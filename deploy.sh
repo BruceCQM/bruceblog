@@ -17,7 +17,7 @@ git commit -m 'feat: Bruceblog deploy'
 
 # 如果是部署到 https://<USERNAME>.github.io/<REPO>
 # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
-git push -f git@github.com:BruceCQM/bruceblog.git master:gh-pages
+git push -f git@github.com:BruceCQM/deploypages.git master:bruceblog_pages
 
 # 返回一开始的路径
 cd -
