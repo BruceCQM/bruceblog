@@ -1,9 +1,7 @@
-#!/usr/bin/env sh
-
 # 忽略错误
 set -e
 
-# 构建
+# 打包构建
 npm run build
 
 # 进入待发布的目录
@@ -21,5 +19,6 @@ git commit -m 'feat: Bruceblog deploy'
 # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
 git push -f git@github.com:BruceCQM/bruceblog.git master:gh-pages
 
+# 返回一开始的路径
 cd -
 

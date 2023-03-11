@@ -9,7 +9,7 @@ export default {
   // 左上角标题
   title: 'BruceBlog',
   // 爬虫爬取的内容
-  description: '前端学习-面试题-资源导航',
+  description: '前端学习-面试题-资源导航-Vue-React-Node',
   // 设置展示最后修改时间
   lastUpdated: true,
   // markdown 相关配置
@@ -17,7 +17,7 @@ export default {
     // 代码块行号
     lineNumbers: true,
   },
-  // 默认主题相关配置
+  // 默认主题相关配置 [https://vitepress.dev/reference/default-theme-config]
   themeConfig: {
     // 配置左上角的 logo
     logo: '/logo.png',
@@ -31,10 +31,10 @@ export default {
     outlineTitle: 'Have a brief look',
     // 设置社交链接
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/BruceCQM/' },
-      { icon: 'twitter', link: '...' },
-      { icon: 'facebook', link: '...' },
-      { icon: 'youtube', link: '...' },
+      { icon: 'github', link: 'https://github.com/BruceCQM' },
+      { icon: 'twitter', link: 'https://twitter.com' },
+      { icon: 'facebook', link: 'https://www.facebook.com' },
+      { icon: 'youtube', link: 'https://www.youtube.com/' },
     ],
     // 最后更新时间
     lastUpdatedText: 'Last updated',
@@ -47,6 +47,11 @@ export default {
     editLink: {
       pattern: 'https://github.com/BruceCQM/bruceblog',
       text: 'Edit this page on GitHub'
+    },
+    // 设置上下篇文字
+    docFooter: {
+      prev: 'Previous page',
+      next: 'Next page'
     }
   },
 }
