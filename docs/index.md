@@ -13,17 +13,20 @@ hero:
       text: Getting Started
       link: /fe/html/html
     - theme: alt
-      text: How to build BruceBlog with Vitepress
-      link: https://vitepress.dev/
+      text: github.io
+      link: https://brucecqm.github.io/bruceblogpages/
+    - theme: alt
+      text: gitee.io
+      link: https://brucecai55520.gitee.io/bruceblogpages/
 
 features:
   - icon: ⚡️
     title: 前端知识
     details: HTML、CSS、JavaScript、Vue、React...
-  - icon: 🖖
+  - icon: 📖
     title: 计算机基础
     details: 计算机网络、操作系统、数据结构...
-  - icon: 🛠️
+  - icon: 🧰
     title: 知也无涯
     details: 面试题、资源导航...
 ---

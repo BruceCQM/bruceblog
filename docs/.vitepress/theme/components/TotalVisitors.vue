@@ -6,7 +6,8 @@ const DEV = inject("DEV");
 
 <template>
   <img v-if="!DEV" class="visitor"
-    src="https://visitor-badge.laobi.icu/badge?page_id=bruceblog_55520"
+    src="https://visitor-badge.laobi.icu/badge?page_id=bruceblog_pages_55520"
+    title="How many people visit this page"
     onerror="this.style.display='none'" />
 </template>
 
