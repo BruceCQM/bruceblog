@@ -5,7 +5,7 @@ export default {
   // 自定义网站 favicon
   head: [['link', { rel: 'icon', href: '/logo.png' }]],
   // 根路径，和仓库名一致
-  base: '/bruceblog/',
+  base: '/bruceblogpages/',
   // 左上角标题
   title: 'BruceBlog',
   // 爬虫爬取的内容
