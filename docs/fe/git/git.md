@@ -208,6 +208,13 @@ git branch 新分支 commitID
 git checkout -b 新分支
 ```
 
+- 基于远程分支创建新分支
+
+```bash
+git checkout -b 新分支 别名/远程分支名
+git checkout -b test_2023 origin/test_2023
+```
+
 ### 查看本地分支
 
 ```bash
@@ -236,6 +243,8 @@ git checkout 分支名
 
 ## 合并分支
 
+### 合并本地分支
+
 `merge` 和 `rebase`的区别有待学习实践 :worried:
 
 1. 将 A 分支合并到当前分支，且为 merge 创建 commit
@@ -260,6 +269,14 @@ git rebase B
 
 ```bash
 git rebase B A
+```
+
+### 合并远程仓库分支
+
+1. 将远程指定分支与本地当前分支合并。可用于在合并到团队公共分支之前解决冲突问题，在本地合并公共分支先解决掉冲突。
+
+```bash
+git merge --no-ff origin/develop_2023-03-12
 ```
 
 ## 版本穿梭与回滚
@@ -386,4 +403,10 @@ git push origin --delete master
 
 ```bash
 git push --force origin master
+```
+
+5. 直接使用仓库地址推送，无需起别名
+
+```bash
+git push git@github.com:<USERNAME>/<REPO>.git master:main
 ```
