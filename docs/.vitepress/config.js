@@ -42,7 +42,7 @@ export default {
     socialLinks: [
       {
         icon: 'github',
-        link: 'https://gitee.com/brucecai55520'
+        link: 'https://github.com/BruceCQM'
       },
       {
         icon: { svg: giteeFavicon, },
