@@ -2,6 +2,7 @@ import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import TotalVisitors from './components/TotalVisitors.vue'
 import Copyright from './components/Copyright.vue'
+import './custom.scss'
 
 export default {
   ...DefaultTheme,
