@@ -11,7 +11,7 @@
 
 ## Vue 脚手架项目结构
 
-```
+```shell
 .
 ├── node_modules
 ├── public
@@ -116,7 +116,7 @@ render: createElement => createElement(App)
 
 - [nanoid](https://gitee.com/mirrors/nanoid#nano-id)
 
-```
+```shell
 npm install nanoid
 
 import { nanoid } from nanoid

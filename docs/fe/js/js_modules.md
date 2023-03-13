@@ -305,17 +305,19 @@ import { 'say' + 'Hello' } from './m1.js'
 
 构建项目结构：
 
-    ├── lib # 转码文件所在目录
-    ├── src
-    │   ├── m1.js
-    │   ├── m2.js
-    │   ├── m3.js
-    │   └── app.js
-    ├── babel.config.json
-    ├── index.html
-    └── package.json
+```shell
+├── lib # 转码文件所在目录
+├── src
+│   ├── m1.js
+│   ├── m2.js
+│   ├── m3.js
+│   └── app.js
+├── babel.config.json
+├── index.html
+└── package.json
+```
 
-安装 [Babel](https://www.babeljs.cn/)转码器，它可将 ES6 语法转成 ES5 语法，让浏览器得以执行。
+安装 [Babel](https://www.babeljs.cn/) 转码器，它可将 ES6 语法转成 ES5 语法，让浏览器得以执行。
 
 ```shell
 npm install --save-dev @babel/core @babel/cli @babel/preset-env
@@ -353,4 +355,4 @@ browserify lib/app.js -o lib/bundle.js
 <script src="./lib/bundle.js"></script>
 ```
 
-可以在浏览器自由玩 ES6 模块了！:relaxed:
+可以在浏览器自由玩 ES6 模块了！:slightly_smiling_face:

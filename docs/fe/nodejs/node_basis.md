@@ -4,9 +4,11 @@
 
 ## 初识 Nodejs
 
-> Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine
->
-> Node.js® 是一个基于 Chrome V8 引擎 的 JavaScript 运行时环境
+:::tip Node.js®
+Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine
+
+Node.js® 是一个基于 Chrome V8 引擎 的 JavaScript 运行时环境
+:::
 
 - 基于 [Express 框架](http://www.expressjs.com.cn/)，可以快速构建 Web 应用
 - 基于 [Electron 框架](https://electronjs.org/)，可以构建跨平台的桌面应用

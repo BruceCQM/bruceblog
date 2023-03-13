@@ -1,6 +1,8 @@
 # React-Redux
 
-> React-Redux 是一个插件库，用于简化 React 中使用 Redux 。
+:::info what's it
+React-Redux 是一个插件库，用于简化 React 中使用 Redux 。
+:::
 
 ![React-Redux模型图](./images/react-redux.png)
 

@@ -1,6 +1,20 @@
 /* 自定义样式，可覆盖默认的样式，默认样式变量如下 */
 /* [https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css] */
 
+.vp-doc h2 {
+  margin-top: 24px;
+}
+
+// h3紧跟的h4
+.vp-doc h3 + h4 {
+  margin-top: 16px;
+}
+
+// tip等框标题
+.custom-block .custom-block-title {
+  font-size: 16px;
+}
+
 // 优化搜索框的样式
 // 屏幕宽度大于768px
 @media (min-width: 768px) {

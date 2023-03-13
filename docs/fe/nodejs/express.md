@@ -1,10 +1,12 @@
 # Express
 
+:::tip Express
+基于 Node.js 平台，快速、开放、极简的 Web 开发框架
+
+用于快速创建服务器的第三方模块。
+
 [官网传送门](https://www.expressjs.com.cn/)
-
-> 基于 Node.js 平台，快速、开放、极简的 Web 开发框架
-
-Express 是用于快速创建服务器的第三方模块。
+:::
 
 ## Express 初体验
 
@@ -289,7 +291,7 @@ res.setHEader('Access-Control-Allow-Methods', '*')
 #### 简单请求
 
 - 请求方式：GET、POST、HEAD 三者之一
-- HTTP 头部信息不超过以下几种字段：无自定义头部字段、Accept、Accept-Language、Content-Language、DPR、Downlink、Save-Data、Viewport-Width、Width 、Content-Type（只有三个值 application/x-www-formurlencoded、multipart/form-data、text/plain）
+- HTTP 头部信息不超过以下几种字段：无自定义头部字段、`Accept`、`Accept-Language`、`Content-Language`、`DPR`、`Downlink`、`Save-Data`、`Viewport-Width`、`Width` 、`Content-Type`（只有三个值 `application/x-www-formurlencoded`、`multipart/form-data`、`text/plain`）
 
 #### 预检请求
 
