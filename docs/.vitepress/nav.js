@@ -1,7 +1,7 @@
 export default [
   {
-    text: '资源导航',
-    link: '/resources/website/websites_recom'
+    text: '资源集中营',
+    link: '/resources/navigation/nav'
   },
   {
     text: '前端学习',

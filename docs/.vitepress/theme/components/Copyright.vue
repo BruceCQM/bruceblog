@@ -1,10 +1,3 @@
-<script setup>
-import { inject } from 'vue'
-import { useRoute } from 'vitepress'
-
-const DEV = inject('DEV')
-const route = useRoute()
-</script>
 
 <template>
   <div class="copyright_container">
@@ -15,6 +8,24 @@ const route = useRoute()
       onerror="this.style.display='none'" />
   </div>
 </template>
+
+<script>
+import { inject } from 'vue'
+import { useRoute } from 'vitepress'
+
+export default {
+  name: 'Copyright',
+  setup: () => {
+    const DEV = inject('DEV')
+    const route = useRoute()
+    return {
+      DEV,
+      route,
+    }
+  }
+}
+
+</script>
 
 <style scoped>
 .copyright_container {

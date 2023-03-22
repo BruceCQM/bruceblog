@@ -1,3 +1,8 @@
+---
+layoutClass: bruceblog-navigation
+outline: [2, 3, 4]
+---
+
 # 网站推荐
 
 ## 常用网站

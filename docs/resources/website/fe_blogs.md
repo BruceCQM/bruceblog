@@ -1,3 +1,8 @@
+---
+layoutClass: bruceblog-navigation
+outline: [2, 3, 4]
+---
+
 # 前端文章
 
 ---
