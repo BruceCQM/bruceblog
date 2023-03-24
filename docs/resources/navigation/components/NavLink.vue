@@ -20,7 +20,6 @@
 <script>
 import { computed } from "vue";
 import loadingImg from '/loading.gif'
-import errorImg from '/logo.png'
 
 export default {
   name: "NavLink",
@@ -47,18 +46,23 @@ export default {
 <style lang="scss" scoped>
 .bb-link {
   display: block;
-  border: 1px solid var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-bg-soft-mute);
   border-radius: 12px;
   cursor: pointer;
+  transition: all 0.4s;
+  background-color: var(--vp-c-bg-soft);
 
   &:hover {
-    background-color: var(--vp-c-bg-soft);
+    background-color: var(--vp-c-white);
+    transform: translateY(-8px);
+    box-shadow: 6px 10px 10px var(--vp-c-divider);
+    border-color: var(--vp-c-yellow-lighter);
   }
-  -webkit-box-orient: vertical;
+
   .box {
     display: flex;
     flex-direction: column;
-    padding: 16px;
+    padding: 8px 16px;
 
     &-header {
       display: flex;
@@ -69,9 +73,7 @@ export default {
         height: 48px;
         margin-right: 12px;
         border-radius: 8px;
-        background-color: var(--vp-c-bg-soft);
-        // box-sizing: border-box;
-        // padding: 8px;
+        background-color: var(--vp-c-bg-soft-down);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -85,17 +87,18 @@ export default {
       .title {
         color: var(--vp-c-text-1);
         font-size: 16px;
-        line-height: 48px;
         text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        flex: 1;
       }
     }
 
     .desc {
       margin: 10px 0 0;
-      color: var(--vp-c-text-2);
+      color: var(--vp-c-text-1);
       font-size: 12px;
       line-height: 20px;
-      flex-grow: 1;
       text-overflow: ellipsis;
       overflow: hidden;
       display: -webkit-box;
@@ -105,87 +108,29 @@ export default {
   }
 }
 
-// .bb-link {
-//   display: block;
-//   border: 1px solid var(--vp-c-bg-soft);
-//   border-radius: 12px;
-//   height: 100%;
-//   cursor: pointer;
-//   // transition: all 1s;
-//   &:hover {
-//     background-color: var(--vp-c-bg-soft);
-//   }
+@media (max-width: 960px) {
+  .bb-link {
+    .box {
+      padding: 8px;
 
-//   .box {
-//     display: flex;
-//     flex-direction: column;
-//     padding: 16px;
-//     height: 100%;
-//     color: var(--vp-c-text-1);
-//     &-header {
-//       display: flex;
-//       align-items: center;
-//     }
-//   }
+      &-header {
+        .icon {
+          width: 36px;
+          height: 36px;
 
-//   .icon {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     margin-right: 12px;
-//     border-radius: 6px;
-//     width: 48px;
-//     height: 48px;
-//     font-size: 24px;
-//     background-color: var(--vp-c-mute);
-//     transition: background-color 0.25s;
-//     :deep(svg) {
-//       width: 24px;
-//       fill: currentColor;
-//     }
-//     :deep(img) {
-//       border-radius: 4px;
-//       width: 24px;
-//     }
-//   }
+          img {
+            width: 24px;
+          }
+        }
+        .title {
+          font-size: 14px;
+        }
+      }
 
-//   .title {
-//     overflow: hidden;
-//     flex-grow: 1;
-//     white-space: nowrap;
-//     text-overflow: ellipsis;
-//     line-height: 48px;
-//     font-size: 16px;
-//     font-weight: 600;
-//   }
-
-//   .desc {
-//     display: -webkit-box;
-//     -webkit-line-clamp: 2;
-//     -webkit-box-orient: vertical;
-//     overflow: hidden;
-//     text-overflow: ellipsis;
-//     flex-grow: 1;
-//     margin: 10px 0 0;
-//     line-height: 20px;
-//     font-size: 12px;
-//     color: var(--vp-c-text-2);
-//   }
-// }
-
-// @media (max-width: 960px) {
-//   .bb-link {
-//     .box {
-//       padding: 8px;
-//     }
-//     .icon {
-//       width: 40px;
-//       height: 40px;
-//     }
-//     .title {
-//       line-height: 40px;
-//       font-size: 14px;
-//     }
-//   }
-// }
+      .desc {
+        margin-top: 8px;
+      }
+    }
+  }
+}
 </style>

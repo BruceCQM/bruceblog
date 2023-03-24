@@ -37,8 +37,10 @@ export default {
 .bb-links {
   --gap: 10px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  grid-auto-flow: row dense;
+  // 至少130px，还有空余则一起等分
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-auto-rows: 115px;
+  // grid-auto-flow: row dense;
   justify-content: center;
   column-gap: var(--gap);
   row-gap: var(--gap);
@@ -59,6 +61,12 @@ export default {
 @media (min-width: 960px) {
   .bb-links {
     --gap: 20px;
+  }
+}
+
+@media (max-width: 960px) {
+  .bb-links {
+    grid-auto-rows: 100px;
   }
 }
 </style>

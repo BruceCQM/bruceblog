@@ -20,6 +20,12 @@ export default [
         desc: 'Mao Mao 的成长之路，包含前端常用知识、源码阅读笔记、各种奇淫技巧、日常提效工具等',
         link: 'https://notes.fe-mm.com/'
       },
+      {
+        icon: 'https://xiaolincoding.com/icon.webp',
+        title: '小林 coding',
+        desc: '图解计算机网络、操作系统、计算机组成、数据库，让天下没有难懂的八股文！',
+        link: 'https://xiaolincoding.com/'
+      },
     ]
   },
   {
@@ -352,6 +358,12 @@ export default [
         desc: '菜鸟教程在线写前端代码',
         link: 'https://www.runoob.com/try/try.php?filename=tryjs_events'
       },
+      {
+        icon: 'https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico',
+        title: 'CODEPEN',
+        desc: '在线coding以及前端开发者社区',
+        link: 'https://codepen.io/'
+      },
     ]
   },
   {
@@ -405,6 +417,12 @@ export default [
         desc: '研究互联网产品和技术，提供原创中文精品教程',
         link: 'https://www.liaoxuefeng.com/'
       },
+      {
+        icon: 'https://zh.javascript.info/img/favicon/favicon.png',
+        title: '现代 JavaScript 教程',
+        desc: '以最新的 JavaScript 标准为基准。通过简单但足够详细的内容，讲解从基础到高阶的 JavaScript 知识。',
+        link: 'https://zh.javascript.info/'
+      },
     ]
   },
   {
@@ -415,6 +433,12 @@ export default [
         title: 'CNode',
         desc: 'CNode：Node.js专业中文社区',
         link: 'https://cnodejs.org/'
+      },
+      {
+        icon: 'https://www.kuangstudy.com/favicon.ico',
+        title: 'KuangStudy',
+        desc: '一个致力于为每个想学习知识的人提供一个少走弯路的平台',
+        link: 'https://www.kuangstudy.com/'
       },
     ]
   },
