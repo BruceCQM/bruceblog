@@ -37,7 +37,7 @@ export default {
 .bb-links {
   --gap: 10px;
   display: grid;
-  // 至少130px，还有空余则一起等分
+  // 至少120px，还有空余则一起等分
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   grid-auto-rows: 115px;
   // grid-auto-flow: row dense;

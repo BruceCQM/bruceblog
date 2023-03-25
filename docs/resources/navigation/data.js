@@ -426,6 +426,29 @@ export default [
     ]
   },
   {
+    title: '知识管理',
+    items: [
+      {
+        icon: 'https://cn.vuejs.org/logo.svg',
+        title: 'VitePress',
+        desc: '基于 Vite 和 Vue 的静态网站生成器，简易、强大、高效。VuePress 的升级版',
+        link: 'https://vitepress.dev/'
+      },
+      {
+        icon: 'https://cn.vuejs.org/logo.svg',
+        title: 'VuePress',
+        desc: 'Vue 驱动的静态网站生成器',
+        link: 'https://vuepress.vuejs.org/zh/'
+      },
+      {
+        icon: 'https://docsify.js.org/_media/favicon.ico',
+        title: 'docsify',
+        desc: '一个神器的文档生成器',
+        link: 'https://docsify.js.org/#/'
+      },
+    ]
+  },
+  {
     title: '社区',
     items: [
       {
