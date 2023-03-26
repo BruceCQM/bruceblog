@@ -1,13 +1,11 @@
 <template>
-  <a href="" class="essay-container">
+  <a :href="link" target="_blank" class="essay-container">
     <article class="essay-content">
-      <img class="icon" src="https://cn.vuejs.org/logo.svg" alt="">
+      <img class="icon" :src="icon" :alt="title"
+        onerror="this.src = '/logo.png'">
       <div class="essay-text">
-        <div class="essay-title">Proxy
-          Switch</div>
-        <div class="essay-link">
-          https://cn.vuejs.org/logo.svg
-        </div>
+        <div class="essay-title">{{ title }}</div>
+        <div class="essay-link">{{ link }}</div>
       </div>
     </article>
   </a>
@@ -16,8 +14,8 @@
 <script>
 export default {
   name: "EssayLink",
+  props: ['icon', 'title', 'link'],
   setup: () => {
-
   }
 };
 </script>
@@ -32,6 +30,7 @@ export default {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.4s;
+  margin-bottom: 10px;
 
   &:hover {
     background-color: var(--vp-c-bg);

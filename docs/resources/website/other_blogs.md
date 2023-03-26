@@ -11,9 +11,7 @@ outline: [2, 3, 4]
 
 ## 我爱 GTA
 
-- [win10 玩侠盗猎车手鼠标不能用怎么办](http://www.somode.com/jiaocheng/2941.html)
 - [GTA 圣安地列斯秘籍](https://zhidao.baidu.com/question/1900115355228272460.html)
-- [GTA 圣安地列斯任务攻略](https://www.douxie.com/gonglve/499487.html)
 
 ## 阿里云部署 Node
 
