@@ -2,7 +2,7 @@
   <a :href="link" target="_blank" class="essay-container">
     <article class="essay-content">
       <img class="icon" :src="icon" :alt="title"
-        onerror="this.src = '/logo.png'">
+        @error="(e) => handleError(e)">
       <div class="essay-text">
         <div class="essay-title">{{ title }}</div>
         <div class="essay-link">{{ link }}</div>
@@ -12,10 +12,19 @@
 </template>
 
 <script>
+import logoImg from '/logo.png';
+
 export default {
   name: "EssayLink",
   props: ['icon', 'title', 'link'],
   setup: () => {
+    function handleError(e) {
+      e.target.src = logoImg;
+    }
+
+    return {
+      handleError,
+    }
   }
 };
 </script>
