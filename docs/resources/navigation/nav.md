@@ -8,7 +8,7 @@ import NavLinks from './components/NavLinks.vue'
 
 import data from './data'
 </script>
-<style src="./index.scss"></style>
+<style src="../../styles/nav.scss"></style>
 
 # 站点导航
 

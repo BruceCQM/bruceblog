@@ -1,52 +1,85 @@
 /* 自定义样式，可覆盖默认的样式，默认样式变量如下 */
 /* [https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css] */
 
-.vp-doc h2 {
-  margin-top: 24px;
-}
+$length--48: 48px;
+$length--24: 24px;
+$length--16: 16px;
+$myWidth: calc(var(--vp-sidebar-width) + $length--48);
 
-// h3紧跟的h4
-.vp-doc h3 + h4 {
-  margin-top: 16px;
-}
-
-// tip等框标题
-.custom-block .custom-block-title {
-  font-size: 16px;
-}
-
-// 优化搜索框的样式
-// 屏幕宽度大于768px
-@media (min-width: 768px) {
-  .VPNav {
-    .VPNavBarSearch {
-      height: 40px;
-      padding: 0 10px 0 12px;
-      border-radius: 8px;
-      background-color: var(--vp-c-bg-alt);
-    }
-    .DocSearch-Button-Placeholder {
-      margin-top: 2px;
-      color: var(--vp-c-text-1);
-    }
-    .DocSearch-Button-Keys {
-      margin-top:3px;
-      border: 1px solid var(--vp-c-divider);
-      border-radius: 4px;
-      color: var(--vp-c-text-1);;
-      display: block
+.Layout {
+  .vp-doc h2 {
+    margin-top: $length--24;
+  }
+  
+  // h3紧跟的h4
+  .vp-doc h3 + h4 {
+    margin-top: $length--16;
+  }
+  
+  // tip等框标题
+  .custom-block .custom-block-title {
+    font-size: $length--16;
+  }
+  
+  // 优化搜索框的样式
+  // 屏幕宽度大于768px
+  @media (min-width: 768px) {
+    .VPNav {
+      .VPNavBarSearch {
+        height: 40px;
+        padding: 0 10px 0 12px;
+        border-radius: 8px;
+        background-color: var(--vp-c-bg-alt);
+      }
+      .DocSearch-Button-Placeholder {
+        margin-top: 2px;
+        color: var(--vp-c-text-1);
+      }
+      .DocSearch-Button-Keys {
+        margin-top:3px;
+        border: 1px solid var(--vp-c-divider);
+        border-radius: 4px;
+        color: var(--vp-c-text-1);;
+        display: block
+      }
     }
   }
-}
-
-// 屏幕宽度小于768px
-@media (max-width: 768px) {
-  .VPNav {
-    .DocSearch-Button {
-      margin-right: -16px;
+  
+  // 屏幕宽度小于768px
+  @media (max-width: 768px) {
+    .VPNav {
+      .DocSearch-Button {
+        margin-right: -$length--16;
+      }
+      .DocSearch-Button-Keys {
+        display: none;
+      }
     }
-    .DocSearch-Button-Keys {
-      display: none;
+  }
+  
+  // 屏幕宽度大于1440px页面整体布局修改
+  @media (min-width: 1440px) {
+    // 顶部导航栏
+    .VPNavBar.has-sidebar div.content {
+      padding-left: $myWidth;
+    }
+    .VPNavBar.has-sidebar .curtain {
+      width: calc(100% - $myWidth);
+    }
+    // 侧边栏固定宽度为272px
+    .VPNavBar.has-sidebar div.title {
+      padding-left: $length--48;
+      padding-right: $length--16;
+      width: $myWidth;
+    }
+    .VPSidebar {
+      padding-left: $length--48;
+      width: $myWidth;
+    }
+    // 正文内容内边距
+    .VPContent.has-sidebar {
+      padding-left: $myWidth;
+      padding-right: var(--vp-nav-height);
     }
   }
 }
