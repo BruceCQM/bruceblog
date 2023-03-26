@@ -1,6 +1,6 @@
 <template>
   <!-- 给h标题添加id，vitepress即可自动生成目录 -->
-  <h2 v-if="title" :id="title">
+  <h2 v-if="title" :id="formatTitle">
     {{ title }}
   </h2>
   <div class="bb-links">
@@ -24,6 +24,8 @@ export default {
     /**
      * slugify() 方法的作用就只是去除头尾空白，中间空白换成 - 而已
      * ' 以 为是   你  ' => '以-为是-你'
+     * 补充：这个转换其实是有用的，如果字符串里面带有空白，那点目录对应标题是无法跳转的
+     * 因此 h2 标题的 id 要用格式化后的 title
      */
     const formatTitle = computed(() => slugify(props.title))
     return {
