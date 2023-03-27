@@ -49,13 +49,13 @@ export default {
 
 <style lang="scss" scoped>
 #back_to_top {
-  border-left: 3px solid var(--vp-c-green);
-  border-top: 3px solid var(--vp-c-green);
-  width: 20px;
-  height: 20px;
+  border-left: 4px solid var(--vp-c-green);
+  border-top: 4px solid var(--vp-c-green);
+  width: 22px;
+  height: 22px;
   position: fixed;
-  bottom: 35px;
-  right: 338px;
+  bottom: 1.5rem;
+  right: 2.5rem;
   transform: rotate(45deg);
   cursor: pointer;
   transition: all 0.8s;
