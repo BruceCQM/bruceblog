@@ -3,6 +3,7 @@ import { useData } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import TotalVisitors from './components/TotalVisitors.vue'
 import Copyright from './components/Copyright.vue'
+import BackToTop from './components/BackToTop.vue'
 import './custom.scss'
 
 export default {
@@ -26,6 +27,7 @@ export default {
       'nav-bar-title-after': () => h(TotalVisitors),
       // 每篇文档底部插入Copyright
       'doc-after': () => h(Copyright),
+      'aside-bottom': () => h(BackToTop),
     })
   },
   /**

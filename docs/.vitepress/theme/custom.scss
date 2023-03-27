@@ -62,6 +62,7 @@ $myWidth: calc(var(--vp-sidebar-width) + $length--48);
     // 顶部导航栏
     .VPNavBar.has-sidebar div.content {
       padding-left: $myWidth;
+      padding-right: var(--vp-nav-height);
     }
     .VPNavBar.has-sidebar .curtain {
       width: calc(100% - $myWidth);
