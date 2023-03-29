@@ -20,9 +20,9 @@ export default {
   props: ['icon', 'title', 'link'],
   setup: (props) => {
     const { link, title } = props;
-    let finalTitle = ref('');
-    let description = ref('');
-    let images = ref('');
+    let finalTitle = ref(title);
+    let description = ref(link);
+    let images = ref(logoImg);
     function handleError(e) {
       e.target.src = logoImg;
     }
@@ -65,11 +65,7 @@ export default {
             console.log('images: ', htmlPage.querySelector('title'));
           }
         })
-    } catch(err) {
-      finalTitle.value = title;
-      description.value = link;
-      images.value = logoImg
-    }
+    } catch(err) { }
 
     return {
       handleError,
