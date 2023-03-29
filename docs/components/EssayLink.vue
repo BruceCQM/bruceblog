@@ -1,11 +1,11 @@
 <template>
   <a :href="link" target="_blank" class="essay-container">
     <article class="essay-content">
-      <img class="icon" :src="icon" :alt="title"
+      <img class="icon" :src="images" :alt="title"
         @error="(e) => handleError(e)">
       <div class="essay-text">
-        <div class="essay-title">{{ title }}</div>
-        <div class="essay-link">{{ link }}</div>
+        <div class="essay-title">{{ finalTitle }}</div>
+        <div class="essay-link">{{ description }}</div>
       </div>
     </article>
   </a>
@@ -13,17 +13,69 @@
 
 <script>
 import logoImg from '/logo.png';
+import { ref } from 'vue';
 
 export default {
   name: "EssayLink",
   props: ['icon', 'title', 'link'],
-  setup: () => {
+  setup: (props) => {
+    const { link, title } = props;
+    let finalTitle = ref('');
+    let description = ref('');
+    let images = ref('');
     function handleError(e) {
       e.target.src = logoImg;
     }
 
+    try {
+      fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(link)}`)
+        .then((res) => {
+          return res.json();
+        })
+        .then((resp) => {
+          const content = resp.contents;
+          const template = document.createElement('template');
+          template.innerHTML = content;
+          const htmlPage = template.content;
+
+          const allMetas = Array.from(htmlPage.childNodes).filter(node => node.nodeName === 'META');
+          const allMetaAttributes = allMetas.map(item => {
+            return Array.from(item.attributes).reduce((pre, current) => {
+              pre[current.name] = current.value;
+              return pre;
+            }, {})
+          })
+
+          const getMetaValue = (key, value) => {
+            const meta = allMetaAttributes.find(item => item[key] === value);
+            return meta?.['content'] || '';
+          }
+
+          // querySelector 好像是异步操作
+          finalTitle.value = htmlPage.querySelector('title').textContent
+            || getMetaValue('name', 'og:title') || getMetaValue('property', 'og:title') || title;
+
+          description.value = getMetaValue('name', 'description') || getMetaValue('name', 'og:description')
+            || getMetaValue('property', 'og:description') || link;
+
+          images.value = getMetaValue('name', 'image') || getMetaValue('name', 'og:image')
+            || getMetaValue('name', 'twitter:image') || htmlPage.querySelector('link[rel*=icon]')?.href || logoImg;
+
+          if(link === 'https://www.cnblogs.com/lgt-hello-world/p/12620073.html') {
+            console.log('images: ', htmlPage.querySelector('title'));
+          }
+        })
+    } catch(err) {
+      finalTitle.value = title;
+      description.value = link;
+      images.value = logoImg
+    }
+
     return {
       handleError,
+      finalTitle,
+      description,
+      images,
     }
   }
 };
@@ -76,7 +128,7 @@ export default {
   }
 
   .essay-link {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--vp-c-text-2);
   }
 }

@@ -11,6 +11,10 @@ import EssayLink from '../../components/EssayLink.vue'
 
 ## 前端体系梳理
 
+<!-- Markdown 的神器写法 -->
+<!-- [learn more](https://www.baidu.com){.link-card} -->
+<!-- [Github](https://github.com 'class=red&target=_blank&data-layout=card') -->
+
 <EssayLink title="从输入 URL 到页面加载的过程？如何由一道题完善自己的前端知识体系！" link="https://segmentfault.com/a/1190000013662126" icon="https://static.segmentfault.com/main_site_next/2d3448f8/touch-icon.png" />
 
 ## 浏览器
