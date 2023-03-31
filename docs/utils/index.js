@@ -83,10 +83,10 @@ function replaceInnerHTML(el, info) {
 /**
  * @description 将页面所有link属性为card的a标签转为链接卡片
  */
-export default function transformLinkToCard() {
+export default function transformLinkToCard(documentEle) {
   // 不加这个定时器获取不到需要的a标签
   setTimeout(() => {
-    const cardLinks = Array.from(document.querySelectorAll('a[link=card]'));
+    const cardLinks = Array.from(documentEle?.querySelectorAll?.('a[link=card]'));
     if(Array.isArray(cardLinks)) {
       cardLinks.forEach(async (item) => {
         const text = item.textContent;
