@@ -1,6 +1,6 @@
 # Vue 核心基础
 
-[官网传送门](https://v2.cn.vuejs.org/)
+[官网传送门](https://v2.cn.vuejs.org/){link=card}
 
 ::: tip Vue
 Vue 是动态构建用户界面的渐进式 JavaScript 框架 <br>
@@ -142,7 +142,8 @@ vm._data = observer
   - 使用 7 个 API 修改数组
   - `Vue.set()`、`vm.$set()`
   - `Vue.delete()`、`vm.$delete()`
-- [思否文章](https://segmentfault.com/a/1190000015783546)
+
+[思否文章](https://segmentfault.com/a/1190000015783546){link=card}
 
 ## 插值语法
 
