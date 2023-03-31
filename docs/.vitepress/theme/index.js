@@ -4,6 +4,7 @@ import DefaultTheme from 'vitepress/theme'
 import TotalVisitors from './components/TotalVisitors.vue'
 import Copyright from './components/Copyright.vue'
 import BackToTop from './components/BackToTop.vue'
+import EssayLink from '../../components/EssayLink.vue'
 import './custom.scss'
 
 export default {
@@ -28,6 +29,7 @@ export default {
       // 每篇文档底部插入Copyright
       'doc-after': () => h(Copyright),
       'aside-bottom': () => h(BackToTop),
+      'layout-bottom': () => h(EssayLink),
     })
   },
   /**
