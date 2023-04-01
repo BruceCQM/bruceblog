@@ -88,7 +88,7 @@ export default function transformLinkToCard(documentEle) {
   setTimeout(() => {
     const cardLinks = Array.from(documentEle?.querySelectorAll?.('a[link=card]'));
     if(Array.isArray(cardLinks)) {
-      cardLinks.forEach(async (item) => {
+      cardLinks.forEach(async (item, index) => {
         const text = item.textContent;
         const url = item.getAttribute('href');
         const defaultInfo = {
@@ -103,14 +103,17 @@ export default function transformLinkToCard(documentEle) {
         replaceInnerHTML(item, defaultInfo);
 
         // 抓取到信息后再更新卡片
-        const info = await getInfoFromUrl(url)
-        const { title, description, images } = info;
-        const newInfo = {
-          title: title || text,
-          desc: description || url,
-          icon: images || defaultLogo,
-        }
-        replaceInnerHTML(item, newInfo);
+        // 3秒发一个抓取请求，避免过于频繁请求，防止服务器误认为是攻击
+        setTimeout(async () => {
+          const info = await getInfoFromUrl(url)
+          const { title, description, images } = info;
+          const newInfo = {
+            title: title || text,
+            desc: description || url,
+            icon: images || defaultLogo,
+          }
+          replaceInnerHTML(item, newInfo);
+        }, index * 3000);
       })
     }
   }, 0)
