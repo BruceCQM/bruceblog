@@ -108,6 +108,15 @@ export default {
   }
 }
 
+// 暗黑模式样式
+.dark {
+  .bb-link {
+    &:hover {
+      background-color: var(--vp-c-bg-soft-mute);
+    }
+  }
+}
+
 @media (max-width: 960px) {
   .bb-link {
     .box {

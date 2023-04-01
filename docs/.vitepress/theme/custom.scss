@@ -136,4 +136,15 @@ $myWidth: calc(var(--vp-sidebar-width) + $length--48);
       color: var(--vp-c-text-2);
     }
   }
+
+}
+
+// 暗黑模式
+.dark {
+  .essay-container {
+    &:hover {
+      background-color: var(--vp-c-bg-soft-mute);
+      border: 1px solid var(--vp-c-green-dark);
+    }
+  }
 }
