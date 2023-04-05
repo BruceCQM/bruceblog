@@ -271,6 +271,12 @@ export default [
         desc: 'OSCHINA 在线工具汇总',
         link: 'https://tool.oschina.net/'
       },
+      {
+        icon: 'https://tool.lu/favicon.ico',
+        title: '在线工具',
+        desc: '无所不有的在线工具箱，在线工具,开发人员工具,代码格式化、压缩、加密、解密...',
+        link: 'https://tool.lu/'
+      },
     ]
   },
   {
@@ -334,6 +340,12 @@ export default [
         title: '标小智',
         desc: '智能 LOGO 设计生成器，BruceBlog 的 logo 在此生成',
         link: 'https://www.logosc.cn/'
+      },
+      {
+        icon: 'https://img.shields.io/badge/-red-red',
+        title: 'Shields.io',
+        desc: 'GitHub 小徽章制作网站',
+        link: 'https://shields.io/'
       },
     ]
   },

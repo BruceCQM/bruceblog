@@ -43,9 +43,11 @@ async function getInfoFromUrl(link) {
       || getMetaValue('property', 'og:description') || link;
 
     const firstImg = htmlPage.querySelector('img');
-    images = getMetaValue('name', 'image') || getMetaValue('name', 'og:image')
-      || getMetaValue('name', 'twitter:image') || htmlPage.querySelector('link[rel=icon]')?.href
-      || htmlPage.querySelector('link[apple-touch-icon]')?.href || firstImg.getAttribute('data-src') || firstImg?.src;
+    images = getMetaValue('name', 'image') || getMetaValue('property', 'image')
+      || getMetaValue('name', 'og:image') || getMetaValue('property', 'og:image')
+      || getMetaValue('name', 'twitter:image') || getMetaValue('property', 'twitter:image')
+      || htmlPage.querySelector('link[rel=icon]')?.href || htmlPage.querySelector('link[apple-touch-icon]')?.href
+      || firstImg.getAttribute('data-src') || firstImg?.src;
 
     return {
       title,

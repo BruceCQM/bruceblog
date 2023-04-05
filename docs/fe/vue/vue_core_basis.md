@@ -75,7 +75,7 @@ obj.a // 1000
 
 ### Vue 中的数据代理
 
-<img src="./images/数据代理.png" />
+![数据代理](./images/数据代理.png)
 
 Vue 中通过 vm 实例对象代理对 data 对象属性的操作，让我们更方便操作 data 中的数据。
 

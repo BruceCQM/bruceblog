@@ -1,5 +1,9 @@
 export default [
   {
+    text: '周录记',
+    link: '/magazine/weekly2023'
+  },
+  {
     text: '资源集中营',
     link: '/resources/navigation/nav'
   },
