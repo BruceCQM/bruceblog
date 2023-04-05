@@ -62,6 +62,21 @@ async function getInfoFromUrl(link) {
 }
 
 /**
+ * @description 根据URL抓取图片，避免直接访问URL跨域的问题
+ * @param {*} url 图片URL
+ * @returns 图片的base64编码
+ */
+async function getImageContent(url) {
+  try {
+    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+    const resp = await res.json();
+    return resp.contents;
+  } catch(err) {
+    return '';
+  }
+}
+
+/**
  * @description 设置卡片链接的innerHTML
  * @param {*} el a元素
  * @param {*} info 信息对象
@@ -106,11 +121,12 @@ export default function transformLinkToCard(documentEle) {
         // 3秒发一个抓取请求，避免过于频繁请求，防止服务器误认为是攻击
         setTimeout(async () => {
           const info = await getInfoFromUrl(url)
-          const { title, description, images } = info;
+          const { title, description, images: imageUrl } = info;
+          const imagesContent = await getImageContent(imageUrl);
           const newInfo = {
             title: title || text,
             desc: description || url,
-            icon: images || defaultLogo,
+            icon: imagesContent || defaultLogo,
           }
           replaceInnerHTML(item, newInfo);
         }, index * 3000);
