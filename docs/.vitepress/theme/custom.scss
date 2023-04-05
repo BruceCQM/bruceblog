@@ -27,41 +27,41 @@ $myWidth: calc(var(--vp-sidebar-width) + $length--48);
     border-radius: 10px;
   }
   
-  // 优化搜索框的样式
+  // 优化搜索框的样式(针对flex search)
   // 屏幕宽度大于768px
-  @media (min-width: 768px) {
-    .VPNav {
-      .VPNavBarSearch {
-        height: 40px;
-        padding: 0 10px 0 12px;
-        border-radius: 8px;
-        background-color: var(--vp-c-bg-alt);
-      }
-      .DocSearch-Button-Placeholder {
-        margin-top: 2px;
-        color: var(--vp-c-text-1);
-      }
-      .DocSearch-Button-Keys {
-        margin-top:3px;
-        border: 1px solid var(--vp-c-divider);
-        border-radius: 4px;
-        color: var(--vp-c-text-1);;
-        display: block
-      }
-    }
-  }
+  // @media (min-width: 768px) {
+  //   .VPNav {
+  //     .VPNavBarSearch {
+  //       height: 40px;
+  //       padding: 0 10px 0 12px;
+  //       border-radius: 8px;
+  //       background-color: var(--vp-c-bg-alt);
+  //     }
+  //     .DocSearch-Button-Placeholder {
+  //       margin-top: 2px;
+  //       color: var(--vp-c-text-1);
+  //     }
+  //     .DocSearch-Button-Keys {
+  //       margin-top:3px;
+  //       border: 1px solid var(--vp-c-divider);
+  //       border-radius: 4px;
+  //       color: var(--vp-c-text-1);;
+  //       display: block
+  //     }
+  //   }
+  // }
   
-  // 屏幕宽度小于768px
-  @media (max-width: 768px) {
-    .VPNav {
-      .DocSearch-Button {
-        margin-right: -$length--16;
-      }
-      .DocSearch-Button-Keys {
-        display: none;
-      }
-    }
-  }
+  // // 屏幕宽度小于768px
+  // @media (max-width: 768px) {
+  //   .VPNav {
+  //     .DocSearch-Button {
+  //       margin-right: -$length--16;
+  //     }
+  //     .DocSearch-Button-Keys {
+  //       display: none;
+  //     }
+  //   }
+  // }
   
   // 屏幕宽度大于1440px页面整体布局修改
   @media (min-width: 1440px) {

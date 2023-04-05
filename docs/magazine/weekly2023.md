@@ -12,7 +12,7 @@
 
 - 使用 [github520](https://github.com/521xueweihan/GitHub520)
 - 配置 github 的 IP 到 host 文件中
-- 科学上网解决一切问题
+- kExUe 上网解决一切问题
 
 :::
 
