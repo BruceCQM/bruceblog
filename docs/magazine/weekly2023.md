@@ -58,6 +58,58 @@ ssh 链接的好处是，当你无法访问 GitHub 时，也能通过 ssh 链接
 
 ![link标签](./images/weekly2023/link-icon.png)
 
+6、用 CSS 画 `√、×` 等符号
+
+文章介绍了如何用纯 CSS 去画出勾 √、叉 ×、三角形 △、大于号 ＞ 几类常见符号。
+
+[简单的使用 css 画勾、叉、三角、大于号](https://blog.csdn.net/Luxuriant_tree/article/details/83181888){link=card}
+
+7、CSS 实现超长文字溢出省略号
+
+[CSS-文字溢出的省略号显示](https://blog.csdn.net/m0_72650596/article/details/127027051){link=card}
+
+:::tip CSS 实现超长文字溢出省略号
+
+超长文字溢出主要分为两类：单行溢出和多行溢出。
+
+单行溢出比较常见：
+
+```CSS
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+```
+
+多行溢出只适用于 webkit 内核的浏览器：
+
+```CSS
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+```
+
+:::
+
+8、CSS3 阴影效果使用
+
+文章详细介绍了 CSS3 阴影属性 `box-shadow` 的使用方法。
+
+```CSS
+box-shadow: 1px 1px 1px #999;
+```
+
+[CSS3 阴影实现方法及技巧全解](https://www.w3cschool.cn/css3/css3-shadow.html){link=card}
+
+9、`flv.js` API 中文文档
+
+高手翻译的 `flv.js` API 中文文档。
+[flv.js 中文 API 文档](https://www.jianshu.com/p/b58356b465c4){link=card}
+
+官网 GitHub。
+[flv.js API](https://github.com/bilibili/flv.js/blob/master/docs/api.md){link=card}
+
 ### 视界
 
 1、老板管理手册

@@ -540,6 +540,12 @@ export default [
         desc: '高效生活视频书',
         link: 'https://topbook.cc/overview'
       },
+      {
+        icon: 'https://img.1990i.com/fcpic/sj/436a.png',
+        title: '小霸王',
+        desc: '小霸王，其乐无穷 。红白机，FC在线游戏，街机游戏，街机在线，NES games，NES games online，Super Mario',
+        link: 'https://www.yikm.net/'
+      },
     ]
   }
 ]
