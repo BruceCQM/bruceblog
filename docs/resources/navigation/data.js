@@ -251,6 +251,17 @@ export default [
     ]
   },
   {
+    title: '地图',
+    items: [
+      {
+        icon: 'https://a.amap.com/pc/static/favicon.ico',
+        title: '高德地图API',
+        desc: '高德地图 JS API 是一套 JavaScript 语言开发的的地图应用编程接口，移动端、PC端一体化设计，一套 API 兼容众多系统平台。',
+        link: 'https://lbs.amap.com/api/javascript-api/summary'
+      }
+    ]
+  },
+  {
     title: '常用工具',
     items: [
       {

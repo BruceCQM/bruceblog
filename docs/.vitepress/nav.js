@@ -52,4 +52,10 @@ export default [
       { text: 'Python', link: '/lang/python/crawler' }
     ]
   },
+  {
+    text: '高效搬砖',
+    items: [
+      { text: '第三方工具', link: '/work/tools' }
+    ]
+  },
 ]
