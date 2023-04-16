@@ -358,6 +358,12 @@ export default [
         desc: 'GitHub 小徽章制作网站',
         link: 'https://shields.io/'
       },
+      {
+        icon: 'https://onlineconvertfree.com/favicon.ico',
+        title: 'OnlineConvertFree',
+        desc: 'OnlineConvertFree 软件是在线免费转换软件， 能转换各种文件、视频、音频和照片等。',
+        link: 'https://onlineconvertfree.com/zh/'
+      },
     ]
   },
   {
