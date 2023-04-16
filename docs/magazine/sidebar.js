@@ -4,6 +4,7 @@ export default [
     collapsed: true,
     items: [
       { text: '2023周录记', link: '/magazine/weekly2023' },
+      { text: '我的博文', link: '/magazine/blog_essay' },
     ]
   }
 ]

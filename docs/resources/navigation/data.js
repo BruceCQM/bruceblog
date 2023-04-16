@@ -486,6 +486,18 @@ export default [
         desc: '一个致力于为每个想学习知识的人提供一个少走弯路的平台',
         link: 'https://www.kuangstudy.com/'
       },
+      {
+        icon: 'https://static.segmentfault.com/main_site_next/c9aa1097/favicon.ico',
+        title: 'SegmentFault 思否',
+        desc: 'SegmentFault 思否是中国领先的开发者技术社区，为开发者提供纯粹、高质的技术交流平台。',
+        link: 'https://segmentfault.com/'
+      },
+      {
+        icon: 'https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web//static/favicons/favicon-32x32.png',
+        title: '稀土掘金',
+        desc: '掘金是面向全球中文开发者的技术内容分享与交流平台。通过技术文章、沸点等产品和服务，打造一个激发开发者创作灵感，激励开发者沉淀分享，陪伴开发者成长的综合类技术社区。',
+        link: 'https://juejin.cn/'
+      },
     ]
   },
   {
