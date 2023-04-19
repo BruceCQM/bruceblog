@@ -55,7 +55,8 @@ export default [
   {
     text: '高效搬砖',
     items: [
-      { text: '第三方工具', link: '/work/tools' }
+      { text: 'Antd 虐我千百遍', link: '/work/antd' },
+      { text: '第三方工具', link: '/work/tools' },
     ]
   },
 ]
