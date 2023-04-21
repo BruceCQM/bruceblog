@@ -70,6 +70,8 @@ const handleSubmit = async () => {
 </Form.Item>
 ```
 
+`itemProps` 具体内容：
+
 **方式二：函数写法**
 
 ```jsx
@@ -99,3 +101,113 @@ const handleSubmit = async () => {
 但个人认为，方式一的写法更加优雅，并且一般情况下，方式一也足够使用了，可以解决日常工作大部分自定义表单验证规则的场景。
 
 [getFieldValue](https://ant.design/components/form-cn#forminstance){link=card}
+
+## Select 下拉框设置初始值
+
+在开发工作中，需要为 `Form` 表单中的 `Select` 下拉框设置初始值的情况也屡见不鲜。下面介绍两种常见的解决方式。
+
+### 使用 `setFieldsValue()`
+
+该方法通过利用 `Form` 表单实例提供的 `setFieldsValue()` 方法设置初始值，在页面初次展示即可调用该方法设置初始值。
+
+```jsx
+const showModal = () => {
+  form.setFieldsValue({
+    color: "red",
+    ...
+  });
+  ...
+}
+```
+
+```jsx
+<Form.Item name="color" label="车辆外表颜色" rules={[{ required: true, message: '请选择车辆外表颜色' }]}>
+  <Select placeholder="请选择车辆外表颜色" {...props}>
+    <Option key={1} value="red">
+      红色
+    </Option>
+    <Option key={2} value="yellow">
+      黄色
+    </Option>
+    <Option key={3} value="blue">
+      蓝色
+    </Option>
+  </Select>
+</Form.Item>
+```
+
+### 使用 `initialValues` 属性
+
+通过使用 `Form` 表单的 `initialValues` 属性，也能够为表单域设置初始值。
+
+```jsx
+const initialValues = { color: 'yellow' }
+
+;<Form form={form} initialValues={initialValues}>
+  <Form.Item name="color" label="车辆外表颜色" rules={[{ required: true, message: '请选择车辆外表颜色' }]}>
+    <Select placeholder="请选择车辆外表颜色" {...props}>
+      <Option key={1} value="red">
+        红色
+      </Option>
+      <Option key={2} value="yellow">
+        黄色
+      </Option>
+      <Option key={3} value="blue">
+        蓝色
+      </Option>
+    </Select>
+  </Form.Item>
+</Form>
+```
+
+### 使用 `initialValue` 属性
+
+通过使用 `Form.Item` 的 `initialValue` 属性，单独为该表单项设置初始值，不影响其他表单项。
+
+```jsx
+<Form.Item name="color" label="车辆外表颜色" rules={[{ required: true, message: '请选择车辆外表颜色' }]} initialValue="blue">
+  <Select placeholder="请选择车辆外表颜色" {...props}>
+    <Option key={1} value="red">
+      红色
+    </Option>
+    <Option key={2} value="yellow">
+      黄色
+    </Option>
+    <Option key={3} value="blue">
+      蓝色
+    </Option>
+  </Select>
+</Form.Item>
+```
+
+### 错误：使用 `defaultValue` 属性
+
+当时遇到这个问题时，我第一个想法是利用 `Select` 下拉框的 `defaultValue` 属性，来设置默认值，如下代码：
+
+```jsx
+<Form.Item name="color" label="车辆外表颜色">
+  <Select defaultValue="red">
+    <Option key={1} value="red">
+      红色
+    </Option>
+    <Option key={2} value="yellow">
+      黄色
+    </Option>
+    <Option key={3} value="blue">
+      蓝色
+    </Option>
+  </Select>
+</Form.Item>
+```
+
+但是该方法并不生效，这是因为 `Form.Item` 设置了 `name` 属性，Ant Design 增加了限制，导致其不生效。
+
+> 设置了  name  属性的  Form.Item  包裹的表单控件，**不能用控件的  value  或  defaultValue  来设置表单域的值，默认值可以用  Form  的  initialValues  来设置**。
+
+### 官网文档相关说明
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/15d308e0f8f84a54880fa5d00afdcfa0~tplv-k3u1fbpfcp-watermark.image?)
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9df3946685d74292b59c16e63e957c48~tplv-k3u1fbpfcp-watermark.image?)
+
+相关链接：[Form 表单](https://ant.design/components/form-cn)
