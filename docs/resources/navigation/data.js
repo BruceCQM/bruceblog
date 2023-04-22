@@ -29,6 +29,77 @@ export default [
     ]
   },
   {
+    title: '前端学习教程',
+    items: [
+      {
+        icon: 'https://wangdoc.com/javascript/assets/icons/favicon-96x96.png',
+        title: 'JavaScript 教程',
+        desc: '教程全面介绍 JavaScript 核心语法，覆盖了 ES5 和 DOM 规范的所有内容',
+        link: 'https://wangdoc.com/javascript/'
+      },
+      {
+        icon: 'https://es6.ruanyifeng.com/favicon.ico',
+        title: 'ES6 入门教程',
+        desc: '阮一峰老师所著的 ES6 语法特性介绍教程',
+        link: 'https://es6.ruanyifeng.com/'
+      },
+      {
+        icon: 'https://developer.mozilla.org/favicon-48x48.cbbd161b.png',
+        title: 'MDN 文档',
+        desc: '前端知识查阅权威手册',
+        link: 'https://developer.mozilla.org/zh-CN/'
+      },
+      {
+        icon: 'https://www.w3school.com.cn/ui2019/logo-48-red.png',
+        title: 'W3school',
+        desc: '全球最大的中文 Web 技术教程',
+        link: 'https://www.w3school.com.cn/index.html'
+      },
+      {
+        icon: 'https://static.runoob.com/images/favicon.ico',
+        title: '菜鸟教程',
+        desc: '学的不仅是技术，更是梦想！',
+        link: 'https://www.runoob.com/'
+      },
+      {
+        icon: 'https://7n.w3cschool.cn/statics/images/favicon.ico?v=2.2',
+        title: 'W3Cschool',
+        desc: '类国外 w3schools 的 W3C 学习社区及菜鸟编程平台',
+        link: 'https://www.w3cschool.cn/'
+      },
+      {
+        icon: 'https://www.kancloud.cn/favicon.ico',
+        title: '前端面试宝典',
+        desc: '前端工程师大厂面试宝典',
+        link: 'https://www.kancloud.cn/pillys/qianduan/2049475'
+      },
+      {
+        icon: 'https://www.liaoxuefeng.com/favicon.ico',
+        title: '廖雪峰的官方网站',
+        desc: '研究互联网产品和技术，提供原创中文精品教程',
+        link: 'https://www.liaoxuefeng.com/'
+      },
+      {
+        icon: 'https://zh.javascript.info/img/favicon/favicon.png',
+        title: '现代 JavaScript 教程',
+        desc: '以最新的 JavaScript 标准为基准。通过简单但足够详细的内容，讲解从基础到高阶的 JavaScript 知识。',
+        link: 'https://zh.javascript.info/'
+      },
+      {
+        icon: 'https://p3-passport.byteimg.com/img/user-avatar/4bea92b5711099af6311631a871174d2~100x100.awebp',
+        title: 'JS 正则表达式完整教程',
+        desc: '让你彻底搞懂 JS 正则表达式',
+        link: 'https://juejin.cn/post/6844903487155732494'
+      },
+      {
+        icon: 'https://p3-passport.byteimg.com/img/user-avatar/cb493d1d3b20183fa770daecfe571364~100x100.awebp',
+        title: 'Typescript 最强入门文章',
+        desc: '入门 TS 的不二首选',
+        link: 'https://juejin.cn/post/7018805943710253086'
+      },
+    ]
+  },
+  {
     title: 'React 生态',
     items: [
       {
@@ -392,65 +463,6 @@ export default [
         title: 'CODEPEN',
         desc: '在线coding以及前端开发者社区',
         link: 'https://codepen.io/'
-      },
-    ]
-  },
-  {
-    title: '前端学习教程',
-    items: [
-      {
-        icon: 'https://wangdoc.com/javascript/assets/icons/favicon-96x96.png',
-        title: 'JavaScript 教程',
-        desc: '教程全面介绍 JavaScript 核心语法，覆盖了 ES5 和 DOM 规范的所有内容',
-        link: 'https://wangdoc.com/javascript/'
-      },
-      {
-        icon: 'https://es6.ruanyifeng.com/favicon.ico',
-        title: 'ES6 入门教程',
-        desc: '阮一峰老师所著的 ES6 语法特性介绍教程',
-        link: 'https://es6.ruanyifeng.com/'
-      },
-      {
-        icon: 'https://developer.mozilla.org/favicon-48x48.cbbd161b.png',
-        title: 'MDN 文档',
-        desc: '前端知识查阅权威手册',
-        link: 'https://developer.mozilla.org/zh-CN/'
-      },
-      {
-        icon: 'https://www.w3school.com.cn/ui2019/logo-48-red.png',
-        title: 'W3school',
-        desc: '全球最大的中文 Web 技术教程',
-        link: 'https://www.w3school.com.cn/index.html'
-      },
-      {
-        icon: 'https://static.runoob.com/images/favicon.ico',
-        title: '菜鸟教程',
-        desc: '学的不仅是技术，更是梦想！',
-        link: 'https://www.runoob.com/'
-      },
-      {
-        icon: 'https://7n.w3cschool.cn/statics/images/favicon.ico?v=2.2',
-        title: 'W3Cschool',
-        desc: '类国外 w3schools 的 W3C 学习社区及菜鸟编程平台',
-        link: 'https://www.w3cschool.cn/'
-      },
-      {
-        icon: 'https://www.kancloud.cn/favicon.ico',
-        title: '前端面试宝典',
-        desc: '前端工程师大厂面试宝典',
-        link: 'https://www.kancloud.cn/pillys/qianduan/2049475'
-      },
-      {
-        icon: 'https://www.liaoxuefeng.com/favicon.ico',
-        title: '廖雪峰的官方网站',
-        desc: '研究互联网产品和技术，提供原创中文精品教程',
-        link: 'https://www.liaoxuefeng.com/'
-      },
-      {
-        icon: 'https://zh.javascript.info/img/favicon/favicon.png',
-        title: '现代 JavaScript 教程',
-        desc: '以最新的 JavaScript 标准为基准。通过简单但足够详细的内容，讲解从基础到高阶的 JavaScript 知识。',
-        link: 'https://zh.javascript.info/'
       },
     ]
   },

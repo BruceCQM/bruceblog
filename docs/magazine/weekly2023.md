@@ -143,3 +143,31 @@ git 回退到指定版本的两种方法：`git reset` 和 `git revert`。
 学以致用，不要为学而学，消费是生产的第一动力，实践是学习的第一目标。
 
 [冴羽答读者问：如何学习更有计划性、提升更稳更快？](https://segmentfault.com/a/1190000042178486){link=card}
+
+## 0417-0423
+
+### 文章
+
+1、JS 正则表达式完整教程
+
+大佬写的 JS 正则表达式教程，非常详实细致，可以说看完就是学会了。
+
+[JS 正则表达式完整教程（略长）](https://juejin.cn/post/6844903487155732494){link=card}
+
+2、`flv.js` 优化方案
+
+文章介绍了前端直播常见的技术方案、`flv.js` 的基本原理及其优化方案。
+
+[flv.js 的追帧、断流重连及实时更新的直播优化方案](https://www.cnblogs.com/xiahj/p/flvExtend.html){link=card}
+
+3、TS 入门教程文章
+
+文章详细介绍了 Typescript，是入门 TS 的不二首选。
+
+[2023 typescript 史上最强学习入门文章(2w 字)](https://juejin.cn/post/7018805943710253086){link=card}
+
+4、冴羽系列博客
+
+冴羽大佬写的系列博客，包括 JavaScript 深入系列、JavaScript 专题系列、underscore 系列、ES6 系列等等，写得十分清晰详实。
+
+[冴羽系列博客](https://github.com/mqyqingfeng/Blog){link=card}
