@@ -26,6 +26,12 @@ export default [
         desc: '图解计算机网络、操作系统、计算机组成、数据库，让天下没有难懂的八股文！',
         link: 'https://xiaolincoding.com/'
       },
+      {
+        icon: 'https://p3-passport.byteimg.com/img/user-avatar/3cc59c2bbb4a99bcadc06cf1b1e2a4ca~180x180.awebp',
+        title: '冴羽的博客',
+        desc: '冴羽写博客的地方，预计写四个系列：JavaScript深入系列、JavaScript专题系列、ES6系列、React系列。',
+        link: 'https://github.com/mqyqingfeng/Blog'
+      },
     ]
   },
   {
