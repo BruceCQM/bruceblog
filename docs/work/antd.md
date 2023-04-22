@@ -72,6 +72,8 @@ const handleSubmit = async () => {
 
 `itemProps` 具体内容：
 
+![itemProps 具体内容](./images/validator_first_param.png)
+
 **方式二：函数写法**
 
 ```jsx
@@ -95,6 +97,10 @@ const handleSubmit = async () => {
   <Input placeholder="请输入你的账户密码" />
 </Form.Item>
 ```
+
+方式二可以取到 `Form` 表单实例的所有方法：
+
+![Form实例方法](./images/form_function.png)
 
 相比而言，方式二的自由度更高，功能也相对更强大，因为提供了 `getFieldValue()` 等方法使用。
 
@@ -143,7 +149,7 @@ const showModal = () => {
 ```jsx
 const initialValues = { color: 'yellow' }
 
-;<Form form={form} initialValues={initialValues}>
+<Form form={form} initialValues={initialValues}>
   <Form.Item name="color" label="车辆外表颜色" rules={[{ required: true, message: '请选择车辆外表颜色' }]}>
     <Select placeholder="请选择车辆外表颜色" {...props}>
       <Option key={1} value="red">
@@ -202,12 +208,83 @@ const initialValues = { color: 'yellow' }
 
 但是该方法并不生效，这是因为 `Form.Item` 设置了 `name` 属性，Ant Design 增加了限制，导致其不生效。
 
-> 设置了  name  属性的  Form.Item  包裹的表单控件，**不能用控件的  value  或  defaultValue  来设置表单域的值，默认值可以用  Form  的  initialValues  来设置**。
+:::tip
+设置了  name  属性的  Form.Item  包裹的表单控件，**不能用控件的  value  或  defaultValue  来设置表单域的值，默认值可以用  Form  的  initialValues  来设置**。
+:::
 
 ### 官网文档相关说明
 
-![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/15d308e0f8f84a54880fa5d00afdcfa0~tplv-k3u1fbpfcp-watermark.image?)
+![defaultValue不可用](./images/defaultValue_nouse.png)
 
-![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9df3946685d74292b59c16e63e957c48~tplv-k3u1fbpfcp-watermark.image?)
+![initialValues的区别](./images/initialValues_diff.png)
 
-相关链接：[Form 表单](https://ant.design/components/form-cn)
+相关链接：
+
+[Form 表单](https://ant.design/components/form-cn){link=card}
+
+## Input 输入框内容去除头尾空白
+
+在填写 `Form` 表单时，我们往往会遇到这样的需求：`Input` 输入框输入的内容头尾不允许带有空格。有点类似于 `trim()` 方法的功能。
+
+针对这个功能，整体上有 3 中实现思路：
+
+- 在输入的过程中，禁止输入空白符
+- 利用表单验证，如果头尾存在空格，则提示用户
+- 提交表单时，自动去除头尾空白，用户无感
+
+### 禁止输入空格
+
+该方式利用 `Form.Item` 的 `getValueFromEvent` 属性，这个属性可以设置如何把输入的内容转换为表单项实际获取的值。需要传入一个函数。
+
+```js
+<Form.Item
+  name="city"
+  label="城市"
+  getValueFromEvent={(e) => e.target.value.replace(/(^\s*)|(\s*$)/g, '')}
+  // getValueFromEvent={(e) => { console.log(e.target); return e.target.value; }}
+>
+  <Input />
+</Form.Item>
+```
+
+在上述代码中，`e.target.value` 即为输入框输入的值，而 `Form.Item` 表单项实际获取到的值是 `e.target.value.replace(/(^\s*)|(\s*$)/g, '')`。
+
+这种方法在页面交互上表现为用户无法输入空格，其实用户体验并不友好，让人感觉更像是这个输入框有 bug，竟然不让我输入空格。
+
+### 利用表单验证
+
+使用上面提到的表单验证方法。
+
+```js
+<Form.Item name="city" label="城市" rules={[{ pattern: /(^\S)((.)*\S)?(\S*$)/, message: '前后不能有空格' }]}>
+  <Input />
+</Form.Item>
+```
+
+```js
+<Form.Item
+  name="city"
+  label="城市"
+  rules={[
+    {
+      validator: (_, value) => {
+        const reg = /(^\s+)|(\s+$)/
+        if (reg.test(value)) {
+          return Promise.reject(new Error('前后不能有空格'))
+        }
+        return Promise.resolve()
+      },
+    },
+  ]}
+>
+  <Input />
+</Form.Item>
+```
+
+这里就体现出了自定义表单验证的优势，写法灵活，且在某些场景下能降低思考难度。`/(^\s+)|(\s+$)/` 和 `/(^\S)((.)*\S)?(\S*$)/` 这两个正则，显然前者更容易写出来，后面这个不查半天资料都难写。
+
+### 提交表单调用 `trim()` 方法
+
+这种方法就是随便用户输入，在提交表单的时候再使用 `trim()` 方法去除前后空格。
+
+但是既然设置了这个规则，还是有必要让用户知道，给用户提示，因此综合下来第二种方法是比较推荐的解决办法。
