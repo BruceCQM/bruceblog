@@ -1,10 +1,13 @@
 # 浏览器本地存储 Web Storage
 
+:::tip 浏览器本地存储
 浏览器本地存储包括两个对象：`sessionStorage` 和 `localStorage`，它们都是 `Storage` 的实例对象。
 
 ```js
 window.localStorage instanceof Storage // true
 ```
+
+:::
 
 ## 基本使用
 

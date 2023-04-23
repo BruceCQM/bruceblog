@@ -74,7 +74,9 @@ export default Demo extends Component {
 
 ## React Hook
 
-> Hook 是 React 16.8.0 增加的新特性，让我们能在函数式组件中使用 `state` 和其他特性
+:::tip Hook
+Hook 是 React 16.8.0 增加的新特性，让我们能在函数式组件中使用 `state` 和其他特性
+:::
 
 ### State Hook
 
@@ -370,8 +372,6 @@ class Demo extends PureComponent {
 
 ## render props (插槽)
 
-> 类似于 Vue 中的插槽技术
-
 如何向组件内部动态传入带内容的结构（即标签或组件）？
 
 - Vue：插槽技术
@@ -468,7 +468,7 @@ class B extends Component {
 
 ## 错误边界
 
-:::tip
+:::danger 错误边界
 错误边界(Error boundary)：用来捕获后代组件错误，渲染出备用页面。
 
 注意：只在生产环境（项目上线）起效

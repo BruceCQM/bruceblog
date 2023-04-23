@@ -19,20 +19,23 @@ Vuex 工作原理图：
 
 官方 Vuex 项目结构示例：
 
-    ├── index.html
-    ├── main.js
-    ├── api
-    │   └── ... # 抽取出API请求
-    ├── components
-    │   ├── App.vue
-    │   └── ...
-    └── store
-        ├── index.js          # 组装模块并导出 store 的地方
-        ├── actions.js        # 根级别的 action
-        ├── mutations.js      # 根级别的 mutation
-        └── modules
-            ├── cart.js       # 购物车模块
-            └── products.js   # 产品模块
+```shell
+.
+├── index.html
+├── main.js
+├── api
+│   └── ... # 抽取出API请求
+├── components
+│   ├── App.vue
+│   └── ...
+└── store
+    ├── index.js          # 组装模块并导出 store 的地方
+    ├── actions.js        # 根级别的 action
+    ├── mutations.js      # 根级别的 mutation
+    └── modules
+        ├── cart.js       # 购物车模块
+        └── products.js   # 产品模块
+```
 
 ## Vuex 核心概念
 
@@ -65,7 +68,9 @@ Vuex 工作原理图：
 
 安装 Vuex：`npm install vuex@3 --save`
 
-> 注意：Vue2 安装 Vuex3，Vue3 安装 Vuex4，版本需对应。
+:::warning
+注意：Vue2 安装 Vuex3，Vue3 安装 Vuex4，版本需对应。
+:::
 
 创建文件 `src/store/index.js` ：
 

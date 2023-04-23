@@ -1,20 +1,31 @@
-<script setup>
-import { inject } from 'vue'
-import { useRoute } from 'vitepress'
-
-const DEV = inject('DEV')
-const route = useRoute()
-</script>
 
 <template>
   <div class="copyright_container">
     Copyright © 2019-present BruceBlog
     <img v-if="!DEV" class="visitor"
-      :src="`https://visitor-badge.laobi.icu/badge?page_id=bruceblog_55520_${route.path}`"
+      :src="`https://visitor-badge.laobi.icu/badge?page_id=bruceblog_pages_55520_${route.path}`"
       title="How many people visit this page"
       onerror="this.style.display='none'" />
   </div>
 </template>
+
+<script>
+import { inject } from 'vue'
+import { useRoute } from 'vitepress'
+
+export default {
+  name: 'Copyright',
+  setup: () => {
+    const DEV = inject('DEV')
+    const route = useRoute()
+    return {
+      DEV,
+      route,
+    }
+  }
+}
+
+</script>
 
 <style scoped>
 .copyright_container {

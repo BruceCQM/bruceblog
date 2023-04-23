@@ -1,7 +1,11 @@
 export default [
   {
-    text: '资源导航',
-    link: '/resources/website/websites_recom'
+    text: '周录记',
+    link: '/magazine/weekly2023'
+  },
+  {
+    text: '资源集中营',
+    link: '/resources/navigation/nav'
   },
   {
     text: '前端学习',
@@ -46,6 +50,13 @@ export default [
     text: '知也无涯',
     items: [
       { text: 'Python', link: '/lang/python/crawler' }
+    ]
+  },
+  {
+    text: '高效搬砖',
+    items: [
+      { text: 'Antd 虐我千百遍', link: '/work/antd' },
+      { text: '第三方工具', link: '/work/tools' },
     ]
   },
 ]

@@ -1,8 +1,12 @@
 # VuePress 从 0 开始搭建个人网站
 
-> BruceBlog 从无到有的全过程
->
-> [VuePress 官网传送门](https://vuepress.vuejs.org/zh/)
+:::tip BruceBlog 从无到有的全过程
+Vitepress 也是类似的过程，偷懒不写了 :grin:
+
+[VuePress 官网传送门](https://vuepress.vuejs.org/zh/)
+
+[VitePress 官网传送门](https://vitepress.dev/)
+:::
 
 ## 体验 VuePress
 
@@ -56,7 +60,7 @@ npm run dev
 
 以下为 BruceBlog 部分目录结构，比较重要的是 `.vuepress` 目录的结构。官方目录结构请移步 [→](https://vuepress.vuejs.org/zh/guide/directory-structure.html)
 
-```
+```shell
 .
 ├── docs
 │   ├── .vuepress
@@ -257,6 +261,8 @@ blockquote {
 :tada: :smile:
 
 [Emoji 大全](https://www.webfx.com/tools/emoji-cheat-sheet/)
+
+[Github](https://github.com/markdown-it/markdown-it-emoji/blob/master/lib/data/full.json)
 
 ## 搭建过程踩的坑
 

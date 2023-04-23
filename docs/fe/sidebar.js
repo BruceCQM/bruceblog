@@ -6,6 +6,7 @@ export default [
       { text: 'HTML', link: '/fe/html/html' },
       { text: 'CSS', link: '/fe/css/css' },
       { text: 'Flex', link: '/fe/css/flex' },
+      { text: 'Grid', link: '/fe/css/grid' },
       { text: 'Less', link: '/fe/css/less' },
     ]
   },

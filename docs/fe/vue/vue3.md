@@ -349,9 +349,9 @@ export default {
 
 ### watch 函数
 
-Vue3 `watch` 能侦听的东西：
-
-> A watch source can only be a getter/effect function, a ref, a reactive object, or an array of these types
+:::tip Vue3 `watch` 能侦听的东西
+A watch source can only be a getter/effect function, a ref, a reactive object, or an array of these types
+:::
 
 ```js
 import { ref, reactive, watch } from 'vue'
@@ -931,10 +931,6 @@ Vue3 将全局的 API，即：`Vue.xxx` 调整到应用实例 `app` 上：
 - 移除 `v-on.native`修饰符，子组件没有在 `emits: ['close']` 声明的自定义事件作为原生事件处理
 - 移除过滤器 `filter`
 - ...
-
----
-
----
 
 ## 组件上的 v-model
 

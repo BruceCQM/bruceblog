@@ -1,8 +1,8 @@
 # Vue 核心基础
 
-[官网传送门](https://v2.cn.vuejs.org/)
+[官网传送门](https://v2.cn.vuejs.org/){link=card}
 
-::: tip
+::: tip Vue
 Vue 是动态构建用户界面的渐进式 JavaScript 框架 <br>
 Vue 借鉴 Angular 的模板和数据绑定技术，React 的组件化和虚拟 DOM 技术
 :::
@@ -75,7 +75,7 @@ obj.a // 1000
 
 ### Vue 中的数据代理
 
-<img src="./images/数据代理.png" />
+![数据代理](./images/数据代理.png)
 
 Vue 中通过 vm 实例对象代理对 data 对象属性的操作，让我们更方便操作 data 中的数据。
 
@@ -85,7 +85,9 @@ data 中的数据实际上被存在 `vm._data` 属性上，如果不进行代理
 
 ## Vue 监测数据的原理
 
-> 监测数据，即 Vue 是如何监听数据发生变化，从而重新解析模板渲染页面的。Vue 会监测 data 中所有层级的数据。
+:::info 监测数据
+监测数据，即 Vue 是如何监听数据发生变化，从而重新解析模板渲染页面的。Vue 会监测 data 中所有层级的数据。
+:::
 
 ### Vue 监测对象数据
 
@@ -140,7 +142,8 @@ vm._data = observer
   - 使用 7 个 API 修改数组
   - `Vue.set()`、`vm.$set()`
   - `Vue.delete()`、`vm.$delete()`
-- [思否文章](https://segmentfault.com/a/1190000015783546)
+
+[思否文章](https://segmentfault.com/a/1190000015783546){link=card}
 
 ## 插值语法
 
@@ -504,7 +507,9 @@ data() { return { username: "Bruce" } }
 
 ### v-html
 
-> v-html 存在安全问题，容易导致 XSS 攻击
+:::warning 安全问题
+v-html 存在安全问题，容易导致 XSS 攻击
+:::
 
 ```html
 <p v-html="desc">原本内容被覆盖</p>
@@ -651,11 +656,13 @@ computed: {
 
 `watch` 侦听器允许开发者监视数据的变化，针对数据的变化做特定的操作。
 
-> 侦听器可以监听普通属性和计算属性
->
-> `computed` 能完成的功能，`watch` 也能
->
-> `watch` 能完成的功能，`computed` 不一定，如异步操作
+:::tip watch vs computed
+侦听器可以监听普通属性和计算属性
+
+`computed` 能完成的功能，`watch` 也能
+
+`watch` 能完成的功能，`computed` 不一定，如异步操作
+:::
 
 - Vue 管理的函数写成普通函数，使其 `this` 指向 vue 实例对象
 - 不被 Vue 管理的函数写成箭头函数（定时器回调、`ajax` 回调、`Promise` 回调），这样其 `this` 才是 vue 实例对象

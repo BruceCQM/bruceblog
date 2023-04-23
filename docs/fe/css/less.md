@@ -1,8 +1,10 @@
 # Hello Less
 
-> It's CSS, with just a little more.
+:::tip Less
+It's CSS, with just a little more.
 
 [Learn More](https://less.bootcss.com/)
+:::
 
 ## What is Less
 
@@ -91,7 +93,9 @@ body {
 
 ### 延迟加载(Lazy Evaluation)
 
-> When defining a variable twice, the last definition of the variable is used, searching from the current scope upwards.
+:::tip Lazy Evaluation
+When defining a variable twice, the last definition of the variable is used, searching from the current scope upwards.
+:::
 
 当一个变量被声明多次，会取最后一次的值，并从当前作用域往外寻找变量。
 
@@ -119,7 +123,9 @@ body {
 
 ### 属性名变量(Properties as Variables)
 
-> You can easily treat properties like variables using the $prop syntax
+:::tip Properties as Variables
+You can easily treat properties like variables using the $prop syntax
+:::
 
 ```less
 .widget {
@@ -415,9 +421,11 @@ nav ul {
 
 ### Extend "all"
 
-> When you specify the all keyword last in an extend argument it tells Less to match that selector as part of another selector. The selector will be copied and the matched part of the selector only will then be replaced with the extend, making a new selector.
->
-> You can think of this mode of operation as essentially doing a non-destructive search and replace
+:::tip Extend "all"
+When you specify the all keyword last in an extend argument it tells Less to match that selector as part of another selector. The selector will be copied and the matched part of the selector only will then be replaced with the extend, making a new selector.
+
+You can think of this mode of operation as essentially doing a non-destructive search and replace
+:::
 
 - 可理解为把 `all` 前的选择器出现的地方全都替换为 `extend` 前的选择器
 - 即把 `.test` 替换为 `.replacement` 生成一个新的选择器应用样式，且不破坏原有的选择器

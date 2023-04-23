@@ -1,0 +1,31 @@
+.bruceblog-navigation {
+  // 正文内容宽度铺满
+  .VPDoc.has-aside .content-container {
+    max-width: 100% ;
+  }
+
+  // 屏幕宽度大于1440px
+  @media (min-width: 1440px) {
+    // 顶部导航栏
+    .VPNavBar.has-sidebar div.content {
+      padding-left: var(--vp-sidebar-width);
+    }
+    .VPNavBar.has-sidebar .curtain {
+      width: calc(100% - var(--vp-sidebar-width));
+    }
+    // 侧边栏固定宽度为272px
+    .VPNavBar.has-sidebar div.title {
+      padding-left: 32px;
+      width: var(--vp-sidebar-width);
+    }
+    .VPSidebar {
+      padding-left: 32px;
+      width: var(--vp-sidebar-width);
+    }
+    // 正文内容内边距
+    .VPContent.has-sidebar {
+      padding-left: var(--vp-sidebar-width);
+      padding-right: var(--vp-nav-height);
+    }
+  }
+}
