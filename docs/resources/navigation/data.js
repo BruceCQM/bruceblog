@@ -299,6 +299,23 @@ export default [
     ]
   },
   {
+    title: '小程序',
+    items: [
+      {
+        icon: 'https://storage.360buyimg.com/pubfree-bucket/taro-docs/c07c6984de/img/logo-taro.png',
+        title: 'Taro',
+        desc: '开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发微信/京东/百度/支付宝小程序/H5等应用',
+        link: 'https://taro-docs.jd.com/docs/'
+      },
+      {
+        icon: 'https://res.wx.qq.com/a/wx_fed/assets/res/NTI4MWU5.ico',
+        title: '微信官方文档-小程序',
+        desc: '微信小程序官方文档',
+        link: 'https://developers.weixin.qq.com/miniprogram/dev/framework/'
+      },
+    ]
+  },
+  {
     title: '可视化',
     items: [
       {
