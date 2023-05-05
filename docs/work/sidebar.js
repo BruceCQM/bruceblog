@@ -6,5 +6,12 @@ export default [
       { text: '那些年, Antd 坑我的地方', link: '/work/antd' },
       { text: '第三方工具', link: '/work/tools' },
     ]
-  }
+  },
+  {
+    text: '地图开发',
+    collapsed: true,
+    items: [
+      { text: '微信小程序地图开发教程', link: '/work/maps/wx_map' },
+    ]
+  },
 ]
