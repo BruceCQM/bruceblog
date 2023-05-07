@@ -194,3 +194,59 @@ class TaroMap extends Component {
   height: 70px;
 }
 ```
+
+## 返回当前位置
+
+点击返回图标，让地图回到当前位置，几乎是每个地图都必备的功能。而这个功能实现起来其实非常简单。
+
+首先调用 `createMapContext()` 创建一个地图实例对象，再调用地图实例的 `moveToLocation()` 方法将地图中心移动到当前定位点即可。
+
+```js
+handleBackCurrenLocation = () => {
+  // 需要把地图的id传入
+  const wxMap = Taro.createMapContext(mapId)
+  wxMap.moveToLocation({})
+}
+```
+
+## 地图拖动展示不同的标记点
+
+由于地图上的标记点可能会非常多，所以一般都不会一口气把所有的点都画到地图上，而是展示地图中心某个范围之内的点。
+
+拖动地图，再展示新的地图中心附近的标记点。
+
+该功能的实现需要用到 `onRegionChange` 事件，当地图视野发生变化时会触发该事件，也就是拖动地图。像这种频繁触发的事件，最好防抖。
+
+```js
+import _ from 'lodash'
+
+class TaroMap extends Component {
+  // 防抖500毫秒
+  onRegionChange = _.debounce(async (e) => {
+    const { type, detail } = e;
+    // 拖动地图会触发两次onRegionChange事件，我们只需要拖动结束时的事件
+    if (type === 'end') {
+      const { centerLocation: { longitude, latitude } } = detail;
+      // ...获取新的标记点
+      const markers = [];
+      this.setState({ markers });
+      }
+    }
+  }, 500)
+
+  render() {
+    <Map
+      id="taroMap"
+      longitude={100}
+      latitude={90}
+      show-location
+      className="map"
+      onRegionChange={this.onRegionChange}
+    >
+      <View className="center">
+        <Image className="center--image" src='./marker.png' />
+      </View>
+    </Map>
+  }
+}
+```
