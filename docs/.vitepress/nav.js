@@ -57,6 +57,12 @@ export default [
     items: [
       { text: 'Antd 虐我千百遍', link: '/work/antd' },
       { text: '第三方工具', link: '/work/tools' },
+      {
+        text: '地图开发',
+        items: [
+          { text: '微信小程序地图开发', link: '/work/maps/wx_map' },
+        ]
+      },
     ]
   },
 ]
