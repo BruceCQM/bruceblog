@@ -405,6 +405,12 @@ export default [
         desc: '一个非常适合IT团队的在线API文档、技术文档工具',
         link: 'https://www.showdoc.com.cn/'
       },
+      {
+        icon: 'https://source.showdoc.com.cn/favicon.ico',
+        title: 'RunApi',
+        desc: 'runapi是一个以接口为核心的开发测试工具（功能上类似postman）, 包含接口测试/自动流程测试/Mock数据/项目协作等功能',
+        link: 'https://www.showdoc.com.cn/runapi/30291'
+      },
     ]
   },
   {
