@@ -171,3 +171,54 @@ git 回退到指定版本的两种方法：`git reset` 和 `git revert`。
 冴羽大佬写的系列博客，包括 JavaScript 深入系列、JavaScript 专题系列、underscore 系列、ES6 系列等等，写得十分清晰详实。
 
 [冴羽系列博客](https://github.com/mqyqingfeng/Blog){link=card}
+
+## 0522-0528
+
+### 文章
+
+1、小程序页面栈溢出报错 `navigateTo fail page limit exceeded`
+
+小程序页面栈最多十层，反复使用 `navigateTo` 跳转页面，压入页面栈，会导致报错。
+
+[小程序页面跳转，页面栈提示”navigateTo fail page limit exceeded“错误，解决办法](https://blog.csdn.net/qq_35310623/article/details/108082712){link=card}
+
+2、`rpx` 和 `px` 单位的区别
+
+`px` 是固定单位，`1px` 就是 1 像素；`rpx` 是自适应单位，根据屏幕的实际尺寸变化，`1rpx` 可能等于不同的像素。
+
+[微信小程序中rpx和px的区别？](https://blog.csdn.net/weixin_43356308/article/details/115081242){link=card}
+
+3、`!.` 是什么意思？
+
+`!.` 是 TS 中的语法，称为非空断言操作符。它和 JS 的可选链操作符 `?.` 完全没有关系。
+
+`!.` 是告诉 TS，这个值我保证不为空，TS 你可以不用进行检查。
+
+因此，不建议使用 `!.`，因为实际上你并不能保证值不为空。
+
+[Non-null Assertion Operator (Postfix!)](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-){link=card}
+
+[js中‘!.’是什么意思？](https://www.zhihu.com/question/459179143){link=card}
+
+4、何为 Docker？
+
+文章介绍了 Docker 的基本知识，比较通俗易懂。
+
+Docker 其实是一个容器。容器：搭建一套给程序运行的环境。只隔离应用程序运行时环境，共享操作系统。与虚拟机相比，更轻量级、占用资源更少。
+
+[什么是Docker？看这一篇干货文章就够了！](https://zhuanlan.zhihu.com/p/187505981){link=card}
+
+5、SSH 登录 GitHub 报错 `Connection to xxx port 22: ...`
+
+最近使用 ssh 登录 GitHub 时报错：
+
+:::error
+kex_exchange_identification: read: Software caused connection abort
+banner exchange: Connection to xxx port 22: Software caused connection abort
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights and the repository exists.
+:::
+
+修改 ssh 的默认端口为 443 即可。
+
+[坑：ssh: connect to host github.com port 22: Connection refused](https://zhuanlan.zhihu.com/p/521340971){link=card}
