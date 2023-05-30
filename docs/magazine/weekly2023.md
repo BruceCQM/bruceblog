@@ -222,3 +222,15 @@ Please make sure you have the correct access rights and the repository exists.
 修改 ssh 的默认端口为 443 即可。
 
 [坑：ssh: connect to host github.com port 22: Connection refused](https://zhuanlan.zhihu.com/p/521340971){link=card}
+
+## 0529-0604
+
+### 文章
+
+1、日常开发提升技术的 13 条建议
+
+文章总结了平常开发过程当中 13 条提升自我技术的建议，小处着手，实用。
+
+![日常开发提升技术的 13 条建议](./images/weekly2023/advice13.png)
+
+[我差点把同事卷跑了。。。](https://mp.weixin.qq.com/s/JQo9inrZ6eoBazDnxvkD8A){link=card}
