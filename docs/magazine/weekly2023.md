@@ -186,7 +186,7 @@ git 回退到指定版本的两种方法：`git reset` 和 `git revert`。
 
 `px` 是固定单位，`1px` 就是 1 像素；`rpx` 是自适应单位，根据屏幕的实际尺寸变化，`1rpx` 可能等于不同的像素。
 
-[微信小程序中rpx和px的区别？](https://blog.csdn.net/weixin_43356308/article/details/115081242){link=card}
+[微信小程序中 rpx 和 px 的区别？](https://blog.csdn.net/weixin_43356308/article/details/115081242){link=card}
 
 3、`!.` 是什么意思？
 
@@ -198,7 +198,7 @@ git 回退到指定版本的两种方法：`git reset` 和 `git revert`。
 
 [Non-null Assertion Operator (Postfix!)](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-){link=card}
 
-[js中‘!.’是什么意思？](https://www.zhihu.com/question/459179143){link=card}
+[js 中‘!.’是什么意思？](https://www.zhihu.com/question/459179143){link=card}
 
 4、何为 Docker？
 
@@ -206,16 +206,17 @@ git 回退到指定版本的两种方法：`git reset` 和 `git revert`。
 
 Docker 其实是一个容器。容器：搭建一套给程序运行的环境。只隔离应用程序运行时环境，共享操作系统。与虚拟机相比，更轻量级、占用资源更少。
 
-[什么是Docker？看这一篇干货文章就够了！](https://zhuanlan.zhihu.com/p/187505981){link=card}
+[什么是 Docker？看这一篇干货文章就够了！](https://zhuanlan.zhihu.com/p/187505981){link=card}
 
 5、SSH 登录 GitHub 报错 `Connection to xxx port 22: ...`
 
-最近使用 ssh 登录 GitHub 时报错：
-
-:::error
+:::danger 最近使用 ssh 登录 GitHub 时报错
 kex_exchange_identification: read: Software caused connection abort
+
 banner exchange: Connection to xxx port 22: Software caused connection abort
+
 fatal: Could not read from remote repository.
+
 Please make sure you have the correct access rights and the repository exists.
 :::
 
