@@ -382,6 +382,18 @@ export default [
         desc: '无所不有的在线工具箱，在线工具,开发人员工具,代码格式化、压缩、加密、解密...',
         link: 'https://tool.lu/'
       },
+      {
+        icon: 'https://onlineconvertfree.com/favicon.ico',
+        title: 'OnlineConvertFree',
+        desc: 'OnlineConvertFree 软件是在线免费转换软件， 能转换各种文件、视频、音频和照片等。',
+        link: 'https://onlineconvertfree.com/zh/'
+      },
+      {
+        icon: 'https://www.aconvert.com/favicon.ico',
+        title: 'Aconvert',
+        desc: '（好用免费）在线转换文档，图像，视频，音频文件格式',
+        link: 'https://www.aconvert.com/cn/'
+      },
     ]
   },
   {
@@ -457,12 +469,6 @@ export default [
         title: 'Shields.io',
         desc: 'GitHub 小徽章制作网站',
         link: 'https://shields.io/'
-      },
-      {
-        icon: 'https://onlineconvertfree.com/favicon.ico',
-        title: 'OnlineConvertFree',
-        desc: 'OnlineConvertFree 软件是在线免费转换软件， 能转换各种文件、视频、音频和照片等。',
-        link: 'https://onlineconvertfree.com/zh/'
       },
     ]
   },
