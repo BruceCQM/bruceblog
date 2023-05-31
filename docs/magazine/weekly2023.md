@@ -235,3 +235,24 @@ Please make sure you have the correct access rights and the repository exists.
 ![日常开发提升技术的 13 条建议](./images/weekly2023/advice13.png)
 
 [我差点把同事卷跑了。。。](https://mp.weixin.qq.com/s/JQo9inrZ6eoBazDnxvkD8A){link=card}
+
+2、nvm 的安装与基本使用
+
+nvm 是管理 node 版本的快捷工具，使用它可以十分方便地切换 node 版本。
+
+文章详细介绍了 nvm 的安装步骤与常用命令的使用。
+
+```bash
+nvm list     // 查看已安装的 node 版本
+nvm install <version>       // 安装某个版本的 node，如：nvm install 12.22.22
+nvm use <version>      // 使用某一版本的 node
+nvm uninstall <version>   // 卸载指定版本的 node
+```
+
+[nvm详细安装步骤以及使用（window10系统）](https://blog.csdn.net/Anony_me/article/details/124153201){link=card}
+
+3、运行 `nvm use xxx` 命令报权限不足
+
+使用管理员身份运行 cmd 即可。
+
+[nvm use 报错：You do not have sufficient privilege to perform this operation](https://blog.csdn.net/JudyC/article/details/121702250){link=card}

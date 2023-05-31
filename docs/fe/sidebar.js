@@ -68,6 +68,7 @@ export default [
       { text: 'Webpack', link: '/fe/webpack/webpack_basis' },
       { text: 'Vscode', link: '/fe/ide/vscode' },
       { text: 'Vuepress', link: '/fe/vuepress/vuepress' },
+      { text: 'Vitepress', link: '/fe/vuepress/vitepress' },
     ]
   },
 ]
