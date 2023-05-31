@@ -1,7 +1,6 @@
-
 <template>
   <div class="copyright_container">
-    Copyright © 2019-present BruceBlog
+    Copyright © 2023-present BruceBlog
     <img v-if="!DEV" class="visitor"
       :src="`https://visitor-badge.laobi.icu/badge?page_id=bruceblog_pages_55520_${route.path}`"
       title="How many people visit this page"

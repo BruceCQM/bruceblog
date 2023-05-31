@@ -99,7 +99,7 @@ export default {
     // 设置底部的版权声明，只有左边侧边栏不存在才会展示
     footer: {
       message: 'If there is any reprint or CV, please mark the original address of this website',
-      copyright: 'Copyright © 2019-present BruceBlog'
+      copyright: 'Copyright © 2023-present BruceBlog'
     },
     // 设置编辑页面链接
     editLink: {
