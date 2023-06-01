@@ -394,6 +394,12 @@ export default [
         desc: '（好用免费）在线转换文档，图像，视频，音频文件格式',
         link: 'https://www.aconvert.com/cn/'
       },
+      {
+        icon: 'https://tinypng.com/images/favicon.ico',
+        title: 'TinyPng',
+        desc: '好用的在线图片压缩工具',
+        link: 'https://tinypng.com/'
+      },
     ]
   },
   {
