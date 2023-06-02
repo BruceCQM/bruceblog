@@ -226,8 +226,6 @@ Please make sure you have the correct access rights and the repository exists.
 
 ## 0529-0604
 
-### 文章
-
 1、日常开发提升技术的 13 条建议
 
 文章总结了平常开发过程当中 13 条提升自我技术的建议，小处着手，实用。
@@ -256,3 +254,15 @@ nvm uninstall <version>   // 卸载指定版本的 node
 使用管理员身份运行 cmd 即可。
 
 [nvm use 报错：You do not have sufficient privilege to perform this operation](https://blog.csdn.net/JudyC/article/details/121702250){link=card}
+
+4、标准普尔家庭资产配置图
+
+标准普尔家庭资产配置图是世界公认最合理的适合多数家庭的资产分配方式，可以参考学习，来对自己的资产进行配置。
+
+需要注意几点：
+
+- 该资产配置图是一个参考，每个人的实际情况都不同，需要灵活变通
+- 此处的 10% 之类的百分比，基数是资产，而非收入。
+- 每隔一段时间，需要进行资产的再配置。例如每隔半年时间，需对资产重新进行配置，这时候增加了半年的工资，这半年的收入也成为了资产的一部分。
+
+[读懂“标准普尔家庭资产配置图”](https://zhuanlan.zhihu.com/p/357228526){link=card}
