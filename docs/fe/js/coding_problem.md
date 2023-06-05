@@ -137,3 +137,118 @@ function throttle(func, wait, option) {
 ```
 
 注意，若时间戳先执行了，则要清空定时器，若定时器先执行了，则要更新previous时间。否则如果不断触发事件，会出现执行两次回调的情况。
+
+## unique 去重
+
+数组去重，经典中的经典。
+
+### 双重循环
+
+双重循环，最原始同时也是兼容性最好的版本。
+
+```js
+function unique1(arr) {
+  const res = [];
+  for(let i = 0;i < arr.length;i++) {
+    // 注意这里用 var，否则下面的判断无法取到 j
+    // 当然也可以在外层定义好
+    for(var j = 0;j < res.length;j++) {
+      if(arr[i] === res[j]) {
+        break;
+      }
+    }
+    if(j === res.length) {
+      res.push(arr[i]);
+    }
+  }
+  return res;
+}
+```
+
+使用数组的 `indexOf` 方法，可以简化代码。
+
+```js
+function unique2(arr) {
+  const res = [];
+  for(let i = 0;i < arr.length;i++) {
+    if(res.indexOf(arr[i]) === -1) {
+      res.push(arr[i]);
+    }
+  }
+  return res;
+}
+```
+
+### `underscore` 版本
+
+`underscore` 的去重方法主要有两个额外参数：`isSorted` 和 `iteratee`。
+
+`isSorted` 参数标识待去重的数组是否已经排好序，如果是排序好的数组使用更快捷的方法（判断当前元素是否与前一个元素相同，相同即重复，只需一次遍历）进行去重。
+
+`iteratee` 传递一个自定义函数，对于数组每一个元素，是对该函数处理后的返回值进行比较，达到自定义去重规则的效果。
+
+```js
+function unique3(arr, isSorted, iteratee) {
+  const res = [];
+  // 存储自定义函数处理后的值
+  const dealValueArr = [];
+  // 排序情况下的前一个值
+  const previousValue = undefined;
+
+  for(let i = 0;i < arr.length;i++) {
+    const value = arr[i];
+    const dealValue = iteratee ? iteratee(value) : value;
+
+    if(isSorted) {
+      // 若是第一个元素或者和前一个元素不相同
+      if(i === 0 || value !== previousValue) {
+        res.push(value);
+      }
+      previousValue = value;
+    } else if(iteratee) {
+      if(dealValueArr.indexOf(dealValue) === -1) {
+        // 注意res压入的是原始数组的值，不是经自定义函数处理后的返回值
+        res.push(value);
+        dealValueArr.push(dealValue);
+      }
+    } else {
+      if(res.indexOf(value) === -1) {
+        res.push(value);
+      }
+    }
+  }
+  return res;
+}
+```
+
+### Object 键值对
+
+该方法的主要思路是：把数组元素作为 key 值存入一个对象里面，在判断一个元素是否重复时，只需要看对象是否存在这个元素的 key 值。
+
+`typeof item + JSON.stringify(item)` 的处理是为了保证 key 值唯一。
+
+```js
+function unique4(arr) {
+  const obj = {};
+  return arr.filter(function(item, index, array) {
+    const keyValue = typeof item + JSON.stringify(item);
+    return obj.hasOwnProperty(keyValue) ? false : (obj[keyValue] = true)
+  })
+}
+```
+
+### 不能 JSON 序列化的特殊值
+
+json 是独立于编程语言的数据存储和表示格式，也就是说它只能存储各个语言通用的东西，JavaScript 特有的一些值无法正确 JSON 序列化。
+
+![不能 JSON 序列化的特殊值](./images/stringify_no.png)
+
+### 利用 ES6 新特性
+
+扩展运算符天下无双。
+
+```js
+function unique5(arr) {
+  return [...new Set(arr)];
+}
+```
