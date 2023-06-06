@@ -243,6 +243,14 @@ json 是独立于编程语言的数据存储和表示格式，也就是说它只
 
 ![不能 JSON 序列化的特殊值](./images/stringify_no.png)
 
+:::tip
+如图，`undefined`、JS 方法、`Symbol` 类型值经过 `stringify()` 处理后都丢失了。
+
+`Infinity`、`NaN` 和数字相关的特殊值转换成了 `null`。
+
+正则表达式转换成了空对象 `{}`。
+:::
+
 ### 利用 ES6 新特性
 
 扩展运算符天下无双。
