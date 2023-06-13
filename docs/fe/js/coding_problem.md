@@ -365,3 +365,156 @@ const res = await deepClone(obj);
 [MDN postMessage](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage){link=card}
 
 [MDN 结构化克隆算法](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Structured_clone_algorithm){link=card}
+
+## 求数组最值
+
+取出数组的最大值或最小值，以取出最大值为例。
+
+### 遍历比较
+
+最原始，同时也是兼容性最好的方式。
+
+```js
+function getMax(arr) {
+  let res = -Infinity;
+  for(let i = 0;i < arr.length;i++) {
+    res = arr[i] > res ? arr[i] : res;
+  }
+  return res;
+}
+```
+
+### `reduce` 方法
+
+通过遍历数组最终得到一个值，可以考虑 `reduce` 方法。
+
+```js
+function getMax(arr) {
+  return arr.reduce((pre, cur) => cur > pre ? cur : pre)
+}
+
+function getMax(arr) {
+  return arr.reduce((pre, cur) => Math.max(pre, cur))
+}
+```
+
+[MDN reduce](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce){link=card}
+
+### 排序
+
+给数组排序好，那么最大值就是数组第一个或最后一个元素。
+
+```js
+function getMax(arr) {
+  // 数组降序排序，首个元素即为最大值
+  arr.sort((a, b) => b - a);
+  return arr[0];
+}
+```
+
+### `Math.max()` 方法
+
+使用 JS 提供的 `Math.max()` 方法，可以方便求出数组的最大值。
+
+其实准确来说，该方法是返回传入参数的最大值。如果要使用它求出数组的最大值，需要将数组转换成**逗号分隔的参数序列**，否则会把数组整体当作一个参数看待。
+
+```js
+Math.max(3,2,4,1); // 4
+```
+#### 数组转为参数序列
+
+下面讨论如何把数组转换成参数序列，作为 `Math.max()` 的正确入参。
+
+1. `Function.prototype.apply()`
+
+`apply()` 方法可以把数组转成参数序列传递给调用函数。
+
+```js
+function getMax(arr) {
+  return Math.max.apply(null, arr);
+}
+```
+
+2. ES6 扩展运算符
+
+```js
+function getMax(arr) {
+  return Math.max(...arr);
+}
+```
+
+:::warning 注意事项
+如果数组元素太多，扩展运算符和 `apply()` 方法可能会得到错误的结果，这是因为 JS 引擎存在参数长度的上限，参数数量太多会出现问题。
+:::
+
+:::details MDN 文档说明
+注意：如果按上面方式调用 `apply`，有超出 JavaScript 引擎参数长度上限的风险。一个方法传入过多参数（比如一万个）时的后果在不同 JavaScript 引擎中表现不同。（JavaScriptCore 引擎中有被硬编码的参数个数上限：65536）。
+
+这是因为此限制（实际上也是任何用到超大栈空间的行为的自然表现）是不明确的。一些引擎会抛出异常，更糟糕的是其他引擎会直接限制传入到方法的参数个数，导致参数丢失。比如：假设某个引擎的方法参数上限为 4（实际上限当然要高得多），这种情况下，上面的代码执行后，真正被传递到 `apply` 的参数为 `5, 6, 2, 3`，而不是完整的数组。
+:::
+
+[MDN max](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Math/max){link=card}
+
+3. `eval()` 方法
+
+```js
+function getMax(arr) {
+  return eval('Math.max(' + arr + ')');
+}
+```
+
+`eval()` 方法的原理是发生了隐式类型转换，它会调用数组的 `toString()` 方法将其转换为字符串，就变成了参数序列。如 `[1,2,3] => "1,2,3"`。
+
+但是呢，如果数组里面混入了一些蛇皮牛马，比如说对象、空数组、`null`、`undefined`，就可能会大红大紫地报错了。
+
+为什么说**可能**呢，得看数组元素数量和具体的特殊值。只要看看这个数组调用 `toString()` 后的返回值即可知道是否会报错。
+
+```js
+[null, undefined, [], {}].toString(); // ',,,[object Object]'
+[null, undefined].toString(); // ','
+[null].toString(); // ''
+```
+
+空数组、`null`、`undefined` 转换后会变成空串，如果数组只包含一个这种元素，得到的结果也是空串，不会报错。如果是多个，就会出现逗号，此时会报 `Unexpected token ','` 的错误。
+
+同理，对象就更是这样了，对象会转成 `[object Object]` 字符串，更加不行，会出现 `Unexpected identifier 'Object'` 的错误。
+
+
+#### 注意事项
+
+`Math.max()` 注意事项：
+
+1. 如果没有参数，返回 `-Infinity`。
+
+```js
+Math.max(); // -Infinity
+```
+
+2. 如果其中一个参数无法转为数值，返回 `NaN`。
+
+```js
+Math.max('max', 1); // NaN
+Math.max(-1, []); // 0
+Math.max(5, [6]); // 6
+Math.max(5, ['6']); //6
+Math.max(5, [6, 1]); // NaN
+Math.max(1, Symbol()) // Cannot convert a Symbol value to a number
+```
+
+:::tip 判断一个值是否可转为数值
+要判断一个值是否可转为数值，使用 `Number()` 看看结果对不对即可。
+
+常见的像非纯数字字符串(如 `123n`)、对象`{}`、函数、包含两个及以上元素的数组、只包含一个元素且该元素无法转成数值的数组(如 `['66n']`)。
+
+特殊地，如果尝试转换 `Symbol` 类型值，会报错。
+:::
+
+3. 不要试图 `new Math()`。
+
+`Math` 不是构造函数，不能 `new` 创建实例，会报错。
+
+直接 `Math.max()` 使用，`max()` 是 `Math` 的静态方法。
+
+```js
+var n = new Math(); // Math is not a constructor
+```
