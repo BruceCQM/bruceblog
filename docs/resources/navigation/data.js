@@ -531,6 +531,17 @@ export default [
     ]
   },
   {
+    title: '浏览器',
+    items: [
+      {
+        icon: 'https://chrome.zzzmh.cn/favicon.ico',
+        title: '极简插件',
+        desc: '不用翻墙的 Chrome 扩展插件商店，优质crx应用下载',
+        link: 'https://chrome.zzzmh.cn/#/index'
+      },
+    ]
+  },
+  {
     title: '社区',
     items: [
       {
