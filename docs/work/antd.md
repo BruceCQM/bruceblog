@@ -288,3 +288,58 @@ const initialValues = { color: 'yellow' }
 这种方法就是随便用户输入，在提交表单的时候再使用 `trim()` 方法去除前后空格。
 
 但是既然设置了这个规则，还是有必要让用户知道，给用户提示，因此综合下来第二种方法是比较推荐的解决办法。
+
+## `Form.Item` 如何包裹多个标签内容
+
+### 问题背景
+
+开发工作中遇到一个需求：需要在开关表单项后面增加一句文本内容，如下图所示。
+
+![开关后增加文本内容](./images/FormItemMulti.png)
+
+### 错误方法
+
+不能直接把文本内容直接放在 `Form.Item` 里面，否则后面提交表单时 `form.getFieldsValue()` 无法正确获取开关的值。
+
+```jsx
+// 始终只能取到初始值
+<Form.Item label="开关" name="isOpen" initialValue={false} valuePropName="checked">
+  <Switch />
+  <span>这是文本内容</span>
+</Form.Item>
+```
+
+后面又尝试把文本内容放在 `Form.Item` 后面，但样式始终存在问题，`Form.Item` 如果增加自定义样式，其样式会乱，比如表单标签被开关挡住了，总之也不行。
+
+### 解决方案
+
+经过高人支招，了解了`Form.Item` 表单项如果需要在表单后面增加额外的标签组件，需将整体封装为一个大的组件写在 `FormItem` 内，否则 `form` 表单无法获取到正确的表单值。
+
+```js
+const SwitchCom = (props) => {
+  const { value, type } = props
+
+  const handleChangeSwitch = (val) => {
+    form.setFieldsValue({ isOpen: val })
+  }
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <Switch checked={value} onChange={(val) => handleChangeSwitch(val)} />
+      <span style={{ color: '#bfbfbf', marginLeft: '10px' }}>这是文本内容</span>
+    </div>
+  )
+}
+```
+
+```jsx
+<Form.Item label="开关" name="isOpen" initialValue={false}>
+  <SwitchCom type="good" />
+</Form.Item>
+```
+
+:::tip 注意事项
+1、需要给 `Switch` 的 `onChange` 事件绑定函数，开关改变时手动修改表单的 `isOpen` 值。
+
+2、`props` 里有表单的 `value` 值，若 `Form.Item` 设置了 `valuePropName` 就是对应的字符串，也可以传入自定义参数。
+:::
