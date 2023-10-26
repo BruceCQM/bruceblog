@@ -1,6 +1,6 @@
 export default [
   {
-    text: '周录记',
+    text: '随笔杂谈',
     link: '/magazine/weekly2023'
   },
   {

@@ -1,3 +1,4 @@
+# 执行该文件命令：sh ./push.sh
 # 推送代码到github和Gitee
 # git push
 git push git@github.com:BruceCQM/bruceblog.git main:main
