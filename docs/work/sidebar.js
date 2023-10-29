@@ -4,6 +4,7 @@ export default [
     collapsed: true,
     items: [
       { text: '那些年, Antd 坑我的地方', link: '/work/antd' },
+      { text: '富文本编辑器', link: '/work/editor' },
       { text: '第三方工具', link: '/work/tools' },
     ]
   },

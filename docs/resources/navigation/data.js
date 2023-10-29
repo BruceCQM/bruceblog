@@ -244,6 +244,12 @@ export default [
     title: 'JavaScript 库',
     items: [
       {
+        icon: 'https://www.wangeditor.com/favicon.ico',
+        title: 'wangEditor',
+        desc: '开源 Web 富文本编辑器，开箱即用，配置简单',
+        link: 'https://www.wangeditor.com/'
+      },
+      {
         icon: 'http://www.axios-js.com/icon/favicon-196x196.png',
         title: 'Axios',
         desc: '易用、简洁且高效的 http 库',
