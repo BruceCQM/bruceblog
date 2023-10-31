@@ -1,0 +1,69 @@
+# 小程序开发的坑
+
+## 图片组件宽高自适应
+
+接到一个需求，需要在小程序中展示图片，自然而然需要使用到 Image 图片组件。由于项目使用的是Taro，因此使用的是Taro的 `Image` 图片组件。
+
+### 错误方法
+
+产品要求的是宽度 100% 屏幕宽度，高度自适应。如果是浏览器，给图片设置 `width: 100%`，那么高度就会自适应了。然而实际上小程序不会。
+
+```jsx
+import { Image } from '@tarojs/components';
+import './index.scss';
+
+<Image
+  src={imageUrl}
+  className="photo"
+/>
+```
+
+```scss
+.photo {
+  width: 100%;
+}
+```
+实际效果是，宽度铺满了屏幕，但高度始终是固定的。这就造成了图片的变形。
+
+后来尝试过给图片设置 `object-fit: contain` 属性，依然不奏效。
+
+### 问题根源
+
+查看页面元素，发现小程序为 image 标签设置了如下属性。
+
+```css
+image {
+  display: inline-block;
+  height: 240px;
+  width: 320px;
+  overflow: hidden;
+}
+```
+
+这导致了高度无法自适应的问题，但是也不能设置图片高度，因为每张图片的宽高也不一样。
+
+### 解决方法
+
+通过查阅 Taro 和微信小程序官方文档，发现 Image 组件提供了 mode 属性可设置图片裁剪、缩放模式。
+
+其中，将 mode 属性设置为 `widthFix` 即可实现需要的效果，宽度固定，高度自适应。
+
+```jsx
+<Image
+  src={imageUrl}
+  className="photo"
+  mode="widthFix"
+/>
+```
+
+折腾半天，这么一个属性就解决了。
+
+:::warning 教训
+遇到问题积极查资料、看文档。
+:::
+
+### 相关链接
+
+[微信小程序——image图片组件宽高自适应方法](https://blog.csdn.net/weixin_42326144/article/details/104817585){link=card}
+
+[image 属性说明](https://developers.weixin.qq.com/miniprogram/dev/component/image.html){link=card}

@@ -266,3 +266,39 @@ nvm uninstall <version>   // 卸载指定版本的 node
 - 每隔一段时间，需要进行资产的再配置。例如每隔半年时间，需对资产重新进行配置，这时候增加了半年的工资，这半年的收入也成为了资产的一部分。
 
 [读懂“标准普尔家庭资产配置图”](https://zhuanlan.zhihu.com/p/357228526){link=card}
+
+
+## 1030-1105
+1、Taro 的 `Image` 图片组件宽高自适应
+
+微信小程序给图片的宽高设置了固定值，因此无法通过设置CSS属性来实现宽高自适应。
+
+使用 `Image` 的 `mode` 属性，设置为 `widthFix` 即可宽度不变，高度自适应。
+
+```jsx
+<Image
+  src={imagePath}
+  mode="widthFix"
+  onClick={() => this.bigImage(imagePath)}
+/>
+```
+
+[微信小程序——image图片组件宽高自适应方法](https://blog.csdn.net/weixin_42326144/article/details/104817585){link=card}
+
+[image 属性说明](https://developers.weixin.qq.com/miniprogram/dev/component/image.html){link=card}
+
+2、Taro 全屏预览图片
+
+`Taro.previewImage()` 方法，传入 `urls` 和 `current` 参数，分别是图片链接列表、当前预览的图片链接。
+
+```js
+bigImage = (url) => {
+  const { imageSrcs } = this.state;
+  Taro.previewImage({
+    current: url, // 当前显示图片的http链接
+    urls: imageSrcs // 需要预览的所有图片http链接列表
+  });
+};
+```
+
+[Taro.previewImage](https://taro-docs.jd.com/docs/apis/media/image/previewImage){link=card}

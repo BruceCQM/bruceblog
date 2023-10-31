@@ -12,7 +12,8 @@ export default [
     text: '地图开发',
     collapsed: true,
     items: [
-      { text: '微信小程序地图开发教程', link: '/work/maps/wx_map' },
+      { text: '小程序开发之坑', link: '/work/wx/wx_points' },
+      { text: '微信小程序地图开发教程', link: '/work/wx/wx_map' },
     ]
   },
 ]

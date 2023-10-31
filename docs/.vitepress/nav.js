@@ -50,9 +50,10 @@ export default [
       { text: '富文本编辑器', link: '/work/editor' },
       { text: '第三方工具', link: '/work/tools' },
       {
-        text: '地图开发',
+        text: '微信小程序',
         items: [
-          { text: '微信小程序地图开发', link: '/work/maps/wx_map' },
+          { text: '小程序开发之坑', link: '/work/wx/wx_points' },
+          { text: '微信小程序地图开发', link: '/work/wx/wx_map' },
         ]
       },
     ]
