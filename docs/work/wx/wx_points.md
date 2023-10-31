@@ -67,3 +67,26 @@ image {
 [微信小程序——image图片组件宽高自适应方法](https://blog.csdn.net/weixin_42326144/article/details/104817585){link=card}
 
 [image 属性说明](https://developers.weixin.qq.com/miniprogram/dev/component/image.html){link=card}
+
+## 点击全屏预览图片
+
+使用 `Taro.previewImage()` 方法，传入 `urls` 和 `current` 参数，分别是图片链接列表、当前预览的图片链接。
+
+```js
+bigImage = (url) => {
+  const { imageSrcs } = this.state;
+  Taro.previewImage({
+    current: url, // 当前显示图片的http链接
+    urls: imageSrcs // 需要预览的所有图片http链接列表
+  });
+};
+
+<Image
+  src={imageUrl}
+  className="photo"
+  mode="widthFix"
+  onClick={(imageUrl) => this.bigImage(imageUrl)}
+/>
+```
+
+[Taro.previewImage](https://taro-docs.jd.com/docs/apis/media/image/previewImage){link=card}
