@@ -247,7 +247,7 @@ nvm use <version>      // 使用某一版本的 node
 nvm uninstall <version>   // 卸载指定版本的 node
 ```
 
-[nvm详细安装步骤以及使用（window10系统）](https://blog.csdn.net/Anony_me/article/details/124153201){link=card}
+[nvm 详细安装步骤以及使用（window10 系统）](https://blog.csdn.net/Anony_me/article/details/124153201){link=card}
 
 3、运行 `nvm use xxx` 命令报权限不足
 
@@ -267,23 +267,19 @@ nvm uninstall <version>   // 卸载指定版本的 node
 
 [读懂“标准普尔家庭资产配置图”](https://zhuanlan.zhihu.com/p/357228526){link=card}
 
-
 ## 1030-1105
+
 1、Taro 的 `Image` 图片组件宽高自适应
 
-微信小程序给图片的宽高设置了固定值，因此无法通过设置CSS属性来实现宽高自适应。
+微信小程序给图片的宽高设置了固定值，因此无法通过设置 CSS 属性来实现宽高自适应。
 
 使用 `Image` 的 `mode` 属性，设置为 `widthFix` 即可宽度不变，高度自适应。
 
 ```jsx
-<Image
-  src={imagePath}
-  mode="widthFix"
-  onClick={() => this.bigImage(imagePath)}
-/>
+<Image src={imagePath} mode="widthFix" onClick={() => this.bigImage(imagePath)} />
 ```
 
-[微信小程序——image图片组件宽高自适应方法](https://blog.csdn.net/weixin_42326144/article/details/104817585){link=card}
+[微信小程序——image 图片组件宽高自适应方法](https://blog.csdn.net/weixin_42326144/article/details/104817585){link=card}
 
 [image 属性说明](https://developers.weixin.qq.com/miniprogram/dev/component/image.html){link=card}
 
@@ -293,12 +289,22 @@ nvm uninstall <version>   // 卸载指定版本的 node
 
 ```js
 bigImage = (url) => {
-  const { imageSrcs } = this.state;
+  const { imageSrcs } = this.state
   Taro.previewImage({
     current: url, // 当前显示图片的http链接
-    urls: imageSrcs // 需要预览的所有图片http链接列表
-  });
-};
+    urls: imageSrcs, // 需要预览的所有图片http链接列表
+  })
+}
 ```
 
 [Taro.previewImage](https://taro-docs.jd.com/docs/apis/media/image/previewImage){link=card}
+
+## 1112-1231
+
+1、QPS 为何物？
+
+QPS，Queries Per Second，每秒钟处理的请求数量。
+
+2000 万 QPS 的场景：春晚抢红包。
+
+[同事们天天谈论的 QPS、TPS、RT、吞吐量等词儿究竟是什么意思？](https://baijiahao.baidu.com/s?id=1764021596169092019){link=card}
