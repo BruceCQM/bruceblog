@@ -1,6 +1,6 @@
 export default [
   {
-    text: '周录记',
+    text: '随笔杂谈',
     link: '/magazine/weekly2023'
   },
   {
@@ -11,26 +11,17 @@ export default [
     text: '前端学习',
     items: [
       {
-        text: '基础',
+        text: '扎马步',
         items: [
           { text: 'HTML / CSS', link: '/fe/css/css' },
           { text: 'JavaScript', link: '/fe/js/what_is_js' },
-        ]
-      },
-      {
-        text: '框架',
-        items: [
           { text: 'Vue', link: '/fe/vue/vue_core_basis' },
           { text: 'React', link: '/fe/react/react_basis' },
-        ]
-      },
-      {
-        text: '玩意儿',
-        items: [
           { text: 'Nodejs', link: '/fe/nodejs/node_basis' },
           { text: 'Git', link: '/fe/git/git' },
           { text: 'Webpack', link: '/fe/webpack/webpack_basis' },
           { text: 'Vscode', link: '/fe/ide/vscode' },
+          { text: '前端编程题', link: '/fe/js/coding_problem' },
         ]
       },
       {
@@ -56,11 +47,13 @@ export default [
     text: '高效搬砖',
     items: [
       { text: 'Antd 虐我千百遍', link: '/work/antd' },
+      { text: '富文本编辑器', link: '/work/editor' },
       { text: '第三方工具', link: '/work/tools' },
       {
-        text: '地图开发',
+        text: '微信小程序',
         items: [
-          { text: '微信小程序地图开发', link: '/work/maps/wx_map' },
+          { text: '小程序开发之坑', link: '/work/wx/wx_points' },
+          { text: '微信小程序地图开发', link: '/work/wx/wx_map' },
         ]
       },
     ]

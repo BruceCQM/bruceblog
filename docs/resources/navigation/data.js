@@ -244,6 +244,12 @@ export default [
     title: 'JavaScript 库',
     items: [
       {
+        icon: 'https://www.wangeditor.com/favicon.ico',
+        title: 'wangEditor',
+        desc: '开源 Web 富文本编辑器，开箱即用，配置简单',
+        link: 'https://www.wangeditor.com/'
+      },
+      {
         icon: 'http://www.axios-js.com/icon/favicon-196x196.png',
         title: 'Axios',
         desc: '易用、简洁且高效的 http 库',
@@ -382,6 +388,24 @@ export default [
         desc: '无所不有的在线工具箱，在线工具,开发人员工具,代码格式化、压缩、加密、解密...',
         link: 'https://tool.lu/'
       },
+      {
+        icon: 'https://onlineconvertfree.com/favicon.ico',
+        title: 'OnlineConvertFree',
+        desc: 'OnlineConvertFree 软件是在线免费转换软件， 能转换各种文件、视频、音频和照片等。',
+        link: 'https://onlineconvertfree.com/zh/'
+      },
+      {
+        icon: 'https://www.aconvert.com/favicon.ico',
+        title: 'Aconvert',
+        desc: '（好用免费）在线转换文档，图像，视频，音频文件格式',
+        link: 'https://www.aconvert.com/cn/'
+      },
+      {
+        icon: 'https://tinypng.com/images/favicon.ico',
+        title: 'TinyPng',
+        desc: '好用的在线图片压缩工具',
+        link: 'https://tinypng.com/'
+      },
     ]
   },
   {
@@ -404,6 +428,12 @@ export default [
         title: 'ShowDoc',
         desc: '一个非常适合IT团队的在线API文档、技术文档工具',
         link: 'https://www.showdoc.com.cn/'
+      },
+      {
+        icon: 'https://source.showdoc.com.cn/favicon.ico',
+        title: 'RunApi',
+        desc: 'runapi是一个以接口为核心的开发测试工具（功能上类似postman）, 包含接口测试/自动流程测试/Mock数据/项目协作等功能',
+        link: 'https://www.showdoc.com.cn/runapi/30291'
       },
     ]
   },
@@ -451,12 +481,6 @@ export default [
         title: 'Shields.io',
         desc: 'GitHub 小徽章制作网站',
         link: 'https://shields.io/'
-      },
-      {
-        icon: 'https://onlineconvertfree.com/favicon.ico',
-        title: 'OnlineConvertFree',
-        desc: 'OnlineConvertFree 软件是在线免费转换软件， 能转换各种文件、视频、音频和照片等。',
-        link: 'https://onlineconvertfree.com/zh/'
       },
     ]
   },
@@ -509,6 +533,17 @@ export default [
         title: 'docsify',
         desc: '一个神器的文档生成器',
         link: 'https://docsify.js.org/#/'
+      },
+    ]
+  },
+  {
+    title: '浏览器',
+    items: [
+      {
+        icon: 'https://chrome.zzzmh.cn/favicon.ico',
+        title: '极简插件',
+        desc: '不用翻墙的 Chrome 扩展插件商店，优质crx应用下载',
+        link: 'https://chrome.zzzmh.cn/#/index'
       },
     ]
   },

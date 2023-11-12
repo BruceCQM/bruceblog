@@ -68,6 +68,8 @@ export default [
       { text: 'Webpack', link: '/fe/webpack/webpack_basis' },
       { text: 'Vscode', link: '/fe/ide/vscode' },
       { text: 'Vuepress', link: '/fe/vuepress/vuepress' },
+      { text: 'Vitepress', link: '/fe/vuepress/vitepress' },
+      { text: '前端编程题', link: '/fe/js/coding_problem' },
     ]
   },
 ]

@@ -12,7 +12,9 @@
 [Taro Map 实例方法](https://taro-docs.jd.com/docs/apis/media/map/MapContext){link=card}
 [微信官方文档 map](https://developers.weixin.qq.com/miniprogram/dev/component/map.html){link=card}
 
-## 创建地图
+## 常见用法
+
+### 创建地图
 
 引入 `Map` 组件，再像普通组件使用即可。可以添加很多属性，各个属性的作用详见 [Taro 文档](https://taro-docs.jd.com/docs/components/maps/map)。
 
@@ -26,7 +28,7 @@ class TaroMap extends Component {
 }
 ```
 
-## 在地图画标记点
+### 在地图画标记点
 
 通过设置 `Map` 组件的 `markers` 属性，在地图上设置标记点。
 
@@ -69,7 +71,7 @@ class TaroMap extends Component {
 }
 ```
 
-## 在地图画圆圈
+### 在地图画圆圈
 
 通过设置 `Map` 组件的 `circles` 属性，在地图上画圈。
 
@@ -101,7 +103,7 @@ class TaroMap extends Component {
 }
 ```
 
-## 初始化地图中心为当前位置，并画圈
+### 初始化地图中心为当前位置，并画圈
 
 大部分地图都会在进入页面时把中心移动到当前位置，同时会以当前位置为中心画一个圆圈。
 
@@ -147,7 +149,7 @@ class TaroMap extends Component {
 }
 ```
 
-## 始终固定图标在地图中心
+### 始终固定图标在地图中心
 
 平时常见的地图，往往都会有一个图标固定在地图的中心，并且无论如何拖动地图，位置都始终不变。
 
@@ -195,7 +197,7 @@ class TaroMap extends Component {
 }
 ```
 
-## 返回当前位置
+### 返回当前位置
 
 点击返回图标，让地图回到当前位置，几乎是每个地图都必备的功能。而这个功能实现起来其实非常简单。
 
@@ -209,7 +211,7 @@ handleBackCurrenLocation = () => {
 }
 ```
 
-## 地图拖动展示不同的标记点
+### 地图拖动展示不同的标记点
 
 由于地图上的标记点可能会非常多，所以一般都不会一口气把所有的点都画到地图上，而是展示地图中心某个范围之内的点。
 
@@ -250,3 +252,43 @@ class TaroMap extends Component {
   }
 }
 ```
+
+
+### 地图设置圆角
+
+微信小地图比较坑，直接给 `Map` 组件设置 `border-radius` 属性是无法生效的，并没有圆角。
+
+需要在外层套一个 `View`，并且设置地图的大小略大于外层盒子，再给外层盒子设置溢出隐藏。
+
+IOS 地图圆角不生效，还需要加上 `transform: 'translateY(0)'`。
+
+```jsx
+<View 
+  style={{
+    width: '100%', 
+    height: '290rpx', 
+    borderRadius: '10px', 
+    overflow: 'hidden', 
+    transform: 'translateY(0)'
+  }}
+>
+  <Map
+    style={{ width: '100%', height: '330rpx' }}
+    className="map"
+    circles={circles}
+    longitude={longitude}
+    latitude={latitude}
+    showLocation
+  />
+</View>
+```
+
+[map地图组件设置圆角](https://developers.weixin.qq.com/community/develop/doc/000088de32c6d80c00e7444895ac00){link=card}
+
+## 一些坑点
+
+- 使用 `circles` 属性画圆圈，**颜色只能使用十六进制写法**，否则在手机预览会不生效。`rgba` 的颜色写法只在微信开发者工具上生效，手机不生效。
+- 使用 `Taro.moveToLocation` 将地图中心移动到当前位置，在手机预览会出现问题。第一次进地图可以正常移动，但是退出地图再进入就无法移动到当前位置。可以通过设置 `<Map>` 的 `longitude` 和 `latitude` 属性来设置地图的初始中心位置。
+- 目前小程序地图已经支持同层渲染，不需要再使用 `controls`、`cover-view`，直接使用普通的 `view` 视图组件即可，默认会在地图上方。
+- 图标 `markers` 的 `id` 如果数字太大，会转换错误，即使手动使用 `Number()` 也会错误。**无法通过 `onMarkerTap` 事件获取到正确的 `id`**。只能寻找其他小数字且唯一的值。
+- 手机预览的情况下，`markers` 无法正确显示 `svg` 图片，需要使用 `png` 图片。
