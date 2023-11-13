@@ -32,6 +32,12 @@ export default [
         desc: '冴羽写博客的地方，预计写四个系列：JavaScript深入系列、JavaScript专题系列、ES6系列、React系列。',
         link: 'https://github.com/mqyqingfeng/Blog'
       },
+      {
+        icon: 'https://coolshell.cn/favicon.png',
+        title: '酷壳-CoolShell',
+        desc: '享受编程和技术所带来的快乐 – Coding Your Ambition',
+        link: 'https://coolshell.cn/'
+      },
     ]
   },
   {
