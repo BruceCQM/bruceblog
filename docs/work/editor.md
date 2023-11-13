@@ -247,3 +247,66 @@ const getDocumentDetail = useCallback(async () => {
 ```
 
 ## 目录生成
+
+目录生成主要有两部分内容：编辑器内容改变实时生成目录、点击目录跳转到对应标题位置。
+
+### 生成目录
+
+生成目录的整理思路是：当编辑器内容发生改变时，遍历编辑器区域里的 `<h>` 标签，提取标签内的文本，得到文章的目录。
+
+要点：
+
+- wangEditor 的编辑器区域默认存在一个名为 `docContent` 的 id，可据此选择到编辑器区域元素。
+
+- `querySelectorAll` 选择页面元素。
+
+- `innerText` 属性提取标签文本。
+
+- 给编辑器的标题标签设置 id 属性，点击目录跳转到标题需用到 id。
+
+```js
+useEffect(() => {
+  const docContent = document.querySelector('#docContent');
+  const eles = docContent?.querySelectorAll('h1,h2,h3,h4,h5,h6');
+  const links = [];
+  if (eles) {
+    eles.forEach((item, index) => {
+      links.push(item.innerText);
+      item.setAttribute('id', `mulu${index}`);
+    });
+  }
+  setCatalogList(links);
+}, [html]);
+```
+
+### 点击目录跳到对应标题
+
+主要思路：点击目录，将页面滚动到 id 对应的标题位置。
+
+```jsx
+const handleclickCatalog = (index) => {
+  setTimeout(() => {
+    const dom = document.getElementById(`mulu${index}`);
+    if (dom) {
+      dom.scrollIntoView();
+    }
+  }, 100);
+};
+
+<div>文档目录</div>
+  {catalogList?.map((text, index) => {
+    return (
+      <a
+        key={index}
+        onClick={() => handleclickCatalog(index)}
+      >
+        {text}
+      </a>
+    );
+  })}
+</div>
+```
+
+`scrollIntoView` 方法简介：将调用这个方法的元素，移动到父元素（可滚动的）的可视区域。
+
+[scrollIntoView](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollIntoView){link=card}
