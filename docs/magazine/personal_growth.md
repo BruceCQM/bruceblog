@@ -113,3 +113,56 @@
 #### 8、输出观点和价值。
 
 #### 9、朋友圈很重要。
+
+## 程序员应知应会
+
+### 每个程序员应读的书
+
+- 《代码大全》
+- 《程序员修炼之道》
+- 《计算机的构造和解释》
+- 《算法导论》
+- 《设计模式》
+- 《重构》
+- 《人月神话》
+- 《代码整洁之道》
+- 《Effective C++》/《More Effective C++》
+- 《Unix 编程艺术》《Unix 高级环境编程》
+
+[What is the single most influential book every programmer should read?](https://stackoverflow.com/questions/1711/what-is-the-single-most-influential-book-every-programmer-should-read){link=card}
+
+### 每个搞计算机专业的学生应有的知识
+
+作品比简历更优参考意义。项目经历、对开源软件的贡献、个人网站等。
+
+学会与人交流，包括如何写演示文稿，以及面对质疑时如何与人辩论的能力。
+
+计算机专业人士所需要的硬技能：工程类数学、系统管理、程序设计语言、离散数学等。
+
+[What every computer science major should know](https://matt.might.net/articles/what-cs-majors-should-know/){link=card}
+
+### LinkedIn 高效的代码复查技巧
+
+- 通过建立公司范围的 Code Review 工具，这就可以做跨团队的 Code Review。
+
+- Code Review 的经验作为员工晋升的参考因素之一。
+
+- Reviewer 可能不了解某块代码修改的背景和目的，因此要求对提交代码写说明文档。
+
+- 为提高员工积极性，LinkedIn 的代码复查工具允许提出“这段代码很棒”之类的话语，以便让好代码的作者得到鼓励。
+
+- 不但要 Review 提交者的代码，还要 Reivew 提交者做过的测试。看看其测试用例是否合理，从而提出测试建议。
+
+[LinkedIn’s Tips for Highly Effective Code Review](https://thenewstack.io/linkedin-code-review/){link=card}
+
+[从 CODE REVIEW 谈如何做技术](https://coolshell.cn/articles/11432.html){link=card}
+
+### 编程语言和代码质量的研究报告
+
+[A Large-Scale Study of Programming Languages and Code Quality in Github](https://cacm.acm.org/magazines/2017/10/221326-a-large-scale-study-of-programming-languages-and-code-quality-in-github/fulltext){link=card}
+
+### 电子书：《C++ 软件性能优化》
+
+C++ 程序员必读书籍。
+
+[Optimizing Software in C++ - Agner Fog](https://agner.org/optimize/optimizing_cpp.pdf){link=card}
