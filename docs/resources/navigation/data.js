@@ -117,8 +117,14 @@ export default [
       {
         icon: 'https://zh-hans.reactjs.org/favicon.ico',
         title: 'React',
-        desc: '用于构建用户界面的 JavaScript 库',
-        link: 'https://caniuse.com'
+        desc: 'The library for web and native user interfaces',
+        link: 'https://react.dev/'
+      },
+      {
+        icon: 'https://zh-hans.reactjs.org/favicon.ico',
+        title: 'React 中文官网',
+        desc: '用于构建 Web 和原生交互界面的库',
+        link: 'https://zh-hans.react.dev/'
       },
       {
         icon: 'https://gw.alipayobjects.com/zos/rmsportal/rlpTLlbMzTNYuZGGCVYM.png',

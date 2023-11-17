@@ -310,3 +310,5 @@ const handleclickCatalog = (index) => {
 `scrollIntoView` 方法简介：将调用这个方法的元素，移动到父元素（可滚动的）的可视区域。
 
 [scrollIntoView](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollIntoView){link=card}
+
+[滚动到可视区域](https://juejin.cn/post/7208367266533048378){link=card}

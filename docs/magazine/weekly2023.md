@@ -308,3 +308,15 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 2000 万 QPS 的场景：春晚抢红包。
 
 [同事们天天谈论的 QPS、TPS、RT、吞吐量等词儿究竟是什么意思？](https://baijiahao.baidu.com/s?id=1764021596169092019){link=card}
+
+2、PoC 为何物？
+
+PoC，Proof of Concept，概念验证。是指企业在实际场景给客户演示或使用，验证产品对客户的实际价值。
+
+[什么是 PoC？如何做好概念验证？](https://zhuanlan.zhihu.com/p/552285379){link=card}
+
+3、《小狗钱钱》读书笔记
+
+理财思维经典读物《小狗钱钱》的读书笔记。
+
+[我的理财入门书籍——《小狗钱钱》读书笔记（纯干货）](https://zhuanlan.zhihu.com/p/178135876){link=card}
