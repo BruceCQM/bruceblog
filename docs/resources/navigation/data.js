@@ -127,6 +127,12 @@ export default [
         link: 'https://zh-hans.react.dev/'
       },
       {
+        icon: 'https://zh-hans.reactjs.org/favicon.ico',
+        title: 'React Old Doc',
+        desc: 'A JavaScript library for building user interfaces',
+        link: 'https://legacy.reactjs.org/'
+      },
+      {
         icon: 'https://gw.alipayobjects.com/zos/rmsportal/rlpTLlbMzTNYuZGGCVYM.png',
         title: 'Ant Design',
         desc: '一套企业级 UI 设计语言和 React 组件库',
