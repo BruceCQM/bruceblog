@@ -118,3 +118,39 @@
 C++ 程序员必读书籍。
 
 [Optimizing Software in C++ - Agner Fog](https://agner.org/optimize/optimizing_cpp.pdf){link=card}
+
+## 前端练级攻略
+
+- HTML5：《HTML5 权威指南》；SVG、Canvas 和 WebGL 对应于矢量图、位图和 3D 图的渲染，这三个看 MDN。
+
+:::tip MDN 链接
+
+- [SVG: Scalable Vector Graphics](https://developer.mozilla.org/en-US/docs/Web/SVG)
+- [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API?retiredLocale=kab)
+- [The WebGL API: 2D and 3D graphics for the web](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API)
+
+:::
+
+- CSS3：[MDN Web Doc - CSS](https://developer.mozilla.org/zh-CN/docs/Web/CSS)；预处理工具 less、sass。
+
+- JavaScript：JS 基础；ES6，看阮一峰的《ECMAScript 6 入门》。
+
+- 浏览器原理：[浏览器的渲染原理简介](https://coolshell.cn/articles/9666.html)；Virtual DOM 学习，前端渲染和性能的关键技术，[深度剖析：如何实现一个 Virtual DOM 算法](https://github.com/livoras/blog/issues/13)。
+
+- 网络协议：HTTP、HTTP2、WebSocket。
+
+- 前端性能优化：《高性能网站建设指南：前端工程师技能精髓》。
+
+- 前端框架：React、Vue。
+
+:::tip React 提高需学习的东西
+
+- 状态：[Thinking Statefully](https://daveceddia.com/thinking-statefully/)
+
+- 函数式编程：React 更符合后端程序员的开发思维。[《JS 函数式编程指南中文版》](https://jigsawye.gitbooks.io/mostly-adequate-guide/content/ch1.html)
+
+- 设计相关：React 的设计模式。[React Pattern](https://reactpatterns.com/)。
+
+:::
+
+- UI/UX 设计：前端能学点 UI 设计最好。
