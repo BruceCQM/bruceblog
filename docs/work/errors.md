@@ -24,8 +24,6 @@ function demo() {
 
 [Error: Minified React error #31](https://legacy.reactjs.org/docs/error-decoder.html/?invariant=31&args%5B%5D=object%20with%20keys%20%7Btitle%7D&args%5B%5D=){link=card}
 
-[React踩坑记录：Error: Minified React error #31](https://blog.csdn.net/weixin_40920953/article/details/126049965){link=card}
-
 一个实际生产环境遇到该报错的案例，深入源码层面寻找剖析错误根源。
 
 [React#31 error，让我熬夜让我秃](https://zhuanlan.zhihu.com/p/367874784){link=card}
@@ -94,3 +92,25 @@ function demo() {
 ```
 
 [Error: Minified React error #130](https://legacy.reactjs.org/docs/error-decoder.html/?invariant=130&args%5B%5D=undefined&args%5B%5D=){link=card}
+
+### React error #185
+
+错误原因：写了死循环，导致栈溢出。
+
+在 `render` 方法或 `componentWillUpdate`、`componentDidUpdate` 钩子中调用 `setState` 可能会出现该错误。
+
+```jsx
+class demo extends React.Component {
+  state = {
+    loading: true,
+  };
+
+  render() {
+    const { loading } = this.state;
+    this.setState({ loading: !loading });
+    return (<div>2322</div>);
+  }
+}
+```
+
+解决方法：不要再 `render` 等方法里调用 `setState`。
