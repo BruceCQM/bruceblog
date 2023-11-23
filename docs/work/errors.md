@@ -114,3 +114,61 @@ class demo extends React.Component {
 ```
 
 解决方法：不要再 `render` 等方法里调用 `setState`。
+
+## Git
+
+### 根据远程分支创建本地分支报错
+
+```bash
+git checkout -b dev origin/dev
+```
+
+错误提示：
+```bash
+
+fatal: 'origin/dev' is not a commit and a branch 'dev' cannot be created from it
+```
+错误原因：远程没有 `dev` 这个分支。
+
+解决方法：`git pull` 拉取最新远程代码，再执行创建分支命令。
+
+### `fatal: Authentication failed for ''`
+
+错误原因：git 账号改了密码，需要重新输入密码，但用户名或密码输错了。
+
+解决方法：
+
+1. 检查密码
+
+先检查用户名和密码是否正确，本人就是用户名输错了。
+
+2. git 命令
+
+输入以下命令，删除本地 git 凭据，这样下次 git 就会要求输入用户名和密码。
+
+```bash
+git config --system --unset credential.helper
+```
+
+再输入以下命令，重新生成本地凭据文件，通常是 `~/.git-credentials`。
+
+```bash
+git config --global credential.helper store
+```
+
+最后再执行 `git pull` 命令，会提示输入账号密码。
+
+3. 修改 Windows 用户凭据
+
+入口：控制面板-用户账户-管理你的凭据-Windows凭据。
+
+找到对应的 git 网站，编辑用户名和密码，保存即可。
+
+![用户账户](./images/errors/user_account.png)
+
+![管理凭据](./images/errors/manage_credentials.png)
+
+![Windows凭据](./images/errors/windows_credentials.png)
+
+
+
