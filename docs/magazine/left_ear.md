@@ -154,3 +154,13 @@ C++ 程序员必读书籍。
 :::
 
 - UI/UX 设计：前端能学点 UI 设计最好。
+
+## 软件设计
+
+### 软件设计一些原则
+
+- Don't Repeat Yourself（DRY）：不要重复自己。抽取封装重复代码。
+
+- KISS（Keep It Simple and Stupid）：保持简单，不要复杂。简约至上
+
+- YAGNI（You Ain't Gonna Need It）：不要无用。只考虑必须的功能，避免过度设计。
