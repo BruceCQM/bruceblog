@@ -170,5 +170,51 @@ git config --global credential.helper store
 
 ![Windows凭据](./images/errors/windows_credentials.png)
 
+## NPM
 
+### npm ERR! code ELIFECYCLE
 
+![npm_err_ELIFECYCLE](./images/errors/npm_err_ELIFECYCLE.png)
+
+错误原因：`node_modules` 中下载的依赖包的版本，和 `package-lock.json` 中记录的版本发生冲突。
+
+解决方法：清空缓存，删除 `node_modules` 和 `package-lock.json`，重新安装依赖包。
+
+```bash
+npm cache clean --force
+# 强制删除 node_mudules 及其内容
+rm -rf node_modules
+rm package-lock.json
+npm install
+```
+
+:::tip rm 命令
+`rm` 命令是 Linux 中用于删除文件或目录的命令。有如下的参数。
+- `-r` 递归删除目录及其内容。
+- `-f` 强制删除文件，不给提示。
+- `-i` 交互模式，在删除前给出提示。
+- `-v` 显示删除的详细信息。
+:::
+
+### PostCSS plugin postcss-resolve-url requires PostCSS 8
+
+![postcss](./images/errors/postcss.png)
+
+错误原因：postcss 版本不对。
+
+解决方法：重新安装对应版本。
+
+```bash
+npm install @postcss8.4.6 -D
+```
+
+### 安装依赖报错：npm WARN tar ENOENT: no such file or directory 
+
+错误原因：依赖包有问题。
+
+解决方法：删除 `package-lock.json`，重新安装依赖包。
+
+```bash
+rm package-lock.json
+npm install
+``````

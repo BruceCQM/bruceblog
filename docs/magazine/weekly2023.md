@@ -320,3 +320,9 @@ PoC，Proof of Concept，概念验证。是指企业在实际场景给客户演�
 理财思维经典读物《小狗钱钱》的读书笔记。
 
 [我的理财入门书籍——《小狗钱钱》读书笔记（纯干货）](https://zhuanlan.zhihu.com/p/178135876){link=card}
+
+4、杀毒垃圾清理软件推荐
+
+文章推荐了一些干净的杀毒、垃圾清理软件，如CCleaner、Microsoft Security Essentials。
+
+[除了360，有哪些可推荐的清理垃圾的软件、杀毒与维护的免费软件？](https://www.zhihu.com/question/20469497){link=card}
