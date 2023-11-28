@@ -217,4 +217,22 @@ npm install @postcss8.4.6 -D
 ```bash
 rm package-lock.json
 npm install
-``````
+```
+
+## 小黑窗命令
+
+### rm 删除命令报错
+
+在 Windows cmd窗口运行 `rm -rf` 命令报错：`rm 不是内部或外部命令，也不是可运行的程序`。
+
+错误原因：`rm -rf` 是 Linux 命令，在 Windows 中不支持。
+
+解决方法：Windows 里使用 `rimraf` 命令。
+
+### rimraf 命令报错
+
+在 Windows cmd窗口运行 `rimraf` 命令报错：`rimraf 不是内部命令`
+
+错误原因：`rimraf` 是 Node.js 包，在 Windows 中不支持。
+
+解决方法：使用 `npm install -g rimraf` 命令全局安装，再输入命令。
