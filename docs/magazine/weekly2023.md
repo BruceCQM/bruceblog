@@ -350,3 +350,9 @@ PoC，Proof of Concept，概念验证。是指企业在实际场景给客户演�
 文章介绍了 Google 内部对各种语言的编程风格的要求。
 
 [Google Style Guides](https://google.github.io/styleguide/){link=card}
+
+9、简约翻译
+
+A simple, open source bilingual translation extension & Greasemonkey script.
+
+[kiss-translator](https://github.com/fishjar/kiss-translator){link=card}
