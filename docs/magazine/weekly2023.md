@@ -323,9 +323,9 @@ PoC，Proof of Concept，概念验证。是指企业在实际场景给客户演�
 
 4、杀毒垃圾清理软件推荐
 
-文章推荐了一些干净的杀毒、垃圾清理软件，如CCleaner、Microsoft Security Essentials。
+文章推荐了一些干净的杀毒、垃圾清理软件，如 CCleaner、Microsoft Security Essentials。
 
-[除了360，有哪些可推荐的清理垃圾的软件、杀毒与维护的免费软件？](https://www.zhihu.com/question/20469497){link=card}
+[除了 360，有哪些可推荐的清理垃圾的软件、杀毒与维护的免费软件？](https://www.zhihu.com/question/20469497){link=card}
 
 5、深入了解 `useEffect`
 
@@ -343,7 +343,7 @@ PoC，Proof of Concept，概念验证。是指企业在实际场景给客户演�
 
 文章介绍了 `<a>` 标签使用 `target="_blank"` 时，可能会带来的安全漏洞。
 
-[target="_blank" 带来的安全漏洞](https://blog.bolajiayodeji.com/the-security-vulnerabilities-of-the-target-blank-attribute){link=card}
+[target="\_blank" 带来的安全漏洞](https://blog.bolajiayodeji.com/the-security-vulnerabilities-of-the-target-blank-attribute){link=card}
 
 8、Google 编程风格指南
 
@@ -356,3 +356,9 @@ PoC，Proof of Concept，概念验证。是指企业在实际场景给客户演�
 A simple, open source bilingual translation extension & Greasemonkey script.
 
 [kiss-translator](https://github.com/fishjar/kiss-translator){link=card}
+
+10、经济机器是怎样运行的
+
+网易公开课视频《经济机器是怎样运行的》，用通俗易懂的语言和动画，讲述了经济机器是如何运行的。
+
+[经济机器是怎样运行的](https://open.163.com/newview/movie/free?pid=MBPO9ED98&mid=MBPO9S8IQ){link=card}

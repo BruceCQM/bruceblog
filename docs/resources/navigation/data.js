@@ -595,6 +595,17 @@ export default [
     ]
   },
   {
+    title: '学习网站',
+    items: [
+      {
+        icon: 'https://c.open.163.com/favicon.ico',
+        title: '网易公开课',
+        desc: '网易公开课,公开课,网课,在线教育,教育,慕课,TED,纪录片',
+        link: 'https://open.163.com/',
+      }
+    ]
+  },
+  {
     title: '这网站有点儿意思',
     items: [
       {
