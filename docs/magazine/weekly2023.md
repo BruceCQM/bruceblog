@@ -326,3 +326,27 @@ PoC，Proof of Concept，概念验证。是指企业在实际场景给客户演�
 文章推荐了一些干净的杀毒、垃圾清理软件，如CCleaner、Microsoft Security Essentials。
 
 [除了360，有哪些可推荐的清理垃圾的软件、杀毒与维护的免费软件？](https://www.zhihu.com/question/20469497){link=card}
+
+5、深入了解 `useEffect`
+
+文章对 React 核心开发者所写的 a-complete-guide-to-useeffect 一文进行精简提炼，是深入了解 `useEffect` 的好文。
+
+[精读《useEffect 完全指南》](https://juejin.cn/post/6844903806090608647){link=card}
+
+6、ChatGPT 使用总结
+
+文章对 ChatGPT 进行了介绍和使用的总结。
+
+[ChatGPT 总结](https://blog.warmplace.cn/post/chatgpt){link=card}
+
+7、`target="_blank"` 的安全漏洞
+
+文章介绍了 `<a>` 标签使用 `target="_blank"` 时，可能会带来的安全漏洞。
+
+[target="_blank" 带来的安全漏洞](https://blog.bolajiayodeji.com/the-security-vulnerabilities-of-the-target-blank-attribute){link=card}
+
+8、Google 编程风格指南
+
+文章介绍了 Google 内部对各种语言的编程风格的要求。
+
+[Google Style Guides](https://google.github.io/styleguide/){link=card}
