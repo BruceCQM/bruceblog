@@ -52,8 +52,14 @@ export default [
       {
         icon: 'https://es6.ruanyifeng.com/favicon.ico',
         title: 'ES6 入门教程',
-        desc: '阮一峰老师所著的 ES6 语法特性介绍教程',
+        desc: '阮一峰所著的 ES6 语法特性介绍教程',
         link: 'https://es6.ruanyifeng.com/'
+      },
+      {
+        icon: 'https://wangdoc.com/typescript/assets/icons/favicon-96x96.png',
+        title: 'TypeScript 教程',
+        desc: '阮一峰所著的 TypeScript 开源教程，介绍基本概念和用法，面向初学者。',
+        link: 'https://wangdoc.com/typescript/'
       },
       {
         icon: 'https://developer.mozilla.org/favicon-48x48.cbbd161b.png',
