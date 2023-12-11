@@ -170,6 +170,27 @@ git config --global credential.helper store
 
 ![Windows凭据](./images/errors/windows_credentials.png)
 
+### ssh 登录 GitHub 报错：Connection to xxx port 22: Software caused connection abort
+
+修改 GitHub 的端口为 443。
+
+```bash
+# edit this file, if there not, create one
+vim ~/.ssh/config
+
+# add the content below to the file
+# then it will use port 443 when ssh connect to github
+Host github.com
+Hostname ssh.github.com
+Port 443
+
+# test if it works
+# if it works, it shows tip: Hi xxxxx! You've successfully authenticated, but GitHub does not provide shell access
+ssh -T git@github.com
+```
+
+[ssh: connect to host github.com port 22: Connection refused](https://zhuanlan.zhihu.com/p/521340971){link=card}
+
 ## NPM
 
 ### npm ERR! code ELIFECYCLE
