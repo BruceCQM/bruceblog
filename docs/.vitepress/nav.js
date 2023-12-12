@@ -34,12 +34,13 @@ export default [
     ]
   },
   {
-    text: '计算机基础',
-    link: '/cs/network'
+    text: '面试宝典',
+    link: '/interview/javascript'
   },
   {
     text: '知也无涯',
     items: [
+      { text: '计算机基础', link: '/cs/network' },
       { text: 'Python', link: '/lang/python/crawler' }
     ]
   },
