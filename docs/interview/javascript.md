@@ -17,3 +17,29 @@
 
 4、引用数据类型大小不固定、所占内存空间较大，若在栈中存储，会影响程序的运行性能，因此在堆中存储。同时，引用数据类型在栈中存储的是指针，指向堆中实体的起始地址。
 :::
+
+## 怎么判断 JS 数据类型
+
+### `typeof` 判断
+
+```js
+// 7大基本数据类型
+typeof 123 // number
+typeof 'abc' // string
+typeof true // boolean
+typeof undefined // undefined
+typeof null // object
+typeof Symbol() // symbol
+typeof BigInt(123) // bigint
+
+// 引用数据类型
+typeof {} // object
+typeof [] // object
+typeof new Date() // object
+typeof /abc/ // object
+typeof new Map() // object
+typeof new Set() // object
+typeof function () {} // function，特殊情况
+```
+
+### `instanceof` 判断
