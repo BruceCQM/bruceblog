@@ -2,6 +2,8 @@
 
 [Ant Design](https://ant.design/index-cn){link=card}
 
+[Ant Design 国内高速镜像](https://ant-design.antgroup.com/index-cn){link=card}
+
 ## 前言
 
 Ant Design 是蚂蚁出品的出色优秀的 React 组件库，相信使用 React 进行管理系统开发的小伙伴们或多或少都接触过 Ant Design。很多公司基于 React 开发的管理端系统也都是使用 Ant Design 的组件库。
@@ -343,3 +345,19 @@ const SwitchCom = (props) => {
 
 2、`props` 里有表单的 `value` 值，若 `Form.Item` 设置了 `valuePropName` 就是对应的字符串，也可以传入自定义参数。
 :::
+
+## `Table` 合并单元格
+
+`Table `合并单元格的写法，官网上的写法是错的.
+
+```js
+render: (text, record, index) => {
+  return {
+    children: text,
+    props: {
+      // 合并单元格
+      rowSpan: [0, 5].includes(index) ? 5 : 0,
+    },
+  };
+}
+```

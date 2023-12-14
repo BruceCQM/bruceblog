@@ -362,3 +362,9 @@ A simple, open source bilingual translation extension & Greasemonkey script.
 网易公开课视频《经济机器是怎样运行的》，用通俗易懂的语言和动画，讲述了经济机器是如何运行的。
 
 [经济机器是怎样运行的](https://open.163.com/newview/movie/free?pid=MBPO9ED98&mid=MBPO9S8IQ){link=card}
+
+11、BEM 命名规范
+
+文章详细介绍了 CSS 的 BEM 命名规范。
+
+[CSS — BEM 命名规范](https://juejin.cn/post/6844903672162304013){link=card}

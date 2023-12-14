@@ -90,3 +90,24 @@ bigImage = (url) => {
 ```
 
 [Taro.previewImage](https://taro-docs.jd.com/docs/apis/media/image/previewImage){link=card}
+
+## 小程序页面栈溢出报错
+
+小程序页面栈溢出报错 `navigateTo fail page limit exceeded`
+
+报错原因：小程序页面栈最多十层，反复使用 `navigateTo` 跳转页面，压入页面栈，会导致报错。
+
+判断是否页面栈溢出，可以使用 `getCurrentPages` 获取当前页面栈，如果栈内页面数量大于 10，说明页面栈溢出，使用 `redirectTo` 跳转页面。
+
+```js
+const pages = getCurrentPages();
+if(pages.length >= 10) {
+  // 替换当前页面栈，类似 history.replace()
+  Taro.redirectTo({ url: '' });
+} else {
+  Taro.navigateTo({ url: '' });
+
+}
+```
+
+[小程序页面跳转，页面栈提示”navigateTo fail page limit exceeded“错误，解决办法](https://blog.csdn.net/qq_35310623/article/details/108082712){link=card}
