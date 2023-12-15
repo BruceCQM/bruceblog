@@ -111,3 +111,50 @@ if(pages.length >= 10) {
 ```
 
 [小程序页面跳转，页面栈提示”navigateTo fail page limit exceeded“错误，解决办法](https://blog.csdn.net/qq_35310623/article/details/108082712){link=card}
+
+## 微信小程序地图设置圆角
+
+直接给 `<Map>` 组件设置 `border-radius` 属性不生效。
+
+解决方案：`<Map>` 外面包一层 `<View>`，设置 View 的圆角属性，同时添加 `overflow: hidden` 样式。
+
+这个方法在 IOS 中圆角不生效，还需要增加 `transform: translateY(0)` 样式属性。
+
+```jsx
+import { Map, View, Image } from '@tarojs/components';
+
+<View
+  style={{
+    width: '100%',
+    height: '290rpx',
+    borderRadius: '10px',
+    overflow: 'hidden',
+    transform: 'translateY(0)'
+  }}
+>
+  <Map
+    style={{ width: '100%', height: '330rpx' }}
+    onTap={this.onTap}
+    circles={circles}
+    longitude={longitude}
+    latitude={latitude}
+    showLocation
+    scale={14}
+  />
+</View>
+```
+
+[map 地图组件设置圆角](https://developers.weixin.qq.com/community/develop/doc/000088de32c6d80c00e7444895ac00){link=card}
+
+## 地图点击 marker 获取的 markerId 不对
+
+微信小程序地图的 marker 的 id 是要传 number 类型的数据进去的，如果是 string 类型会被转成 number 类型。
+
+如果原始的 id 是很长的字符串，转成 number 类型会和原来不同。
+
+```js
+str = '19823791827379832384891';
+num = Number(str); // num和str不相同
+```
+
+[使用微信小程序的过程中 点击marker获取markerId 并不是数据的id?](https://developers.weixin.qq.com/community/develop/doc/00080074b54048165a0d6d3b35b800){link=card}
