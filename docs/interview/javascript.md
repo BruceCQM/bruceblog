@@ -43,3 +43,92 @@ typeof function () {} // function，特殊情况
 ```
 
 ### `instanceof` 判断
+
+`instanceof` 通过判断构造函数的 `prototype` 原型对象，是否在实例对象的原型链上，来判断实例对象的数据类型。
+
+该方法可以正确判断引用数据类型，但不能判断基本数据类型。
+
+```js
+666 instanceof Number // false
+'str' instanceof String // false
+true instanceof Boolean // false
+Symbol(123) instanceof Symbol // false
+BigInt(123) instanceof BigInt // false
+
+[] instanceof Array // true
+{} instanceof Object // true
+function () {} instanceof Function // true
+new Date() instanceof Date // true
+/abc/ instanceof RegExp // true
+new Map() instanceof Map // true
+new Set() instanceof Set // true
+```
+
+### `constructor` 判断
+
+`constructor` 属性返回实例对象的构造函数，可以用来判断基本数据类型。
+
+```js
+var a
+
+// 基本数据类型
+a = 123
+a.constructor === Number // true
+a = 'abc'
+a.constructor === String // true
+a = true
+a.constructor === Boolean // true
+Symbol(123).constructor === Symbol // true`
+BigInt(123).constructor === BigInt // true
+
+// 引用数据类型
+a = []
+a.constructor === Array // true
+a = {}
+a.constructor === Object // true
+a = function () {}
+a.constructor === Function // true
+a = new Date()
+a.constructor === Date // true
+a = /abc/
+a.constructor === RegExp // true
+```
+
+### `Object.prototype.toString.call` 判断
+
+`Object.prototype.toString.call` 方法用于将一个对象转换为字符串，返回一个字符串。
+
+```js
+Object.prototype.toString.call(123) // [object Number]
+Object.prototype.toString.call('abc') // [object String]
+Object.prototype.toString.call(true) // [object Boolean]
+Object.prototype.toString.call(undefined) // [object Undefined]
+Object.prototype.toString.call(null) // [object Null]
+Object.prototype.toString.call(Symbol(123)) // [object Symbol]
+Object.prototype.toString.call(BigInt(123)) // [object BigInt]
+Object.prototype.toString.call({}) // [object Object]
+Object.prototype.toString.call([]) // [object Array]
+Object.prototype.toString.call(function () {}) // [object Function]
+```
+
+:::tip 为何不直接使用 obj.toString 的形式判断？
+`toString()` 是 `Object` 原型的方法，其功能是返回对象的具体类型。
+
+但 `Array, Function` 等构造函数的原型都重写了 `toString` 方法，因此实例对象直接调用 `toString` 使用的是重写后的方法，而非 `Object` 原型上的 `toString`。
+
+```js
+arr = [1, 2, 'hello']
+arr.toString() // '1,2,hello'
+
+func = function () {
+  console.log('hello')
+}
+func.toString() // 'function () { console.log('hello') }'
+
+a = 123
+a.toString() // '123'
+a = true
+a.toString() // 'true'
+```
+
+:::
