@@ -132,3 +132,30 @@ a.toString() // 'true'
 ```
 
 :::
+
+## 基本数据类型为何能调用方法？
+
+基本数据类型都有其对应的包装类，能够调用方法是因为进行了自动封装。
+
+## `null` 和 `undefined` 的区别
+
+相同点：
+
+`undefined` 和 `null` 都是基本数据类型，都只有一个值，`undefined` 和 `null`。
+
+不同点：
+
+- `undefined` 代表未定义，使用 `var` 定义变量但没赋值就是 `undefined`，函数没有返回值则返回的也是 `undefined`。`null` 代表空对象，一般用于初始化可能为对象的变量。
+
+- `undefined` 可以放在赋值语句的左边，`null` 不可以。可以通过 `void 0` 安全地获得 `undefined`。
+
+```js
+undefined = 3; // 不报错
+null = 3; // Uncaught SyntaxError: Invalid left-hand side in assignment
+
+void 0 === undefined; // true
+```
+
+- `typeof undefined` 返回 `undefined`。`typeof null` 返回 `object`，这是个历史遗留问题。
+
+- `undefined == null` 返回 true，`undefined === null` 返回 false。
