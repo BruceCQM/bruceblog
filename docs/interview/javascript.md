@@ -159,3 +159,49 @@ void 0 === undefined; // true
 - `typeof undefined` 返回 `undefined`。`typeof null` 返回 `object`，这是个历史遗留问题。
 
 - `undefined == null` 返回 true，`undefined === null` 返回 false。
+
+## `new` 一个构造函数发生什么事
+
+1. 创建一个空对象。
+
+2. 将这个空对象的 `__proto__` 属性指向构造函数的原型对象 `prototype`。
+
+3. 将构造函数的 `this` 指向这个新对象，并执行构造函数的代码。
+
+4. 如果构造函数有返回值，则返回该值。如果没有，则返回这个创建的新对象。
+
+一个标准的 `new` 过程效果如下。
+```js
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.sayHello = function () {
+  console.log('hello, my name is '+ this.name);
+};
+
+const person = new Person('kimmy');
+
+person.name; // kimmy
+person.sayHello(); // hello, my name is kimmy
+```
+
+手动实现一个 `new` 运算。
+
+```js
+function myNew() {
+  // 创建空对象
+  const obj = {};
+  // 获取构造函数，约定第一个参数是构造函数
+  const constructorFunc = Array.prototype.shift.call(arguments);
+  // 空对象的__proto__指向构造函数的prototype
+  obj.__proto__ = constructorFunc.prototype;
+  // 构造函数的this指向空对象，并执行构造函数
+  const result = constructorFunc.apply(obj, arguments);
+  // 如果构造函数有返回值，则返回该值，否则返回空对象
+  return typeof result === 'object'? result : obj;
+}
+
+const myPerson = myNew(Person, 'kimmy');
+person.name; // kimmy
+person.sayHello(); // hello, my name is kimmy
+```
