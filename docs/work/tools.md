@@ -1,8 +1,6 @@
 # 日常开发工具
 
-## 开源工具库
-
-### classnames
+## classnames
 
 一个实用的工具库，方便我们根据条件动态组合类名。
 
@@ -31,6 +29,33 @@ class App extends React.Component {
   }
 }
 ```
+
+## moment
+
+一个日期时间工具库，在 JavaScript 中解析、校验、操作和展示日期和时间。
+
+[moment 中文网](https://momentjs.cn/){link=card}
+
+[moment 英文网](https://momentjs.com/){link=card}
+
+### 安装
+
+```bash
+npm install moment --save
+```
+
+### 格式化为日期时间字符串
+
+注意 `HH:mm:ss` 和 `hh:mm:ss` 的区别，前者是24小时制，后者是12小时制。
+
+```js
+moment().format('YYYY-MM-DD HH:mm:ss'); // 2023-01-01 17:20:20
+moment().format('YYYY-MM-DD hh:mm:ss'); // 2023-01-01 05:20:20
+moment(new Date()).format('YYYY-MM-DD HH:mm:ss'); // 2023-01-01 17:20:20
+moment(1703150359094).format('YYYY-MM-DD HH:mm:ss'); // 2023-12-21 17:19:19
+```
+
+### 计算时间差
 
 ## NVM
 
