@@ -57,6 +57,33 @@ moment(1703150359094).format('YYYY-MM-DD HH:mm:ss'); // 2023-12-21 17:19:19
 
 ### 计算时间差
 
+使用 `moment().diff()`，计算两个时间的差值。
+
+```js
+moment().diff(Moment|String|Number|Date|Array);
+moment().diff(Moment|String|Number|Date|Array, String);
+moment().diff(Moment|String|Number|Date|Array, String, Boolean);
+```
+
+参数1：要判断的时间值，格式支持 `Moment|String|Number|Date|Array`。
+
+参数2：比较的单位，可以为 `years, months, weeks, days, hours, minutes, seconds`，默认单位值毫秒。
+
+参数3：是否保留小数。默认是截断小数点后的位数，取整数，如 0.5 返回 0。
+
+如果前者时间比后者时间大，返回正值，相反则返回负值，因此也可以用来比较两个时间的大小。
+
+```js
+var a = moment('2023-12-22 16:18:15');
+var b = moment('2023-12-22 16:18:10');
+
+a.diff(b); // 5000
+a.diff(b,'seconds'); // 5，表示a比b多5秒
+a.diff(b, 'minutes'); // 0
+a.diff(b, 'minutes', true); // 0.08333333333333333
+b.diff(a); // -5000
+```
+
 ## NVM
 
 nvm 是管理 node 版本的快捷工具，使用它可以十分方便地切换 node 版本。
