@@ -84,6 +84,36 @@ a.diff(b, 'minutes', true); // 0.08333333333333333
 b.diff(a); // -5000
 ```
 
+### 判断两个时间大小
+
+使用 `moment().diff()`，根据差值的正负判断时间的大小。
+
+```js
+// 正值：前者时间比后者时间大。
+// 负值：前者时间比后者时间小。
+// 0：前者时间和后者时间相等。
+var a = moment('2023-12-22 16:18:15');
+var b = moment('2023-12-22 16:18:10');
+
+a.diff(b); // 5000
+b.diff(a); // -5000
+```
+
+### 常用时间
+
+```js
+moment().format('YYYY-MM-DD'); // 今天
+moment().add(1, 'day').format('YYYY-MM-DD'); // 明天
+moment().subtract(1, 'day').format('YYYY-MM-DD'); // 昨天
+moment().subtract(29, 'day').format('YYYY-MM-DD'); // 30天前
+moment().startOf('month'); // 本月初
+moment().endOf('month'); // 本月末
+moment().startOf('week'); // 本周初
+moment().endOf('week'); // 本周末
+moment().month(moment().month() - 1).startOf('month'); // 上个月初
+moment().month(moment().month() - 1).endOf('month'); // 上个月末
+```
+
 ## NVM
 
 nvm 是管理 node 版本的快捷工具，使用它可以十分方便地切换 node 版本。
