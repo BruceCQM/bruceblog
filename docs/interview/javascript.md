@@ -171,18 +171,19 @@ void 0 === undefined; // true
 4. 如果构造函数有返回值，则返回该值。如果没有，则返回这个创建的新对象。
 
 一个标准的 `new` 过程效果如下。
+
 ```js
 function Person(name) {
-  this.name = name;
+  this.name = name
 }
 Person.prototype.sayHello = function () {
-  console.log('hello, my name is '+ this.name);
-};
+  console.log('hello, my name is ' + this.name)
+}
 
-const person = new Person('kimmy');
+const person = new Person('kimmy')
 
-person.name; // kimmy
-person.sayHello(); // hello, my name is kimmy
+person.name // kimmy
+person.sayHello() // hello, my name is kimmy
 ```
 
 手动实现一个 `new` 运算。
@@ -190,18 +191,34 @@ person.sayHello(); // hello, my name is kimmy
 ```js
 function myNew() {
   // 创建空对象
-  const obj = {};
+  const obj = {}
   // 获取构造函数，约定第一个参数是构造函数
-  const constructorFunc = Array.prototype.shift.call(arguments);
+  const constructorFunc = Array.prototype.shift.call(arguments)
   // 空对象的__proto__指向构造函数的prototype
-  obj.__proto__ = constructorFunc.prototype;
+  obj.__proto__ = constructorFunc.prototype
   // 构造函数的this指向空对象，并执行构造函数
-  const result = constructorFunc.apply(obj, arguments);
+  const result = constructorFunc.apply(obj, arguments)
   // 如果构造函数有返回值，则返回该值，否则返回空对象
-  return typeof result === 'object'? result : obj;
+  return typeof result === 'object' ? result : obj
 }
 
-const myPerson = myNew(Person, 'kimmy');
-person.name; // kimmy
-person.sayHello(); // hello, my name is kimmy
+const myPerson = myNew(Person, 'kimmy')
+person.name // kimmy
+person.sayHello() // hello, my name is kimmy
 ```
+
+## 如何理解原型链？
+
+:::tip 回答思路
+首先说什么是原型，为什么设计原型（共享属性和方法），再说属性和方法的查找顺序，自然而然谈到了原型链。原型链可以隐身到继承，继承结合构造函数和原型。
+:::
+
+1、为什么设计原型
+
+当我们使用 new 构造函数的方式创建实例时，定义在构造函数内部的方法会在每个实例里都创建一遍，这样一来就造成了内存空间的浪费，因为这些方法的功能都是相同的，没有必要多次创建。
+
+因此原型就被设计出来解决这个问题，每个构造函数都有一个原型对象 prototype，在原型里定义的方法和属性可以被所有的实例对象共享。因此，通过将方法定义在原型对象 prototype 上，就能避免方法的重复创建。
+
+2、原型链是什么
+
+每个实例对象都有一个 `__proto__` 属性，指向它的构造函数的原型对象 prototype，而原型对象 prototype 它本身也是一个对象，它也有 `__proto__` 属性，指向它自己的构造函数的原型对象，这样一层一层往上走，就形成了原型链。原型链的终点是 Object 构造函数的原型对象，它的 `__proto__` 属性指向 null。
