@@ -368,3 +368,9 @@ A simple, open source bilingual translation extension & Greasemonkey script.
 文章详细介绍了 CSS 的 BEM 命名规范。
 
 [CSS — BEM 命名规范](https://juejin.cn/post/6844903672162304013){link=card}
+
+12、什么是 Docker?
+
+容器：搭建一套给程序运行的环境。 只隔离应用程序运行时环境，共享操作系统。与虚拟机相比，更轻量级、占用资源更少。
+
+[什么是 Docker？](https://zhuanlan.zhihu.com/p/187505981){link=card}
