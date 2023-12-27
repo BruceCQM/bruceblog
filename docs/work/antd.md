@@ -361,3 +361,16 @@ render: (text, record, index) => {
   };
 }
 ```
+
+## 下拉框选择多个显示省略号
+
+设置 `maxTagCount="responsive`，根据屏幕大小自适应展示多少个 tag。
+
+```jsx
+<Select mode="multiple" maxTagCount="responsive">
+  <Option value="1">Option 1</Option>
+  <Option value="1">Option 1</Option>
+</Select>
+```
+
+![maxTagCount="responsive"](./images/maxTagCount_responsive.png)

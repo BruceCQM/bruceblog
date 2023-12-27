@@ -131,6 +131,34 @@ nvm uninstall <version>   // 卸载指定版本的 node
 
 [nvm 详细安装步骤以及使用（window10 系统）](https://blog.csdn.net/Anony_me/article/details/124153201){link=card}
 
+## serve
+
+serve 在本地启动一个静态资源服务器，可以在本地运行查看项目打包的效果。
+
+:::tip node版本≥14
+serve v14 onwards requires Node v14 to run. Please use serve v13 if you cannot upgrade to Node v14.
+:::
+
+安装。
+
+```bash
+npm install -g serve
+```
+
+启动服务器，首先先打包完本地项目，一般会生成 `build` 或 `dist` 目录。
+
+```bash
+# 进入build或dist目录
+serve
+
+# 在项目根目录
+serve -s build
+serve -s dist
+
+# 指定端口号
+serve -p 3000
+```
+
 ## Charles
 
 Charles 是网络代理应用软件。
