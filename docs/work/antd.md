@@ -374,3 +374,28 @@ render: (text, record, index) => {
 ```
 
 ![maxTagCount="responsive"](./images/maxTagCount_responsive.png)
+
+## Input 输入框使用 defaultValue 内容无法改变
+
+在遍历渲染时，多个 Input 输入框使用 defaultValue，只会记录第一个 Input 的初始值，后面的都和第一个一样。
+
+解决方法：给 Input 输入框增加 key 属性。
+
+```jsx
+const columns = [
+  {
+    title: '名称',
+    dataIndex: 'name',
+    render: (text, record) => {
+      return (
+        <Input key={nanoid()} defaultValue={text} />
+        <Input key={String(Date.now())} defaultValue={text} />
+        // 这个不行，不知道为何
+        <Input key={new Date().toTimeString()} defaultValue={text} />
+      );
+    },
+  },
+]
+```
+
+[react input的defaultValue不会变化](https://blog.csdn.net/weixin_42881588/article/details/124406364){link=card}

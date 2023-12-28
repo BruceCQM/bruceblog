@@ -240,6 +240,14 @@ rm package-lock.json
 npm install
 ```
 
+### eslint 编译报错 Cannot read property ‘range’ of null
+
+具体看看文章，当时自己怎么解决的忘记了。
+
+[彻底解决 Cannot read property ‘range‘ of null 错误的几个方案和后期造成的一劳永逸的方案](https://wanglaibin.blog.csdn.net/article/details/103904790){link=card}
+
+[【解决方案】ESLINT 报错: Cannot read property 'range' of null](https://blog.csdn.net/u013243347/article/details/104426531){link=card}
+
 ## 小黑窗命令
 
 ### rm 删除命令报错
