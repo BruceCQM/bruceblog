@@ -228,3 +228,26 @@ person.sayHello() // hello, my name is kimmy
 原型链实际上提供了一条查询属性和方法的路径，当我们要访问一个对象的属性时，首先看这个对象本身是否存在这个属性，如果没有，再沿着原型链查找原型对象，一直到原型链的终点为止。
 
 ![原型链](./images/prototype_chain.png)
+
+## `call() apply() bind()` 的作用
+
+call、apply、bind 都能改变函数内部的 this 指向。
+
+call 和 apply 都会调用函数，其中 apply 需要以数组的形式传递参数，数组中的元素作为参数传递给被调用的函数。
+
+bind 不会调用函数，它返回一个改变了 this 指向的新函数。
+
+当需要改变函数内部 this 指向且要立即调用函数时，可使用 call、apply。
+
+当需要改变函数内部 this 指向有不需要立刻调用函数的时候，可以使用 bind，如改变定时器内部的 this 指向。
+
+```js
+const max = Math.max.apply(null, [1, 2, 3]); // 3
+
+btn.onclick = function() {
+  this.disabled = true;
+  setTimeout(function() {
+    this.disabled = false;
+  }.bind(this), 1000);
+}
+```
