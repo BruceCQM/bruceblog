@@ -2,6 +2,8 @@
 
 [Ant Design](https://ant.design/index-cn){link=card}
 
+[Ant Design 国内高速镜像](https://ant-design.antgroup.com/index-cn){link=card}
+
 ## 前言
 
 Ant Design 是蚂蚁出品的出色优秀的 React 组件库，相信使用 React 进行管理系统开发的小伙伴们或多或少都接触过 Ant Design。很多公司基于 React 开发的管理端系统也都是使用 Ant Design 的组件库。
@@ -343,3 +345,57 @@ const SwitchCom = (props) => {
 
 2、`props` 里有表单的 `value` 值，若 `Form.Item` 设置了 `valuePropName` 就是对应的字符串，也可以传入自定义参数。
 :::
+
+## `Table` 合并单元格
+
+`Table `合并单元格的写法，官网上的写法是错的.
+
+```js
+render: (text, record, index) => {
+  return {
+    children: text,
+    props: {
+      // 合并单元格
+      rowSpan: [0, 5].includes(index) ? 5 : 0,
+    },
+  };
+}
+```
+
+## 下拉框选择多个显示省略号
+
+设置 `maxTagCount="responsive`，根据屏幕大小自适应展示多少个 tag。
+
+```jsx
+<Select mode="multiple" maxTagCount="responsive">
+  <Option value="1">Option 1</Option>
+  <Option value="1">Option 1</Option>
+</Select>
+```
+
+![maxTagCount="responsive"](./images/maxTagCount_responsive.png)
+
+## Input 输入框使用 defaultValue 内容无法改变
+
+在遍历渲染时，多个 Input 输入框使用 defaultValue，只会记录第一个 Input 的初始值，后面的都和第一个一样。
+
+解决方法：给 Input 输入框增加 key 属性。
+
+```jsx
+const columns = [
+  {
+    title: '名称',
+    dataIndex: 'name',
+    render: (text, record) => {
+      return (
+        <Input key={nanoid()} defaultValue={text} />
+        <Input key={String(Date.now())} defaultValue={text} />
+        // 这个不行，不知道为何
+        <Input key={new Date().toTimeString()} defaultValue={text} />
+      );
+    },
+  },
+]
+```
+
+[react input的defaultValue不会变化](https://blog.csdn.net/weixin_42881588/article/details/124406364){link=card}

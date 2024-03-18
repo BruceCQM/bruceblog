@@ -420,3 +420,14 @@ h1 {
 [浏览器的私有前缀理解](https://blog.csdn.net/Dreammin/article/details/104663120)
 
 [-moz、-ms、-webkit 浏览器私有前缀详解，作用、出处](https://blog.csdn.net/wyx100/article/details/50450728)
+
+
+## `break-all` 单词内换行
+
+通过设置 `word-break: break-all;` 实现单词内换行。一长串数字或字母可以换行，不至于溢出盒子。
+
+```css
+.text {
+  word-break: break-all;
+}
+```

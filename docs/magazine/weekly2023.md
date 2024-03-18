@@ -308,3 +308,69 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 2000 万 QPS 的场景：春晚抢红包。
 
 [同事们天天谈论的 QPS、TPS、RT、吞吐量等词儿究竟是什么意思？](https://baijiahao.baidu.com/s?id=1764021596169092019){link=card}
+
+2、PoC 为何物？
+
+PoC，Proof of Concept，概念验证。是指企业在实际场景给客户演示或使用，验证产品对客户的实际价值。
+
+[什么是 PoC？如何做好概念验证？](https://zhuanlan.zhihu.com/p/552285379){link=card}
+
+3、《小狗钱钱》读书笔记
+
+理财思维经典读物《小狗钱钱》的读书笔记。
+
+[我的理财入门书籍——《小狗钱钱》读书笔记（纯干货）](https://zhuanlan.zhihu.com/p/178135876){link=card}
+
+4、杀毒垃圾清理软件推荐
+
+文章推荐了一些干净的杀毒、垃圾清理软件，如 CCleaner、Microsoft Security Essentials。
+
+[除了 360，有哪些可推荐的清理垃圾的软件、杀毒与维护的免费软件？](https://www.zhihu.com/question/20469497){link=card}
+
+5、深入了解 `useEffect`
+
+文章对 React 核心开发者所写的 a-complete-guide-to-useeffect 一文进行精简提炼，是深入了解 `useEffect` 的好文。
+
+[精读《useEffect 完全指南》](https://juejin.cn/post/6844903806090608647){link=card}
+
+6、ChatGPT 使用总结
+
+文章对 ChatGPT 进行了介绍和使用的总结。
+
+[ChatGPT 总结](https://blog.warmplace.cn/post/chatgpt){link=card}
+
+7、`target="_blank"` 的安全漏洞
+
+文章介绍了 `<a>` 标签使用 `target="_blank"` 时，可能会带来的安全漏洞。
+
+[target="\_blank" 带来的安全漏洞](https://blog.bolajiayodeji.com/the-security-vulnerabilities-of-the-target-blank-attribute){link=card}
+
+8、Google 编程风格指南
+
+文章介绍了 Google 内部对各种语言的编程风格的要求。
+
+[Google Style Guides](https://google.github.io/styleguide/){link=card}
+
+9、简约翻译
+
+A simple, open source bilingual translation extension & Greasemonkey script.
+
+[kiss-translator](https://github.com/fishjar/kiss-translator){link=card}
+
+10、经济机器是怎样运行的
+
+网易公开课视频《经济机器是怎样运行的》，用通俗易懂的语言和动画，讲述了经济机器是如何运行的。
+
+[经济机器是怎样运行的](https://open.163.com/newview/movie/free?pid=MBPO9ED98&mid=MBPO9S8IQ){link=card}
+
+11、BEM 命名规范
+
+文章详细介绍了 CSS 的 BEM 命名规范。
+
+[CSS — BEM 命名规范](https://juejin.cn/post/6844903672162304013){link=card}
+
+12、什么是 Docker?
+
+容器：搭建一套给程序运行的环境。 只隔离应用程序运行时环境，共享操作系统。与虚拟机相比，更轻量级、占用资源更少。
+
+[什么是 Docker？](https://zhuanlan.zhihu.com/p/187505981){link=card}

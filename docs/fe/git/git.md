@@ -84,6 +84,12 @@ git commit -m '日志信息' .
 git commit -m '日志信息' fileName
 ```
 
+- 提交代码忽略 eslint 的检查
+
+```bash
+git commit -m '日志信息' --no-verify
+```
+
 ## 比较差异 git diff
 
 1. 比较工作区和暂存区的所有差异，只能查看旧文件的变更（包括修改和删除），不能查看新文件（因为新文件还为被 git 追踪）
@@ -313,6 +319,14 @@ git reset --hard
 git reset --hard 版本号
 ```
 
+### 恢复指定版本
+
+1、`git reset --hard 版本号`：硬性回退，该版本之后的提交记录全都删除了。
+
+2、`git revert -n 版本号`：新增一个版本，将指定版本的操作全部撤销。
+
+[Git恢复之前版本的两种方法reset、revert](https://blog.csdn.net/yxlshk/article/details/79944535){link=card}
+
 ## 修改 commit 记录
 
 1. 往最后一次 commit 追加记录，而不新建 commit - [reference](https://segmentfault.com/a/1190000038535534)
@@ -410,3 +424,27 @@ git push --force origin master
 ```bash
 git push git@github.com:<USERNAME>/<REPO>.git master:main
 ```
+
+## `git stash` 命令
+
+使用场景：开发到一半，开发的内容不能提交，又需要切换分支，即可使用 `git stash` 命令将当前开发内容保存到堆栈里，处理完别的事情后，再将堆栈里的内容恢复到当前分支。
+
+### 保存当前开发内容到堆栈
+
+```bash
+git stash
+
+git stash save "feat: message"
+```
+
+### 恢复堆栈里的内容
+
+```bash
+# 恢复堆栈里的内容，并删除堆栈里的内容
+git stash pop
+
+# 恢复堆栈里的内容，但不会将内容从堆栈里删除，即可以将内容多次应用到不同的分支里
+git stash apply
+```
+
+[git stash详解](https://blog.csdn.net/stone_yw/article/details/80795669){link=card}
