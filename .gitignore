@@ -2,3 +2,5 @@ node_modules
 dist
 cache
 .temp
+package-lock.json
+package.json

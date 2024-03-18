@@ -1,7 +1,7 @@
 export default [
   {
     text: '随笔杂谈',
-    link: '/magazine/weekly2023'
+    link: '/magazine/articles'
   },
   {
     text: '资源集中营',

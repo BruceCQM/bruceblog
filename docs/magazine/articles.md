@@ -1,8 +1,6 @@
-# 周录记 2023
+# 文章
 
-## 0403-0409
-
-### 文章
+## 2023
 
 1、解决国内 GitHub 无法访问的问题
 
@@ -45,7 +43,7 @@ ssh 链接的好处是，当你无法访问 GitHub 时，也能通过 ssh 链接
 [Github 上的小徽章制作与应用指南](https://www.cnblogs.com/singerw/p/14127815.html){link=card}
 [如何在你的 GitHub 仓库介绍上加上小图标？](https://www.bilibili.com/read/cv16327331){link=card}
 
-5、怎么获取网页 logo 图标的 URL 链接
+6、怎么获取网页 logo 图标的 URL 链接
 
 [怎么获取网页 logo 图标的 URL 链接](https://baijiahao.baidu.com/s?id=1700106073888091496){link=card}
 
@@ -58,13 +56,13 @@ ssh 链接的好处是，当你无法访问 GitHub 时，也能通过 ssh 链接
 
 ![link标签](./images/weekly2023/link-icon.png)
 
-6、用 CSS 画 `√、×` 等符号
+7、用 CSS 画 `√、×` 等符号
 
 文章介绍了如何用纯 CSS 去画出勾 √、叉 ×、三角形 △、大于号 ＞ 几类常见符号。
 
 [简单的使用 css 画勾、叉、三角、大于号](https://blog.csdn.net/Luxuriant_tree/article/details/83181888){link=card}
 
-7、CSS 实现超长文字溢出省略号
+8、CSS 实现超长文字溢出省略号
 
 [CSS-文字溢出的省略号显示](https://blog.csdn.net/m0_72650596/article/details/127027051){link=card}
 
@@ -92,7 +90,7 @@ display: -webkit-box;
 
 :::
 
-8、CSS3 阴影效果使用
+9、CSS3 阴影效果使用
 
 文章详细介绍了 CSS3 阴影属性 `box-shadow` 的使用方法。
 
@@ -102,7 +100,7 @@ box-shadow: 1px 1px 1px #999;
 
 [CSS3 阴影实现方法及技巧全解](https://www.w3cschool.cn/css3/css3-shadow.html){link=card}
 
-9、`flv.js` API 中文文档
+10、`flv.js` API 中文文档
 
 高手翻译的 `flv.js` API 中文文档。
 [flv.js 中文 API 文档](https://www.jianshu.com/p/b58356b465c4){link=card}
@@ -110,19 +108,13 @@ box-shadow: 1px 1px 1px #999;
 官网 GitHub。
 [flv.js API](https://github.com/bilibili/flv.js/blob/master/docs/api.md){link=card}
 
-### 视界
-
-1、老板管理手册
+11、老板管理手册
 
 红极一时的老板管理手册。
 
 [全网都在疯传的《老板管理手册》(转)](https://zhuanlan.zhihu.com/p/537042061){link=card}
 
-## 0410-0416
-
-### 文章
-
-1、git 回退指定版本
+12、git 回退指定版本
 
 [GIT 回退到指定版本的两种方法（reset/revert）](https://blog.csdn.net/L1147484597/article/details/128480953){link=card}
 
@@ -134,9 +126,7 @@ git 回退到指定版本的两种方法：`git reset` 和 `git revert`。
 
 :::
 
-### 视界
-
-1、工作之余如何学习提升自我？
+13、工作之余如何学习提升自我？
 
 > 你要做的是，结合自己的目标和实际工作，确定自己的学习方向，在打实基础之外，学习有可能应用到你工作中的知识点
 
@@ -144,51 +134,43 @@ git 回退到指定版本的两种方法：`git reset` 和 `git revert`。
 
 [冴羽答读者问：如何学习更有计划性、提升更稳更快？](https://segmentfault.com/a/1190000042178486){link=card}
 
-## 0417-0423
-
-### 文章
-
-1、JS 正则表达式完整教程
+14、JS 正则表达式完整教程
 
 大佬写的 JS 正则表达式教程，非常详实细致，可以说看完就是学会了。
 
 [JS 正则表达式完整教程（略长）](https://juejin.cn/post/6844903487155732494){link=card}
 
-2、`flv.js` 优化方案
+15、`flv.js` 优化方案
 
 文章介绍了前端直播常见的技术方案、`flv.js` 的基本原理及其优化方案。
 
 [flv.js 的追帧、断流重连及实时更新的直播优化方案](https://www.cnblogs.com/xiahj/p/flvExtend.html){link=card}
 
-3、TS 入门教程文章
+16、TS 入门教程文章
 
 文章详细介绍了 Typescript，是入门 TS 的不二首选。
 
 [2023 typescript 史上最强学习入门文章(2w 字)](https://juejin.cn/post/7018805943710253086){link=card}
 
-4、冴羽系列博客
+17、冴羽系列博客
 
 冴羽大佬写的系列博客，包括 JavaScript 深入系列、JavaScript 专题系列、underscore 系列、ES6 系列等等，写得十分清晰详实。
 
 [冴羽系列博客](https://github.com/mqyqingfeng/Blog){link=card}
 
-## 0522-0528
-
-### 文章
-
-1、小程序页面栈溢出报错 `navigateTo fail page limit exceeded`
+18、小程序页面栈溢出报错 `navigateTo fail page limit exceeded`
 
 小程序页面栈最多十层，反复使用 `navigateTo` 跳转页面，压入页面栈，会导致报错。
 
 [小程序页面跳转，页面栈提示”navigateTo fail page limit exceeded“错误，解决办法](https://blog.csdn.net/qq_35310623/article/details/108082712){link=card}
 
-2、`rpx` 和 `px` 单位的区别
+19、`rpx` 和 `px` 单位的区别
 
 `px` 是固定单位，`1px` 就是 1 像素；`rpx` 是自适应单位，根据屏幕的实际尺寸变化，`1rpx` 可能等于不同的像素。
 
 [微信小程序中 rpx 和 px 的区别？](https://blog.csdn.net/weixin_43356308/article/details/115081242){link=card}
 
-3、`!.` 是什么意思？
+20、`!.` 是什么意思？
 
 `!.` 是 TS 中的语法，称为非空断言操作符。它和 JS 的可选链操作符 `?.` 完全没有关系。
 
@@ -200,7 +182,7 @@ git 回退到指定版本的两种方法：`git reset` 和 `git revert`。
 
 [js 中‘!.’是什么意思？](https://www.zhihu.com/question/459179143){link=card}
 
-4、何为 Docker？
+21、何为 Docker？
 
 文章介绍了 Docker 的基本知识，比较通俗易懂。
 
@@ -208,7 +190,7 @@ Docker 其实是一个容器。容器：搭建一套给程序运行的环境。�
 
 [什么是 Docker？看这一篇干货文章就够了！](https://zhuanlan.zhihu.com/p/187505981){link=card}
 
-5、SSH 登录 GitHub 报错 `Connection to xxx port 22: ...`
+22、SSH 登录 GitHub 报错 `Connection to xxx port 22: ...`
 
 :::danger 最近使用 ssh 登录 GitHub 时报错
 kex_exchange_identification: read: Software caused connection abort
@@ -224,9 +206,7 @@ Please make sure you have the correct access rights and the repository exists.
 
 [坑：ssh: connect to host github.com port 22: Connection refused](https://zhuanlan.zhihu.com/p/521340971){link=card}
 
-## 0529-0604
-
-1、日常开发提升技术的 13 条建议
+23、日常开发提升技术的 13 条建议
 
 文章总结了平常开发过程当中 13 条提升自我技术的建议，小处着手，实用。
 
@@ -234,7 +214,7 @@ Please make sure you have the correct access rights and the repository exists.
 
 [我差点把同事卷跑了。。。](https://mp.weixin.qq.com/s/JQo9inrZ6eoBazDnxvkD8A){link=card}
 
-2、nvm 的安装与基本使用
+24、nvm 的安装与基本使用
 
 nvm 是管理 node 版本的快捷工具，使用它可以十分方便地切换 node 版本。
 
@@ -249,13 +229,13 @@ nvm uninstall <version>   // 卸载指定版本的 node
 
 [nvm 详细安装步骤以及使用（window10 系统）](https://blog.csdn.net/Anony_me/article/details/124153201){link=card}
 
-3、运行 `nvm use xxx` 命令报权限不足
+25、运行 `nvm use xxx` 命令报权限不足
 
 使用管理员身份运行 cmd 即可。
 
 [nvm use 报错：You do not have sufficient privilege to perform this operation](https://blog.csdn.net/JudyC/article/details/121702250){link=card}
 
-4、标准普尔家庭资产配置图
+26、标准普尔家庭资产配置图
 
 标准普尔家庭资产配置图是世界公认最合理的适合多数家庭的资产分配方式，可以参考学习，来对自己的资产进行配置。
 
@@ -267,9 +247,7 @@ nvm uninstall <version>   // 卸载指定版本的 node
 
 [读懂“标准普尔家庭资产配置图”](https://zhuanlan.zhihu.com/p/357228526){link=card}
 
-## 1030-1105
-
-1、Taro 的 `Image` 图片组件宽高自适应
+27、Taro 的 `Image` 图片组件宽高自适应
 
 微信小程序给图片的宽高设置了固定值，因此无法通过设置 CSS 属性来实现宽高自适应。
 
@@ -283,7 +261,7 @@ nvm uninstall <version>   // 卸载指定版本的 node
 
 [image 属性说明](https://developers.weixin.qq.com/miniprogram/dev/component/image.html){link=card}
 
-2、Taro 全屏预览图片
+28、Taro 全屏预览图片
 
 `Taro.previewImage()` 方法，传入 `urls` 和 `current` 参数，分别是图片链接列表、当前预览的图片链接。
 
@@ -299,12 +277,34 @@ bigImage = (url) => {
 
 [Taro.previewImage](https://taro-docs.jd.com/docs/apis/media/image/previewImage){link=card}
 
-## 1112-1231
-
-1、QPS 为何物？
+29、QPS 为何物？
 
 QPS，Queries Per Second，每秒钟处理的请求数量。
 
 2000 万 QPS 的场景：春晚抢红包。
 
 [同事们天天谈论的 QPS、TPS、RT、吞吐量等词儿究竟是什么意思？](https://baijiahao.baidu.com/s?id=1764021596169092019){link=card}
+
+## 2024
+
+1、Chrome Perfonrmance 性能分析入门
+
+文章介绍了 Chrome Performance 性能分析工具的基本使用。
+
+[Chrome Performance 页面性能分析指南](https://zhuanlan.zhihu.com/p/163474573){link=card}
+
+2、`block` 标签的作用
+
+`block` 标签是微信小程序中的标签，充当一个容器，类似于 `view`。
+
+:::tip GPT的回答
+`block` 标签在微信小程序中主要用作包装元素，它不会在页面上进行渲染，只接受控制属性。
+
+使用 `block` 标签可以将多个组件包装起来，并在其内部使用 `wx:if` 控制属性。这样可以一次性判断多个组件标签是否需要显示，类似于 `view` 标签的功能。
+
+例如，如果需要渲染一个包含多节点的结构块，可以使用 `block` 标签包裹 `wx:for` 语句，从而控制这一块的逻辑。
+
+`block` 标签的中文翻译是‘块’，它的作用类似于一个容器，可以包含其他组件和逻辑，使得代码更加模块化和易于维护。
+:::
+
+[微信小程序中，block的作用](https://www.cnblogs.com/a973692898/p/13131660.html){link=card}
