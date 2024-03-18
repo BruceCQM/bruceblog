@@ -18,6 +18,7 @@ export default [
       { text: 'JS 数组', link: '/fe/js/array' },
       { text: 'Web Storage 浏览器本地存储', link: '/fe/js/webstorage' },
       { text: 'JS 模块化', link: '/fe/js/js_modules' },
+      { text: 'JS 碎碎念', link: '/fe/js/js_things' },
     ]
   },
   {

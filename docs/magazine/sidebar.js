@@ -6,6 +6,7 @@ export default [
       { text: '文章精选', link: '/magazine/articles' },
       { text: '我的博文', link: '/magazine/blog_essay' },
       { text: '个人成长', link: '/magazine/personal_growth' },
+      { text: '左耳听风', link: '/magazine/left_ear' },
     ]
   }
 ]

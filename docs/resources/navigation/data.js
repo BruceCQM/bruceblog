@@ -32,6 +32,12 @@ export default [
         desc: '冴羽写博客的地方，预计写四个系列：JavaScript深入系列、JavaScript专题系列、ES6系列、React系列。',
         link: 'https://github.com/mqyqingfeng/Blog'
       },
+      {
+        icon: 'https://coolshell.cn/favicon.png',
+        title: '酷壳-CoolShell',
+        desc: '享受编程和技术所带来的快乐 – Coding Your Ambition',
+        link: 'https://coolshell.cn/'
+      },
     ]
   },
   {
@@ -46,8 +52,14 @@ export default [
       {
         icon: 'https://es6.ruanyifeng.com/favicon.ico',
         title: 'ES6 入门教程',
-        desc: '阮一峰老师所著的 ES6 语法特性介绍教程',
+        desc: '阮一峰所著的 ES6 语法特性介绍教程',
         link: 'https://es6.ruanyifeng.com/'
+      },
+      {
+        icon: 'https://wangdoc.com/typescript/assets/icons/favicon-96x96.png',
+        title: 'TypeScript 教程',
+        desc: '阮一峰所著的 TypeScript 开源教程，介绍基本概念和用法，面向初学者。',
+        link: 'https://wangdoc.com/typescript/'
       },
       {
         icon: 'https://developer.mozilla.org/favicon-48x48.cbbd161b.png',
@@ -111,8 +123,20 @@ export default [
       {
         icon: 'https://zh-hans.reactjs.org/favicon.ico',
         title: 'React',
-        desc: '用于构建用户界面的 JavaScript 库',
-        link: 'https://caniuse.com'
+        desc: 'The library for web and native user interfaces',
+        link: 'https://react.dev/'
+      },
+      {
+        icon: 'https://zh-hans.reactjs.org/favicon.ico',
+        title: 'React 中文官网',
+        desc: '用于构建 Web 和原生交互界面的库',
+        link: 'https://zh-hans.react.dev/'
+      },
+      {
+        icon: 'https://zh-hans.reactjs.org/favicon.ico',
+        title: 'React Old Doc',
+        desc: 'A JavaScript library for building user interfaces',
+        link: 'https://legacy.reactjs.org/'
       },
       {
         icon: 'https://gw.alipayobjects.com/zos/rmsportal/rlpTLlbMzTNYuZGGCVYM.png',
@@ -574,6 +598,17 @@ export default [
         desc: '掘金是面向全球中文开发者的技术内容分享与交流平台。通过技术文章、沸点等产品和服务，打造一个激发开发者创作灵感，激励开发者沉淀分享，陪伴开发者成长的综合类技术社区。',
         link: 'https://juejin.cn/'
       },
+    ]
+  },
+  {
+    title: '学习网站',
+    items: [
+      {
+        icon: 'https://c.open.163.com/favicon.ico',
+        title: '网易公开课',
+        desc: '网易公开课,公开课,网课,在线教育,教育,慕课,TED,纪录片',
+        link: 'https://open.163.com/',
+      }
     ]
   },
   {

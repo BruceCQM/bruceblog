@@ -34,21 +34,23 @@ export default [
     ]
   },
   {
-    text: '计算机基础',
-    link: '/cs/network'
+    text: '面试宝典',
+    link: '/interview/javascript'
   },
   {
     text: '知也无涯',
     items: [
+      { text: '计算机基础', link: '/cs/network' },
       { text: 'Python', link: '/lang/python/crawler' }
     ]
   },
   {
     text: '高效搬砖',
     items: [
-      { text: 'Antd 虐我千百遍', link: '/work/antd' },
+      { text: '那些年, Antd 坑我的地方', link: '/work/antd' },
+      { text: 'Error 虐我千百遍', link: '/work/errors' },
       { text: '富文本编辑器', link: '/work/editor' },
-      { text: '第三方工具', link: '/work/tools' },
+      { text: '开发工具', link: '/work/tools' },
       {
         text: '微信小程序',
         items: [
