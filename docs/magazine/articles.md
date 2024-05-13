@@ -54,7 +54,7 @@ ssh 链接的好处是，当你无法访问 GitHub 时，也能通过 ssh 链接
 
 :::
 
-![link标签](./images/weekly2023/link-icon.png)
+![link标签](./images/articles/link-icon.png)
 
 7、用 CSS 画 `√、×` 等符号
 
@@ -210,7 +210,7 @@ Please make sure you have the correct access rights and the repository exists.
 
 文章总结了平常开发过程当中 13 条提升自我技术的建议，小处着手，实用。
 
-![日常开发提升技术的 13 条建议](./images/weekly2023/advice13.png)
+![日常开发提升技术的 13 条建议](./images/articles/advice13.png)
 
 [我差点把同事卷跑了。。。](https://mp.weixin.qq.com/s/JQo9inrZ6eoBazDnxvkD8A){link=card}
 
@@ -297,7 +297,7 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 
 `block` 标签是微信小程序中的标签，充当一个容器，类似于 `view`。
 
-:::tip GPT的回答
+:::tip GPT 的回答
 `block` 标签在微信小程序中主要用作包装元素，它不会在页面上进行渲染，只接受控制属性。
 
 使用 `block` 标签可以将多个组件包装起来，并在其内部使用 `wx:if` 控制属性。这样可以一次性判断多个组件标签是否需要显示，类似于 `view` 标签的功能。
@@ -307,4 +307,16 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 `block` 标签的中文翻译是‘块’，它的作用类似于一个容器，可以包含其他组件和逻辑，使得代码更加模块化和易于维护。
 :::
 
-[微信小程序中，block的作用](https://www.cnblogs.com/a973692898/p/13131660.html){link=card}
+[微信小程序中，block 的作用](https://www.cnblogs.com/a973692898/p/13131660.html){link=card}
+
+3、某些移动安卓设备 `font-weight: 600` 不生效
+
+在某些安卓的移动端设备上，`font-weight: 600` 不生效，字体并没有加粗。这是因为在某些设备上，缺少对某些字体的粗细支持。
+
+一般而言，绝大多数设备支持对 400 和 700 的粗细字体样式。也就是常见的 `font-weight: normal` 和 `font-weight: bold`。
+
+而苹果设备对字体粗细的支持程度做的比安卓好很多，可以看到不同数值粗细的变化。
+
+![font-weight不生效](./images/articles/font-weight.png)
+
+[font-weight 失效移动安卓处理方法](https://blog.csdn.net/weixin_41697143/article/details/104517239){link=card}
