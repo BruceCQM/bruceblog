@@ -168,6 +168,18 @@ export default [
         desc: '基于 React 的应用研发框架',
         link: 'https://v3.ice.work/'
       },
+      {
+        icon: 'https://mobx.js.org/img/favicon.png',
+        title: 'Mobx',
+        desc: 'Simple, scalable state management.',
+        link: 'https://mobx.js.org/README.html'
+      },
+      {
+        icon: 'https://cn.mobx.js.org/gitbook/images/favicon.ico',
+        title: 'Mobx 中文文档',
+        desc: '简单、可扩展的状态管理',
+        link: 'https://cn.mobx.js.org/'
+      },
     ]
   },
   {

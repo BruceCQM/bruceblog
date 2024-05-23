@@ -320,3 +320,13 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 ![font-weight不生效](./images/articles/font-weight.png)
 
 [font-weight 失效移动安卓处理方法](https://blog.csdn.net/weixin_41697143/article/details/104517239){link=card}
+
+4、iPhone 如何安装 whistle 证书
+
+简要步骤：
+
+- 扫描 whistle 二维码，用 Safari 下载证书。
+- 安装证书。
+- 开启信任证书。
+
+[whistle苹果手机安装证书步骤](https://blog.csdn.net/qq_44859233/article/details/123834624){link=card}
