@@ -220,3 +220,75 @@ Charles 的注册码通行证，自行搜索找吧。
 ## Nginx
 
 [连前端都看得懂的《Nginx 入门指南》](https://juejin.cn/post/6844904129987526663){link=card}
+
+## PlantUML
+
+PlantUML 是一个画图工具。
+
+可以在其官方网站上在线画图，也可以在 vscode 中安装插件画图。
+
+个人推荐在 vscode 中画，样式更好看，下面以 vscode 插件画图为例说明流程。
+
+[PlantUML 一览](https://plantuml.com/zh/){link=card}
+
+### 安装 Java
+
+PlantUML 的预览需要安装 Java。所需最低版本为 Java 8。
+
+具体安装教程查一查网络资料。
+
+```bash
+# 查看 Java 版本
+java -version
+```
+
+### vscode 安装插件
+
+在 vscode 搜索 PlantUML 插件，安装即可。
+
+![PlantUML 插件](./images//tools/PlantUML_extension.png)
+
+### 书写画图代码
+
+以画树结构图标为例。
+
+[官方文档教程](https://plantuml.com/zh/salt)
+
+```bash
+@startsalt
+{
+  {T
+  +目录结构        | 说明  
+  + src        | 资源目录
+  ++ <color:#db8e00>api</color> | <color:#db8e00>存放api接口定义文件</color> 
+  +++ ...
+  ++ <color:Green>components</color> | <color:Green>存放页面上各个组件</color> 
+  +++ comp1 | 组件1
+  ++++ index.jsx | 组件入口
+  ++++ index.scss | 组件1样式文件
+  +++ ...
+  +++ index.js | 渠道配置入口
+  ++ pages | 存放页面代码
+  +++ index | 首页
+  ++++ index.jsx |  首页入口
+  ++++ index.scss | 首页样式文件
+  +++ ...
+  ++ ...
+  ++ utils | 存放公共方法
+  +++ constant.js | 常量
+  +++ ...
+  ++ app.jsx | 模块入口
+  ++ app.scss | 模块样式文件入口
+  }
+}
+@endsalt
+```
+
+### 预览图表
+
+> Preview Diagram, Press **Alt + D** to start PlantUML preview (**option + D** on MacOS).
+
+注意需要安装 Java 才能正常预览。
+
+常见的代码目录结构图。
+![树状图](./images/tools/PlantUML_tree.png)
