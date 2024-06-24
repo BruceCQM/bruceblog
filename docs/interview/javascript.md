@@ -207,6 +207,10 @@ person.name // kimmy
 person.sayHello() // hello, my name is kimmy
 ```
 
+## `new` 一个箭头函数会怎样
+
+箭头函数没有 `this`，没有 `prototype`，也不能使用 `arguments` 参数，无法 `new` 一个箭头函数。
+
 ## 如何理解原型链？
 
 :::tip 回答思路
@@ -251,3 +255,104 @@ btn.onclick = function() {
   }.bind(this), 1000);
 }
 ```
+
+## JS 的包装类型是什么？
+
+JS 中，基本类型是没有属性和方法的。为了便于操作基本类型，在调用基本类型的属性或方法时，JS 会隐式地将基本类型转换为对应的包装对象。
+
+```js
+const str = 'hello';
+str.length; // 5
+str.toUpperCase(); // 'HELLO'
+```
+
+通过 `Object()` 函数，也可以显式地将基本类型转换为包装对象。
+
+```js
+const str = 'hello';
+Object(str); // String { "hello" }
+const num = 123;
+Object(num); // Number { 123 }
+```
+
+通过 `valueOf()` 函数，可以将包装对象转换为基本类型。
+
+```js
+const str = 'hello';
+const strObj = Object(str);
+strObj.valueOf(); // 'hello'
+```
+
+:::tip 看代码说结果
+```js
+const boo = new Boolean(false);
+if (!boo) {
+  console.log('boo is false'); // 这段代码不会执行
+}
+```
+
+上述代码不会打印 `boo is false`，因为 boo 是一个包装对象，本质上它已经是一个对象，因此 `if` 语句中是 `true`，打印语句不会执行。
+:::
+
+## 为什么会有 BigInt 的提案
+
+JS 中 `Number.MAX_SAFE_INTEGER` 来表示最大的安全整数，它的值是9007199254740991（即2的53次方减1）。
+
+在这个范围内的整数可以精确表示，没有精度丢失。当整数超过这个范围时，JS 可能会出现计算不准确的情况。
+
+由于这个问题在进行大数计算时不得不依靠一些第三方库，因此官方提出了 BigInt 的提案来解决这个问题。
+
+:::tip JS 的特殊数值
+```js
+Number.MAX_SAFE_INTEGER // 最大的安全整数，9007199254740991
+Number.MAX_VALUE // 最大正浮点数，约为 1.7976931348623157e+308
+Number.MIN_SAFE_INTEGER // 最小的安全整数，-9007199254740991
+Number.MIN_VALUE // 最小正浮点数，约为 5e-324
+```
+:::
+
+## 如何判断一个对象是空对象
+
+### `Object.keys()`
+
+```js
+function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0;
+}
+```
+
+`Object.keys()` 返回一个由给定对象的所有可枚举自有属性的属性名组成的数组。
+
+### `JSON.stringify()`
+
+```js
+function isEmptyObject(obj) {
+  return JSON.stringify(obj) === '{}';
+}
+```
+
+若对象包含不可枚举的自有属性，这种方法不准确。
+
+## `const` 定义的变量的值可以修改吗
+
+`const` 关键字保证的是栈内存中保存的值不能修改。
+
+对于基本数据类型而言，栈内存中保存的就是实际的值，因此这个值无法被修改。
+
+对于引用数据类型而言，栈内存中保存的是对象在堆内存中的**引用地址**，这个引用地址无法被修改，但是堆内存中的对象是可以被修改的。
+
+## `this` 指向
+
+1. 函数调用。`this` 指向函数的调用者。普通函数调用指向全局对象（非严格模式）或 `undefined` （严格模式）。对象函数的调用，指向该对象。
+2. 全局上下文的函数调用。非严格模式下，在全局上下文中，`this` 指向全局对象，浏览器是 `window` 对象，Node.js 是 `global` 对象。严格模式下，`this` 指向 `undefined`。
+3. 构造函数调用。使用 `new` 构造函数创建对象时，构造函数的 `this` 指向创建的实例对象。
+4. 定时器、立即执行函数、匿名函数的指向，同第二点。
+5. 箭头函数没有自己的 `this`，它的 `this` 指向在函数定义时就已经确定了，指向的是函数外层作用域的 `this`，且不会改变。
+6. `bind()`、`call()`、`apply()` 等方法可以改变函数的 `this` 指向。
+
+## 箭头函数和普通函数的区别
+
+1. 箭头函数没有自己的 this，它的 this 指向在函数定义时就确定了，指向函数外层作用域的 this，并且不会改变，call、apply、bind 方法也无法改变箭头函数的 this 指向。
+2. 箭头函数没有 arguments，在箭头函数里访问 arguments 得到的实际上是外层函数的 arguments。如果没有外层函数，也就是箭头函数在全局作用域内，使用 arguments 会报错。可以使用剩余参数来代替 arguments 访问箭头函数的参数列表。
+3. 箭头函数没有原型对象 prototype。
+4. 箭头函数不能用作构造函数，不可以使用 new 命令。在 new 一个构造函数时，首先会创建一个对象，接着把新对象的 `__proto__` 属性设置为构造函数的原型对象 prototype，接着把构造函数的 this 指向新对象。对于箭头函数而言，第一，它没有原型对象 prototype，第二，它没有自己的this，所以不能用作构造函数。
