@@ -118,6 +118,23 @@ export default [
     ]
   },
   {
+    title: '其它官网',
+    items: [
+      {
+        icon: 'https://webpack.js.org/favicon.a3dd58d3142f7566.ico',
+        title: 'Webpack',
+        desc: 'webpack is a module bundler',
+        link: 'https://webpack.js.org/'
+      },
+      {
+        icon: 'https://webpack.js.org/favicon.a3dd58d3142f7566.ico',
+        title: 'Webpack 中文文档',
+        desc: 'webpack 是一个模块打包器。',
+        link: 'https://www.webpackjs.com/'
+      },
+    ]
+  },
+  {
     title: 'React 生态',
     items: [
       {
