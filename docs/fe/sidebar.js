@@ -62,11 +62,18 @@ export default [
     ]
   },
   {
+    text: 'Webpack',
+    collapsed: true,
+    items: [
+      { text: 'Webpack 基础', link: '/fe/webpack/webpack_basis' },
+      { text: 'Webpack 极速入门', link: '/fe/webpack/webpack' },
+    ]
+  },
+  {
     text: 'Other',
     collapsed: true,
     items: [
       { text: 'Git', link: '/fe/git/git' },
-      { text: 'Webpack', link: '/fe/webpack/webpack_basis' },
       { text: 'Vscode', link: '/fe/ide/vscode' },
       { text: 'Vuepress', link: '/fe/vuepress/vuepress' },
       { text: 'Vitepress', link: '/fe/vuepress/vitepress' },

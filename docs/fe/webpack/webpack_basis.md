@@ -1,99 +1,48 @@
-# Webpack
+# 前端工程化与 webpack 基础
 
-## Webpack 是什么
+## 前端工程化
 
-Webpack 是一个 JavaScript 应用程序静态模块打包工具，可以把互相依赖的 HTML、JS、CSS、图片、字体等资源文件经过一系列的处理，打包成静态的前端项目，生成一个或多个捆绑包（bundle），这些 bundle 可以直接在浏览器上运行。
+### 实际的前端开发
 
-Webpack 的主要功能包括：
+- 模块化（js 的模块化、css 的模块化、资源的模块化）
+- 组件化（复用已有的 UI 结构、样式、行为）
+- 规范化（目录结构的划分、编码规范化、接口规范化、文档规范化、Git 分支管理）
+- 自动化（自动化构建、自动部署、自动化测试）
 
-1. 模块打包：Webpack 可以将项目中的各种模块进行静态分析，并将它们打包成一个或多个 bundle。这使得管理项目中的模块变得更加方便，同时也能提高页面加载速度，因为浏览器可以并行加载多个资源。
-2. 代码转换：Webpack 可以处理 JavaScript、TypeScript、CSS、SCSS、LESS 等不同类型的文件，并通过 loader 转换它们，例如使用 Babel loader 将 ES6/ES7 代码转换为 ES5，或者使用 CSS loader 和 Style loader 将 CSS 嵌入到 JavaScript 中，再通过 JS 将 CSS 添加到 DOM 中。
-3. 模块依赖分析：Webpack 能够分析模块之间的依赖关系，包括直接依赖和间接依赖，然后构建出依赖关系树，以确保在打包时正确地引入依赖的模块。
-4. 代码拆分：Webpack 允许将代码拆分成多个 bundle，从而实现按需加载，提高页面加载性能。这对于大型应用程序特别有用，因为它们可能包含大量的代码，但并非所有代码都需要在初始加载时下载。
-5. 插件系统：Webpack 提供了丰富的插件系统，使得开发者能够扩展其功能，例如，HtmlWebpackPlugin 生成 HTML 文件，UglifyJsPlugin 压缩 JS 代码。
-6. 开发服务器：Webpack 提供了一个开发服务器，可以在本地快速启动一个服务器，支持热模块替换（Hot Module Replacement），使得开发过程更加高效。
+### 何为前端工程化
 
-## Webpack 初体验
+前端工程化即，在企业级的前端项目开发中，把前端开发所需的工具、技术、流程、经验等进行规范化、标准化。这样有利于前端开发自成体系，有一套<font color=red>标准的开发方案和流程</font>。
 
-### 初始化项目
+### 前端工程化解决方案
 
-```bash
-npm init -y
-```
+早期解决方案：
 
-项目结构如下。
+- [grunt](https://www.gruntjs.net/)
+- [gulp](https:///www.gulpjs.com.cn/)
 
-```shell
-.
-├── node_modules
-├── src
-│ │── index.js
-│ │── data.js
-├── index.html
-├── package.json
-├── package-lock.json
-```
+目前主流方案：
+
+- [webpack](https://www.webpackjs.com/)
+- [parcel](https://zh.parceljs.org/)
+
+## webpack 基础用法
+
+### webpack 是什么
+
+- webpack 是前端项目工程化的解决方案
+- 它提供了<font color=red>前端模块化开发</font>支持，以及<font color=red>代码压缩混淆、处理浏览器端 JavaScript 的兼容性、性能优化</font>等功能
+- 它让程序员把工作重心放在具体功能实现上，提高开发效率和项目可维护性
 
 ### 安装 webpack
 
 `-D` 是 `--save-dev` 的缩写，表示开发时依赖，只在项目开发阶段用到。
 `-S` 是 `--save` 的缩写，表示运行时依赖，即项目打包发布运行时要用到。
 
-Webpack 只在项目开发阶段用到，因此使用 `-D` 参数。
-
 ```bash
-npm install webpack webpack-cli -D
+npm install webpack@5.42.1 webpack-cli@4.7.2 -D
 ```
 
-### 书写代码
-
-```js
-// index.js
-import { getList } from './data'
-
-console.log(getList())
-```
-
-```js
-// data.js
-export function getList() {
-  return ['111', '222', '333']
-}
-```
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>hello webpack</h1>
-    <script src="./dist/main.js"></script>
-  </body>
-</html>
-```
-
-### 运行打包命令
-
-```bash
-npx webpack
-```
-
-打包完成后，就会生成 dist 文件夹，入口文件默认是 main.js。
-
-打包生成的内容如下。
-
-```bash
-# main.js
-(() => {'use strict';console.log(['111', '222', '333'])})();
-```
-
-运行 index.html 文件即可看到页面效果以及控制台打印的文字。
-
-## 配置 webpack
+### 配置 webpack
 
 1. 项目根目录中创建 webpack.config.js 配置文件，初始化基本配置：
 
