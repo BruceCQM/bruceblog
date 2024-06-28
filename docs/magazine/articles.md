@@ -330,3 +330,35 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 - 开启信任证书。
 
 [whistle苹果手机安装证书步骤](https://blog.csdn.net/qq_44859233/article/details/123834624){link=card}
+
+5、SSR、SSG、CSR 前端渲染技术
+
+SSR（Server Side Rendering）是服务器端渲染，SSG（Static Site Generation）是静态站点生成，CSR（Client Side Rendering）是客户端渲染。
+
+文章介绍了三者的优缺点。
+
+[一文搞懂：什么是SSR、SSG、CSR？前端渲染技术全解析](https://segmentfault.com/a/1190000044882791){link=card}
+
+[服务端渲染 (SSR)](https://cn.vuejs.org/guide/scaling-up/ssr.html){link=card}
+
+6、离线包简介
+
+文章对 H5 离线包进行了基本介绍。
+
+:::warning 离线包
+离线包 是将包括 HTML、JavaScript、CSS 等页面内静态资源打包到一个压缩包内。预先下载该离线包到本地，然后通过客户端打开，直接从本地加载离线包，从而最大程度地摆脱网络环境对 H5 页面的影响。
+:::
+
+[离线包简介](https://help.aliyun.com/document_detail/59594.html){link=card}
+
+7、H5 是什么
+
+文章介绍了手机 APP 开发的基本概念，H5 其实就是混合应用（hybrid app）。
+
+:::tip APP 技术分类
+- 原生应用，native app
+- Web 应用，Web app
+- 混合应用，hybrid app
+:::
+
+[H5 手机 App 开发入门：概念篇](https://ruanyifeng.com/blog/2019/12/hybrid-app-concepts.html){link=card}
