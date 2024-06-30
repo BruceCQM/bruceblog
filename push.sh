@@ -3,8 +3,8 @@
 # git push
 # git push git@gitee.com:brucecai55520/bruceblog.git main:bruceblog_vitepress
 # git push https://github.com/BruceCQM/bruceblog.git main:main
-# git push git@github.com:BruceCQM/bruceblog.git main:main
+git push git@github.com:BruceCQM/bruceblog.git master:main
 # git push https://gitee.com/brucecai55520/bruceblog.git main:master
 
-git push https://github.com/BruceCQM/bruceblog.git master:main
+# git push https://github.com/BruceCQM/bruceblog.git master:main
 git push https://gitee.com/brucecai55520/bruceblog.git master:master
