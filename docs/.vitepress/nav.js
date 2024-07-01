@@ -19,7 +19,7 @@ export default [
           { text: 'React', link: '/fe/react/react_basis' },
           { text: 'Nodejs', link: '/fe/nodejs/node_basis' },
           { text: 'Git', link: '/fe/git/git' },
-          { text: 'Webpack', link: '/fe/webpack/webpack_basis' },
+          { text: 'Webpack', link: '/fe/webpack/webpack' },
           { text: 'Vscode', link: '/fe/ide/vscode' },
           { text: '前端编程题', link: '/fe/js/coding_problem' },
         ]

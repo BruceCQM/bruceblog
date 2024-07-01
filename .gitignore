@@ -4,3 +4,4 @@ cache
 .temp
 package-lock.json
 package.json
+test.js
