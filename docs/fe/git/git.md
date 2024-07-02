@@ -391,6 +391,16 @@ git clone -b 远程仓库分支名 地址
 git pull 别名 分支名
 ```
 
+### git fetch
+
+`git fetch` 是将远程仓库的内容拉到本地，但不会自动合并，由用户决定是否合并。
+
+而 `git pull` 是将远程仓库内容拉取到本地，直接合并，即 `git pull = git fetch + git merge`。
+
+```bash
+git fetch 仓库别名
+```
+
 ### git push
 
 1. 推送本地指定分支到仓库指定分支

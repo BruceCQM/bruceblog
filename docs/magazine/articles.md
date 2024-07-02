@@ -287,13 +287,13 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 
 ## 2024
 
-1、Chrome Perfonrmance 性能分析入门
+### 1、Chrome Perfonrmance 性能分析入门
 
 文章介绍了 Chrome Performance 性能分析工具的基本使用。
 
 [Chrome Performance 页面性能分析指南](https://zhuanlan.zhihu.com/p/163474573){link=card}
 
-2、`block` 标签的作用
+### 2、`block` 标签的作用
 
 `block` 标签是微信小程序中的标签，充当一个容器，类似于 `view`。
 
@@ -309,7 +309,7 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 
 [微信小程序中，block 的作用](https://www.cnblogs.com/a973692898/p/13131660.html){link=card}
 
-3、某些移动安卓设备 `font-weight: 600` 不生效
+### 3、某些移动安卓设备 `font-weight: 600` 不生效
 
 在某些安卓的移动端设备上，`font-weight: 600` 不生效，字体并没有加粗。这是因为在某些设备上，缺少对某些字体的粗细支持。
 
@@ -321,7 +321,7 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 
 [font-weight 失效移动安卓处理方法](https://blog.csdn.net/weixin_41697143/article/details/104517239){link=card}
 
-4、iPhone 如何安装 whistle 证书
+### 4、iPhone 如何安装 whistle 证书
 
 简要步骤：
 
@@ -331,7 +331,7 @@ QPS，Queries Per Second，每秒钟处理的请求数量。
 
 [whistle苹果手机安装证书步骤](https://blog.csdn.net/qq_44859233/article/details/123834624){link=card}
 
-5、SSR、SSG、CSR 前端渲染技术
+### 5、SSR、SSG、CSR 前端渲染技术
 
 SSR（Server Side Rendering）是服务器端渲染，SSG（Static Site Generation）是静态站点生成，CSR（Client Side Rendering）是客户端渲染。
 
@@ -341,7 +341,7 @@ SSR（Server Side Rendering）是服务器端渲染，SSG（Static Site Generati
 
 [服务端渲染 (SSR)](https://cn.vuejs.org/guide/scaling-up/ssr.html){link=card}
 
-6、离线包简介
+### 6、离线包简介
 
 文章对 H5 离线包进行了基本介绍。
 
@@ -351,7 +351,7 @@ SSR（Server Side Rendering）是服务器端渲染，SSG（Static Site Generati
 
 [离线包简介](https://help.aliyun.com/document_detail/59594.html){link=card}
 
-7、H5 是什么
+### 7、H5 是什么
 
 文章介绍了手机 APP 开发的基本概念，H5 其实就是混合应用（hybrid app）。
 
@@ -362,3 +362,15 @@ SSR（Server Side Rendering）是服务器端渲染，SSG（Static Site Generati
 :::
 
 [H5 手机 App 开发入门：概念篇](https://ruanyifeng.com/blog/2019/12/hybrid-app-concepts.html){link=card}
+
+### 8、多个git仓库之间cherry-pick操作
+
+文章介绍了如何在多个 git 仓库之间进行 cherry-pick 操作。例如，将 A 仓库某个分支的某个 commit 迁移到 B 仓库的分支上。
+
+1. 在 B 仓库中，本地添加 A 库：`git remote add Aorigin https://xxx`;
+
+2. `git fetch Aorigin` 同步 A 库的分支信息；
+
+3. 在 B 库中所需分支上，执行 cherry-pick操作：`git cherry-pick [commitId]`，即可将 A 库的某个 commit 迁移到 B 库的分支上。
+
+[多个git项目库之间的cherry-pick操作](https://blog.csdn.net/qq_40102178/article/details/123378200){link=card}
