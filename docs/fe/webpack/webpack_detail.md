@@ -180,7 +180,7 @@ module.exports = {
 ![dependOd 循环引用](./images/depend-circular.png)
 :::
 
-## 常见场景
+## 入口常见场景
 
 ### 分离APP和vendor(第三方库)入口
 
@@ -222,3 +222,33 @@ module.exports = {
 [webpack多页面打包实践](https://zhuanlan.zhihu.com/p/109527475){link=card}
 
 [webpack 拆包：关于 splitChunks 的几个重点属性解析](https://segmentfault.com/a/1190000042093955){link=card}
+
+## 出口(output)
+
+`output` 属性用于配置 webpack 打包生成的文件输出到哪里，以及如何命名这个文件。
+
+输出文件路径和文件名默认值是 ``./dist/main.js`。
+
+```js
+const path = require('path');
+module.exports = {
+  output: {
+    filename: 'bundle.js', // 指定打包后的文件名
+    path: path.resolve(__dirname, 'dist'), // 指定打包文件生成的目录
+  },
+}
+```
+
+如果 entry 配置了多个入口起点，则需使用占位符确保每个输出文件具有唯一的名称。否则会报错。
+
+`[name]` 是指入口文件的文件名，`[contenthash]` 是指根据文件内容生成的 hash 值，`[contenthash:8]` 表示只取前 8 位。
+
+```js
+const path = require('path');
+module.exports = {
+  output: {
+    filename: '[name].[contenthash:8].js', // 指定打包后的文件名
+    path: path.resolve(__dirname, 'dist'), // 指定打包文件生成的目录
+  },
+}
+```
