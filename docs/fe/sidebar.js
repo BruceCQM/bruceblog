@@ -65,7 +65,7 @@ export default [
     text: 'Webpack',
     collapsed: true,
     items: [
-      { text: 'Webpack 极速入门', link: '/fe/webpack/webpack' },
+      { text: 'Webpack 极速入门', link: '/fe/webpack/webpack_quick' },
       { text: 'Webpack 深入学习', link: '/fe/webpack/webpack_detail' },
       { text: 'Webpack 基础', link: '/fe/webpack/webpack_basis' },
     ]

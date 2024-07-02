@@ -374,3 +374,41 @@ SSR（Server Side Rendering）是服务器端渲染，SSG（Static Site Generati
 3. 在 B 库中所需分支上，执行 cherry-pick操作：`git cherry-pick [commitId]`，即可将 A 库的某个 commit 迁移到 B 库的分支上。
 
 [多个git项目库之间的cherry-pick操作](https://blog.csdn.net/qq_40102178/article/details/123378200){link=card}
+
+### 9、`splitChunks` 拆包重点属性详解
+
+文章对 webpack 的 `splitChunks` 拆包配置重点属性进行了详细讲解，包括 `chunks`、`minSize`、`maxAsyncRequests`、`maxInitialRequests`、`cacheGroups` 属性。
+
+```js
+module.exports = {
+  optimization: {
+    splitChunks: {
+      // 同步导入、异步导入的公共模块都会被抽离出来
+      chunks: 'all',
+      // 如果chunk体积小于10B，则不打包
+      minSize: 10,
+      // chunk体积大于500B的，则会被分包，每个chunk体积不得大于500B
+      maxSize: 500,
+      // 自定义chunk分组
+      cacheGroups: {
+        vendor: {
+          name: 'vendor',
+          test: /[\\/]node_modules[\\/]/,
+          // 若某个模块同时匹配到vendor和utils，优先匹配高优先级的，即会被打包在utils生成的chunk中
+          priority: 10,
+          // 是否重用已存在的代码块，一般开启，可减少生成的chunk数量，优化浏览器缓存效率
+          reuseExistingChunk: true,
+        },
+        utils: {
+          name: 'utils',
+          test: /[\\/]utils[\\/]/,
+          priority: 20,
+          reuseExistingChunk: true,
+        }
+      },
+    }
+  }
+}
+```
+
+[webpack 拆包：关于 splitChunks 的几个重点属性解析](https://segmentfault.com/a/1190000042093955){link=card}

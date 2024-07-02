@@ -276,6 +276,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       // 修改html文件标题
       title: '这是标题',
+      // 执行HTML模板
+      template: './src/pages/page1/index.html',
+      // 指定生成的HTML要引入的chunk，与entry配置对应
+      chunks: ['page1'],
     }),
   ],
 }

@@ -127,3 +127,98 @@ module.exports = {
 ![dependOn之前](./images/dependOn-before.png)
 
 ![dependOn之后](./images/dependOn-after.png)
+
+
+:::danger 注意事项
+1. `runtime` 和 `dependOn` 不能在同一个入口上同时使用，否则配置无效，且会抛出错误。
+
+```js
+module.exports = {
+  entry: {
+    index: './src/index.js',
+    index2: {
+      runtime: 'run2',
+      dependOn: 'index',
+      import: './src/index2.js',
+    },
+  },
+}
+```
+
+![runtime-dependon-error](./images/runtime-dependon-error.png)
+
+2. `runtime` 不能指向已经存在的入口名称，否则会报错。
+
+```js
+module.exports = {
+  entry: {
+    index: './src/index.js',
+    index2: {
+      runtime: 'index',
+      import: './src/index2.js',
+    },
+  },
+}
+```
+
+![runtime-same-entrypoint](./images/runtime-same-entrypoint.png)
+
+3. `dependOn` 不能循环引用，否则会报错。
+
+```js
+module.exports = {
+  entry: {
+    index: './src/index.js',
+    index2: {
+      runtime: 'index',
+      import: './src/index2.js',
+    },
+  },
+}
+```
+
+![dependOd 循环引用](./images/depend-circular.png)
+:::
+
+## 常见场景
+
+### 分离APP和vendor(第三方库)入口
+
+```js
+module.exports = {
+  entry: {
+    app: './src/app.js',
+    vendor: './src/vendor.js'
+  },
+}
+```
+
+配置了 2 个单独的入口点。
+
+这样就可在 `vendor.js` 中存入未做修改的必要 library 或文件（如 Bootstrap、jQuery、图片等），将它们打包在一起生成单独的 chunk。
+
+:::warning 注意事项
+在 webpack < 4 的版本中，通常将 vendor 作为一个单独的入口起点添加到 entry 选项中，以将其编译为一个单独的文件（与 `CommonsChunkPlugin` 结合使用）。
+
+而在 webpack 4 中不鼓励这样做。而是使用 `optimization.splitChunks` 选项，将 vendor 和 app(应用程序) 模块分开，并为其创建一个单独的文件。不要为 vendor 或其他不是执行起点创建 entry。
+:::
+
+### 多页面应用程序
+
+```js
+module.exports = {
+  entry: {
+    pageOne: './src/pageOne/index.js',
+    pageTwo: './src/pageTwo/index.js',
+    pageThree: './src/pageThree/index.js',
+  },
+};
+```
+
+告诉 webpack 需要三个独立分离的依赖图。
+
+在多页面应用程序中，server 会拉取一个新的 HTML 文档给你的客户端。页面重新加载此新文档，并且资源被重新下载。然而，这给了我们特殊的机会去做很多事，例如使用 `optimization.splitChunks` 为页面间共享的应用程序代码创建 bundle。由于入口起点数量的增多，多页应用能够复用多个入口起点之间的大量代码/模块，从而可以极大地从这些技术中受益。
+
+[webpack多页面打包实践](https://zhuanlan.zhihu.com/p/109527475){link=card}
+
+[webpack 拆包：关于 splitChunks 的几个重点属性解析](https://segmentfault.com/a/1190000042093955){link=card}
