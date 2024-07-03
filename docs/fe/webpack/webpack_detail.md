@@ -252,3 +252,111 @@ module.exports = {
   },
 }
 ```
+
+## loader
+
+loader 好文。
+
+[看完这篇webpack-loader，不再怕面试官问了](https://juejin.cn/post/6844904054393405453){link=card}
+
+[Loader原理](https://learn.fuming.site/front-end/Webpack/origin/loader.html){link=card}
+
+### 概述
+
+webpack 只能处理打包 JavaScript 和 JSON 文件，这是 webpack 开箱可用的自带能力。
+
+loader 让 webpack 能够处理其他类型的文件，并将它们转换为有效模块，以供应用程序使用，以及被添加到依赖图中。
+
+一个 loader 的职责是单一的，只需要完成一种转换。若一个源文件需要经历多步转换才能正常使用，就要通过多个 loader 去转换。在调用多个 loader 处理一个文件时，每个 loader 会链式执行，第一个 loader 会拿到需要处理的原内容。上一个 loader 处理后的结果会传递给下一个 loader，最后一个 loader 将处理完成的最终结果返回给 webpack。
+
+因此，在开发一个 loader 的时候，请保持其职责的单一性，只需要关注输入和输出。
+
+### 基本使用
+
+loader 有两个属性。
+
+- `test`：用于匹配要处理的文件。
+
+- `use`：用于指定在进行转换时，要使用的 loader。
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      { test: /\.txt$/, use: 'raw-loader' },
+    ]
+  }
+}
+```
+
+上述配置，对一个单独的 module 对象定义了 rules 属性。这告诉 webpack 编译器(compiler) 如下信息：
+
+> ”嘿，webpack 编译器，当你碰到 「在 `require()/import` 语句中被解析为 `.txt` 的路径」时，在你对它打包之前，先 use(使用) `raw-loader` 转换一下。“
+
+`/\.txt$/` 与 `'/\.txt$/'`、`"/\.txt$/"` 不一样。前者表示 webpack 匹配任何以 .txt 结尾的文件，后者表示 webpack 匹配具有绝对路径 '.txt' 的单个文件。
+
+如果不用正则表达式，使用字符串的形式匹配，必须填入正确的绝对路径，让 webpack 可以正确匹配到对应的文件。
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      { test: '/Users/xxx/Documents/webpackTest/src/index.css', use: 'css-loader' },
+    ]
+  }
+}
+```
+
+`'./index.css'` 会如下报错。
+
+![test属性不是绝对路径报错](./images/test-absolute-path.png)
+
+### 多个loader转换
+
+如果配置了多个 loader，loader 的执行顺序是从右到左，从下到上。
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      // 从右到左
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      // 从下到上，其实也是从右到左，use属性都是数组
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+            },
+          },
+          { loader: 'sass-loader' },
+        ],
+      },
+    ]
+  }
+}
+```
+
+## 手撸 loader
+
+### 基础结构
+
+webpack 是运行在 Node.js 之上的，一个 loader 就是一个 Node.js 模块，这个模块需要导出一个函数。
+
+这个函数的职责就是获取处理前的原内容，对原内容执行转换逻辑后，返回处理后的内容。
+
+```js
+module.exports = function(source) {
+  // source 为 compiler 传递给 Loader 的⼀个⽂件的原内容
+  // 该函数需要返回处理后的内容
+  // 这⾥简单起⻅，直接把原内容返回，相当于该 loader 没有做任何转换
+  return source;
+}
+```
+
+由于 loader 运行在 Node.js 中，因此可以调用任何 Node.js 自带的 API，或安装第三方模块进行调用。
+
+### 获得 loader 的 options
