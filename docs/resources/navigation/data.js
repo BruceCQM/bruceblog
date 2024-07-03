@@ -115,10 +115,16 @@ export default [
         desc: '入门 TS 的不二首选',
         link: 'https://juejin.cn/post/7018805943710253086'
       },
+      {
+        icon: 'https://cn.mobx.js.org/gitbook/images/favicon.ico',
+        title: '铭哥教程',
+        desc: '完整的前端学习教程，包括HTML、css、JavaScript、Webpack、canvas等',
+        link: 'https://learn.fuming.site/front-end/Webpack/origin/loader.html'
+      },
     ]
   },
   {
-    title: '其它官网',
+    title: 'webpack',
     items: [
       {
         icon: 'https://webpack.js.org/favicon.a3dd58d3142f7566.ico',
@@ -131,6 +137,12 @@ export default [
         title: 'Webpack 中文文档',
         desc: 'webpack 是一个模块打包器。',
         link: 'https://www.webpackjs.com/'
+      },
+      {
+        icon: 'https://cn.mobx.js.org/gitbook/images/favicon.ico',
+        title: '深入浅出 Webpack',
+        desc: '《深入浅出 Webpack》书籍的电子版',
+        link: 'https://webpack.wuhaolin.cn/'
       },
     ]
   },

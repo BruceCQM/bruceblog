@@ -360,3 +360,131 @@ module.exports = function(source) {
 由于 loader 运行在 Node.js 中，因此可以调用任何 Node.js 自带的 API，或安装第三方模块进行调用。
 
 ### 获得 loader 的 options
+
+```js
+const loaderUtils = require('loader-utils');
+
+module.exports = function(source) {
+  // 获取到⽤户给当前 Loader 传⼊的 options
+  const options = loaderUtils.getOptions(this);
+  return source;
+}
+```
+
+`loader-utils` 是一个 npm 包，帮助开发者处理webpack loader 中的配置选项。
+
+1. 获取配置选项：通过 `loader-utils` 提供的 `getOptions` 函数，可以方便地获取到webpack配置文件中为loader指定的选项（options）。这样做的好处是，开发者无需直接操作复杂的 `this.query` 对象，从而简化了代码并提高了可读性。
+
+2. 验证配置选项：`loader-utils` 通常与 `schema-utils` 一起使用，以便对loader的配置选项进行验证。这有助于确保传递给loader的参数符合预期的数据类型和结构，从而避免在loader执行过程中因参数错误而导致的错误。
+
+3. 简化开发流程：通过使用 `loader-utils`，开发者可以更加专注于loader的核心逻辑，而无需花费大量时间在处理配置选项等琐碎事务上。这有助于提高开发效率，并降低出错的可能性。
+
+### 返回其它结果
+
+```js
+const loaderUtils = require('loader-utils');
+
+module.exports = function(source) {
+  // 通过this.callback告诉webpack返回的结果。该函数可同步或异步调用，并可返回多个结果。
+  this.callback(null, source, sourceMap);
+  // 当使用this.callback时，loader必须返回undefined。
+  // 让webpack知道，loader返回的结果在this.callback中，而不是return中。
+  return;
+}
+```
+
+### 同步 loaders
+
+无论是 return 还是 this.callback，都可以同步返回转换后的 content 值。
+
+```js
+// sync-loader.js
+module.exports = function (content, map, meta) {
+  return someSyncOperation(content);
+};
+```
+
+this.callback 方法更灵活，它允许传递多个参数，而不仅仅是 content。
+
+```js
+// sync-loader-with-multiple-results.js
+module.exports = function (content, map, meta) {
+  this.callback(null, someSyncOperation(content), map, meta);
+  return; // 当调用 callback() 函数时，总是返回 undefined。
+}
+```
+
+### 异步 loaders
+
+对于异步 loader，使用 this.async 来获取 callback 函数。
+
+```js
+// async-loader.js
+module.exports = function (content, map, meta) {
+  var callback = this.async();
+  someAsyncOperation(content, function (err, result) {
+    if (err) return callback(err);
+    callback(null, result, map, meta);
+  });
+};
+```
+
+```js
+// async-loader-with-multiple-results.js
+module.exports = function (content, map, meta) {
+  var callback = this.async();
+  someAsyncOperation(content, function (err, result, sourceMaps, meta) {
+    if (err) return callback(err);
+    callback(null, result, sourceMaps, meta);
+  });
+};
+```
+
+:::tip 同步异步
+loader 最初被设计为可以在同步 loader pipelines（如 Node.js，使用 enhanced-require），以及在异步 pipelines（如 webpack） 中运行。
+
+然而，由于同步计算过于耗时，在 Node.js 这样的单线程环境下进行此操作不是好的方案，建议尽可能地使 loader 异步化。
+
+但如果计算量很小，同步 loader 也是可以的。
+:::
+
+### 处理二进制数据(Raw loader)
+
+默认情况下，资源文件会被转化为 UTF-8 字符串，然后传给 loader。通过设置 `raw` 为 `true`，loader 可以接收原始的 `Buffer`。每一个 loader 都可以用 `String` 或者 `Buffer` 的形式传递它的处理结果。complier 将会把它们在 loader 之间相互转换。
+
+```js
+// raw-loader.js
+module.exports = function (content) {
+  assert(content instanceof Buffer);
+  return someSyncOperation(content);
+  // 返回值也可以是一个 `Buffer`
+  // 即使不是 "raw"，loader 也没问题
+};
+module.exports.raw = true;
+```
+
+### Pitching Loader
+
+loader 总是从右到左被调用。有些情况下，loader 只关心 request 后面的元数据（metadata），并且忽略前一个 loader 的结果。在实际（从右到左）执行 loader 之前，会先**从左到右**调用 loader 上的 pitch 方法。
+
+pitch 方法的三个参数：
+
+- remainingRequest：后面的 loader+资源路径，loadername!的语法。
+
+- precedingRequest：资源路径。
+
+- metadata：和普通的 loader 函数的第三个参数一样，辅助对象，而且 loader 执行的全程用的是同一个对象。
+
+实现 bundle.loader 异步加载。命中 pitch 后，后⾯的 loader 在动态引⼊⽂件时，可以以 loadername 的形式处理⽬标⽂件。
+
+### context
+
+`this.loadModule`：当 loader 在处理一个文件时，如果依赖其它文件的处理结果才能得出当前文件的结果时，可以通过 `this.loadModule(request: string, callback: function(err, source, sourceMap, module))` 去获得 request 对应文件的处理结果。
+
+### 相关文章
+
+[webpack实战，手写loader和plugin](https://segmentfault.com/a/1190000042779769){link=card}
+
+[中文文档：Loader Interface](https://webpack.docschina.org/api/loaders/#asynchronous-loaders){link=card}
+
+[深入浅出Webpack书籍：5-3编写loader章节](https://webpack.wuhaolin.cn/5%E5%8E%9F%E7%90%86/5-3%E7%BC%96%E5%86%99Loader.html){link=card}
