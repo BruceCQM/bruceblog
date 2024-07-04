@@ -488,3 +488,71 @@ pitch 方法的三个参数：
 [中文文档：Loader Interface](https://webpack.docschina.org/api/loaders/#asynchronous-loaders){link=card}
 
 [深入浅出Webpack书籍：5-3编写loader章节](https://webpack.wuhaolin.cn/5%E5%8E%9F%E7%90%86/5-3%E7%BC%96%E5%86%99Loader.html){link=card}
+
+## 插件(plugin)
+
+loader 用于转换某些类型的模块，而插件可以用于执行范围更广的任务。包括：打包优化、资源管理、注入环境变量。
+
+```js
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack'); // 访问内置的插件
+
+module.exports = {
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new HtmlWebpackPlugin({ template: './src/index.html' }),
+  ],
+}
+```
+
+### 组成
+
+- 一个 ES6 class 类；
+- 在类中定义一个 apply 方法；
+- 指定一个绑定到 webpack 自身的事件钩子；
+- 处理 webpack 内部实例的特定数据；
+- 功能完成后调用 webpack 提供的回调；
+
+### compiler 和 compilation
+
+在开发 plugins 时最常用的就是 compiler 和 compilation 对象。它们是 plugins 和 webpack 之间的桥梁。
+
+#### compiler
+
+compiler 对象包含了 webpack 环境所有的配置信息，包括 options、loaders、plugins 这些信息。
+
+这个对象在 webpack 启动时就被实例化，它是全局唯一的，可以简单理解为 webpack 实例。
+
+#### compilation
+
+compilation 对象代表了一次资源版本的构建。它包含了当前的模块资源、编译生成资源、变化的文件，以及被跟踪依赖的状态信息等。
+
+当 webpack 以开发模式运行时，每当检测到一个变化，一次新的 compilation 将被创建。
+
+compilation 对象也提供了很多事件回调供插件做扩展，通过 compilation 也可以读到 compiler 对象。
+
+### Tapable
+
+tapable 是 webpack 一个核心工具，它暴露了 tap、tapAsync、tapPromise 等方法，可以使用这些方法来触发 compiler 钩子，使插件可以监听 webpack 在运行过程中广播的事件，接着通过 compiler 对象去操作 webpack。
+
+也可以使用这些方法注入自定义的构建步骤，这个步骤将在整个编译过程中的不同时机触发。
+
+- tap：以同步方式触发 compiler 钩子。
+
+- tapAsync：以异步方式触发 compiler 钩子。
+
+- tapPromise：以异步方式触发 compiler 钩子，返回 Promise。
+
+### loader 和 plugin 的区别
+
+loader 用于对源代码文件进行转换和处理，而 plugin 用于对 webpack 的编译过程进行扩展和增强。
+
+plugin 可以用于执行任意类型的任务，如生成 HTML 文件、压缩代码、提取公共代码等。
+
+使用 plugin 可以实现 webpack 无法处理的复杂任务。
+
+### 相关文章
+
+[开发一个 Webpack 插件原来这么简单](https://juejin.cn/post/6893097741258326030){link=card}
+
+[webpack 中 loader 和 plugin 有啥区别?](https://zhuanlan.zhihu.com/p/618991058){link=card}
