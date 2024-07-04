@@ -51,6 +51,49 @@ var twoSum = function(nums, target) {
 
 ## 链表
 
+### 160. [相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists/description/)
+
+题目：
+
+![160.相交链表](./images/leetcode/question-160.png)
+
+代码：
+
+```js
+var getIntersectionNode = function(headA, headB) {
+  if (headA === null || headB === null) {
+    return null;
+  }
+  var a = headA, b = headB;
+  while (a !== b) {
+    a = a ? a.next : headB;
+    b = b ? b.next : headA;
+  }
+  return a;
+}
+```
+
+### 206. [反转链表](https://leetcode.cn/problems/reverse-linked-list/description/)
+
+题目：
+
+![206.反转链表](./images/leetcode/question-206.png)
+
+代码：
+
+```js
+var reverseList = function(head) {
+  var pre = null, cur = head;
+  while (cur) {
+    var tmp = cur.next;
+    cur.next = pre;
+    pre = cur;
+    cur = tmp;
+  }
+  return pre;
+}
+```
+
 ## 二叉数
 
 ## 图论
