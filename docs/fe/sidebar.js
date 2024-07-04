@@ -62,12 +62,12 @@ export default [
     ]
   },
   {
-    text: 'Webpack',
+    text: 'webpack',
     collapsed: true,
     items: [
-      { text: 'Webpack 极速入门', link: '/fe/webpack/webpack_quick' },
-      { text: 'Webpack 深入学习', link: '/fe/webpack/webpack_detail' },
-      { text: 'Webpack 基础', link: '/fe/webpack/webpack_basis' },
+      { text: 'webpack 极速入门', link: '/fe/webpack/webpack_quick' },
+      { text: 'webpack 概念', link: '/fe/webpack/webpack_concepts' },
+      { text: 'webpack 基础', link: '/fe/webpack/webpack_basis' },
     ]
   },
   {

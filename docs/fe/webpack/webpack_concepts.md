@@ -1,4 +1,4 @@
-# webpack 深入学习
+# webpack 概念
 
 ## webpack 是什么
 
@@ -603,3 +603,24 @@ module.exports = {
 [浅析webpack中mode的取值及不同取值的作用/打包方式及摇树优化（tree-shaking）的理解](https://www.cnblogs.com/goloving/p/15002124.html){link=card}
 
 [webpack4 神奇的 mode](https://zhuanlan.zhihu.com/p/134068206){link=card}
+
+## 浏览器兼容性
+
+webpack 支持所有复核 ES5 标准的浏览器（不支持 IE8 及以下版本）。
+
+webpack 的 import() 和 require.ensure() 需要 Promise。如果想要支持旧版本浏览器，在使用这些表达式之前，需要提前[加载 polyfill](https://www.webpackjs.com/guides/shimming/#loading-polyfills)。
+
+import() 和 require.ensure() 是 webpack 中实现代码分割的两种方式，它们可以将代码分割成多个模块，然后按需加载，提高应用的性能和加载速度。
+
+在使用 import() 和 require.ensure() 时，需要将其返回的结果作为 Promise 对象来处理，以确保模块的加载和解析是异步的，并且可以处理加载失败的情况。
+
+```js
+import("./module").then(function(module) {
+  // 处理模块的导出值
+});
+
+require.ensure(["./module"], function(require) {
+  let module = require("./module");
+  // 处理模块的导出值
+}, "myChunk");
+```
