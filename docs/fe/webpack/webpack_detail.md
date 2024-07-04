@@ -543,7 +543,9 @@ tapable 是 webpack 一个核心工具，它暴露了 tap、tapAsync、tapPromis
 
 - tapPromise：以异步方式触发 compiler 钩子，返回 Promise。
 
-### loader 和 plugin 的区别
+[开发一个 Webpack 插件原来这么简单](https://juejin.cn/post/6893097741258326030){link=card}
+
+## loader 和 plugin 的区别
 
 loader 用于对源代码文件进行转换和处理，而 plugin 用于对 webpack 的编译过程进行扩展和增强。
 
@@ -551,8 +553,53 @@ plugin 可以用于执行任意类型的任务，如生成 HTML 文件、压缩�
 
 使用 plugin 可以实现 webpack 无法处理的复杂任务。
 
-### 相关文章
-
-[开发一个 Webpack 插件原来这么简单](https://juejin.cn/post/6893097741258326030){link=card}
-
 [webpack 中 loader 和 plugin 有啥区别?](https://zhuanlan.zhihu.com/p/618991058){link=card}
+
+## 模式(mode)
+
+mode 模式有三个取值：development，production，none。每个取值代表不同的构建环境和优化策略。
+
+### none
+
+在 none 模式下，webpack 不会应用任何默认的优化配置。开发者需要手动配置所有需要的优化和插件，以获得所需的构建效果。
+
+使用场景：通常不推荐在常规项目中使用 none 模式，因为它不提供任何内置的优化，除非你有特殊需求或正在进行高度定制化的构建过程。
+
+### development
+
+development 模式用于开发环境，它提供了一些有助于开发的默认配置。例如，启用 source map 以支持源代码映射，提高调试效率；启用 NamedChunksPlugin 和 NamedModulesPlugin，为打包后的模块和 chunks 提供可读的名称，便于开发者识别。
+
+特点：
+
+- `process.env.NODE_ENV` 被设置为 `development`。
+
+- 打包后的代码包含详细的注释和源映射信息，便于调试。
+
+- 打包速度相对较快，因为开发模式下可能启用了缓存和其他性能优化。
+
+- 打包后的代码未经压缩和混淆，保持较高的可读性。
+
+### production
+
+production 模式用于生产环境，它提供了一系列旨在优化最终产品的默认配置。这些配置旨在减少最终 bundle 的大小、提高加载速度和提升整体性能。
+
+特点：
+- `process.env.NODE_ENV` 被设置为 `production`。
+
+- 启用多种优化插件，如 UglifyJsPlugin（或其他压缩插件，取决于 webpack 版本和配置），用于压缩和混淆代码。
+
+- 移除未使用的代码和文件，通过摇树优化（tree-shaking）减少最终 bundle 的大小。
+
+- 打包后的代码经过压缩和混淆，减少文件大小并提高加载速度。
+
+- 可能启用代码分割（code splitting）和懒加载（lazy loading），以进一步优化加载时间和用户体验。
+
+```js
+module.exports = {
+  mode: 'production',
+}
+```
+
+[浅析webpack中mode的取值及不同取值的作用/打包方式及摇树优化（tree-shaking）的理解](https://www.cnblogs.com/goloving/p/15002124.html){link=card}
+
+[webpack4 神奇的 mode](https://zhuanlan.zhihu.com/p/134068206){link=card}
