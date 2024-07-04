@@ -8,7 +8,7 @@ css 盒子模型分为两种：
 
 - 标准盒子模型：在标准盒子模型当中，盒子的宽度和高度是指内容 content 的宽高，不包括内边距、边框。因此设置内边距和边框，会把盒子撑大。
 
-- 怪异盒子模型（IE盒子模型）：在怪异盒子模型当中，盒子的宽高包括了内边距和边框。因此设置内边距和边框，不会把盒子撑大。
+- 怪异盒子模型（IE 盒子模型）：在怪异盒子模型当中，盒子的宽高包括了内边距和边框。因此设置内边距和边框，不会把盒子撑大。
 
 可以通过设置 `box-sizing` 属性来改变盒子模型。
 
@@ -26,7 +26,7 @@ css 不同属性的百分比值，参照的基准不一样。
 
 3. 参照**父元素相同属性**：font-size、line-height。
 
-4. 相对定位的元素，top、bottom 参照的是父元素**内容（content）**的高度，left、right 参照的是父元素内容的宽度。
+4. 相对定位的元素，top、bottom 参照的是父元素 **内容（content）** 的高度，left、right 参照的是父元素内容的宽度。
 
 5. 绝对定位的元素，参照的分别是**最近的定位元素包含 padding 的高度和宽度**。绝对定位的元素以最近的设置了定位的元素为参照元素，只要 position 不是 static 就算是设置了定位，因为 static 是默认值。
 
@@ -68,3 +68,73 @@ css 不同属性的百分比值，参照的基准不一样。
 #### 相关链接
 
 [CSS 的几种定位详解](https://blog.csdn.net/weixin_38055381/article/details/81558288)
+
+## transform
+
+### 平移(translate)
+
+- translate 的平移不会影响其他元素的位置，有点类似 relative 定位。
+
+- 百分比是相对于元素自身的**包含 padding 的宽高**。
+
+- translate 对行内标签没有效果。
+
+| 选项               | 说明                        |
+| ------------------ | --------------------------- |
+| translate(x,y)     | 同时向 x 轴和 y 轴平移      |
+| translateX(x)      | 向 x 轴平移                 |
+| translateY(y)      | 向 y 轴平移                 |
+| translateZ(z)      | 向 z 轴平移                 |
+| translate3d(x,y,z) | 同时向 x 轴、y 轴、z 轴平移 |
+
+一种实现水平垂直居中的方法：定位+平移。
+
+```css
+.father {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background: red;
+}
+
+.son {
+  position: absolute;
+  top: 50%; /* 相对于父元素 */
+  left: 50%; /* 相对于父元素 */
+  transform: translate(-50%, -50%); /* 相对于自身宽高 */
+  width: 50px;
+  height: 50px;
+  background: blue;
+}
+```
+
+### 旋转(rotate)
+
+- 度数单位是 deg，旋转非零的角度都需要加上单位。
+
+- 正数-顺时针，负数-逆时针。
+
+- 默认旋转中心是元素的中心点。
+
+- `transform-origin` 设置旋转的中心点。默认中心点是 `50% 50%`。可以设置像素 px 或方位名词 top、bottom、left、right、center。
+
+- `transform-origin` 以元素自身为基准，起点是元素的左上角。
+
+- 如果是 3D 还有个 z 轴，`transform-origin: 50% 50% 0`。
+
+| 选项                | 说明                         |
+| ------------------- | ---------------------------- |
+| rotate(deg)         | 旋转 deg 度                  |
+| rotateX(deg)        | 绕 x 轴旋转 deg 度           |
+| rotateY(deg)        | 绕 y 轴旋转 deg 度           |
+| rotateZ(deg)        | 绕 z 轴旋转 deg 度           |
+| rotate3d(x,y,z,deg) | 绕 x、y、z 轴同时旋转 deg 度 |
+
+```css
+transform: rotate(45deg);
+
+/* 假设元素宽高都是20px，下面三个写法的旋转中心点相同 */
+transform-origin: 50% 50%;
+transform-origin: 10px 10px;
+transform-origin: center center;
+```
