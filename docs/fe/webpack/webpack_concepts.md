@@ -22,6 +22,18 @@ webpack 是一个强大的模块打包工具，用于处理和打包 JavaScript 
 
 5. 社区支持。webpack 有庞大的社区支持，提供了丰富的文档、教程和示例，可帮助开发者快速入门和解决问题。
 
+## 五大核心概念
+
+- entry(入口)：指示 webpack 从哪个文件开始打包。
+
+- output(输出)：指示 webpack 打包后的文件输出到哪里，如何命名。
+
+- loader(loader)：webpack 本身只能处理 js、JSON 文件，其它资源需要借助 loader，webpack 才能解析。
+
+- plugins(插件)：扩展 webpack 的功能。
+
+- mode(模式)：指示 webpack 使用哪种构建模式。
+
 ## 入口(entry)
 
 ### 单入口
