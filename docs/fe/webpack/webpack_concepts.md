@@ -239,7 +239,7 @@ module.exports = {
 
 `output` 属性用于配置 webpack 打包生成的文件输出到哪里，以及如何命名这个文件。
 
-输出文件路径和文件名默认值是 ``./dist/main.js`。
+输出文件路径和文件名默认值是 `./dist/main.js`。
 
 ```js
 const path = require('path');

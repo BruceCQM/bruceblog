@@ -119,3 +119,60 @@ module、chunk、bundle 其实就是同一份代码，在不同转换场景下�
 ![module、chunk和bundle的区别](./images/module-chunk-bundle.png)
 
 [webpack——module、chunk和bundle的区别](https://blog.csdn.net/qq_17175013/article/details/119753186){link=card}
+
+## filename & chunkFilename
+
+通过 output 的 filename 和 chunkFilename 控制 chunk 输出的 bundle 命名。
+
+[output中chunkFilename和filename的区别](https://juejin.cn/post/6844904166150651917){link=card}
+
+MiniCssExtractPlugin 也同样有这些字段：
+
+[Webpack - css 文件的代码分割](https://github.com/VenenoFSD/Learn-Webpack4/issues/17){link=card}
+
+## 命名(hash)
+
+webpack 文件打包一般有三种 hash：hash、chunkhash、contenthash。
+
+- hash 是项目级别的，使用 hash 的缺点是，加入只修改了其中一个文件，但是所有文件的文件名里的 hash 都是相同的。
+
+- chunkhash 根据不同的入口文件(entry)进行依赖文件解析，构建对应的 chunk，生成对应的哈希值。
+
+- contenthash 是针对文件内容级别的，只有自己模块的内容改变，哈希值才会改变。
+
+[从源码看webpack的hash策略](https://juejin.cn/post/6844903942384517127){link=card}
+
+[webpack中文件打包 hash、chunkhash、contenthash 的区别](https://juejin.cn/post/7078589390422802440){link=card}
+
+可以使用 webpack 提供的模板字符串定义 bundle 文件名，下面是常用的模板字符串。
+
+|模板|描述|稳定性|
+|--|--|--|
+|[name]|chunk 的名称|只要chunk名称不修改就不会变化|
+|[hash]|根据所有 chunk 生成的 hash|工程某个chunk被修改就会引起变化|
+|[chunkhash]|根据chunk生成的hash值|某个chunk被修改，只会引起被修改的chunk的hash|
+|[contenthash]|根据bundle内容生成的hash|chunk中某个bundle被修改，只会引起被修改的bundle的hash|
+
+:::warning 注意事项
+1. JS 文件的指纹设置 `'[name][chunkhash:8].js'`。
+
+JS 文件为什么不用 contenthash？
+
+因为 JS 引入了 css 模块，若 css 改变，css 使用的是 contenthash，那么 css 的指纹变了。但对于引入 css 的 JS 模块来说，它的内容是没有发生变化的。
+
+因此如果 js 文件使用 contenthash，则 js 模块的指纹不变，导致 js 无法引入更新后的 css 文件。
+
+2. css 文件的指纹设置 `'[name][contenthash:8].css'`。
+
+css 文件为什么不用 chunkhash？
+
+js 使用的是 chunkhash，如果 js 模块发生改变，则 chunkhash 也会改变，导致它引入的 css 模块的 chunkhash 也跟着改变。
+
+但这是不合理的，因为 css 文件本身的内容并没有发生改变。
+
+因此 css 使用 contenthash，只与其自身内容有关，无视被哪个 js 模块引用。
+
+3. Images/Fonts 的指纹设置 `'[name][hash:8].[ext]'`。
+
+注意，图片字体的 hash，和 css、js 的 hash 概念不同，是按内容生成的，不是按编译生成的。
+:::
