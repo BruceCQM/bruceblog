@@ -98,6 +98,94 @@ var reverseList = function(head) {
 }
 ```
 
+### 234. [回文链表](https://leetcode.cn/problems/palindrome-linked-list/description/)
+
+标签：栈、递归
+
+题目：
+
+![234.回文链表](./images/leetcode/question-234.png)
+
+代码：
+
+```js
+// 方法一：先用数组记录下链表所有元素，再用双指针判断是否回文
+var isPalindrome = function(head) {
+  var arr = [], p = head;
+  while (p) {
+    arr.push(p.val);
+    p = p.next;
+  }
+  for (var i = 0, j = arr.length - 1;i < j;i++, j--) {
+    if (arr[i] !== arr[j]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// 方法二：栈存储，再遍历比较弹出
+var isPalindrome = function(head) {
+  var stack = [], p = head;
+  while (p) {
+    stack.push(p.val);
+    p = p.next;
+  }
+  while (head) {
+    if (head.val !== stack.pop()) {
+      return false;
+    }
+    head = head.next;
+  }
+  return true;
+}
+
+// 方法二优化：相当于只需要比较链表前半部分和后半部分即可
+var isPalindrome = function(head) {
+  var stack = [], p = head;
+  var len = 0;
+  while (p) {
+    stack.push(p.val);
+    p = p.next;
+    len++;
+  }
+  len = len / 2;
+  while(len-- >= 0) {
+    if (head.val !== stack.pop()) {
+      return false;
+    }
+    head = head.next;
+  }
+  return true;
+}
+
+// 方法三：递归，难理解
+var p = null;
+
+var isPalindrome = function(head) {
+  p = head;
+  return check(head);
+}
+
+var check = function(head) {
+  if (!head) {
+    return true;
+  }
+  var res = check(head.next) && (p.val === head.val);
+  p = p.next;
+  return res;
+}
+
+// 帮助理解方法三：逆序打印链表
+var printList = function(head) {
+  if (!head) {
+    return;
+  }
+  printList(head.next);
+  console.log(head.val);
+}
+```
+
 ### 141. [环形链表](https://leetcode.cn/problems/linked-list-cycle/description/)
 
 标签：双指针、哈希表
