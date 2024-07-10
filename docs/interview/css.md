@@ -138,3 +138,49 @@ transform-origin: 50% 50%;
 transform-origin: 10px 10px;
 transform-origin: center center;
 ```
+
+### 缩放(scale)
+
+可以设置不同的中心点(`transform-origin`)进行缩放，默认元素中心点进行缩放，不影响其它盒子。
+
+| 选项                | 说明                         |
+| ------------------- | ---------------------------- |
+| scale(x,y) | 2D 缩放                 |
+| scale3d(x,y,z) | 3D 缩放           |
+| scaleX(x) | x 轴缩放           |
+| scaleY(y) | y 轴缩放          |
+| scaleZ(z) | z 轴缩放 |
+
+### 倾斜(skew)
+
+2D 倾斜，在 2D 里做 3D 透视图。
+
+|选项|说明|
+|--|--|
+|skew(x,y)|x 轴倾斜 x 度，y 轴倾斜 y 度|
+|skewX(x)|x 轴倾斜 x 度|
+|skewY(y)|y 轴倾斜 y 度|
+
+### 综合写法
+
+- 顺序会影响转换的效果，比如旋转会改变坐标轴的方向。
+
+- 一般把平移放在最前面。
+
+```css
+.son {
+  transform: translate(100px, 100px) rotate(45deg) scale(2, 2);
+}
+```
+
+### matrix
+
+css 矩阵，涵盖了上述所有属性。
+
+`transform: matrix(scaleX, skewY, skewX, scaleY, translateX, translateY)`：matrix 的六个值分别代表缩放 x 轴、倾斜 y 轴、倾斜 x 轴、缩放 y 轴、平移 x 轴、平移 y 轴。
+
+```css
+.son {
+  transform: matrix(1, 0, 0, 1, 0, 0);
+}
+```
