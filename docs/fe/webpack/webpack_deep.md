@@ -238,3 +238,41 @@ module.exports = {
 webpack manifest 是一个特殊的文件，它用于记录 webpack 编译后的所有资产（包括 JavaScript、css、图像等）的映射关系。这个映射关系可以帮助我们在代码中更方便地引用这些资产，并且在更新资产时，不用担心因为引用资源的路径改变导致的问题。
 
 通常情况下，webpack manifest 会在生产构建中启用，并将其写入到磁盘的一个特定位置，以便在运行时可以快速访问。在生产环境使用 webpack manifest 可以提高应用程序的性能和可靠性。
+
+## 常用的 loader 和 plugin
+
+### loader
+
+- babel-loader：把 ES6 转换成 ES5
+
+- less-loader：将less代码转换成CSS
+
+- css-loader：加载 CSS，⽀持模块化、压缩、⽂件导⼊等特性
+
+- style-loader：把 CSS 代码注⼊到 JavaScript 中，通过 DOM 操作去加载 CSS
+
+- eslint-loader：通过 ESLint 检查 JavaScript 代码
+
+- vue-loader：加载 Vue.js 单⽂件组件
+
+- cache-loader: 可以在⼀些性能开销较⼤的 Loader 之前添加，⽬的是将结果缓存到磁盘⾥
+
+- file-loader：把⽂件输出到⼀个⽂件夹中，在代码中通过相对 URL 去引⽤输出的⽂件 (处理图⽚和字体)
+
+- url-loader：与 file-loader 类似，区别是⽤户可以设置⼀个阈值，⼤于阈值时返回其 publicPath，⼩于阈值时返回⽂件 base64 形式编码 (处理图⽚和字体)
+
+### plugin
+
+- CopyWebpackPlugin：将单个⽂件或整个⽬录复制到构建⽬录
+
+- HtmlWebapckPlugin：简单创建 HTML ⽂件，⽤于服务器访问
+
+- MiniCssExtractPlugin: 分离样式⽂件，CSS 提取为独⽴⽂件，⽀持按需加载 (替代extract-text-Webpack-plugin)
+
+- ParallelUglifyPlugin: 多进程执⾏js代码压缩，提升构建速度
+
+- TerserWebpackPlugin，多进程执⾏js代码压缩，⽀持抽离注释⽂件以及⽀持多种压缩⽅式（terserMinify、UglifyJS、SWC等）
+
+- postcss-sprites：自动生成精灵图
+
+[使用 webpack 的各种插件提升你的开发效率](https://juejin.cn/post/6844903795512573966){link=card}
