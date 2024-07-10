@@ -218,6 +218,61 @@ var hasCycle = function(head) {
 }
 ```
 
+### 21. [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/description/)
+
+标签：递归、双指针
+
+题目：
+
+![21.合并两个有序链表](./images/leetcode/question-21.png)
+
+代码：
+
+```js
+// 方法一：遍历链表存到数组，排好序，返回一个新链表
+var mergeTwoLists = function(l1, l2) {
+  if (!l1 && !l2) {
+    return null;
+  }
+  var arr = [];
+  while (l1) {
+    arr.push(l1.val);
+    l1 = l1.next;
+  }
+  while (l2) {
+    arr.push(l2.val);
+    l2 = l2.next;
+  }
+  arr.sort((a, b) => a - b);
+  var head = new ListNode(), p = head;
+  for (var i = 0;i < arr.length; i++) {
+    p.val = arr[i];
+    if (i < arr.length - 1) {
+      p.next = new ListNode();
+      p = p.next;
+    }
+  }
+  return head;
+}
+
+// 方法二：快慢链表
+var mergeTwoLists = function(l1, l2) {
+  var head = new ListNode(), p = head;
+  while (l1 && l2) {
+    if (l1.val <= l2.val) {
+      p.next = l1;
+      l1 = l1.next;
+    } else {
+      p.next = l2;
+      l2 = l2.next;
+    }
+    p = p.next;
+  }
+  p.next = l1 || l2;
+  return head.next;
+}
+```
+
 ## 二叉数
 
 ## 图论
