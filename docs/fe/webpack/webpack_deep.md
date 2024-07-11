@@ -273,6 +273,55 @@ vite、snowpack 这类非构建式打包工具，在冷启动开发服务器时�
 
 [rollup，vite以及webpack比较与介绍](https://juejin.cn/post/7097493230572273700#heading-26){link=card}
 
+## 热更新原理
+
+webpack 热更新，是基于 WDS(webpack-dev-server)的模块热替换，只需要局部刷新页面上发生变化的模块，同时可以保留当前的页面状态，比如复选框的选中状态、输入框的输入等，增量更新。
+
+1. WDS 工作流程。
+
+- 启动 webpack，生成 compiler 实例。compiler 上有很多方法，比如可以启动 webpack 所有编译工作，以及监听本地文件的变化。
+
+- 使用 express 框架启动本地 server，让浏览器可以请求本地的静态资源。
+
+- 本地 server 启动之后，再去启动 websocket 服务。通过 websocket，可以建立本地服务和浏览器的双向通信，这样就可以实现当本地文件发生变化，立马告知浏览器可以热更新代码。
+
+2. 监听文件变化。
+
+此时用到了 webpack-dev-middleware 库。很多人分不清 webpack-dev-middleware 和 webpack-dev-server 的区别。webpack-dev-server 只负责启动服务和前置准备工作，所有文件相关的操作都抽离到 webpack-dev-middleware 库了，主要是本地文件的编译和输出以及监听。职责的划分更清晰。
+
+此时调用 compiler.watch 方法，改方法主要做了 2 件事。
+
+- 首先对本地文件代码进行编译打包，也就是 webpack 的一系列编译流程。
+
+- 其次，编译结束后，开启对本地文件的监听，当文件发生变化，重新编译，编译完成之后继续监听。
+
+为什么代码的改动保存会自动编译、重新打包？这一系列的重新检测编译归功于 compiler.watch 方法。监听本地文件的变化主要通过**文件的生成时间**是否有变化。
+
+3. 通知浏览器进行热更新。此时浏览器得到的 bundle 文件里面，内嵌了两个重要的代码逻辑片段，即 websocket 的客户端以及 HotModuleReplacementPlugin。
+
+websocket 和服务端连接，并注册了 2 个监听事件。
+
+- hash 事件，更新最新一次打包后的 hash 值。
+
+- ok 事件，进行热更新检查。
+
+4. 浏览器开始热更新
+
+websocket 监听到 ok 事件后调用 module.hot.check 开始热更新，该方法利用上一次保存的 hash 值，发送 ajax 请求；请求结果获取热更新模块，以及下次热更新的 hash 标识，并进入热更新准备阶段。
+
+发送 ajax 请求时，使用的是 JSONP 的方法，因为 json 获取的代码可以直接执行，立马进行热更新。
+
+5. 热替换流程。
+
+删除旧模块，将新的模块添加到 modules 中，通过 `__webpack_require__` 执行相关模块的代码。
+
+[轻松理解webpack热更新原理](https://juejin.cn/post/6844904008432222215#heading-7){link=card}
+
+[webpack热加载的实现原理](https://juejin.cn/post/6885348399924084744){link=card}
+
+[webpack热更新原理-连阿珍都看懂了](https://blog.csdn.net/bigname22/article/details/127362168){link=card}
+
+
 ## 常用的 loader 和 plugin
 
 ### loader
