@@ -6,7 +6,7 @@
 
 题目：
 
-给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
+给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target 的那 两个 整数，并返回它们的数组下标。
 
 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
 
@@ -26,17 +26,17 @@
  * @param {number} target
  * @return {number[]}
  */
-var twoSum = function(nums, target) {
-  const map = new Map();
-  for (let i = 0;i < nums.length;i++) {
-    const gap = target - nums[i];
+var twoSum = function (nums, target) {
+  const map = new Map()
+  for (let i = 0; i < nums.length; i++) {
+    const gap = target - nums[i]
     if (map.has(nums[i])) {
-      return [map.get(nums[i]), i];
+      return [map.get(nums[i]), i]
     }
-    map.set(gap, i);
+    map.set(gap, i)
   }
-  return [];
-};
+  return []
+}
 ```
 
 ## 双指针
@@ -62,16 +62,17 @@ var twoSum = function(nums, target) {
 代码：
 
 ```js
-var getIntersectionNode = function(headA, headB) {
+var getIntersectionNode = function (headA, headB) {
   if (headA === null || headB === null) {
-    return null;
+    return null
   }
-  var a = headA, b = headB;
+  var a = headA,
+    b = headB
   while (a !== b) {
-    a = a ? a.next : headB;
-    b = b ? b.next : headA;
+    a = a ? a.next : headB
+    b = b ? b.next : headA
   }
-  return a;
+  return a
 }
 ```
 
@@ -86,15 +87,16 @@ var getIntersectionNode = function(headA, headB) {
 代码：
 
 ```js
-var reverseList = function(head) {
-  var pre = null, cur = head;
+var reverseList = function (head) {
+  var pre = null,
+    cur = head
   while (cur) {
-    var tmp = cur.next;
-    cur.next = pre;
-    pre = cur;
-    cur = tmp;
+    var tmp = cur.next
+    cur.next = pre
+    pre = cur
+    cur = tmp
   }
-  return pre;
+  return pre
 }
 ```
 
@@ -110,79 +112,82 @@ var reverseList = function(head) {
 
 ```js
 // 方法一：先用数组记录下链表所有元素，再用双指针判断是否回文
-var isPalindrome = function(head) {
-  var arr = [], p = head;
+var isPalindrome = function (head) {
+  var arr = [],
+    p = head
   while (p) {
-    arr.push(p.val);
-    p = p.next;
+    arr.push(p.val)
+    p = p.next
   }
-  for (var i = 0, j = arr.length - 1;i < j;i++, j--) {
+  for (var i = 0, j = arr.length - 1; i < j; i++, j--) {
     if (arr[i] !== arr[j]) {
-      return false;
+      return false
     }
   }
-  return true;
+  return true
 }
 
 // 方法二：栈存储，再遍历比较弹出
-var isPalindrome = function(head) {
-  var stack = [], p = head;
+var isPalindrome = function (head) {
+  var stack = [],
+    p = head
   while (p) {
-    stack.push(p.val);
-    p = p.next;
+    stack.push(p.val)
+    p = p.next
   }
   while (head) {
     if (head.val !== stack.pop()) {
-      return false;
+      return false
     }
-    head = head.next;
+    head = head.next
   }
-  return true;
+  return true
 }
 
 // 方法二优化：相当于只需要比较链表前半部分和后半部分即可
-var isPalindrome = function(head) {
-  var stack = [], p = head;
-  var len = 0;
+var isPalindrome = function (head) {
+  var stack = [],
+    p = head
+  var len = 0
   while (p) {
-    stack.push(p.val);
-    p = p.next;
-    len++;
+    stack.push(p.val)
+    p = p.next
+    len++
   }
-  len = len / 2;
-  while(len-- >= 0) {
+  len = len / 2
+  while (len-- >= 0) {
     if (head.val !== stack.pop()) {
-      return false;
+      return false
     }
-    head = head.next;
+    head = head.next
   }
-  return true;
+  return true
 }
 
 // 方法三：递归，难理解
-var p = null;
+var p = null
 
-var isPalindrome = function(head) {
-  p = head;
-  return check(head);
+var isPalindrome = function (head) {
+  p = head
+  return check(head)
 }
 
-var check = function(head) {
+var check = function (head) {
   if (!head) {
-    return true;
+    return true
   }
-  var res = check(head.next) && (p.val === head.val);
-  p = p.next;
-  return res;
+  var res = check(head.next) && p.val === head.val
+  p = p.next
+  return res
 }
 
 // 帮助理解方法三：逆序打印链表
-var printList = function(head) {
+var printList = function (head) {
   if (!head) {
-    return;
+    return
   }
-  printList(head.next);
-  console.log(head.val);
+  printList(head.next)
+  console.log(head.val)
 }
 ```
 
@@ -200,21 +205,21 @@ var printList = function(head) {
 
 ![141.环形链表](./images/leetcode/question-141.png)
 
-
 代码：
 
 ```js
 // 双指针：快慢指针
-var hasCycle = function(head) {
-  var slow = head, fast = head;
+var hasCycle = function (head) {
+  var slow = head,
+    fast = head
   while (fast && fast.next) {
-    slow = slow.next;
-    fast = fast.next.next;
+    slow = slow.next
+    fast = fast.next.next
     if (slow === fast) {
-      return true;
+      return true
     }
   }
-  return false;
+  return false
 }
 ```
 
@@ -230,46 +235,93 @@ var hasCycle = function(head) {
 
 ```js
 // 方法一：遍历链表存到数组，排好序，返回一个新链表
-var mergeTwoLists = function(l1, l2) {
+var mergeTwoLists = function (l1, l2) {
   if (!l1 && !l2) {
-    return null;
+    return null
   }
-  var arr = [];
+  var arr = []
   while (l1) {
-    arr.push(l1.val);
-    l1 = l1.next;
+    arr.push(l1.val)
+    l1 = l1.next
   }
   while (l2) {
-    arr.push(l2.val);
-    l2 = l2.next;
+    arr.push(l2.val)
+    l2 = l2.next
   }
-  arr.sort((a, b) => a - b);
-  var head = new ListNode(), p = head;
-  for (var i = 0;i < arr.length; i++) {
-    p.val = arr[i];
+  arr.sort((a, b) => a - b)
+  var head = new ListNode(),
+    p = head
+  for (var i = 0; i < arr.length; i++) {
+    p.val = arr[i]
     if (i < arr.length - 1) {
-      p.next = new ListNode();
-      p = p.next;
+      p.next = new ListNode()
+      p = p.next
     }
   }
-  return head;
+  return head
 }
 
 // 方法二：快慢链表
-var mergeTwoLists = function(l1, l2) {
-  var head = new ListNode(), p = head;
+var mergeTwoLists = function (l1, l2) {
+  var head = new ListNode(),
+    p = head
   while (l1 && l2) {
     if (l1.val <= l2.val) {
-      p.next = l1;
-      l1 = l1.next;
+      p.next = l1
+      l1 = l1.next
     } else {
-      p.next = l2;
-      l2 = l2.next;
+      p.next = l2
+      l2 = l2.next
     }
-    p = p.next;
+    p = p.next
   }
-  p.next = l1 || l2;
-  return head.next;
+  p.next = l1 || l2
+  return head.next
+}
+```
+
+### 2. [两数相加](https://leetcode.cn/problems/add-two-numbers/description/)
+
+标签：链表、pre 指针
+
+题目：
+
+![2.两数相加](./images/leetcode/question-2.png)
+
+![两数相加思路](./images/leetcode/answer-2.png)
+
+代码：
+
+```js
+var addTwoNumbers = function (l1, l2) {
+  var pre = new ListNode(0)
+  var cur = pre
+
+  // 进位
+  var carry = 0
+  while (l1 || l2) {
+    var a = l1 ? l1.val : 0
+    var b = l2 ? l2.val : 0
+    // 求和
+    var sum = a + b + carry
+    // 注意此处要向下取整，计算进位
+    carry = Math.floor(sum / 10)
+    // 取余数
+    sum = sum % 10
+
+    cur.next = new ListNode(sum)
+    cur = cur.next
+    if (l1) {
+      l1 = l1.next
+    }
+    if (l2) {
+      l2 = l2.next
+    }
+  }
+  if (carry > 0) {
+    cur.next = new ListNode(carry)
+  }
+  return pre.next
 }
 ```
 
