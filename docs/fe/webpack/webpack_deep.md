@@ -239,6 +239,18 @@ webpack manifest 是一个特殊的文件，它用于记录 webpack 编译后的
 
 通常情况下，webpack manifest 会在生产构建中启用，并将其写入到磁盘的一个特定位置，以便在运行时可以快速访问。在生产环境使用 webpack manifest 可以提高应用程序的性能和可靠性。
 
+## 长缓存
+
+[持久化缓存caching（注意id问题）](https://johninch.github.io/Roundtable/Question-Bank/webpack/chunkhash.html#%E6%96%87%E4%BB%B6%E6%8C%87%E7%BA%B9chunkhash){link=card}
+
+[持久性缓存来提高构建性能](https://juejin.cn/post/7136876121886785550#heading-1){link=card}
+
+[webpack缓存原理](https://zhuanlan.zhihu.com/p/376543854){link=card}
+
+[深度解析webpack5持久化缓存](https://juejin.cn/post/7088552132260921352){link=card}
+
+## 开发环境添加缓存
+
 ## webpack VS vite
 
 思考：webpack 按需加载和 vite 按需加载的区别。
