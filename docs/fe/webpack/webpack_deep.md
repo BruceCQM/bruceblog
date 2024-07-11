@@ -321,6 +321,15 @@ websocket 监听到 ok 事件后调用 module.hot.check 开始热更新，该方
 
 [webpack热更新原理-连阿珍都看懂了](https://blog.csdn.net/bigname22/article/details/127362168){link=card}
 
+## esbuild 为何这么快
+
+1. js 是单线程串行，esbuild 是新开一个进程，然后多线程并行，充分发挥多核优势。
+
+2. go 是纯机器码，肯定要比 JIT 快。
+
+3. 不使用 AST，优化了构建流程。
+
+[rollup，vite以及webpack比较与介绍](https://juejin.cn/post/7097493230572273700#heading-26){link=card}
 
 ## 常用的 loader 和 plugin
 
