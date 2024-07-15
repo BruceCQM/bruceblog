@@ -251,6 +251,111 @@ webpack manifest 是一个特殊的文件，它用于记录 webpack 编译后的
 
 ## 开发环境添加缓存
 
+## 打包
+
+### 提取公共代码
+
+每个分离出来的 chunk 会包含 webpack 的 runtime 代码（用来解析和加载模块之类的运行时代码），所以即使该 chunk 没有改变，同一个 chunk 其它代码改变了，chunkhash 的值也会改变，因此需要提取这部分代码，单独打成一个 chunk。
+
+```js
+module.exports = {
+  optimization: {
+    runtimeChunk: {
+      name: 'manifest',
+    }
+  }
+}
+```
+
+### 固定 moduleId
+
+模块 id 默认是按引入的顺序排序的，所以即使文件内容没有改变，引入文件的顺序变动了，chunkhash 可能也会变动，因此模块 id 的排序规则也要改变。
+
+development 下默认采用路径的方式。
+
+```js
+module.exports = {
+  optimization: {
+    namedModules: true
+  }
+}
+```
+
+生产环境使用全路径，有点太长，可以使用 HashedModuleIdsPlugin 插件来根据路径生成 hash。
+
+### 固定 chunkId
+
+默认情况，生产环境下 chunkId 是以自增的数字命名，因此增加 chunk 或减少 chunk 时，会导致顺序乱掉。所以我们要固定 chunkId。
+
+```js
+module.exports = {
+  optimization: {
+    // 默认情况下，开发环境为 true，生产环境为 false
+    namedChunks: true
+  }
+}
+```
+:::tip 为什么默认情况下，开发环境为 true，生产环境为 false？
+固定 chunkId 会导致：打包大小增加一点；chunk 名称暴露。
+:::
+
+### contenthash
+
+chunkhash 根据不同的入口文件进行依赖文件解析、构建对应的 chunk，生成对应的哈希值。只要我们不改动代码，就可以保证其哈希值不受影响。
+
+css 文件使用 contenthash，这样不受 js 模块变化影响。
+
+js 内部会引用 css 文件，共同组成一个 chunk。
+
+### runtime 和 manifest
+
+webpack 通过 runtime 和 manifest 来管理所有模块的交互。
+
+:::tip runtime
+runtime，以及伴随的 manifest 数据，主要是指：在浏览器运行过程中，webpack 用来连接模块化应用程序所需的所有代码。它包含：在模块交互时，连接模块所需的加载和解析逻辑。包括已经加载到浏览器中的连接模块逻辑，以及尚未加载模块的延迟加载逻辑。
+:::
+
+:::tip manifest
+当 compiler 开始执⾏、解析和映射应⽤程序时，它会保留所有模块的详细要点。这个数据集合称为 "manifest"。
+
+当完成打包并发送到浏览器时，runtime 会通过 manifest 来解析和加载模块。⽆论你选择哪种 模块语法，那些 import 或 require 语句现在都已经转换为 webpack_require ⽅法，此⽅法指向模块标识符(module identifier)。
+
+通过使⽤manifest 中的数据，runtime 将能够检索这些标识符，找出每个标识符背后对应的模块。
+:::
+
+runtime 和 manifest 是一个每次打包都可能变化的不稳定因素，所以它会导致一些问题。比如，我们对整个项目的文章在做一次打包，打包结果如下，结果发现什么也没改动，但是 hash 全部发生变化，原因就是 runtime 和 manifest 这些所谓的样板文件。
+
+```bash
+                Asset           Size            Chunks                            Chunk Names
+          css/app.2f3933e.css   52 bytes       0  [emitted] [immutable]         app
+        css/list.2f3933e.css    1.5 KiB       1  [emitted] [immutable]         list
+      css/vendors.2f3933e.css   71.2 KiB       2  [emitted] [immutable]         vendors
+  css/vendors.2f3933e.css.gz   7.85 KiB          [emitted]
+                  index.html   1.33 KiB          [emitted]
+            js/app.2f3933e.js   6.63 KiB       0  [emitted] [immutable]         app
+          js/list.2f3933e.js   50.9 KiB       1  [emitted] [immutable]         list
+  js/list.2f3933e.js.LICENSE  120 bytes          [emitted]
+        js/list.2f3933e.js.gz     15 KiB          [emitted]
+        js/vendors.2f3933e.js    340 KiB       2  [emitted] [immutable]  [big]  vendors
+js/vendors.2f3933e.js.LICENSE  423 bytes          [emitted]
+      js/vendors.2f3933e.js.gz   91.8 KiB          [emitted]
+            js/work.2f3933e.js  188 bytes       3  [emitted] [immutable]         work
+```
+
+如何解决这个问题？我们可以把 runtime 和 manifest 提取出来，去掉这两个不稳定因素，接着打包发现 hash 并未改变，但是多了一个 manifest 文件。
+
+```js
+module.exports = {
+  runtimeChunk: {
+    name: 'manifest',
+  }
+}
+```
+
+再次打包代码，不断打包 hash 都不会变。
+
+[一文搞懂webpack hash持久化](https://juejin.cn/post/7110748046853406756){link=card}
+
 ## webpack VS vite
 
 思考：webpack 按需加载和 vite 按需加载的区别。
