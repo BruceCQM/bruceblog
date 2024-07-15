@@ -251,6 +251,22 @@ webpack manifest 是一个特殊的文件，它用于记录 webpack 编译后的
 
 ## 开发环境添加缓存
 
+cache + snapshot：相关的配置决定了缓存内存生成 snapshot 时所采用的策略(timestamps|content hash|timestamps + content hash)，而这个策略最终会影响到缓存是否失效，即 webpack 是否决定来使用缓存。
+
+hard-source-webpack-plugin 和 cache-loader 都是用来优化 webpack 打包性能的插件，它们的作用是缓存 webpack 的构建结果，以避免每次重新构建都需要重新执行耗时的操作，从而提高打包速度。
+
+然而，这两个插件的工作方式和适用场景略有不同。
+
+hard-source-webpack-plugin 会缓存 webpack 的中间输出文件（即构建过程中生成的代码），并且会将缓存存储到本地磁盘中。这个插件适用于比较大型的项目，它可以显著地减少重新构建的时间，特别是在增量构建(incremental build)场景下表现优秀。
+
+cache-loader 则是一个通用的 loader，它可以用来缓存任何 loader 的输出结果，包括 JavaScript、css、图片等。这个插件会将 loader 的输出结果存储到内存中，所以相对于 hard-source-webpack-plugin，它的缓存速度更快，但是存储的内容也更有限。cache-loader 适用于需要频繁使用的 loader，例如 babel-loader、sass-loader 等。
+
+如果需要缓存 webpack 的中间输出文件，那么使用 hard-source-webpack-plugin 插件。
+
+如果只需要缓存某个 loader 的输出结果，那么使用 cache-loader 插件更方便。
+
+当然，也可以一起使用，进一步提高 webpack 的打包速度。
+
 ## 打包
 
 ### 提取公共代码
