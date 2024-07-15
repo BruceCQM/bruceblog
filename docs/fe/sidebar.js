@@ -62,13 +62,14 @@ export default [
     ]
   },
   {
-    text: 'webpack',
+    text: '打包工具',
     collapsed: true,
     items: [
       { text: 'webpack 极速入门', link: '/fe/webpack/webpack_quick' },
       { text: 'webpack 概念', link: '/fe/webpack/webpack_concepts' },
       { text: 'webpack 深入学习', link: '/fe/webpack/webpack_deep' },
       { text: 'webpack 基础', link: '/fe/webpack/webpack_basis' },
+      { text: 'vite', link: '/fe/webpack/vite' },
     ]
   },
   {

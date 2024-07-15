@@ -124,7 +124,7 @@ export default [
     ]
   },
   {
-    title: 'webpack',
+    title: '打包工具',
     items: [
       {
         icon: 'https://webpack.js.org/favicon.a3dd58d3142f7566.ico',
@@ -143,6 +143,12 @@ export default [
         title: '深入浅出 Webpack',
         desc: '《深入浅出 Webpack》书籍的电子版',
         link: 'https://webpack.wuhaolin.cn/'
+      },
+      {
+        icon: 'https://vitejs.cn/vite3-cn/logo.svg',
+        title: 'vite',
+        desc: '下一代的前端工具链，为开发提供极速响应',
+        link: 'https://vitejs.cn/vite3-cn/'
       },
     ]
   },
