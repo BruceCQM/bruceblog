@@ -63,3 +63,45 @@ HTML 引用了带有 import 语句的 js 文件，浏览器直接打开会报跨
 
 相关链接：[引用import的JS报错：Access to script at 'file:' from origin 'null' has been blocked by CORS policy（3种解决手段）](https://blog.csdn.net/u013946061/article/details/106077527)
 :::
+
+## vite 依赖预构建
+
+- 默认情况下，vite 会将 package.json 中生产依赖（dependencies）进行预构建，并将构建的内容缓存在 node_modules 的 `.vite` 文件中。启用 DevServer 时直接请求缓存的内容。
+
+- 在 vite.config.js 中的 optimizeDeps 选项可以选择需要或不需要进行预构建的依赖的名称，vite 会根据该选项来确定是否对该依赖进行预构建。
+
+- 在启动时添加 `--force options`，可以用来强制重新进行依赖预构建。
+
+### 背景
+
+- vite 中每个 import 都回触发一个请求，在依赖层级很深，涉及模块较多的情况下会出现很多的请求。
+
+- 在 Chrome 中，同一个域名下只能同时支持 6 个 http 请求。
+
+以上两个原因导致页面加载比较缓慢，与 vite 主导的性能优势相违背。
+
+### 预构建做的事情
+
+- 将其它格式（如 UMD、commonJS）的产物转换为 ESM 格式，使其在浏览器通过 `<script type="module"></script>` 的方式正常加载。
+
+- 打包第三方库的代码，将各个第三方库分散的文件合并到一起，减少 HTTP 请求数量，避免页面加载性能劣化。
+
+- 在 vite 中可以直接通过依赖名称引入依赖，这是因为 vite 在依赖处理的过程中，如果看到了有非绝对路径或者相对路径的引用，它会开启路径补全。如：
+
+```js
+import _ from 'lodash';
+// 补全为
+import _ from "/node_modules/.vite/lodash";
+```
+
+这些事情全部由性能优异的 esbuild 完成，因此也不会有明显的打包性能问题，反而是 vite 项目启动飞快的一个核心原因。
+
+对于依赖的请求结果，vite 的 devserver 会做强缓存处理。
+
+[vite依赖预构建](https://juejin.cn/post/7218129062745178168){link=card}
+
+[Vite依赖预构建](https://juejin.cn/post/7112718640977281055){link=card}
+
+## vite 的原理和手动实现
+
+[面试官：”Vite为什么快？“](https://juejin.cn/post/7280747221510144054){link=card}
