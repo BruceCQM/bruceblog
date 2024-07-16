@@ -412,3 +412,13 @@ module.exports = {
 ```
 
 [webpack 拆包：关于 splitChunks 的几个重点属性解析](https://segmentfault.com/a/1190000042093955){link=card}
+
+### 10、lighthouse 使用和性能优化
+
+lighthouse 是一个开源工具，用于评估网站性能、可访问性、性能、可维护性等维度。
+
+可以直接在 Chrome DevTools 中使用，也可以通过命令行工具使用。
+
+[前端性能测试工具 Lighthouse(灯塔)使用](https://juejin.cn/post/7220230543005253691){link=card}
+
+[利用LightHouse进行合理的页面性能优化，看这一篇就够了！](https://blog.csdn.net/Zong_0915/article/details/131773108){link=card}
