@@ -325,7 +325,34 @@ var addTwoNumbers = function (l1, l2) {
 }
 ```
 
-## 二叉数
+## 二叉树
+
+### 94.[二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/description/)
+
+标签：深度优先搜索、递归
+
+题目：
+
+![94.二叉树的中序遍历](./images/leetcode/question-94.png)
+
+代码：
+
+```js
+var inorderTraversal = function (root) {
+  var res = [];
+  inorder(root, res);
+  return res;
+}
+
+var inorder = function (root, res) {
+  if (!root) {
+    return;
+  }
+  inorder(root.left, res);
+  res.push(root.val);
+  inorder(root.right, res);
+}
+```
 
 ## 图论
 
