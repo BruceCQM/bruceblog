@@ -360,6 +360,39 @@ var inorder = function (root, res) {
 
 ## 二分查找
 
+### 35.[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
+
+标签：二分查找
+
+题目：
+
+![35.搜索插入位置](./images/leetcode/question-35.png)
+
+代码：
+
+```js
+var searchInsert = function (nums, target) {
+  var len = nums.length;
+  if (nums[len - 1] < target) {
+    return len;
+  }
+  var left = 0, right = len - 1;
+  while (left < right) {
+    // 除以 2 向下取整
+    var mid = (left + right) >> 1;
+    if (nums[mid] === target) {
+      return mid;
+    } else if (nums[mid] < target) {
+      // 注意 left 要加 1，不然向下取整可能会导致死循环
+      left = mid + 1;
+    } else {
+      right = mid;
+    }
+  }
+  return left;
+}
+```
+
 ## 栈
 
 ## 堆
