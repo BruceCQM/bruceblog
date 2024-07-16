@@ -636,3 +636,47 @@ require.ensure(["./module"], function(require) {
   // 处理模块的导出值
 }, "myChunk");
 ```
+
+## rollup vs webpack
+
+### rollup
+
+rollup 诞生在 esm 标准出来之后。
+
+它的出发点就是希望开发者去写 esm 模块，这样适合做代码静态分析，可以做 tree-shaking 减少代码体积，也是浏览器除了 script 标签之外，真正让 JavaScript 拥有模块化能力，是 js 语言的未来。
+
+rollup 完全依赖高版本浏览器原生去支持 esm 模块，所以没有额外代码注入，打包后的代码结构也是清晰的（不用像 webpack 那样 IIFE）。
+
+目前浏览器支持模块化只有 3 种方法：
+
+- script 标签。缺点是没有作用域的概念。
+
+- script 标签+IIFE+window+函数作用域。可以解决作用域问题，webpack 的打包产物就是这样。
+
+- esm。什么都好，就是需要高版本浏览器支持。
+
+### webpack
+
+webpack 诞生在 esm 标准出来之前，commonjs 出来之后。
+
+1. script 标签加载模块
+
+当时的浏览器只能通过 script 标签加载模块。
+
+script 标签加载代码是没有作用域的，只能在代码内使用 IIFE 的方式实现作用域的效果，这就是 webpack 打包出来的代码大部分都是 IIFE 的原因。
+
+并且每个模块都要装到 function 里面，才能保证相互之间作用域不干扰，这也是为什么 webpack 打包的代码感觉很乱，找不到自己写的代码的真正原因。
+
+2. 代码注入问题
+
+关于 webpack 的代码注入问题，是因为浏览器不支持 cjs，所以 webpack要去自己实现 require 和 module.exports 方法，才导致很多注入。
+
+这么多年过去了，甚至到 2022 年了，为什么浏览器不支持 cjs？
+
+cjs 是同步的，运行时的，node 环境用 cjs，node 本身运行在服务器，无需等待网络握手，所以同步处理很快。
+
+而浏览器是客户端，访问的是服务端资源，中间需要等待网络握手，可能会很慢，所以不能同步处理，容易卡在那里等服务器返回，体验太差。
+
+3. 后续 esm 出来之后，webpack 为了兼容以前发在 npm 上的老包，所以保留这个 IIFE 的结构和代码注入，导致现在看 webpack 打包的产物，乍一看结构比较乱而且很多的代码注入，自己写的代码都找不到。
+
+[rollup打包产物解析及原理（对比webpack）](https://juejin.cn/post/7054752322269741064){link=card}
