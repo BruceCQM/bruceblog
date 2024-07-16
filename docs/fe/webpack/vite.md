@@ -49,3 +49,17 @@ export const add = (a, b) => {
 浏览器会将 import 语句处理成一个个 http 网络请求，去获取 import 引入的各个模块。
 
 因为浏览器现在可以通过 `type="module"` 的方式读懂项目中文件的模块化引入，因此，bundless 的思想得以发展。
+
+:::danger HTML 引用 JS 模块报错
+HTML 引用了带有 import 语句的 js 文件，浏览器直接打开会报跨域的错误。
+
+![HTML 引用 JS 模块报错](./images/html-CORS-error.png)
+
+原本来自相同的目录或子目录的本地文件是同源的，但是这有安全隐患，后面浏览器将所有本地文件视为不透明来源，因此加载**包含本地资源**的本地文件会导致 CORS 错误。
+
+相关链接：[原因：CORS request not HTTP](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS/Errors/CORSRequestNotHttp)
+
+解决办法：开启一个本地服务器，访问本地文件。最简便的方式就是安装 `Live Server` 插件，右键点击 HTML 文件，选择 `Open with Live Server`，一键打开。
+
+相关链接：[引用import的JS报错：Access to script at 'file:' from origin 'null' has been blocked by CORS policy（3种解决手段）](https://blog.csdn.net/u013946061/article/details/106077527)
+:::
