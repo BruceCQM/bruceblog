@@ -1,5 +1,37 @@
 # webpack 概念
 
+[webpack5基础知识](https://juejin.cn/post/7080165314461171720){link=static}
+
+[高级进阶之Webpack篇](https://juejin.cn/post/6844904115240173576){link=static}
+
+[由浅至深了解webpack异步加载背后的原理](https://juejin.cn/post/6844903971325214734){link=static}
+
+[你的 import 被 webpack 编译成了什么？](https://juejin.cn/post/6859569958742196237){link=static}
+
+[从Webpack的同步/异步加载到加载顺序到循环依赖到开发习惯](https://blog.csdn.net/weixin_42274805/article/details/123639416){link=static}
+
+[webpack的异步加载原理及分包策略](https://juejin.cn/post/6895546761255845901){link=static}
+
+[Web 之 Webpack 异步加载(懒加载)分包和使用SplitChunksPlugin 进行简单拆解分包](https://blog.csdn.net/u014361280/article/details/125737041){link=static}
+
+## 常见问题
+
+- 基本作用
+
+- 自定义 loader 和 webpack
+
+- postcss 相关、样式提取
+
+- 性能优化
+
+- 持久化缓存
+
+- 哈希命名策略的优化
+
+- 同步异步加载的原理
+
+- webpack4 与 5 的区别
+
 ## webpack 是什么
 
 webpack 是一个强大的模块打包工具，用于处理和打包 JavaScript 应用程序的依赖关系。它能够把许多分散的模块按照依赖关系打包成一个或多个捆绑包（bundle），这些 bundle 可以直接在浏览器中运行。
