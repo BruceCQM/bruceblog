@@ -231,9 +231,9 @@ module.exports = {
 
 在多页面应用程序中，server 会拉取一个新的 HTML 文档给你的客户端。页面重新加载此新文档，并且资源被重新下载。然而，这给了我们特殊的机会去做很多事，例如使用 `optimization.splitChunks` 为页面间共享的应用程序代码创建 bundle。由于入口起点数量的增多，多页应用能够复用多个入口起点之间的大量代码/模块，从而可以极大地从这些技术中受益。
 
-[webpack多页面打包实践](https://zhuanlan.zhihu.com/p/109527475){link=card}
+[webpack多页面打包实践](https://zhuanlan.zhihu.com/p/109527475){link=static}
 
-[webpack 拆包：关于 splitChunks 的几个重点属性解析](https://segmentfault.com/a/1190000042093955){link=card}
+[webpack 拆包：关于 splitChunks 的几个重点属性解析](https://segmentfault.com/a/1190000042093955){link=static}
 
 ## 出口(output)
 
@@ -269,9 +269,9 @@ module.exports = {
 
 loader 好文。
 
-[看完这篇webpack-loader，不再怕面试官问了](https://juejin.cn/post/6844904054393405453){link=card}
+[看完这篇webpack-loader，不再怕面试官问了](https://juejin.cn/post/6844904054393405453){link=static}
 
-[Loader原理](https://learn.fuming.site/front-end/Webpack/origin/loader.html){link=card}
+[Loader原理](https://learn.fuming.site/front-end/Webpack/origin/loader.html){link=static}
 
 ### 概述
 
@@ -495,11 +495,11 @@ pitch 方法的三个参数：
 
 ### 相关文章
 
-[webpack实战，手写loader和plugin](https://segmentfault.com/a/1190000042779769){link=card}
+[webpack实战，手写loader和plugin](https://segmentfault.com/a/1190000042779769){link=static}
 
-[中文文档：Loader Interface](https://webpack.docschina.org/api/loaders/#asynchronous-loaders){link=card}
+[中文文档：Loader Interface](https://webpack.docschina.org/api/loaders/#asynchronous-loaders){link=static}
 
-[深入浅出Webpack书籍：5-3编写loader章节](https://webpack.wuhaolin.cn/5%E5%8E%9F%E7%90%86/5-3%E7%BC%96%E5%86%99Loader.html){link=card}
+[深入浅出Webpack书籍：5-3编写loader章节](https://webpack.wuhaolin.cn/5%E5%8E%9F%E7%90%86/5-3%E7%BC%96%E5%86%99Loader.html){link=static}
 
 ## 插件(plugin)
 
@@ -555,7 +555,7 @@ tapable 是 webpack 一个核心工具，它暴露了 tap、tapAsync、tapPromis
 
 - tapPromise：以异步方式触发 compiler 钩子，返回 Promise。
 
-[开发一个 Webpack 插件原来这么简单](https://juejin.cn/post/6893097741258326030){link=card}
+[开发一个 Webpack 插件原来这么简单](https://juejin.cn/post/6893097741258326030){link=static}
 
 ## loader 和 plugin 的区别
 
@@ -565,7 +565,7 @@ plugin 可以用于执行任意类型的任务，如生成 HTML 文件、压缩�
 
 使用 plugin 可以实现 webpack 无法处理的复杂任务。
 
-[webpack 中 loader 和 plugin 有啥区别?](https://zhuanlan.zhihu.com/p/618991058){link=card}
+[webpack 中 loader 和 plugin 有啥区别?](https://zhuanlan.zhihu.com/p/618991058){link=static}
 
 ## 模式(mode)
 
@@ -612,9 +612,9 @@ module.exports = {
 }
 ```
 
-[浅析webpack中mode的取值及不同取值的作用/打包方式及摇树优化（tree-shaking）的理解](https://www.cnblogs.com/goloving/p/15002124.html){link=card}
+[浅析webpack中mode的取值及不同取值的作用/打包方式及摇树优化（tree-shaking）的理解](https://www.cnblogs.com/goloving/p/15002124.html){link=static}
 
-[webpack4 神奇的 mode](https://zhuanlan.zhihu.com/p/134068206){link=card}
+[webpack4 神奇的 mode](https://zhuanlan.zhihu.com/p/134068206){link=static}
 
 ## 浏览器兼容性
 
@@ -679,4 +679,4 @@ cjs 是同步的，运行时的，node 环境用 cjs，node 本身运行在服�
 
 3. 后续 esm 出来之后，webpack 为了兼容以前发在 npm 上的老包，所以保留这个 IIFE 的结构和代码注入，导致现在看 webpack 打包的产物，乍一看结构比较乱而且很多的代码注入，自己写的代码都找不到。
 
-[rollup打包产物解析及原理（对比webpack）](https://juejin.cn/post/7054752322269741064){link=card}
+[rollup打包产物解析及原理（对比webpack）](https://juejin.cn/post/7054752322269741064){link=static}

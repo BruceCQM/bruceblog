@@ -12,7 +12,7 @@
 
 但是这样修改一个文件意味着必须重新构建整个文件，拼接可以做到容易地跨文件重用脚本，但却使构建结果的优化变得更加困难。如何判断代码是否实际被使用？即使你只用到 loadash 中的某个函数，也必须在构建结果中加入整个库，接着将它们压缩到一起。如何 treeshake 代码依赖？难以大规模地实现延迟加载代码块，这需要开发人员手动地进行大量工作。
 
-[为什么选择webpack](https://webpack.docschina.org/concepts/why-webpack/){link=card}
+[为什么选择webpack](https://webpack.docschina.org/concepts/why-webpack/){link=static}
 
 ## webapck 工作原理
 
@@ -138,19 +138,19 @@ index.css 和 common.js 在 index.js 中被引⼊，打包⽣成的 index.bundle
 
 ⼀般来说⼀个 chunk 对应⼀个 bundle，⽐如上图中的 utils.js -> chunks 1 -> utils.bundle.js；但也有例外，⽐如说上图中，就⽤ MiniCssExtractPlugin 从 chunks 0 中抽离出了 index.bundle.css ⽂件。
 
-[webpack 中module、chunk 、bundle 的区别](https://juejin.cn/post/7005530386641977374){link=card}
+[webpack 中module、chunk 、bundle 的区别](https://juejin.cn/post/7005530386641977374){link=static}
 
-[webpack——module、chunk和bundle的区别](https://blog.csdn.net/qq_17175013/article/details/119753186){link=card}
+[webpack——module、chunk和bundle的区别](https://blog.csdn.net/qq_17175013/article/details/119753186){link=static}
 
 ## filename & chunkFilename
 
 通过 output 的 filename 和 chunkFilename 控制 chunk 输出的 bundle 命名。
 
-[output中chunkFilename和filename的区别](https://juejin.cn/post/6844904166150651917){link=card}
+[output中chunkFilename和filename的区别](https://juejin.cn/post/6844904166150651917){link=static}
 
 MiniCssExtractPlugin 也同样有这些字段：
 
-[Webpack - css 文件的代码分割](https://github.com/VenenoFSD/Learn-Webpack4/issues/17){link=card}
+[Webpack - css 文件的代码分割](https://github.com/VenenoFSD/Learn-Webpack4/issues/17){link=static}
 
 ## 命名(hash)
 
@@ -162,9 +162,9 @@ webpack 文件打包一般有三种 hash：hash、chunkhash、contenthash。
 
 - contenthash 是针对文件内容级别的，只有自己模块的内容改变，哈希值才会改变。
 
-[从源码看webpack的hash策略](https://juejin.cn/post/6844903942384517127){link=card}
+[从源码看webpack的hash策略](https://juejin.cn/post/6844903942384517127){link=static}
 
-[webpack中文件打包 hash、chunkhash、contenthash 的区别](https://juejin.cn/post/7078589390422802440){link=card}
+[webpack中文件打包 hash、chunkhash、contenthash 的区别](https://juejin.cn/post/7078589390422802440){link=static}
 
 可以使用 webpack 提供的模板字符串定义 bundle 文件名，下面是常用的模板字符串。
 
@@ -231,7 +231,7 @@ module.exports = {
 }
 ```
 
-[深入理解webpack的chunkId对线上缓存的思考](https://juejin.cn/post/6844903924818771981){link=card}
+[深入理解webpack的chunkId对线上缓存的思考](https://juejin.cn/post/6844903924818771981){link=static}
 
 ## manifest
 
@@ -241,13 +241,13 @@ webpack manifest 是一个特殊的文件，它用于记录 webpack 编译后的
 
 ## 长缓存
 
-[持久化缓存caching（注意id问题）](https://johninch.github.io/Roundtable/Question-Bank/webpack/chunkhash.html#%E6%96%87%E4%BB%B6%E6%8C%87%E7%BA%B9chunkhash){link=card}
+[持久化缓存caching（注意id问题）](https://johninch.github.io/Roundtable/Question-Bank/webpack/chunkhash.html#%E6%96%87%E4%BB%B6%E6%8C%87%E7%BA%B9chunkhash){link=static}
 
-[持久性缓存来提高构建性能](https://juejin.cn/post/7136876121886785550#heading-1){link=card}
+[持久性缓存来提高构建性能](https://juejin.cn/post/7136876121886785550#heading-1){link=static}
 
-[webpack缓存原理](https://zhuanlan.zhihu.com/p/376543854){link=card}
+[webpack缓存原理](https://zhuanlan.zhihu.com/p/376543854){link=static}
 
-[深度解析webpack5持久化缓存](https://juejin.cn/post/7088552132260921352){link=card}
+[深度解析webpack5持久化缓存](https://juejin.cn/post/7088552132260921352){link=static}
 
 ## 开发环境添加缓存
 
@@ -370,7 +370,7 @@ module.exports = {
 
 再次打包代码，不断打包 hash 都不会变。
 
-[一文搞懂webpack hash持久化](https://juejin.cn/post/7110748046853406756){link=card}
+[一文搞懂webpack hash持久化](https://juejin.cn/post/7110748046853406756){link=static}
 
 ## webpack VS vite
 
@@ -402,9 +402,9 @@ vite、snowpack 这类非构建式打包工具，在冷启动开发服务器时�
 
 主要原因是，为了在生产环境获得最佳的加载性能和兼容性，还是需要将代码进行 tree-shaking、懒加载和 chunk 分割（以获得更好的缓存），所以 vite 选择了 rollup 进行产品最终构建打包。
 
-[前端工程化vite与webpack的优缺点对比](https://juejin.cn/post/7109475126810411044){link=card}
+[前端工程化vite与webpack的优缺点对比](https://juejin.cn/post/7109475126810411044){link=static}
 
-[rollup，vite以及webpack比较与介绍](https://juejin.cn/post/7097493230572273700#heading-26){link=card}
+[rollup，vite以及webpack比较与介绍](https://juejin.cn/post/7097493230572273700#heading-26){link=static}
 
 ## 热更新原理
 
@@ -448,11 +448,11 @@ websocket 监听到 ok 事件后调用 module.hot.check 开始热更新，该方
 
 删除旧模块，将新的模块添加到 modules 中，通过 `__webpack_require__` 执行相关模块的代码。
 
-[轻松理解webpack热更新原理](https://juejin.cn/post/6844904008432222215#heading-7){link=card}
+[轻松理解webpack热更新原理](https://juejin.cn/post/6844904008432222215#heading-7){link=static}
 
-[webpack热加载的实现原理](https://juejin.cn/post/6885348399924084744){link=card}
+[webpack热加载的实现原理](https://juejin.cn/post/6885348399924084744){link=static}
 
-[webpack热更新原理-连阿珍都看懂了](https://blog.csdn.net/bigname22/article/details/127362168){link=card}
+[webpack热更新原理-连阿珍都看懂了](https://blog.csdn.net/bigname22/article/details/127362168){link=static}
 
 ## esbuild 为何这么快
 
@@ -462,7 +462,7 @@ websocket 监听到 ok 事件后调用 module.hot.check 开始热更新，该方
 
 3. 不使用 AST，优化了构建流程。
 
-[rollup，vite以及webpack比较与介绍](https://juejin.cn/post/7097493230572273700#heading-26){link=card}
+[rollup，vite以及webpack比较与介绍](https://juejin.cn/post/7097493230572273700#heading-26){link=static}
 
 ## 常用的 loader 和 plugin
 
@@ -500,4 +500,4 @@ websocket 监听到 ok 事件后调用 module.hot.check 开始热更新，该方
 
 - postcss-sprites：自动生成精灵图
 
-[使用 webpack 的各种插件提升你的开发效率](https://juejin.cn/post/6844903795512573966){link=card}
+[使用 webpack 的各种插件提升你的开发效率](https://juejin.cn/post/6844903795512573966){link=static}

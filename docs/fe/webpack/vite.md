@@ -98,10 +98,10 @@ import _ from "/node_modules/.vite/lodash";
 
 对于依赖的请求结果，vite 的 devserver 会做强缓存处理。
 
-[vite依赖预构建](https://juejin.cn/post/7218129062745178168){link=card}
+[vite依赖预构建](https://juejin.cn/post/7218129062745178168){link=static}
 
-[Vite依赖预构建](https://juejin.cn/post/7112718640977281055){link=card}
+[Vite依赖预构建](https://juejin.cn/post/7112718640977281055){link=static}
 
 ## vite 的原理和手动实现
 
-[面试官：”Vite为什么快？“](https://juejin.cn/post/7280747221510144054){link=card}
+[面试官：”Vite为什么快？“](https://juejin.cn/post/7280747221510144054){link=static}

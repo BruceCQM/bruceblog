@@ -1,4 +1,5 @@
 const defaultLogo = '/bruceblogpages/logo.png';
+const essayLogo = '/bruceblogpages/essay_logo.ico';
 
 /**
  * @description 从所给的URL中提取标题、摘要、图片等信息
@@ -132,6 +133,33 @@ export default function transformLinkToCard(documentEle) {
           }
           replaceInnerHTML(item, newInfo);
         }, index * 3000);
+      })
+    }
+  }, 0)
+}
+
+/**
+ * @description 将页面所有link属性为static的a标签转为静态链接卡片
+ * 静态卡片不会动态请求文章切图、标题、摘要
+ */
+export function transformLinkToStaticCard(documentEle) {
+  // 不加这个定时器获取不到需要的a标签
+  setTimeout(() => {
+    const cardLinks = Array.from(documentEle?.querySelectorAll?.('a[link=static]'));
+    if(Array.isArray(cardLinks)) {
+      cardLinks.forEach(async (item) => {
+        const text = item.textContent;
+        const url = item.getAttribute('href');
+        const defaultInfo = {
+          title: text,
+          desc: url,
+          icon: essayLogo
+        }
+
+        // 先用默认值渲染卡片
+        item.setAttribute('target', '_blank');
+        item.setAttribute('class', 'essay-container');
+        replaceInnerHTML(item, defaultInfo);
       })
     }
   }, 0)
