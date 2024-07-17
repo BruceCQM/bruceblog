@@ -70,6 +70,7 @@ export default [
       { text: 'webpack 深入学习', link: '/fe/webpack/webpack_deep' },
       { text: 'webpack 基础', link: '/fe/webpack/webpack_basis' },
       { text: 'vite', link: '/fe/webpack/vite' },
+      { text: 'Babel', link: '/fe/webpack/babel' },
     ]
   },
   {
