@@ -422,3 +422,9 @@ lighthouse 是一个开源工具，用于评估网站性能、可访问性、性
 [前端性能测试工具 Lighthouse(灯塔)使用](https://juejin.cn/post/7220230543005253691){link=card}
 
 [利用LightHouse进行合理的页面性能优化，看这一篇就够了！](https://blog.csdn.net/Zong_0915/article/details/131773108){link=card}
+
+### 11、Web 性能优化系列文章
+
+Web 性能优化系列文章，包括 webpack 分包、图片优化、css 优化等内容，值得好好学习。
+
+[Web 性能优化：理解及使用 JavaScript 缓存](https://segmentfault.com/a/1190000018589996){link=card}
