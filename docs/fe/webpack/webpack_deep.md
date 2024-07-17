@@ -501,3 +501,90 @@ websocket 监听到 ok 事件后调用 module.hot.check 开始热更新，该方
 - postcss-sprites：自动生成精灵图
 
 [使用 webpack 的各种插件提升你的开发效率](https://juejin.cn/post/6844903795512573966){link=static}
+
+## Scope Hoisting
+
+### 是什么
+
+Scope Hoisting 是 webpack 作用域提升，它是 webpack 的内置优化，在生产环境打包时会自动开启。
+
+在没有开启 scope hoisting 时，webpack 会将每个模块的代码放在一个独立的函数环境中，这样做是为了保证模块的作用域互不干扰。
+
+而 scope hoisting 的作用相反，是把多个模块的代码合并到一个函数作用域中执行。在这一过程中，webpack 会按照正确顺序合并模块代码，同时对涉及的标识符做适当处理以避免重名。
+
+这样做的好处是减少了函数调用，对运行效率有一定提升，同时也降低了打包体积。
+
+但 scope hoisting 的启用是有前提的，如果遇到某些模块多次被其它模块引用，或者使用了动态导入的模块，或者是非 ESM 的模块，都不会有 scope hoisting。
+
+### 打包结果示例
+
+```js
+// main.js
+export default "hello world";
+
+// index.js
+import str from "./main.js";
+console.log(str);
+```
+
+没有使用 scope hoisting 的打包结果如下：
+
+```js
+[
+  (function (module, __webpack_exports__, __webpack_require__) {
+    var __WEBPACK_IMPORTED_MODULE_0__main_js__ = __webpack_require__(1);
+    console.log(__WEBPACK_IMPORTED_MODULE_0__main_js__["a"]);
+  }),
+  (function (module, __webpack_exports__, __webpack_require__) {
+    __webpack_exports__["a"] = ('hello world');
+  })
+]
+```
+
+使用 scope hoisting 的打包结果如下：
+
+```js
+[
+  (function (module, __webpack_exports__, __webpack_require__) {
+    var main = ('hello world');
+    console.log(main);
+  })
+]
+```
+
+对比两种打包方式输出的代码，可以看到，启用 scope hoisting 后，函数声明变成一个，main.js 中定义的内容直接注入到 index.js 中。
+
+这么做有两点好处：
+
+- **代码体积更小**，因为函数声明语句会产生大量代码，导致包体积增加，模块越多越明显。
+
+- 代码在运行时，因为创建的函数作用域更少，**内存开销也随之变小**。
+
+### 原理
+
+scope hoisting 的实现原理很简单：分析出模块之间的依赖关系，尽可能将打散的模块合并到一个函数中，前提是不能造成代码冗余。因此，**只有那些被引用了一次的模块才能被合并**。
+
+由于 scope hoisting 需要分析出模块之间的依赖关系，因此源码**必需采用 ES6 模块化语句**，否则无法生效。
+
+### 自动开启
+
+将 webpack 的 mode 设置为 production，scope hoisting 会自动开启。
+
+```js
+module.exports = {
+  mode: 'production'
+}
+```
+
+### 手动开启
+
+在 webpack 中已经内置了 scope hoisting，所以用起来很简单，只需要配置 ModuleConcatenationPlugin 插件。
+
+```js
+const webpack = require('webpack');
+module.exports = {
+  plugins: [
+    new webpack.optimize.ModuleConcatenationPlugin()
+  ]
+}
+```
