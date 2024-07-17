@@ -588,3 +588,33 @@ module.exports = {
   ]
 }
 ```
+
+[了不起的 Webpack Scope Hoisting 学习指南](https://juejin.cn/post/6850418110983241741){link=static}
+
+## 资源管理:file-loader&url-loader
+
+[Webpack 中 file-loader 和 url-loader 的区别](https://juejin.cn/post/7000225935215558687){link=static}
+
+## 分片、按需加载
+
+require.ensure 或 require.include 实现依赖前置。
+
+[Webpack 实用技巧高效实战](https://mp.weixin.qq.com/s/MRhEJOiijLVsbHH6BoQisw){link=static}
+
+## webpack 实现动态打包换肤
+
+首次加载只引用默认主题文件，其它的可以到切换的时候再引入。
+
+因此只需要解决编译多套 css 输出的问题，和不让 css 注入 HTML 的问题就好。
+
+[webpack 换肤功能多主题/配色样式打包解决方案](https://juejin.cn/post/6844903596992135182#heading-3){link=static}
+
+[前端构建工具vite进阶系列(三) -- 静态资源与css模块化的处理](https://juejin.cn/post/7206909221806981175#heading-2){link=static}
+
+[基于 webpack 项目接入 vite 你可能需要注意的点](https://juejin.cn/post/7129128214735093791){link=static}
+
+## webpack 处理 css
+
+处理 css-loader 中的 @import 需要使用 importLoaders。
+
+[如何使用webpack提取和压缩CSS并处理兼容性](https://juejin.cn/post/7083776122587971597){link=static}
