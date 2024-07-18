@@ -184,3 +184,77 @@ css 矩阵，涵盖了上述所有属性。
   transform: matrix(1, 0, 0, 1, 0, 0);
 }
 ```
+
+## transition
+
+### 简介
+
+transition 翻译过来就是「过渡」，是指元素的某个属性（如 background-color）从某个值（如 red）变到另一个值（如 green）的过程，这是一个状态的改变。
+
+这个状态的改变需要有某一个条件来触发，比如常见的 `:hover`、`:focus` 等。
+
+### 例子
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .father {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      /* transition 可以设置多个属性的过渡 */
+      transition: transform ease-in 1s, background-color ease-in 1s;
+    }
+    .father:hover {
+      transform: translate(100px, 100px) rotate(180deg) scale(2);
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="father">123</div>
+</body>
+</html>
+```
+
+![transition](./images/css/transition.gif)
+
+当鼠标移入元素时，元素的 transform 和 background-color 属性发生变化，此时就会触发 transition，产生动画。鼠标移出时，属性也发生变化，也会触发 transition 产生动画。
+
+因此 transition 产生动画的条件是其设置的 css 属性发生变化，而这种变化需要事件触发。
+
+### 用法
+
+复合语法：`transition: property duration timing-function delay;`
+
+|属性|说明|
+|--|--|
+|transition-property|过渡的属性|
+|transition-duration|过渡的持续时间|
+|transition-timing-function|过渡的动画函数|
+|transition-delay|过渡的延迟时间，比如延迟 1s 才开始过渡|
+
+`transition-timing-function` 的值包括以下几种：
+
+- ease：默认值，动画效果由慢到快到慢。
+
+- linear：匀速变化。
+
+- ease-in：慢速开始，逐渐变快。
+
+- ease-out：快速开始，逐渐变慢。
+
+- ease-in-out：慢速开始和结束，中间部分加速。结合了 ease-in 和 ease-out 特点。
+
+### 不足
+
+- 需要事件触发，无法在网页加载时自动发生。
+
+- 一次性的，不能重复发生，除非重复触发事件。
+
+- 只能定义开始和结束状态，不能定义中间的状态。
