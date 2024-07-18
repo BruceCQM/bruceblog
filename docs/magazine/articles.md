@@ -428,3 +428,13 @@ lighthouse 是一个开源工具，用于评估网站性能、可访问性、性
 Web 性能优化系列文章，包括 webpack 分包、图片优化、css 优化等内容，值得好好学习。
 
 [Web 性能优化：理解及使用 JavaScript 缓存](https://segmentfault.com/a/1190000018589996){link=card}
+
+### 12、Mac 录屏和制作 GIF 动图
+
+在 Mac 上，按下 Shift-Command-5 以打开“截屏”并显示工具。
+
+使用 keynote 来制作 GIF 动图。
+
+[在 Mac 上截屏或录屏](https://support.apple.com/zh-cn/guide/mac-help/mh26782/mac){link=card}
+
+[Mac上快速将视频转化为GIF动图](https://blog.csdn.net/ww2011/article/details/131651866){link=card}
