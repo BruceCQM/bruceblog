@@ -258,3 +258,102 @@ transition 翻译过来就是「过渡」，是指元素的某个属性（如 ba
 - 一次性的，不能重复发生，除非重复触发事件。
 
 - 只能定义开始和结束状态，不能定义中间的状态。
+
+## animation 动画
+
+animation 可以看作是 transition 的增强版，它可以定义更加丰富的动画效果，可操作性更强。
+
+### 使用
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .father {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      animation: myanimation 2s linear 0.5s infinite alternate running forwards;
+    }
+
+    .father:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes myanimation {
+      0% {
+        background-color: blue;
+      }
+      25% {
+        width: 80px;
+      }
+      50% {
+        border: 10px solid pink;
+      }
+      100% {
+        width: 160px;
+        height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="father">123</div>
+</body>
+</html>
+```
+
+可以用 from、to 关键词设置开始和结束状态，相当于 0% 和 100%。
+
+```css
+@keyframes myanimation {
+  from {
+    background-color: blue;
+  }
+  to {
+    width: 160px;
+    height: 160px;
+  }
+}
+```
+
+![animation](./images/css/animation.gif)
+
+### 属性
+
+|属性|说明|
+|--|--|
+|@keyframes|定义动画|
+|animation|复合属性，可以同时设置多个属性|
+|animation-name|定义动画的名称|
+|animation-duration|定义动画的持续时间|
+|animation-timing-function|定义动画的速度曲线，默认为 ease|
+|animation-delay|定义动画的延迟时间，默认为 0|
+|animation-iteration-count|定义动画的播放次数，默认为 1 次，infinite 设置无数次|
+|animation-direction|定义动画是否反向播放，默认值 normal，alternate 设置反向播放|
+|animation-fill-mode|定义动画结束后的状态，forwards 停在结束位置，backwards 返回开始位置|
+|animation-play-state|定义动画是否正在运行，默认为running，paused 暂停，经常和鼠标经过配合使用|
+
+复合写法：`animation: name duration timing-function delay iteration-count direction fill-mode play-state`。
+
+顺序其实可以打乱，但是持续时间 duration 和延迟时间 delay 必需按顺序，因为无法区分，其它属性关键字不同，可以通过设置的值区分是哪个属性。
+
+各个属性详细讲解见：
+
+[CSS3-animation动画详解](https://juejin.cn/post/6970883520168198158){link=static}
+
+### animation和transition的区别
+
+1. 触发条件不同。transition 通常和 hover 等事件配合使用，由事件触发。animation 则可以立即播放。
+
+2. 循环。animation 可以设定循环次数，transition 只能播放一次，除非反复触发事件。
+
+3. 精确性。animation 可以设定每一帧的样式和时间。transition 只能设定开始和结束样式。
+
+4. 与 JavaScript 的交互。animation 和 js 的交互不是很紧密，因为它可以独立完成所有事情。transition 和 js 结合后更强大，js 设置要变化的样式，transition 负责动画效果。
+
+[CSS动画：animation、transition、transform、translate傻傻分不清](https://juejin.cn/post/6844903615920898056){link=static}
