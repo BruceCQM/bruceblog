@@ -377,6 +377,41 @@ var addTwoNumbers = function (l1, l2) {
 }
 ```
 
+### 19. [删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/description/)
+
+标签：pre 指针、双指针
+
+题目：
+
+![19.删除链表的倒数第 N 个结点](./images/leetcode/question-19.png)
+
+代码：
+
+```js
+// 思路：快指针先移动 n 步，接着两个指针共同移动，直到快指针到尾部，此时慢指针刚到到达被删除节点的前一个节点
+var removeNthFromEnd = function(head, n) {
+  // 技巧：好用的 pre 指针
+  var pre = new ListNode();
+  pre.next = head;
+  // 初始化快慢指针为 pre 指针
+  var slow = pre, fast = pre;
+  // fast 先移动 n 步
+  while(n > 0) {
+    fast = fast.next;
+    n -= 1;
+  }
+  // 快慢指针一起向前移动，直到快指针到末尾
+  while(fast.next) {
+    slow = slow.next;
+    fast = fast.next;
+  }
+  // 删除节点
+  slow.next = slow.next.next;
+  // 返回 pre.next，head 可能被删除
+  return pre.next;
+}
+```
+
 ## 二叉树
 
 ### 94.[二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/description/)
