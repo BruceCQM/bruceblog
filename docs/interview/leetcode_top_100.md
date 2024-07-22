@@ -223,6 +223,58 @@ var hasCycle = function (head) {
 }
 ```
 
+### 142. [环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/description/)
+
+标签：哈希表、双指针、快慢指针
+
+题目：
+
+![142.环形链表 II](./images/leetcode/question-142.png)
+
+代码：
+
+```js
+// 方法一：遍历链表，哈希表存储每个节点的地址，若哈希表里有重复的地址，则返回该地址，即为环的入口
+var detectCycle = function (head) {
+  var map = new Map();
+  var p = head;
+  while(p) {
+    if (map.has(p)) {
+      return p;
+    }
+    map.set(p);
+    p = p.next;
+  }
+  return p;
+}
+
+// 方法二：快慢双指针。
+// 首先快慢指针找到第一次重合的节点，接着快指针从头开始，两个指针相遇的节点即为环的入口
+var detectCycle = function(head) {
+  var slow = head, fast = head;
+  while(true) {
+    // 没有环，返回null
+    if (!fast || !fast.next) {
+      return null;
+    }
+    slow = slow.next;
+    fast = fast.next.next;
+    // 找到重合的第一个节点
+    if (slow === fast) {
+      break;
+    }
+  }
+
+  // 快指针返回头节点
+  fast = head;
+  while(slow !== fast) {
+    slow = slow.next;
+    fast = fast.next;
+  }
+  return slow;
+}
+```
+
 ### 21. [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/description/)
 
 标签：递归、双指针
