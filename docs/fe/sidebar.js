@@ -62,7 +62,7 @@ export default [
     ]
   },
   {
-    text: '打包工具',
+    text: 'Webapck',
     collapsed: true,
     items: [
       { text: 'webpack 极速入门', link: '/fe/webpack/webpack_quick' },
@@ -81,7 +81,6 @@ export default [
       { text: 'Vscode', link: '/fe/ide/vscode' },
       { text: 'Vuepress', link: '/fe/vuepress/vuepress' },
       { text: 'Vitepress', link: '/fe/vuepress/vitepress' },
-      { text: '前端编程题', link: '/fe/js/coding_problem' },
     ]
   },
 ]

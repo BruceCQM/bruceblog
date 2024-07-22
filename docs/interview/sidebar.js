@@ -11,4 +11,8 @@ export default [
     text: 'LeetCode Top 100',
     link: '/interview/leetcode_top_100'
   },
+  {
+    text: 'FE coding',
+    link: '/interview/coding_problem'
+  },
 ]

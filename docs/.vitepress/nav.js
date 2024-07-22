@@ -21,7 +21,6 @@ export default [
           { text: 'Git', link: '/fe/git/git' },
           { text: 'Webpack', link: '/fe/webpack/webpack_quick' },
           { text: 'Vscode', link: '/fe/ide/vscode' },
-          { text: '前端编程题', link: '/fe/js/coding_problem' },
         ]
       },
       {
