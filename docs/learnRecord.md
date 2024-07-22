@@ -1,0 +1,16 @@
+- 2024-06-30：整理完成 webpack 快速入门视频笔记；Q1-两数之和。
+- 2024-07-01： 学习整理 webpack 入口 entry 配置项文档；Q160-相交链表。
+- 2024-07-02：学习整理 webpack 入口 entry 配置、splitChunks 重要属性、出口 output；Q206-反转链表；CSS 盒子模型。
+- 2024-07-03：学习整理 webpack 的 loader；复习 Q1、160、206；css 定位。
+- 2024-07-04：忘记记录了。
+- 2024-07-05：学习整理 webpack 工作原理、如何产生 chunk。
+- 2024-07-08：学习整理 bundle、chunk 和 bundle 的区别、webpack 的 hash；Q234-回文链表。
+- 2024-07-09：chunkId、manifest；Q234 多种方法整理到 blog。
+- 2024-07-10：常见 loader、plugin；Q21-合并两个有序链表；整理 transform 剩余内容。
+- 2024-07-11：webpack 和 vite 区别；热更新原理；esbuild 为什么这么快；Q2-两数相加。
+- 2024-07-12：长缓存、打包。
+- 2024-07-15：hard-source-webpack-plugin vs cache-loader；runtime 和 manifest；vite 原理；webpack 核心。
+- 2024-07-16：Q35、94 整理到 blog；vite 整理完成；rollup 和 webpack
+- 2024-07-17：忘记记录了。
+- 2024-07-18：transition 动画学习；
+- 2024-07-19：animation 动画学习；
