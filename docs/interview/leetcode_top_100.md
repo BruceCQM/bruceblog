@@ -412,6 +412,50 @@ var removeNthFromEnd = function(head, n) {
 }
 ```
 
+### 24. [两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/description/)
+
+标签：递归、迭代、pre 指针
+
+题目：
+
+![24.两两交换链表中的节点](./images/leetcode/question-24.png)
+
+代码：
+
+```js
+// 方法一：递归
+var swapPairs = function (head) {
+  // 终止条件：当前无节点或只有一个节点，无法交换
+  if (!head || !head.next) {
+    return head;
+  }
+
+  // 递归调用单元：head 连接后面完成交换的子链表，next 连接 head，完成交换
+  var temp = head.next;
+  head.next = swapPairs(temp.next);
+  temp.next = head;
+
+  // 返回值：完成交换的子链表
+  return temp;
+}
+
+// 方法二：迭代
+var swapPairs = function (head) {
+  var pre = new ListNode();
+  pre.next = head;
+  var p = pre;
+  while (p.next && p.next.next) {
+    var start = p.next;
+    var end = p.next.next;
+    start.next = end.next;
+    end.next = start;
+    p.next = end;
+    p = start;
+  }
+  return pre.next;
+}
+```
+
 ## 二叉树
 
 ### 94.[二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/description/)
