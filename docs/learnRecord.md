@@ -15,3 +15,4 @@
 - 2024-07-18：transition 动画学习；
 - 2024-07-19：animation 动画学习；
 - 2024-07-22：css 动画和 js 动画；Q142、19 整理到 blog。
+- 2024-07-23：学习整理 requestAnimationFrame；
