@@ -438,3 +438,9 @@ Web 性能优化系列文章，包括 webpack 分包、图片优化、css 优化
 [在 Mac 上截屏或录屏](https://support.apple.com/zh-cn/guide/mac-help/mh26782/mac){link=card}
 
 [Mac上快速将视频转化为GIF动图](https://blog.csdn.net/ww2011/article/details/131651866){link=card}
+
+### 13、requestAnimationFrame 介绍
+
+文章介绍了 requestAnimationFrame 的含义、基本使用、性能优化、使用场景、兼容性等内容，看完可以对 requestAnimationFrame 有一个基本的了解。
+
+[浅析requestAnimationFrame的用法与优化](https://segmentfault.com/a/1190000044314827){link=card}

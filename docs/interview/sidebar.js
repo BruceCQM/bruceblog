@@ -4,6 +4,10 @@ export default [
     link: '/interview/javascript'
   },
   {
+    text: 'Browser',
+    link: '/interview/browser'
+  },
+  {
     text: 'css',
     link: '/interview/css'
   },
