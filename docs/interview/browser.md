@@ -1,6 +1,6 @@
 # 浏览器相关
 
-## requestAnimationFrame
+## 1. requestAnimationFrame
 
 requestAnimationFrame 是一个浏览器提供的方法，用于在浏览器下次重绘之前执行回调函数，通常用于动画和游戏开发。
 
@@ -81,7 +81,7 @@ requestAnimationFrame(callback) 触发的 callback 方法会接受一个时间�
 
 [浅析requestAnimationFrame的用法与优化](https://segmentfault.com/a/1190000044314827){link=static}
 
-## 重排重绘
+## 2. 重排重绘
 
 ### 重排重绘是什么？
 
