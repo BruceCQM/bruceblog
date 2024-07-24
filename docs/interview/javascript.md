@@ -240,10 +240,10 @@ person.sayHello() // hello, my name is kimmy
 先看一道题，以下的代码输出什么？
 
 ```js
-Object instanceof Function;
-Function instanceof Function;
-Object instanceof Object;
-Function instanceof Object;
+Object instanceof Function
+Function instanceof Function
+Object instanceof Object
+Function instanceof Object
 ```
 
 回顾一下 instanceof 的工作原理，它是判断构造函数的 prototype 属性是否存在于实例对象的原型链上。
@@ -251,23 +251,45 @@ Function instanceof Object;
 Object、Function 是函数对象，可以看作是 new Function() 产生的，而 Object 构造函数的 prototype 存在于所有原型链上，因此上述代码都打印 true。
 
 ```js
-Object instanceof Function; // true
-Function instanceof Function; // true
-Object instanceof Object; // true
-Function instanceof Object; // true
+Object instanceof Function // true
+Function instanceof Function // true
+Object instanceof Object // true
+Function instanceof Object // true
 ```
 
 下面看更复杂的例子。
 
 ```js
-Function.__proto__ === Function.prototype;
+Function.__proto__ === Function.prototype
 
-Function.__proto__.__proto__ === Object.prototype;
+Function.__proto__.__proto__ === Object.prototype
 
-Object.__proto__ === Function.prototype;
+Object.__proto__ === Function.prototype
 
-Object.__proto__.__proto__ === Object.prototype;
+Object.__proto__.__proto__ === Object.prototype
 ```
+
+- Function.prototype 可以看作是一个对象，由 Object 构造函数创建。
+
+- Object 可以看作一个函数，由 Function 构造函数创建。
+
+- Function 可以 看作一个函数对象，由 Function 构造函数创建。
+
+```js
+// Function是一个函数对象，由Function构造函数创建
+Function.__proto__ === Function.prototype // true
+
+// Funtcion.prototype本身是一个对象，由Object构造函数创建
+Function.__proto__.__proto__ === Object.prototype // true
+
+// Object是一个函数对象，由Function构造函数创建
+Object.__proto__ === Function.prototype // true
+
+// Object.prototype本身是一个对象，由Object构造函数创建
+Object.__proto__.__proto__ === Object.prototype // true
+```
+
+[浅谈 Function.prototype 和函数、Object 的关系](https://blog.csdn.net/Pang_Yue__Fairy/article/details/130570056){link=static}
 
 ## 8. `call() apply() bind()` 的作用
 
@@ -282,13 +304,16 @@ bind 不会调用函数，它返回一个改变了 this 指向的新函数。
 当需要改变函数内部 this 指向有不需要立刻调用函数的时候，可以使用 bind，如改变定时器内部的 this 指向。
 
 ```js
-const max = Math.max.apply(null, [1, 2, 3]); // 3
+const max = Math.max.apply(null, [1, 2, 3]) // 3
 
-btn.onclick = function() {
-  this.disabled = true;
-  setTimeout(function() {
-    this.disabled = false;
-  }.bind(this), 1000);
+btn.onclick = function () {
+  this.disabled = true
+  setTimeout(
+    function () {
+      this.disabled = false
+    }.bind(this),
+    1000
+  )
 }
 ```
 
@@ -297,33 +322,34 @@ btn.onclick = function() {
 JS 中，基本类型是没有属性和方法的。为了便于操作基本类型，在调用基本类型的属性或方法时，JS 会隐式地将基本类型转换为对应的包装对象。
 
 ```js
-const str = 'hello';
-str.length; // 5
-str.toUpperCase(); // 'HELLO'
+const str = 'hello'
+str.length // 5
+str.toUpperCase() // 'HELLO'
 ```
 
 通过 `Object()` 函数，也可以显式地将基本类型转换为包装对象。
 
 ```js
-const str = 'hello';
-Object(str); // String { "hello" }
-const num = 123;
-Object(num); // Number { 123 }
+const str = 'hello'
+Object(str) // String { "hello" }
+const num = 123
+Object(num) // Number { 123 }
 ```
 
 通过 `valueOf()` 函数，可以将包装对象转换为基本类型。
 
 ```js
-const str = 'hello';
-const strObj = Object(str);
-strObj.valueOf(); // 'hello'
+const str = 'hello'
+const strObj = Object(str)
+strObj.valueOf() // 'hello'
 ```
 
 :::tip 看代码说结果
+
 ```js
-const boo = new Boolean(false);
+const boo = new Boolean(false)
 if (!boo) {
-  console.log('boo is false'); // 这段代码不会执行
+  console.log('boo is false') // 这段代码不会执行
 }
 ```
 
@@ -332,19 +358,21 @@ if (!boo) {
 
 ## 10. 为什么会有 BigInt 的提案
 
-JS 中 `Number.MAX_SAFE_INTEGER` 来表示最大的安全整数，它的值是9007199254740991（即2的53次方减1）。
+JS 中 `Number.MAX_SAFE_INTEGER` 来表示最大的安全整数，它的值是 9007199254740991（即 2 的 53 次方减 1）。
 
 在这个范围内的整数可以精确表示，没有精度丢失。当整数超过这个范围时，JS 可能会出现计算不准确的情况。
 
 由于这个问题在进行大数计算时不得不依靠一些第三方库，因此官方提出了 BigInt 的提案来解决这个问题。
 
 :::tip JS 的特殊数值
+
 ```js
 Number.MAX_SAFE_INTEGER // 最大的安全整数，9007199254740991
 Number.MAX_VALUE // 最大正浮点数，约为 1.7976931348623157e+308
 Number.MIN_SAFE_INTEGER // 最小的安全整数，-9007199254740991
 Number.MIN_VALUE // 最小正浮点数，约为 5e-324
 ```
+
 :::
 
 ## 11. 如何判断一个对象是空对象
@@ -353,7 +381,7 @@ Number.MIN_VALUE // 最小正浮点数，约为 5e-324
 
 ```js
 function isEmptyObject(obj) {
-  return Object.keys(obj).length === 0;
+  return Object.keys(obj).length === 0
 }
 ```
 
@@ -363,7 +391,7 @@ function isEmptyObject(obj) {
 
 ```js
 function isEmptyObject(obj) {
-  return JSON.stringify(obj) === '{}';
+  return JSON.stringify(obj) === '{}'
 }
 ```
 
@@ -386,9 +414,9 @@ function isEmptyObject(obj) {
 5. 箭头函数没有自己的 `this`，它的 `this` 指向在函数定义时就已经确定了，指向的是函数外层作用域的 `this`，且不会改变。
 6. `bind()`、`call()`、`apply()` 等方法可以改变函数的 `this` 指向。
 
-## 14. s箭头函数和普通函数的区别
+## 14. s 箭头函数和普通函数的区别
 
 1. 箭头函数没有自己的 this，它的 this 指向在函数定义时就确定了，指向函数外层作用域的 this，并且不会改变，call、apply、bind 方法也无法改变箭头函数的 this 指向。
 2. 箭头函数没有 arguments，在箭头函数里访问 arguments 得到的实际上是外层函数的 arguments。如果没有外层函数，也就是箭头函数在全局作用域内，使用 arguments 会报错。可以使用剩余参数来代替 arguments 访问箭头函数的参数列表。
 3. 箭头函数没有原型对象 prototype。
-4. 箭头函数不能用作构造函数，不可以使用 new 命令。在 new 一个构造函数时，首先会创建一个对象，接着把新对象的 `__proto__` 属性设置为构造函数的原型对象 prototype，接着把构造函数的 this 指向新对象。对于箭头函数而言，第一，它没有原型对象 prototype，第二，它没有自己的this，所以不能用作构造函数。
+4. 箭头函数不能用作构造函数，不可以使用 new 命令。在 new 一个构造函数时，首先会创建一个对象，接着把新对象的 `__proto__` 属性设置为构造函数的原型对象 prototype，接着把构造函数的 this 指向新对象。对于箭头函数而言，第一，它没有原型对象 prototype，第二，它没有自己的 this，所以不能用作构造函数。
