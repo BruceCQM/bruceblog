@@ -283,12 +283,19 @@ Function.__proto__ === Function.prototype // true
 Function.__proto__.__proto__ === Object.prototype // true
 Function.prototype.__proto__ === Object.prototype // true
 
+// 原型对象的constructor指向构造函数
+Function.__proto__.constructor === Function // true
+
 // Object是一个函数对象，由Function构造函数创建
 Object.__proto__ === Function.prototype // true
 
 // Object.prototype本身是一个对象，由Object构造函数创建
 Object.__proto__.__proto__ === Object.prototype // true
 ```
+
+一图胜千言：
+
+![原型链](./images/js/prototype-chain.png)
 
 [浅谈 Function.prototype 和函数、Object 的关系](https://blog.csdn.net/Pang_Yue__Fairy/article/details/130570056){link=static}
 
@@ -325,6 +332,86 @@ new 构造函数创建的对象，它的 __proto__ 指向构造函数的 prototy
 function Person() {}
 const person = new Person();
 person.__proto__ === Person.prototype // true
+```
+
+### 和原型相关的方法
+
+- Object.getPrototypeOf(obj)：获取对象的原型。
+
+- Object.setPrototypeOf(obj, prototype)：设置对象的原型。
+
+- obj.hasOwnProperty(prop)：判断对象是否包含自由属性 prop。
+
+- obj.isPrototypeOf(obj2)：判断 obj2 是否在 obj 的原型链上，和 instanceof 类似。
+
+- Object.create(obj)：创建一个新对象，它的原型指向obj。
+
+实现继承：子类通过原型链继承父类的属性和方法。
+
+```js
+function Animal(name) {
+ this.name = name;
+}
+
+Animal.prototype.sayName = function () {
+ console.log(`My name is ${this.name}`);
+};
+
+function Dog(name, breed) {
+ Animal.call(this, name); // 继承⽗类的属性
+ this.breed = breed;
+}
+
+Dog.prototype = Object.create(Animal.prototype); // 继承⽗类的⽅法
+Dog.prototype.constructor = Dog;
+Dog.prototype.sayBreed = function () {
+ console.log(`My breed is ${this.breed}`);
+};
+
+const dog = new Dog("Buddy", "Golden Retriever");
+dog.sayName(); // My name is Buddy
+dog.sayBreed(); // My breed is Golden Retriever
+```
+
+```js
+// 多态
+function Animal() {}
+
+Animal.prototype.speak = function () {
+ console.log("Animal speaks");
+};
+
+function Cat() {}
+Cat.prototype = Object.create(Animal.prototype);
+Cat.prototype.constructor = Cat;
+Cat.prototype.speak = function () {
+ console.log("Meow");
+};
+
+function Dog() {}
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+Dog.prototype.speak = function () {
+ console.log("Woof");
+};
+
+const cat = new Cat();
+const dog = new Dog();
+cat.speak(); // Meow
+dog.speak(); // Woof
+```
+
+![继承链路图](./images/js/js-inherit.png)
+
+```js
+// 修改对象
+const person = { name: "John" };
+
+Object.getPrototypeOf(person).sayHello = function () {
+ console.log(`Hello, my name is ${this.name}`);
+};
+
+person.sayHello(); // 输出：Hello, my name is John
 ```
 
 ## 8. `call() apply() bind()` 的作用
