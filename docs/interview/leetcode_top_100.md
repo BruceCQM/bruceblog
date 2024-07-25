@@ -456,6 +456,62 @@ var swapPairs = function (head) {
 }
 ```
 
+### 25. [K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/description/)
+
+标签：dummy 指针
+
+题目：
+
+![25.K 个一组翻转链表](./images/leetcode/question-25.png)
+
+代码：
+
+```js
+// 反转链表
+var reverse = function (head) {
+  var pre = null, cur = head;
+  while(cur) {
+    var temp = cur.next;
+    cur.next = pre;
+    pre = cur;
+    cur = temp;
+  }
+  return pre;
+}
+
+var reverseKGroup = function (head, k) {
+  var dummy = new ListNode();
+  dummy.next = head;
+  var p = dummy;
+  var tail = dummy;
+
+  while(p.next) {
+    // 找到要反转的K链表的头尾节点
+    var start = p.next;
+    for (var i = 0;i < k;i++) {
+      tail = tail.next;
+      // 如果不够k个节点，则直接返回
+      if (!tail) {
+        return dummy.next;
+      }
+    }
+    
+    // 记录下尾节点下一个节点
+    var next = tail.next;
+    // 先断开链表，否则后面一整条链表都会进行反转
+    tail.next = null;
+    p.next = reverse(start);
+    // 反转之后，start就变成尾节点
+    start.next = next;
+
+    // 进行下一组的初始化
+    p = start;
+    tail = p;
+  }
+  return dummy.next;
+}
+```
+
 ## 二叉树
 
 ### 94.[二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/description/)
