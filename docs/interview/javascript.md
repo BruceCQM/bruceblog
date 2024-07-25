@@ -281,6 +281,7 @@ Function.__proto__ === Function.prototype // true
 
 // Funtcion.prototype本身是一个对象，由Object构造函数创建
 Function.__proto__.__proto__ === Object.prototype // true
+Function.prototype.__proto__ === Object.prototype // true
 
 // Object是一个函数对象，由Function构造函数创建
 Object.__proto__ === Function.prototype // true
@@ -290,6 +291,41 @@ Object.__proto__.__proto__ === Object.prototype // true
 ```
 
 [浅谈 Function.prototype 和函数、Object 的关系](https://blog.csdn.net/Pang_Yue__Fairy/article/details/130570056){link=static}
+
+### 创建对象的方法及它们的proto
+
+1. 字面量创建
+
+```js
+const obj = {};
+obj.__proto__ === Object.prototype // true
+```
+
+2. new Object创建
+
+```js
+const obj = new Object();
+obj.__proto__ === Object.prototype // true
+```
+
+3. Object.create()创建
+
+Object.create()创建一个对象，它的 __proto__ 指向第一个参数。
+
+```js
+const obj = Object.create({});
+obj.__proto__; // {}
+```
+
+4. new构造函数创建
+
+new 构造函数创建的对象，它的 __proto__ 指向构造函数的 prototype。
+
+```js
+function Person() {}
+const person = new Person();
+person.__proto__ === Person.prototype // true
+```
 
 ## 8. `call() apply() bind()` 的作用
 
