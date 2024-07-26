@@ -512,6 +512,41 @@ var reverseKGroup = function (head, k) {
 }
 ```
 
+### 138. [随机链表的复制](https://leetcode.cn/problems/copy-list-with-random-pointer/description/)
+
+标签：哈希表
+
+题目：
+
+![138.随机链表的复制](./images/leetcode/question-138.png)
+
+代码：
+
+```js
+var copyRandomList = function (head) {
+  if (!head) {
+    return null;
+  }
+  var map = new Map();
+  var cur = head;
+  // 遍历链表，建立原链表节点和新链表节点的对应关系
+  while(cur) {
+    map.set(cur, new Node(cur.val));
+    cur = cur.next;
+  }
+
+  cur = head;
+  // 遍历链表，构建新链表节点的next指针和random指针
+  while(cur) {
+    // 链表尾节点的 next 必须指向 null，否则会报错
+    map.get(cur).next = map.get(cur.next) || null;
+    map.get(cur).random = map.get(cur.random);
+    cur = cur.next; 
+  }
+  return map.get(head);
+}
+```
+
 ## 二叉树
 
 ### 94.[二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/description/)
