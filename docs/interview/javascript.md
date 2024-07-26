@@ -537,9 +537,262 @@ function isEmptyObject(obj) {
 5. 箭头函数没有自己的 `this`，它的 `this` 指向在函数定义时就已经确定了，指向的是函数外层作用域的 `this`，且不会改变。
 6. `bind()`、`call()`、`apply()` 等方法可以改变函数的 `this` 指向。
 
-## 14. s 箭头函数和普通函数的区别
+## 14. 箭头函数和普通函数的区别
 
 1. 箭头函数没有自己的 this，它的 this 指向在函数定义时就确定了，指向函数外层作用域的 this，并且不会改变，call、apply、bind 方法也无法改变箭头函数的 this 指向。
 2. 箭头函数没有 arguments，在箭头函数里访问 arguments 得到的实际上是外层函数的 arguments。如果没有外层函数，也就是箭头函数在全局作用域内，使用 arguments 会报错。可以使用剩余参数来代替 arguments 访问箭头函数的参数列表。
 3. 箭头函数没有原型对象 prototype。
 4. 箭头函数不能用作构造函数，不可以使用 new 命令。在 new 一个构造函数时，首先会创建一个对象，接着把新对象的 `__proto__` 属性设置为构造函数的原型对象 prototype，接着把构造函数的 this 指向新对象。对于箭头函数而言，第一，它没有原型对象 prototype，第二，它没有自己的 this，所以不能用作构造函数。
+
+## 15. 作用域、执行上下文
+
+### 作用域
+
+1. 简单而言，作用域相当于一个区域，就是为了说明这个区域有多大，而不包括这个区域里面有什么东西。这个区域里面有什么东西是这个作用域对应的执行上下文要说明的内容。
+
+2. JS 没有块级作用域，只有函数作用域和全局作用域。块级作用域就是定义在 {} 里的范围，比如 if() 和 for() 里那个 {} 的范围就叫做块级作用域。
+
+3. 全局变量要在代码前端声明，函数中的变量要在函数体一开始的地方声明好。除了这两个地方，其它地方不要出现变量声明。否则会：内层变量会覆盖外层变量；用来计数的循环变量泄漏变成全局变量。使用 let 会解决 var 没有块级作用域的问题。
+
+4. 作用域是在函数创建的时候就已经确定了，而不是函数调用的时候。
+
+5. 作用域最大的用处就是隔离变量，不用作用域下的同名变量不会有冲突。
+
+### 执行上下文
+
+我们可以将执行上下文看作代码当前运行的环境。主要分为：全局执行上下文、函数执行上下文和 eval 函数执行上下文。
+
+对于一个执行上下文，也可以称为当前 js 执行环境，包括了私有作用域、当前作用域中的变量、上层作用域、当前作用域对象 this。
+
+执行上下文的建立过程：
+
+1. 建立阶段（调用一个函数时，但在执行函数体内具体代码以前）：给参数赋值、声明函数、声明变量、初始化作用域链、确认上下文的 this 指向。
+
+2. 代码执行阶段：变量赋值、执行其它代码。
+
+在建立执行上下文的过程中，变量的声明不重要，重要的是变量的赋值。不管在建立阶段的时候一个属性的声明是怎样的，在执行阶段仍然可以被赋值为不同类型的值，这也是为什么 JavaScript 是弱类型的语言。
+
+### 作用域和上下文的关系
+
+作用域只是一个区域，一个抽象的概念，其中没有变量。
+
+要通过作用域对应的执行上下文环境来获取变量的值。
+
+同一个作用域下，不同的调用会产生不同的执行上下文环境，继而产生不同的变量值。
+
+### 自由变量
+
+> **不在自己作用域里的变量都叫自由变量**。
+
+在 JavaScript 中，自由变量（Free Variable）是指在一个函数内部可以访问到的，但不是该函数参数或局部变量的变量。这些变量通常是定义在函数外部的全局变量，或者是函数所在作用域链（Scope Chain）中的上层作用域中的变量。
+
+自由变量的概念主要出现在函数式编程和闭包（Closure）的讨论中。闭包是指一个函数可以访问并操作其外部作用域中的变量，即使该函数在其他地方被调用。
+
+```js
+// 全局变量 x，是函数 foo 的自由变量
+var x = 10;
+
+function foo() {
+  // 访问全局变量 x，这里 x 是自由变量
+  console.log(x);
+}
+
+foo(); // 输出: 10
+```
+
+### 作用域链
+
+在自己所在作用域对应的执行上下文取值，如果取不到就到上一级作用域对应的执行上下文，直到全局作用域对应的执行上下文。
+
+作用域链是因为自由变量才存在的，也是因为自由变量，作用域链才有意义。
+
+```js
+var aa = 22;
+
+function a() {
+  console.log(aa);
+}
+
+function b(fn) {
+  var aa = 11;
+  fn();
+}
+
+b(a); // 22
+```
+
+作用域在函数创建的时候就已经确定了，而不是函数调用的时候。
+
+因此，上述例子中，函数 a 的上一级作用域是全局作用域，而不是函数 b 的作用域，所以向上一级作用域取变量 aa 的值是 22，不是 11。
+
+```js
+function a() {
+  var age = 21;
+  var height = 178;
+  var weight = 70;
+  function b() {
+    // var 声明的变量有变量提升，在这个位置 age 已声明但未赋值，所以是 undefined
+    console.log(age); // undefined
+    console.log(height); // 178
+    var age = 25;
+    height = 180;
+    console.log(age); // 25
+    console.log(height); // 180
+  }
+  b();
+  console.log(height); // 180
+}
+a();
+```
+
+[javascript执行上下文、作用域与闭包（第一篇）---执行上下文](https://blog.csdn.net/iamchuancey/article/details/78230791){link=static}
+
+## 16. 闭包
+
+当一个内部函数引用了外部函数的变量，就产生了闭包。
+
+在闭包里，函数调用完之后，其执行上下文环境不会立即被销毁。使用闭包会使变量保存在内存中，导致增加内存开销。
+
+内部函数保持对外部函数作用域的引用，使得外部函数中的变量在内部函数执行时依然可用。
+
+闭包的应用场景：
+
+1. 实现计数器
+
+闭包可以用来创建自己的计数器或计时器，这些计数器或计时器能够记住它们自己的计数或时间信息，而不会影响其他计数器或计时器。
+
+```js
+function makeCounter() {
+  let count = 0;
+  return function() {
+    count++;
+    return count;
+  };
+}
+
+const counter1 = makeCounter();
+const counter2 = makeCounter();
+
+console.log(counter1()); // 输出: 1
+console.log(counter1()); // 输出: 2
+console.log(counter2()); // 输出: 1
+```
+
+2. 封装私有变量
+
+闭包可以用来创建只能通过特定函数访问的私有变量。
+
+```js
+function person(name, age) {
+  let _name = name;
+  let _age = age;
+
+  return {
+    getName: function() {
+      return _name;
+    },
+    getAge: function() {
+      return _age;
+    },
+    setAge: function(age) {
+      _age = age;
+    }
+  };
+}
+
+const p = person('John', 30);
+console.log(p.getName()); // 输出: 'John'
+p.setAge(31);
+console.log(p.getAge()); // 输出: 31
+```
+
+3. 实现模块化
+
+闭包可以用来实现简单的模块化模式，创建私有变量和方法，只暴露必要的接口。把操作函数暴露在外部，细节隐藏在内部。
+
+```js
+function module() {
+  const arr = []
+
+  function add(val) {
+    arr.push(val);
+  }
+
+  function get(index) {
+    return arr[index];
+  }
+
+  return { add, get}
+}
+
+const m = module();
+m.add(22);
+m.get(0); // 22
+```
+
+4. 循环注册点击事件
+
+有问题的代码：
+
+```js
+var list = document.querySelectorAll('li');
+for (var i = 0;i < list.length;i++) {
+  list[i].onclick = function() {
+    alert(i);
+  }
+}
+```
+
+首先，这段代码是产生了闭包的。匿名回调函数引用了外部作用的变量 i，由于闭包的作用，即使循环结束，i 值会保留在内存中。
+
+但是每个事件监听器会共享一个 i 值，因此点击任意一个 li 元素，弹出的值是循环结束的 i 值，即 list.length，而不是点击的元素在数组中的索引。
+
+修改方法一：将索引值保存到每个 li 元素中
+
+```js
+var list = document.querySelectorAll('li');
+for (var i = 0;i < list.length;i++) {
+  list[i].index = i;
+  list[i].onclick = function() {
+    // 函数的 this 指向就是对应的 li 元素
+    alert(this.index);
+  }
+}
+```
+
+修改方法二：var 改为 let
+
+let 声明的变量具有块级作用域，每个循环迭代都会创建一个新的 i 的绑定，这样每个点击事件监听器就会引用它自己的 i 的值。
+
+```js
+var list = document.querySelectorAll('li');
+for (let i = 0;i < list.length;i++) {
+  list[i].onclick = function() {
+    alert(i);
+  }
+}
+```
+
+修改方法三：使用 IIFE 产生新闭包
+
+使用立即执行函数表达式（IIFE）来创建一个新的作用域，将循环中的 i 值传递给这个新的作用域。
+
+```js
+var list = document.querySelectorAll('li');
+for (var i = 0;i < list.length;i++) {
+  list[i].onclick = (function(index) {
+    return function() {
+      console.log(index)
+    }
+  })(i)
+}
+
+var list = document.querySelectorAll('li');
+for (var i = 0;i < list.length;i++) {
+  (function(index) {
+    list[i].onclick = function() {
+      console.log(index);
+    }
+  })(i)
+}
+```
