@@ -823,3 +823,70 @@ for (var i = 0;i < list.length;i++) {
   })(i)
 }
 ```
+
+## 17. var let const
+
+### 块级作用域
+
+ES5 只有全局作用域和函数作用域，没有块级作用域。在 ES6 之前，大部分人会选择使用闭包来解决这个问题，现在可以用 let 来解决问题。
+
+var：只有全局作用域和函数作用域，没有块级作用域的概念。
+
+let：有全局作用域、函数作用域和块级作用域的概念。块级作用域由花括号{}包裹起来，if 和 for 语句的 {} 也属于块级作用域，注意对象的 {}不是块级作用域。
+
+### 变量提升、暂时性死区
+
+var 声明的变量存在变量提升，let、const 没有。
+
+在作用域内，使用 let 声明的变量之前，这个变量都是不可用的，称为暂时性死区（temporal dead zone，简称 TDZ）。
+
+当前作用域顶部到这个变量声明位置的中间部分，都是 let 变量的死区，在死区中，禁止访问这个变量，否则会报错。
+
+```js
+if (true) {
+  console.log(name);
+  let name = 'let'; // Uncaught ReferenceError: Cannot access 'name' before initialization
+}
+```
+
+### 重复声明
+
+var 的变量可以重复声明，let、const 的变量不允许重复声明，即在相同作用域内不能够重复声明一个变量。
+
+### 全局对象的属性
+
+ES5 中全局对象的属性与全局变量基本是等价的，但是也有区别，比如通过var声明的全局变量不能使用delete从 window/global （ global是针对与node环境）上删除，不过在变量的访问上基本等价。
+
+ES6 中做了严格的区分，使用 var 和 function 声明的全局变量依旧作为全局对象的属性，使用 let, const 命令声明的全局变量不属于全局对象的属性。
+
+```js
+var a = 10;
+console.log(window.a); //10
+console.log(this.a) //10
+
+let b = 20;
+console.log(window.b); // undefined
+console.log(this.b) // undefined
+```
+
+### const 常量
+
+const 声明的变量具有 let 声明的变量的特性。
+
+除此之外，const 变量必须在声明的时候初始化，并且不可改变。
+
+当变量是对象时，这里的不可改变是指变量指向的对象不可改变，但是对象内部的变化是不受限制的。
+
+```js
+const a = 1;
+a = 2; // Uncaught TypeError: Assignment to constant variable.
+
+const b; // Uncaught SyntaxError: Missing initializer in const declaration
+
+const c = [];
+c[1] = 2;
+
+c = [1,2]; // Uncaught TypeError: Assignment to constant variable.
+```
+
+[总结下var、let 和 const 的区别](https://www.cnblogs.com/jing-tian/p/11073168.html){link=static}
