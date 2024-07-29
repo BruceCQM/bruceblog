@@ -20,6 +20,8 @@
 
 ## 2. 怎么判断 JS 数据类型
 
+[判断JS数据类型的四种方法](https://www.cnblogs.com/onepixel/p/5126046.html){link=static}
+
 ### `typeof` 判断
 
 ```js
@@ -63,6 +65,31 @@ new Date() instanceof Date // true
 new Map() instanceof Map // true
 new Set() instanceof Set // true
 ```
+
+:::danger instanceof 的缺陷
+instanceof 操作符的问题在于，它假定只有一个全局执行环境。如果网页中包含多个框架，那实际上就存在两个以上不同的全局执行环境，从而存在两个以上不同版本的构造函数。
+
+如果从一个框架向另一个框架传入一个数组，那么传入的数组与第二个框架原生创建的数组分别具有不同的构造函数。
+
+一个例子就是，网页中有多个 iframe，每个 iframe  是相互独立的全局执行环境，都有各自的 Array。
+
+```js
+var iframe = document.createElement('iframe')
+document.body.appendChild(iframe)
+xArray = window.frames[0].Array
+var arr = new xArray(1,2,3)
+arr instanceof Array // false
+```
+
+为了解决这个问题，ECMAScript 提供了 Array.isArray() 来判断一个值是否为数组，不用管是在哪个全局执行环境创建的。
+
+Array.isArray() 本质上检测的是对象的 `[[Class]]` 值，这是对象的一个内部属性，里面包含了对象的类型信息，格式为 [object Xxx]，Xxx 就是对应的具体类型。对于数组而言，`[[Class]]` 的值就是 [object Array]。
+
+:::
+
+[如何理解《JavaScript高程》第六章中Array.from中提到的instanceof的问题](https://segmentfault.com/q/1010000040302948){link=static}
+
+[[学习笔记] JavaScript 检测数组](https://segmentfault.com/a/1190000002937174){link=static}
 
 ### `constructor` 判断
 
