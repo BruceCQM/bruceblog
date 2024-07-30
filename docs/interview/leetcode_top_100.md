@@ -547,6 +547,36 @@ var copyRandomList = function (head) {
 }
 ```
 
+### 148. [排序链表](https://leetcode.cn/problems/sort-list/description/)
+
+标签：排序
+
+题目：
+
+![148.排序链表](./images/leetcode/question-148.png)
+
+代码：
+
+```js
+// 最简单的方法，用数组接收，排序，再生成链表
+var sortList = function(head) {
+  var arr = [];
+  while(head) {
+    arr.push(head.val);
+    head = head.next;
+  }
+  arr.sort((a, b) => a - b);
+  var dummy = new ListNode();
+  var pre = dummy;
+  for (var i = 0;i < arr.length;i++) {
+    var node = new ListNode(arr[i]);
+    pre.next = node;
+    pre = node;
+  }
+  return dummy.next;
+}
+```
+
 ## 二叉树
 
 ### 94.[二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/description/)
