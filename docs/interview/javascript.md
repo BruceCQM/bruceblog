@@ -1,6 +1,6 @@
 # JavaScript
 
-## 1. JS 有哪些数据类型
+## JS 有哪些数据类型
 
 7 大基本数据类型：`Number、String、Boolean、Null、Undefined、Symbol、BigInt`。
 
@@ -18,7 +18,7 @@
 4、引用数据类型大小不固定、所占内存空间较大，若在栈中存储，会影响程序的运行性能，因此在堆中存储。同时，引用数据类型在栈中存储的是指针，指向堆中实体的起始地址。
 :::
 
-## 2. 怎么判断 JS 数据类型
+## 怎么判断 JS 数据类型
 
 [判断JS数据类型的四种方法](https://www.cnblogs.com/onepixel/p/5126046.html){link=static}
 
@@ -160,11 +160,11 @@ a.toString() // 'true'
 
 :::
 
-## 3. 基本数据类型为何能调用方法？
+## 基本数据类型为何能调用方法？
 
 基本数据类型都有其对应的包装类，能够调用方法是因为进行了自动封装。
 
-## 4. `null` 和 `undefined` 的区别
+## `null` 和 `undefined` 的区别
 
 相同点：
 
@@ -187,7 +187,7 @@ void 0 === undefined; // true
 
 - `undefined == null` 返回 true，`undefined === null` 返回 false。
 
-## 5. `new` 一个构造函数发生什么事
+## `new` 一个构造函数发生什么事
 
 1. 创建一个空对象。
 
@@ -220,6 +220,7 @@ function myNew() {
   // 创建空对象
   const obj = {}
   // 获取构造函数，约定第一个参数是构造函数
+  // 将 arguments 第一个元素弹出来，就是构造函数
   const constructorFunc = Array.prototype.shift.call(arguments)
   // 空对象的__proto__指向构造函数的prototype
   obj.__proto__ = constructorFunc.prototype
@@ -234,11 +235,11 @@ person.name // kimmy
 person.sayHello() // hello, my name is kimmy
 ```
 
-## 6. `new` 一个箭头函数会怎样
+## `new` 一个箭头函数会怎样
 
 箭头函数没有 `this`，没有 `prototype`，也不能使用 `arguments` 参数，无法 `new` 一个箭头函数。
 
-## 7. 原型链和原型对象
+## 原型链和原型对象
 
 ### 如何理解原型链？
 
@@ -441,13 +442,15 @@ Object.getPrototypeOf(person).sayHello = function () {
 person.sayHello(); // 输出：Hello, my name is John
 ```
 
-## 8. `call() apply() bind()` 的作用
+## `call() apply() bind()` 的作用
 
 call、apply、bind 都能改变函数内部的 this 指向。
 
 call 和 apply 都会调用函数，其中 apply 需要以数组的形式传递参数，数组中的元素作为参数传递给被调用的函数。
 
 bind 不会调用函数，它返回一个改变了 this 指向的新函数。
+
+call 和 bind 会将第二个参数及其之后的参数传入函数体内。
 
 当需要改变函数内部 this 指向且要立即调用函数时，可使用 call、apply。
 
@@ -467,7 +470,97 @@ btn.onclick = function () {
 }
 ```
 
-## 9. JS 的包装类型是什么？
+看代码说结果
+
+```js
+function func(a, b, c) {
+  console.log(a, b, c);
+}
+var func1 = func.bind(null, "linxin");
+
+func("A", "B", "C"); 
+func1(); 
+func1("A", "B", "C"); 
+func1("B", "C"); 
+func.call(null, "linxin"); 
+func.apply(null, ["a", "b", "c"]); 
+
+
+// 结果分别是：
+// A B C
+// linxin undefined undefined
+// linxin A B
+// linxin B C
+// linxin undefined undefined
+// a b c
+```
+
+## bind 链式调用
+
+看代码说结果。
+
+```js
+function fn(age) {
+  console.log('🥬  ', arguments);
+  console.log('🥬  ', this.name, age);
+}
+let obj1 = { name: 'obj1' };
+let obj2 = { name: 'obj2' };
+let obj3 = { name: 'obj3' };
+
+let a = fn.bind(obj1, 10);
+let b = a.bind(obj2, 20);
+let c = b.bind(obj3, 30);
+
+a(66);
+b(77);
+c(88);
+
+fn.bind(obj1, 10).bind(obj2, 20).bind(obj3, 30)(40);
+```
+
+结果如下。
+
+```js
+// node 环境下的运行结果
+🥬   [Arguments] { '0': 10, '1': 66 }
+🥬   obj1 10
+🥬   [Arguments] { '0': 10, '1': 20, '2': 77 }
+🥬   obj1 10
+🥬   [Arguments] { '0': 10, '1': 20, '2': 30, '3': 88 }
+🥬   obj1 10
+🥬   [Arguments] { '0': 10, '1': 20, '2': 30, '3': 40 }
+🥬   obj1 10
+```
+
+1、bind() 方法会创建一个新函数。
+
+2、bind()的第一个参数为新函数的 this 指向，后面的参数会作为新函数的前几个参数传入。
+
+3、新函数在运行时，会调用原函数。
+
+4、连续 bind 会产生闭包，算是函数柯里化的一种应用。
+
+`fn.bind(obj1, 10).bind(obj2, 20).bind(obj3, 30)(40);` 相当于：
+
+```js
+let a = fn.bind(obj1, 10);
+let b = a.bind(obj2, 20);
+let c = b.bind(obj3, 30);
+c(40);
+```
+
+c(40) 运行时，会调用 b 函数，并且把参数 30、40（bind 直接绑定的参数在前面） 传给 b 函数，b 函数的 this 指向 obj3。
+
+b 运行时，调用 a 函数，传入参数 20、30、40。
+
+a 运行时，调用 fn 函数，传入参数 10、20、30、40，fn 函数 this 指向 obj1。
+
+即最后执行的时候相当于 `fn.call(obj1, 10, 20, 30, 40)`。
+
+[连续bind返回值的个人理解](https://juejin.cn/post/6947353368687804453){link=static}
+
+## JS 的包装类型是什么？
 
 JS 中，基本类型是没有属性和方法的。为了便于操作基本类型，在调用基本类型的属性或方法时，JS 会隐式地将基本类型转换为对应的包装对象。
 
@@ -506,7 +599,7 @@ if (!boo) {
 上述代码不会打印 `boo is false`，因为 boo 是一个包装对象，本质上它已经是一个对象，因此 `if` 语句中是 `true`，打印语句不会执行。
 :::
 
-## 10. 为什么会有 BigInt 的提案
+## 为什么会有 BigInt 的提案
 
 JS 中 `Number.MAX_SAFE_INTEGER` 来表示最大的安全整数，它的值是 9007199254740991（即 2 的 53 次方减 1）。
 
@@ -525,7 +618,7 @@ Number.MIN_VALUE // 最小正浮点数，约为 5e-324
 
 :::
 
-## 11. 如何判断一个对象是空对象
+## 如何判断一个对象是空对象
 
 ### `Object.keys()`
 
@@ -547,7 +640,7 @@ function isEmptyObject(obj) {
 
 若对象包含不可枚举的自有属性，这种方法不准确。
 
-## 12. `const` 定义的变量的值可以修改吗
+## `const` 定义的变量的值可以修改吗
 
 `const` 关键字保证的是栈内存中保存的值不能修改。
 
@@ -555,7 +648,7 @@ function isEmptyObject(obj) {
 
 对于引用数据类型而言，栈内存中保存的是对象在堆内存中的**引用地址**，这个引用地址无法被修改，但是堆内存中的对象是可以被修改的。
 
-## 13. `this` 指向
+## `this` 指向
 
 1. 函数调用。`this` 指向函数的调用者。普通函数调用指向全局对象（非严格模式）或 `undefined` （严格模式）。对象函数的调用，指向该对象。
 2. 全局上下文的函数调用。非严格模式下，在全局上下文中，`this` 指向全局对象，浏览器是 `window` 对象，Node.js 是 `global` 对象。严格模式下，`this` 指向 `undefined`。
@@ -564,14 +657,14 @@ function isEmptyObject(obj) {
 5. 箭头函数没有自己的 `this`，它的 `this` 指向在函数定义时就已经确定了，指向的是函数外层作用域的 `this`，且不会改变。
 6. `bind()`、`call()`、`apply()` 等方法可以改变函数的 `this` 指向。
 
-## 14. 箭头函数和普通函数的区别
+## 箭头函数和普通函数的区别
 
 1. 箭头函数没有自己的 this，它的 this 指向在函数定义时就确定了，指向函数外层作用域的 this，并且不会改变，call、apply、bind 方法也无法改变箭头函数的 this 指向。
 2. 箭头函数没有 arguments，在箭头函数里访问 arguments 得到的实际上是外层函数的 arguments。如果没有外层函数，也就是箭头函数在全局作用域内，使用 arguments 会报错。可以使用剩余参数来代替 arguments 访问箭头函数的参数列表。
 3. 箭头函数没有原型对象 prototype。
 4. 箭头函数不能用作构造函数，不可以使用 new 命令。在 new 一个构造函数时，首先会创建一个对象，接着把新对象的 `__proto__` 属性设置为构造函数的原型对象 prototype，接着把构造函数的 this 指向新对象。对于箭头函数而言，第一，它没有原型对象 prototype，第二，它没有自己的 this，所以不能用作构造函数。
 
-## 15. 作用域、执行上下文
+## 作用域、执行上下文
 
 ### 作用域
 
@@ -674,7 +767,7 @@ a();
 
 [javascript执行上下文、作用域与闭包（第一篇）---执行上下文](https://blog.csdn.net/iamchuancey/article/details/78230791){link=static}
 
-## 16. 闭包
+## 闭包
 
 当一个内部函数引用了外部函数的变量，就产生了闭包。
 
@@ -824,7 +917,7 @@ for (var i = 0;i < list.length;i++) {
 }
 ```
 
-## 17. var let const
+## var let const
 
 ### 块级作用域
 
@@ -891,7 +984,59 @@ c = [1,2]; // Uncaught TypeError: Assignment to constant variable.
 
 [总结下var、let 和 const 的区别](https://www.cnblogs.com/jing-tian/p/11073168.html){link=static}
 
-## 18. 用 ES5 实现 const
+### 看代码说结果
+
+```js
+// 1.
+var b = 20;
+const a = {
+  b: 12,
+  fn: function () {
+    return function () {
+      console.log(this.b);
+    };
+  },
+};
+a.fn()();
+
+// 2.
+const b = 20;
+const a = {
+  b: 12,
+  fn: function () {
+    return function () {
+      console.log(this.b);
+    };
+  },
+};
+a.fn()();
+
+// 3.
+var b = 20;
+const a = {
+  b: 12,
+  fn: function () {
+    console.log(this.b);
+  },
+};
+a.fn();
+
+// 4.
+var b = 20;
+const a = {
+  b: 12,
+  fn: function () {
+    console.log(b);
+  },
+};
+a.fn();
+
+
+
+// 结果分别是：20, undefined, 12, 20
+```
+
+## 用 ES5 实现 const
 
 由于ES5环境没有block的概念，所以是无法百分百实现const，只能是挂载到某个对象下，要么是全局的window，要么就是自定义一个object来当容器。
 
@@ -934,7 +1079,7 @@ a = 20 // 报错
 
 [如何用es5实现const](https://blog.csdn.net/Alive_tree/article/details/107839058){link=static}
 
-## 19. script 作用域
+## script 作用域
 
 script 作用域可以理解为全局的块级作用域，它和全局作用域同级。
 
