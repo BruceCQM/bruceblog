@@ -933,3 +933,34 @@ a = 20 // 报错
 [如何在 ES5 环境下实现一个const ？](https://juejin.cn/post/6844903848008482824){link=static}
 
 [如何用es5实现const](https://blog.csdn.net/Alive_tree/article/details/107839058){link=static}
+
+## 19. script 作用域
+
+script 作用域可以理解为全局的块级作用域，它和全局作用域同级。
+
+script 作用域和块级作用域的关系，就像全局作用域和函数作用域的关系。只有在全局中使用 let、const 定义变量，script 作用域才会被创建。
+
+```js
+debugger
+var a = 'window a'
+
+debugger
+const b = 'script b'
+debugger
+{
+    const c = 'Block c'
+    debugger
+}
+function Fun() {
+    const a = 'Fun a'
+    var b = 'Fun b'
+    debugger
+}
+Fun()
+```
+
+![const 声明变量还未赋值](./images/js/const-no-value.png)
+
+![const 声明变量已赋值](./images/js/const-has-value.png)
+
+![块级作用域](./images/js/block-scope.png)
