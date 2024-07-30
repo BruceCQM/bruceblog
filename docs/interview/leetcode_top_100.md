@@ -577,6 +577,42 @@ var sortList = function(head) {
 }
 ```
 
+### 23. [合并K个排序链表](https://leetcode.cn/problems/merge-k-sorted-lists/description/)
+
+标签：归并排序
+
+题目：
+
+![23.合并 K 个排序链表](./images/leetcode/question-23.png)
+
+代码：
+
+```js
+// 最简单的方法，遍历，用数组接收所有节点值，排序，再生成链表
+var mergeKLists = function(lists) {
+  var arr = [];
+  for (var i = 0;i < lists.length;i++) {
+    var head = lists[i];
+    while(head) {
+      arr.push(head.val);
+      head = head.next;
+    }
+  }
+
+  arr.sort((a, b) => a - b);
+  var dummy = new ListNode();
+  var pre = dummy;
+  for (var j = 0;j < arr.length;j++) {
+    var node = new ListNode(arr[j]);
+    pre.next = node;
+    pre = node;
+  }
+  return dummy.next;
+}
+```
+
+![时间和空间消耗](./images/leetcode/time-waste-23.png)
+
 ## 二叉树
 
 ### 94.[二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/description/)
