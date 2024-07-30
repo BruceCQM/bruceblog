@@ -450,3 +450,15 @@ Web 性能优化系列文章，包括 webpack 分包、图片优化、css 优化
 文章从新人的角度详细介绍了 postcss 是什么，很适合对 postcss 没有概念的人初次了解 postcss。
 
 [PostCSS 是个什么鬼东西？](https://segmentfault.com/a/1190000003909268){link=card}
+
+### 15、前端实现PDF预览常见方案
+
+小程序可以使用官方提供的 API：wx.openDocument(Object object)。
+
+H5 可以使用 iframe 第三方插件 pdf.js。
+
+[wx.openDocument(Object object)](https://developers.weixin.qq.com/miniprogram/dev/api/file/wx.openDocument.html){link=card}
+
+[前端实现 PDF 预览的常见方案](https://juejin.cn/post/7143088940953075743){link=card}
+
+[微信小程序使用webview打开pdf文档及显示网页内容](https://blog.csdn.net/blue__k/article/details/123401496){link=card}
