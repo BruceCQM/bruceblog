@@ -657,6 +657,37 @@ Function.prototype.myCall = function (context, ...rest) {
 
 ### apply
 
+apply 的实现和 call 类似，区别就在于 apply 传递的参数是数组，而 call 传递的参数是逗号分割的参数序列。
+
+```js
+// ES5 实现
+Function.prototype.myApply = function (context, args) {
+  var context = context ? Object(context) : window;
+
+  var key = 'fn' + new Date().getTime();
+  context[key] = this;
+
+  var callStr = 'context[key](' + args + ')';
+  var res = eval(callStr);
+
+  delete context[key];
+  return res;
+}
+
+// ES6 实现
+Function.prototype.myApply = function (context, args) {
+  const context = context ? Object(context) : window;
+
+  const key = Symbol();
+  context[key] = this;
+
+  const res = context[key](...args);
+
+  delete context[key];
+  return res;
+}
+```
+
 ### bind
 
 实现 bind 的几个关键点：
