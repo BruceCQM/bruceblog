@@ -564,6 +564,97 @@ a 运行时，调用 fn 函数，传入参数 10、20、30、40，fn 函数 this
 
 ### call
 
+主要思路：将原函数挂载到指定对象上，接着通过该对象调用原函数，从而将函数的 this 指向指定对象，最后将函数从对象属性上删除。
+
+难点：在 ES5 中，如何将 arguments 类数组的参数，转换为逗号分割的参数序列，给原函数传递参数。
+
+```js
+// ES5 实现
+Function.prototype.myCall = function (context) {
+  // 如果 context 为空，则挂载到全局对象上，Node 是 global
+  // Object(context) 是为了防止传入基本类型
+  var context = context ? Object(context) : window;
+
+  // 为了防止属性名冲突，拼接上当前时间戳
+  var key = 'fn' + new Date().getTime();
+  context[key] = this;
+
+  // 获取参数，从第二个开始，第一个是 context 
+  var args = [];
+  for (var i = 1;i < arguments.length;i++) {
+    args.push(arguments[i]);
+  }
+
+  // 假设 args 是 [1, 2, 3]
+  // 调用字符串：context[key](1,2,3)
+  // 这样也可以：'context.' + key + '(' + args + ')'，结果是：context.fn1623844656(1,2,3)
+  // 在这里，args 会自动调用数组的 toString 方法，转换为逗号分割的参数序列字符串 1,2,3
+  var callStr = 'context[key](' + args + ')';
+  // eval 函数将字符串当作 JS 代码执行
+  var res = eval(callStr);
+
+  // 删除临时添加的属性
+  delete context[key];
+  return res;
+}
+```
+
+无注释版本：
+
+```js
+// ES5 实现
+Function.prototype.myCall = function (context) {
+  var context = context ? Object(context) : window;
+
+  var key = 'fn' + new Date().getTime();
+  context[key] = this;
+
+  var args = [];
+  for (var i = 1;i < arguments.length;i++) {
+    args.push(arguments[i]);
+  }
+
+  var callStr = 'context[key](' + args + ')';
+  var res = eval(callStr);
+
+  delete context[key];
+  return res;
+}
+
+// 使用 Symbol
+Function.prototype.myCall = function (context) {
+  var context = context ? Object(context) : window;
+
+  // 每个 Symbol 都是独一无二的，不会冲突
+  var key = Symbol();
+  context[key] = this;
+
+  var args = [];
+  for (var i = 1;i < arguments.length;i++) {
+    args.push(arguments[i]);
+  }
+
+  var callStr = 'context[key](' + args + ')';
+  var res = eval(callStr);
+
+  delete context[key];
+  return res;
+}
+
+// ES6 实现
+Function.prototype.myCall = function (context, ...rest) {
+  const context = context ? Object(context) : window;
+
+  const key = Symbol();
+  context[key] = this;
+
+  const res = context[key](...rest);
+
+  delete context[key];
+  return res;
+}
+```
+
 ### apply
 
 ### bind
