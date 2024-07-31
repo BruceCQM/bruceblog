@@ -560,6 +560,58 @@ a 运行时，调用 fn 函数，传入参数 10、20、30、40，fn 函数 this
 
 [连续bind返回值的个人理解](https://juejin.cn/post/6947353368687804453){link=static}
 
+## 手写 call、apply、bind
+
+### call
+
+### apply
+
+### bind
+
+实现 bind 的几个关键点：
+
+- 改变 this 指向。
+
+- bind 返回一个函数。
+
+- 预设参数，即参数可以在 bind 中传递，也可以在 bind 返回的函数中传递。
+
+- 需要保留原函数的原型 prototype。
+
+- 需要判断 bind 返回的函数是否被 new 了。
+
+```js
+// ES5 的实现
+Function.prototype.myBind = function (context) {
+  // 保留原函数
+  var fn = this;
+  //  arg1 是 bind 函数里传递的参数，从第 2 个开始
+  var arg1 = Array.prototype.slice.call(arguments, 1);
+
+  // 返回的新函数
+  var result = function() {
+    //  arg2是调用新函数时传递的参数
+    var arg2 = Array.prototype.slice.call(arguments);
+    // 如果这个新函数被 new 了，直接取 this
+    return fn.apply(this instanceof result ? this : context, arg1.concat(arg2));
+  }
+
+  // 维护原型链
+  result.prototype = fn.prototype;
+  return result;
+}
+
+// ES6 的实现
+Function.prototype.myBind = function (context, ...arg1) {
+  const fn = this;
+  const result = function(...arg2) {
+    return fn.apply(this instanceof result ? this : context, [...arg1, ...arg2]);
+  }
+  result.prototype = fn.prototype;
+  return result;
+}
+```
+
 ## JS 的包装类型是什么？
 
 JS 中，基本类型是没有属性和方法的。为了便于操作基本类型，在调用基本类型的属性或方法时，JS 会隐式地将基本类型转换为对应的包装对象。
