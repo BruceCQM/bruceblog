@@ -39,6 +39,34 @@ var twoSum = function (nums, target) {
 }
 ```
 
+### 49.字母异位词分组
+
+标签：哈希表
+
+题目：
+
+![49.字母异位词分组](./images/leetcode/question-49.png)
+
+代码：
+
+```js
+var groupAnagrams = function (strs) {
+  var map = new Map();
+  for (var i = 0;i < strs.length;i++) {
+    var str = strs[i];
+    // 排序好的字符串作为key
+    var sortStr = Array.from(str).sort().join('');
+    if (map.has(sortStr)) {
+      map.get(sortStr).push(str);
+    } else {
+      map.set(sortStr, [str]);
+    }
+  }
+  // map.values()返回迭代器，需要转换为数组
+  return Array.from(map.values());
+}
+```
+
 ## 双指针
 
 ## 滑动窗口
