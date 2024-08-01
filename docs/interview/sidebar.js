@@ -4,6 +4,10 @@ export default [
     link: '/interview/javascript'
   },
   {
+    text: 'ES6 新特性',
+    link: '/interview/es6.md'
+  },
+  {
     text: 'Browser',
     link: '/interview/browser'
   },

@@ -1,0 +1,104 @@
+# ES6 新特性
+
+## 1. let 和 const
+
+## 2. 解构赋值
+
+对象、数组的结构。
+
+```js
+const { age } = obj;
+
+const [first, second, third] = [1,2,3];
+```
+
+## 3. 模板字符串
+
+模板字符串用反引号 ` 包围，支持字符串插值，直接嵌入表达式。
+
+
+```js
+const name = 'world';
+const str = `hello ${name}`;
+```
+
+高级用法：标签模板。
+
+[JS 标签模板（Tagged templates）什么时候使用？](https://www.zhangxinxu.com/wordpress/2021/12/js-tagged-templates/){link=static}
+
+## 4. 简化对象写法
+
+对象的属性名和属性值的变量名相同，可以简写。
+
+```js
+const name = 'world';
+const obj = {
+  name
+}
+```
+
+## 5. 函数参数
+
+- 允许给函数赋默认值，且可以直接在参数定义中使用解构赋值
+
+- 可以使用剩余参数替代 arguments
+
+```js
+function say({ name = 'Ben', age = 66}, ...rest) {
+  console.log(name, age, rest);
+}
+```
+
+## 6. 扩展运算符
+
+扩展运算符就是三个点：`...`，和剩余参数的三个点一样。
+
+常见用途：数组或对象合并、数据的浅拷贝、将类数组转化为数组。
+
+```js
+// 1. 数组合并
+const arr1 = [1,2,3];
+const arr2 = [4,5,6];
+const arr3 = [...arr1, ...arr2];
+
+// 2. 对象合并
+const obj1 = { a: 1, b: 2 };
+const obj2 = { c: 3, d: 4 };
+const obj3 = { ...obj1, ...obj2 };
+
+// 3. 数组拷贝
+const arr = [1,2,3];
+const arrCopy = [...arr];
+
+// 4. 对象拷贝
+const obj = { a: 1, b: 2 };
+const objCopy = { ...obj };
+
+// 5. 将类数组转化为数组
+const nodeList = document.querySelectorAll('div');
+const nodeArray = [...nodeList]; // 将 NodeList 转换为数组
+```
+
+## 7. 箭头函数
+
+- 静态this。
+
+- 不能使用 arguments，可以使用剩余参数。
+
+- 没有原型对象。
+
+- 不能作为构造函数。
+
+## 8. Symbol
+
+- Symbol 的值是唯一的，用来解决命名冲突的问题。
+
+- Symbol 值不能与其他类型的值进行运算，也不能和自己进行运算，如 +、-、*、/等运算，会报错。
+
+- Symbol 定义的对象属性不能用 for...in 遍历，但可以使用 Reflect.ownKeys来获取对象所有键名。
+
+- Symbol 定义可以传参数，`let s = Symbol(111)`，即使传进去的值相等，返回的值也是不相等的。使用 Symbol.for() 创建 Symbol 可以解决这个问题。
+
+- Symbol.for() 不会每次创建一个新的内存，如果标志不存在则创建一个，存在则直接引用以前的地址。
+
+## 9. 迭代器

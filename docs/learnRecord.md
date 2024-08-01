@@ -23,3 +23,4 @@
 - 2024-07-29：instanceof 判断类型的缺陷；var let const 区别；如何用 es5 实现 const；Q23-合并 K 个升序链表。
 - 2024-07-30：Q148、23 整理到 blog；script 作用域；块级作用域代码题目；new 做了什么；call、apply、bind；连续调用 bind。
 - 2024-07-31：手动实现 bind、call、apply 函数。
+- 2024-08-01：ES6 新特性总结。
