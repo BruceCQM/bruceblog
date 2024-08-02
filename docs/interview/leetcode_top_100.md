@@ -51,19 +51,59 @@ var twoSum = function (nums, target) {
 
 ```js
 var groupAnagrams = function (strs) {
-  var map = new Map();
-  for (var i = 0;i < strs.length;i++) {
-    var str = strs[i];
+  var map = new Map()
+  for (var i = 0; i < strs.length; i++) {
+    var str = strs[i]
     // 排序好的字符串作为key
-    var sortStr = Array.from(str).sort().join('');
+    var sortStr = Array.from(str).sort().join('')
     if (map.has(sortStr)) {
-      map.get(sortStr).push(str);
+      map.get(sortStr).push(str)
     } else {
-      map.set(sortStr, [str]);
+      map.set(sortStr, [str])
     }
   }
   // map.values()返回迭代器，需要转换为数组
-  return Array.from(map.values());
+  return Array.from(map.values())
+}
+```
+
+### 128. [最长连续序列](https://leetcode.cn/problems/longest-consecutive-sequence/description/)
+
+标签：哈希表、并查集
+
+题目：
+
+![128.最长连续序列](./images/leetcode/question-128.png)
+
+代码：
+
+```js
+var longestConsecutive = function (nums) {
+  if (nums.length === 0) {
+    return 0
+  }
+  // 先给数组排序
+  nums.sort((a, b) => a - b)
+  var count = 1
+  var max = 1
+  for (var i = 0; i < nums.length; i++) {
+    var cur = nums[i]
+    var next = nums[i + 1]
+    // 相同元素跳过
+    if (cur === next) {
+      continue
+    }
+    // 下一个元素比当前元素大1，则计数器加1
+    if (cur + 1 === next) {
+      count += 1
+    } else {
+      // 重置计数器
+      count = 1
+    }
+    // 更新最大值
+    max = Math.max(count, max)
+  }
+  return max
 }
 ```
 
@@ -264,42 +304,43 @@ var hasCycle = function (head) {
 ```js
 // 方法一：遍历链表，哈希表存储每个节点的地址，若哈希表里有重复的地址，则返回该地址，即为环的入口
 var detectCycle = function (head) {
-  var map = new Map();
-  var p = head;
-  while(p) {
+  var map = new Map()
+  var p = head
+  while (p) {
     if (map.has(p)) {
-      return p;
+      return p
     }
-    map.set(p);
-    p = p.next;
+    map.set(p)
+    p = p.next
   }
-  return p;
+  return p
 }
 
 // 方法二：快慢双指针。
 // 首先快慢指针找到第一次重合的节点，接着快指针从头开始，两个指针相遇的节点即为环的入口
-var detectCycle = function(head) {
-  var slow = head, fast = head;
-  while(true) {
+var detectCycle = function (head) {
+  var slow = head,
+    fast = head
+  while (true) {
     // 没有环，返回null
     if (!fast || !fast.next) {
-      return null;
+      return null
     }
-    slow = slow.next;
-    fast = fast.next.next;
+    slow = slow.next
+    fast = fast.next.next
     // 找到重合的第一个节点
     if (slow === fast) {
-      break;
+      break
     }
   }
 
   // 快指针返回头节点
-  fast = head;
-  while(slow !== fast) {
-    slow = slow.next;
-    fast = fast.next;
+  fast = head
+  while (slow !== fast) {
+    slow = slow.next
+    fast = fast.next
   }
-  return slow;
+  return slow
 }
 ```
 
@@ -417,26 +458,27 @@ var addTwoNumbers = function (l1, l2) {
 
 ```js
 // 思路：快指针先移动 n 步，接着两个指针共同移动，直到快指针到尾部，此时慢指针刚到到达被删除节点的前一个节点
-var removeNthFromEnd = function(head, n) {
+var removeNthFromEnd = function (head, n) {
   // 技巧：好用的 pre 指针
-  var pre = new ListNode();
-  pre.next = head;
+  var pre = new ListNode()
+  pre.next = head
   // 初始化快慢指针为 pre 指针
-  var slow = pre, fast = pre;
+  var slow = pre,
+    fast = pre
   // fast 先移动 n 步
-  while(n > 0) {
-    fast = fast.next;
-    n -= 1;
+  while (n > 0) {
+    fast = fast.next
+    n -= 1
   }
   // 快慢指针一起向前移动，直到快指针到末尾
-  while(fast.next) {
-    slow = slow.next;
-    fast = fast.next;
+  while (fast.next) {
+    slow = slow.next
+    fast = fast.next
   }
   // 删除节点
-  slow.next = slow.next.next;
+  slow.next = slow.next.next
   // 返回 pre.next，head 可能被删除
-  return pre.next;
+  return pre.next
 }
 ```
 
@@ -455,32 +497,32 @@ var removeNthFromEnd = function(head, n) {
 var swapPairs = function (head) {
   // 终止条件：当前无节点或只有一个节点，无法交换
   if (!head || !head.next) {
-    return head;
+    return head
   }
 
   // 递归调用单元：head 连接后面完成交换的子链表，next 连接 head，完成交换
-  var temp = head.next;
-  head.next = swapPairs(temp.next);
-  temp.next = head;
+  var temp = head.next
+  head.next = swapPairs(temp.next)
+  temp.next = head
 
   // 返回值：完成交换的子链表
-  return temp;
+  return temp
 }
 
 // 方法二：迭代
 var swapPairs = function (head) {
-  var pre = new ListNode();
-  pre.next = head;
-  var p = pre;
+  var pre = new ListNode()
+  pre.next = head
+  var p = pre
   while (p.next && p.next.next) {
-    var start = p.next;
-    var end = p.next.next;
-    start.next = end.next;
-    end.next = start;
-    p.next = end;
-    p = start;
+    var start = p.next
+    var end = p.next.next
+    start.next = end.next
+    end.next = start
+    p.next = end
+    p = start
   }
-  return pre.next;
+  return pre.next
 }
 ```
 
@@ -497,46 +539,47 @@ var swapPairs = function (head) {
 ```js
 // 反转链表
 var reverse = function (head) {
-  var pre = null, cur = head;
-  while(cur) {
-    var temp = cur.next;
-    cur.next = pre;
-    pre = cur;
-    cur = temp;
+  var pre = null,
+    cur = head
+  while (cur) {
+    var temp = cur.next
+    cur.next = pre
+    pre = cur
+    cur = temp
   }
-  return pre;
+  return pre
 }
 
 var reverseKGroup = function (head, k) {
-  var dummy = new ListNode();
-  dummy.next = head;
-  var p = dummy;
-  var tail = dummy;
+  var dummy = new ListNode()
+  dummy.next = head
+  var p = dummy
+  var tail = dummy
 
-  while(p.next) {
+  while (p.next) {
     // 找到要反转的K链表的头尾节点
-    var start = p.next;
-    for (var i = 0;i < k;i++) {
-      tail = tail.next;
+    var start = p.next
+    for (var i = 0; i < k; i++) {
+      tail = tail.next
       // 如果不够k个节点，则直接返回
       if (!tail) {
-        return dummy.next;
+        return dummy.next
       }
     }
-    
+
     // 记录下尾节点下一个节点
-    var next = tail.next;
+    var next = tail.next
     // 先断开链表，否则后面一整条链表都会进行反转
-    tail.next = null;
-    p.next = reverse(start);
+    tail.next = null
+    p.next = reverse(start)
     // 反转之后，start就变成尾节点
-    start.next = next;
+    start.next = next
 
     // 进行下一组的初始化
-    p = start;
-    tail = p;
+    p = start
+    tail = p
   }
-  return dummy.next;
+  return dummy.next
 }
 ```
 
@@ -553,25 +596,25 @@ var reverseKGroup = function (head, k) {
 ```js
 var copyRandomList = function (head) {
   if (!head) {
-    return null;
+    return null
   }
-  var map = new Map();
-  var cur = head;
+  var map = new Map()
+  var cur = head
   // 遍历链表，建立原链表节点和新链表节点的对应关系
-  while(cur) {
-    map.set(cur, new Node(cur.val));
-    cur = cur.next;
+  while (cur) {
+    map.set(cur, new Node(cur.val))
+    cur = cur.next
   }
 
-  cur = head;
+  cur = head
   // 遍历链表，构建新链表节点的next指针和random指针
-  while(cur) {
+  while (cur) {
     // 链表尾节点的 next 必须指向 null，否则会报错
-    map.get(cur).next = map.get(cur.next) || null;
-    map.get(cur).random = map.get(cur.random);
-    cur = cur.next; 
+    map.get(cur).next = map.get(cur.next) || null
+    map.get(cur).random = map.get(cur.random)
+    cur = cur.next
   }
-  return map.get(head);
+  return map.get(head)
 }
 ```
 
@@ -587,25 +630,25 @@ var copyRandomList = function (head) {
 
 ```js
 // 最简单的方法，用数组接收，排序，再生成链表
-var sortList = function(head) {
-  var arr = [];
-  while(head) {
-    arr.push(head.val);
-    head = head.next;
+var sortList = function (head) {
+  var arr = []
+  while (head) {
+    arr.push(head.val)
+    head = head.next
   }
-  arr.sort((a, b) => a - b);
-  var dummy = new ListNode();
-  var pre = dummy;
-  for (var i = 0;i < arr.length;i++) {
-    var node = new ListNode(arr[i]);
-    pre.next = node;
-    pre = node;
+  arr.sort((a, b) => a - b)
+  var dummy = new ListNode()
+  var pre = dummy
+  for (var i = 0; i < arr.length; i++) {
+    var node = new ListNode(arr[i])
+    pre.next = node
+    pre = node
   }
-  return dummy.next;
+  return dummy.next
 }
 ```
 
-### 23. [合并K个排序链表](https://leetcode.cn/problems/merge-k-sorted-lists/description/)
+### 23. [合并 K 个排序链表](https://leetcode.cn/problems/merge-k-sorted-lists/description/)
 
 标签：归并排序
 
@@ -617,25 +660,25 @@ var sortList = function(head) {
 
 ```js
 // 最简单的方法，遍历，用数组接收所有节点值，排序，再生成链表
-var mergeKLists = function(lists) {
-  var arr = [];
-  for (var i = 0;i < lists.length;i++) {
-    var head = lists[i];
-    while(head) {
-      arr.push(head.val);
-      head = head.next;
+var mergeKLists = function (lists) {
+  var arr = []
+  for (var i = 0; i < lists.length; i++) {
+    var head = lists[i]
+    while (head) {
+      arr.push(head.val)
+      head = head.next
     }
   }
 
-  arr.sort((a, b) => a - b);
-  var dummy = new ListNode();
-  var pre = dummy;
-  for (var j = 0;j < arr.length;j++) {
-    var node = new ListNode(arr[j]);
-    pre.next = node;
-    pre = node;
+  arr.sort((a, b) => a - b)
+  var dummy = new ListNode()
+  var pre = dummy
+  for (var j = 0; j < arr.length; j++) {
+    var node = new ListNode(arr[j])
+    pre.next = node
+    pre = node
   }
-  return dummy.next;
+  return dummy.next
 }
 ```
 
@@ -655,18 +698,18 @@ var mergeKLists = function(lists) {
 
 ```js
 var inorderTraversal = function (root) {
-  var res = [];
-  inorder(root, res);
-  return res;
+  var res = []
+  inorder(root, res)
+  return res
 }
 
 var inorder = function (root, res) {
   if (!root) {
-    return;
+    return
   }
-  inorder(root.left, res);
-  res.push(root.val);
-  inorder(root.right, res);
+  inorder(root.left, res)
+  res.push(root.val)
+  inorder(root.right, res)
 }
 ```
 
@@ -688,24 +731,25 @@ var inorder = function (root, res) {
 
 ```js
 var searchInsert = function (nums, target) {
-  var len = nums.length;
+  var len = nums.length
   if (nums[len - 1] < target) {
-    return len;
+    return len
   }
-  var left = 0, right = len - 1;
+  var left = 0,
+    right = len - 1
   while (left < right) {
     // 除以 2 向下取整
-    var mid = (left + right) >> 1;
+    var mid = (left + right) >> 1
     if (nums[mid] === target) {
-      return mid;
+      return mid
     } else if (nums[mid] < target) {
       // 注意 left 要加 1，不然向下取整可能会导致死循环
-      left = mid + 1;
+      left = mid + 1
     } else {
-      right = mid;
+      right = mid
     }
   }
-  return left;
+  return left
 }
 ```
 
