@@ -137,3 +137,25 @@ console.log(iterator.next());
 任何数据结构只要部署 iterator 接口，即可完成遍历操作。
 
 ES6 还引入了生成器对象，让创建迭代器对象的过程变得更简单。
+
+## 10. 生成器
+
+```js
+function* gen(x){
+  try {
+    var y = yield x + 2;
+  } catch (e){ 
+    console.log(e);
+  }
+  return y;
+}
+
+var g = gen(1);
+g.next();
+g.throw（'出错了'）;
+// 出错了
+```
+
+[Generator 函数的含义与用法](https://www.ruanyifeng.com/blog/2015/04/generator.html){link=static}
+
+[Generator 函数的语法](https://es6.ruanyifeng.com/#docs/generator){link=static}
