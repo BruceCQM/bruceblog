@@ -1283,3 +1283,93 @@ Fun()
 ![const 声明变量已赋值](./images/js/const-has-value.png)
 
 ![块级作用域](./images/js/block-scope.png)
+
+## 迭代器
+
+### 迭代器是什么
+
+迭代器（Iterator）是一种设计模式，它使你能够遍历数据集合（例如数组，字符串，映射，集合等）的元素。在JavaScript中，迭代器是一个对象，它必须实现一个next()方法。每次调用next()方法，迭代器都会返回一个包含两个属性的对象：value和done。value属性表示当前元素的值，done属性是一个布尔值，如果迭代完成则为true，否则为false。
+
+迭代器的主要作用是提供一种统一的遍历数据结构的方法，尤其是对于复杂的数据结构（如图、树等），迭代器模式可以将遍历逻辑与数据结构本身分离，使得在不改变数据结构的前提下，可以方便地对数据进行遍历。
+
+### 迭代器使用
+
+通过 `Symbol.iterator` 获取迭代器。
+
+```js
+const arr = [1, 2, 3];
+const iterator = arr[Symbol.iterator]();
+
+console.log(iterator.next()); // { value: 1, done: false }
+console.log(iterator.next()); // { value: 2, done: false }
+console.log(iterator.next()); // { value: 3, done: false }
+console.log(iterator.next()); // { value: undefined, done: true }
+```
+
+### 实现迭代器
+
+```js
+function createIterator(items) {
+  let index = 0;
+  return {
+    next: function () {
+      const value = items[index++];
+      const done = index >= items.length;
+      return { value, done };
+    },
+  };
+}
+
+const iterator = createIterator([1, 2, 3]);
+
+console.log(iterator.next());
+console.log(iterator.next());
+console.log(iterator.next());
+console.log(iterator.next());
+```
+
+:::danger 注意事项
+`for...of` 循环会调用迭代器，如果循环的对象没事实现迭代器，则会报错。
+
+普通对象没有实现迭代器，所以 `for...of` 循环会报错。
+
+```js
+const obj = { age: 11 };
+for (const item of obj) {
+  console.log(item);
+} // Uncaught TypeError: obj is not iterable
+```
+
+给普通对象定义 `Symbol.iterator` 方法，添加迭代器。
+
+```js
+const obj = { age: 11 };
+
+// 为对象添加一个 Symbol.iterator 方法
+obj[Symbol.iterator] = function() {
+  const keys = Object.keys(this);
+  const values = Object.values(this);
+
+  let index = 0;
+
+  return {
+    next: function() {
+      // this指向外层的这个对象, { next: f() }
+      console.log(this);
+      if (index < keys.length) {
+        const key = keys[index];
+        const value = values[index];
+        index += 1;
+        return { value: `key: ${key}, value: ${value}`, done: false };
+      } else {
+        return { done: true };
+      }
+    }
+  };
+};
+
+for (const item of obj) {
+  console.log(item);
+};
+```
+:::

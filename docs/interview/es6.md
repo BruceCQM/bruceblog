@@ -101,4 +101,39 @@ const nodeArray = [...nodeList]; // 将 NodeList 转换为数组
 
 - Symbol.for() 不会每次创建一个新的内存，如果标志不存在则创建一个，存在则直接引用以前的地址。
 
+应用：给对象添加属性和方法，由于 Symbol 值具有唯一性，因此可以安全地把属性和方法加入对象中。
+
 ## 9. 迭代器
+
+- 创建一个指针对象，指向当前数据结构的起始位置。
+
+- 第一次调用对象的 next 方法，指针自动指向数据结构的第一个成员。
+
+- 接下来不断调用 next 方法，指针一直往后移动，直到指向最后一个成员。
+
+- 每次调用 next 方法，返回一个包含 value 和 done 属性的对象，done 属性表示遍历是否结束。
+
+```js
+// 实现一个迭代器
+function createIterator(items) {
+  let index = 0;
+  return {
+    next: function () {
+      const value = items[index++];
+      const done = index >= items.length;
+      return { value, done };
+    },
+  };
+}
+
+const iterator = createIterator([1, 2, 3]);
+
+console.log(iterator.next());
+console.log(iterator.next());
+console.log(iterator.next());
+console.log(iterator.next());
+```
+
+任何数据结构只要部署 iterator 接口，即可完成遍历操作。
+
+ES6 还引入了生成器对象，让创建迭代器对象的过程变得更简单。
