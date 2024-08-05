@@ -1373,3 +1373,108 @@ for (const item of obj) {
 };
 ```
 :::
+
+## DOM 事件流
+
+事件流描述的是页面接收事件的顺序，它包含三个阶段：事件捕获阶段、目标阶段、事件冒泡阶段。
+
+事件捕获阶段是指事件从 DOM 的最顶层节点开始，逐级向下传递到具体节点的过程。事件首先发生在 document 上，然后依次传递给 html、body 及其子节点，最后到达目标节点。
+
+事件冒泡阶段相反，是指事件从目标节点开始，逐级向上传递到最顶层节点的过程。事件到达事件目标后不会停止，会逐层向上冒泡，直到 document 对象，和事件捕获阶段相反。
+
+![事件流](./images/js/event_stream.jpg)
+
+事件委托：利用事件冒泡的特性，将里层的事件委托给外层，根据 event 对象的属性进行事件委托，改善性能。
+
+当子节点数量过多的时候，不单独为每个子节点设置事件处理程序，而是把事件处理程序绑定在它们共同的父节点上，利用事件冒泡把事件传递给父节点，由父节点来处理事件。父节点可以通过 event.target 属性获取到事件触发的元素。
+
+通过使用事件委托：
+
+- 我们只操作了一次 DOM 节点，减少了与 DOM 节点的交互次数，提高了性能。
+
+- 另外，使用事件委托也减少了函数的绑定数量，每个函数都是对象，都会占用一定的内存空间，因此可以减少内存占用。
+
+```js
+// 每个子节点的效果相同
+ul.onclick = function(event) {
+  var e = event || window.event;
+  var target = e.target || e.srcElement;
+  if (target.nodeName.toLowerCase() === 'li') {
+    alert(target.innerHTML);
+  }
+}
+
+// 每个子节点效果不同
+box.onclick = function(event) {
+  var e = event || window.event;
+  var target = e.target || e.srcElement;
+  if (target.nodeName.toLowerCase() === 'input') {
+    switch(target.id) {
+      case 'add':
+        alert('add');
+        break;
+      case 'remove':
+        alert('remove');
+        break;
+      case 'move': 
+        alert('move');
+        break;
+      default:
+        break;
+    }
+  }
+}
+```
+
+`adddEventListener(event.type, handle, boolean)`：添加事件监听器，第三个参数默认为 false，表示在冒泡阶段触发事件。设置为 true 则表示在捕获阶段触发事件。
+
+`event.stopPropagation()`：阻止事件进一步传播，包括捕获、冒泡。根据事件监听器触发的阶段，决定什么时候阻止事件继续传播。
+
+例如，adddEventListener 设置了在捕获阶段触发事件，则 stopPropagation 在捕获阶段就会阻止事件进一步传播，后续的目标阶段和冒泡阶段都不会触发了。
+
+[关于js中事件的event.stopPropagation()方法的理解与举例说明](https://blog.csdn.net/zhizhan888/article/details/122094292){link=static}
+
+```html
+<div class="div1">
+  div1
+  <div class="div2">
+    div2
+    <div class="div3">
+      div3
+      <div class="div4">div4</div>
+    </div>
+  </div>
+</div>
+```
+
+![事件阻断](./images/js/event_bubble.png)
+
+```js
+var div1 = document.querySelector(".div1");
+var div2 = document.querySelector(".div2");
+var div3 = document.querySelector(".div3");
+var div4 = document.querySelector(".div4");
+
+div1.addEventListener("click", clickhandler1, true);
+div2.addEventListener("click", clickhandler2);
+div3.addEventListener("click", clickhandler3, true);
+div4.addEventListener("click", clickhandler4);
+
+function clickhandler1(e) {
+  console.log("div1");
+}
+function clickhandler2(e) {
+  console.log("div2");
+}
+function clickhandler3(e) {
+  console.log("div3");
+  e.stopPropagation();
+}
+function clickhandler4(e) {
+  console.log("div4");
+}
+
+// 点击div4，输出结果：div1 div3
+```
+
+`event.cancelBubble = true`，阻止冒泡。
