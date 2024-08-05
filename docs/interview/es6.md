@@ -197,3 +197,38 @@ const union = new Set([...arr1, ...arr2]);
 ```
 
 ## 13. Map
+
+ES6 提供了 Map 数据结构，它类似于对象，也是键值对的集合，但是建的范围不限于字符串，各种类型的值（包括对象）都可以当作键。这是和普通对象不同的地方。
+
+Map 也实现了 iterator 接口，因此可以使用 for...of 遍历。
+
+常见 API：
+
+- size：返回 Map 的键值对个数。
+
+- set()：设置键值对，返回当前 Map。
+
+- get()：根据键获取值，如果找不到键，返回 undefined。
+
+- delete()：删除键值对，返回一个布尔值。
+
+- has()：判断 Map 中是否有该键，有返回 true，否则返回 false。
+
+- clear()：清空 Map 中的所有键值对。
+
+- values()： 返回一个迭代器对象，包含 Map 中所有键值对的值。
+
+- keys()：返回一个迭代器对象，包含 Map 中所有键值对的键。
+
+```js
+const map = new Map();
+map.set(1,11);
+map.set(2,22);
+map.set(3,33);
+
+const values = map.values();
+values.next(); // {value: 11, done: false}
+values.next(); // {value: 22, done: false}
+values.next(); // {value: 33, done: false}
+values.next(); // {value: undefined, done: true}
+```
