@@ -159,3 +159,41 @@ g.throw（'出错了'）;
 [Generator 函数的含义与用法](https://www.ruanyifeng.com/blog/2015/04/generator.html){link=static}
 
 [Generator 函数的语法](https://es6.ruanyifeng.com/#docs/generator){link=static}
+
+## 11.Promise
+
+## 12. Set
+
+ES6 提供了新的数据结构 Set（集合），本质上是一个对象。它类似于数组，但成员的值都是唯一的，Set 实现了 iterator 接口，因此可以使用 for...of 遍历。
+
+常用 API：
+
+- size：返回集合中元素的个数。
+
+- add()：增加一个新元素，返回当前集合。
+
+- delete()：删除一个元素，返回一个布尔值。
+
+- has()：判断元素是否存在于集合中，返回一个布尔值。
+
+应用：数组去重、求并集、搭配 filter 求交集。
+
+```js
+// 数组去重
+const arr = [1,1,2,2,3];
+const uniqueArr = [...new Set(arr)];
+
+// 搭配 filter 求交集
+const arr1 = [1,2,3];
+const arr2 = [2,3,4];
+const set2 = new Set(arr2);
+// set的has方法时间复杂度是O(1)，如果直接用数组的includes方法，时间复杂度是O(n)，效率会有点优化。
+const intersection = new Set(arr1.filter(item => set2.has(item)));
+
+// 求并集
+const arr1 = [1,2,3];
+const arr2 = [2,3,4];
+const union = new Set([...arr1, ...arr2]);
+```
+
+## 13. Map
