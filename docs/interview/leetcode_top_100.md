@@ -109,6 +109,40 @@ var longestConsecutive = function (nums) {
 
 ## 双指针
 
+### 11.[盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/description/)
+
+标签：双指针
+
+题目：
+
+![11.盛最多水的容器](./images/leetcode/question-11.png)
+
+思路：
+
+初始化双指针分别在数组两端，每次循环数值小的一边向内移动一格，并更新最大面积，直到两个指针相遇。
+
+代码：
+
+```js
+var maxArea = function (height) {
+  var head = 0, tail = height.length - 1;
+  var max = 0;
+  while(head !== tail) {
+    // 高
+    var h = Math.min(height[head], height[tail]);
+    // 长
+    var long = tail - head;
+    // 更新最大面积
+    max = Math.max(max, h * long);
+
+    // 数值小的一边向内移动一格
+    if (height[head] <= height[tail]) head += 1;
+    else tail -= 1;
+  }
+  return max;
+}
+```
+
 ## 滑动窗口
 
 ## 子串
