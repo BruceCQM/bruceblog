@@ -109,6 +109,34 @@ var longestConsecutive = function (nums) {
 
 ## 双指针
 
+### 283.[移动零](https://leetcode.cn/problems/move-zeroes/description/)
+
+标签：双指针
+
+题目：
+
+![283.移动零](./images/leetcode/question-283.png)
+
+代码：
+
+```js
+// 如果数组没有0，那么快慢指针始终指向同一个位置，每个位置自己和自己交换
+// 如果数组有0，快指针先走一步，此时慢指针对应的就是0，所以要交换
+var moveZeroes = function (nums) {
+  if (nums.length === 0) return;
+  var slow = 0, fast = 0;
+  while (fast < nums.length) {
+    if (nums[fast] !== 0) {
+      var tmp = nums[slow];
+      nums[slow] = nums[fast];
+      nums[fast] = tmp;
+      slow += 1;
+    }
+    fast += 1;
+  }
+}
+```
+
 ### 11.[盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/description/)
 
 标签：双指针
@@ -125,21 +153,22 @@ var longestConsecutive = function (nums) {
 
 ```js
 var maxArea = function (height) {
-  var head = 0, tail = height.length - 1;
-  var max = 0;
-  while(head !== tail) {
+  var head = 0,
+    tail = height.length - 1
+  var max = 0
+  while (head !== tail) {
     // 高
-    var h = Math.min(height[head], height[tail]);
+    var h = Math.min(height[head], height[tail])
     // 长
-    var long = tail - head;
+    var long = tail - head
     // 更新最大面积
-    max = Math.max(max, h * long);
+    max = Math.max(max, h * long)
 
     // 数值小的一边向内移动一格
-    if (height[head] <= height[tail]) head += 1;
-    else tail -= 1;
+    if (height[head] <= height[tail]) head += 1
+    else tail -= 1
   }
-  return max;
+  return max
 }
 ```
 
