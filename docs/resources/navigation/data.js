@@ -38,6 +38,12 @@ export default [
         desc: '享受编程和技术所带来的快乐 – Coding Your Ambition',
         link: 'https://coolshell.cn/'
       },
+      {
+        icon: 'https://www.hello-algo.com/assets/images/favicon.png',
+        title: 'Hello 算法',
+        desc: 'krahets 算法著作，动画图解、一键运行的数据结构与算法教程',
+        link: 'https://www.hello-algo.com/'
+      },
     ]
   },
   {
