@@ -123,7 +123,6 @@ var longestConsecutive = function (nums) {
 // 如果数组没有0，那么快慢指针始终指向同一个位置，每个位置自己和自己交换
 // 如果数组有0，快指针先走一步，此时慢指针对应的就是0，所以要交换
 var moveZeroes = function (nums) {
-  if (nums.length === 0) return;
   var slow = 0, fast = 0;
   while (fast < nums.length) {
     if (nums[fast] !== 0) {
@@ -153,22 +152,59 @@ var moveZeroes = function (nums) {
 
 ```js
 var maxArea = function (height) {
-  var head = 0,
-    tail = height.length - 1
-  var max = 0
+  var head = 0, tail = height.length - 1;
+  var max = 0;
   while (head !== tail) {
-    // 高
-    var h = Math.min(height[head], height[tail])
-    // 长
-    var long = tail - head
-    // 更新最大面积
-    max = Math.max(max, h * long)
+    var h = Math.min(height[head], height[tail]);
+    var long = tail - head;
+    max = Math.max(max, h * long);
 
-    // 数值小的一边向内移动一格
-    if (height[head] <= height[tail]) head += 1
-    else tail -= 1
+    if (height[head] < height[tail]) head += 1;
+    else tail -= 1;
   }
-  return max
+  return max;
+}
+```
+
+### 15. [三数之和](https://leetcode.cn/problems/3sum/description/)
+
+标签：双指针、排序
+
+题目：
+
+![15.三数之和](./images/leetcode/question-15.png)
+
+代码：
+
+```js
+var threeSum = function (nums) {
+  // 先按升序排序
+  nums.sort((a, b) => a - b);
+  var res = [];
+  for (var k = 0;k < nums.length - 2;k++) {
+    // 如果最小的元素都大于0，直接break，后面的都大于0
+    if (nums[k] > 0) break;
+    // 跳过相同的元素组合
+    if (k > 0 && nums[k] === nums[k - 1]) continue;
+    var i = k + 1, j = nums.length - 1;
+    while (i < j) {
+      var sum = nums[k] + nums[i] + nums[j];
+      if (sum === 0) {
+        // 记录组合
+        res.push([nums[k], nums[i], nums[j]]);
+        // i和j向内移动，并跳过重复的值，防止记录了重复的结果
+        while (i < j && nums[i] === nums[++i]);
+        while (i < j && nums[j] === nums[--j]);
+      } else if (sum < 0) {
+        // sum小于0，说明偏小，需要i向内移动，来增大sum
+        while (i < j && nums[i] === nums[++i]);
+      } else {
+        // sum大于0，说明偏大，需要j向内移动，来减小sum
+        while (i < j && nums[j] === nums[--j]);
+      }
+    }
+  }
+  return res;
 }
 ```
 
