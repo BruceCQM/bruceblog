@@ -208,6 +208,62 @@ var threeSum = function (nums) {
 }
 ```
 
+### 42.[接雨水](https://leetcode.cn/problems/trapping-rain-water/description/)
+
+标签：双指针、数组
+
+题目：
+
+![42.接雨水](./images/leetcode/question-42.png)
+
+代码：
+
+```js
+// 方法一：用数组存储前缀和后缀最大值
+var trap = function (height) {
+  var len = height.length;
+  // 计算出前缀最大值，用数组存储
+  var preMax = new Array(len);
+  preMax[0] = height[0];
+  for (var i = 1;i < len;i++) {
+    preMax[i] = Math.max(preMax[i - 1], height[i]);
+  }
+
+  // 计算后缀最大值，用数组存储
+  var sufMax = new Array(len);
+  sufMax[len - 1] = height[len - 1];
+  for (var j = len - 2;j > -1;j--) {
+    sufMax[j] = Math.max(sufMax[j + 1], height[j]);
+  }
+
+  // 每个位置能接的水的数量，为当前位置的前缀和后缀最大值的较小者，减去当前位置的值
+  var res = 0;
+  for (var k = 0;k < len;k++) {
+    res += Math.min(preMax[k], sufMax[k]) - height[k];
+  }
+  return res;
+}
+
+// 方法二：用双指针优化
+var trap = function (height) {
+  var left = 0, right = height.length - 1;
+  var leftMax = 0, rightMax = 0;
+  var res = 0;
+  while (left < right) {
+    leftMax = Math.max(leftMax, height[left]);
+    rightMax = Math.max(rightMax, height[right]);
+    if (leftMax < rightMax) {
+      res += leftMax - height[left];
+      left += 1;
+    } else {
+      res += rightMax - height[right];
+      right -= 1;
+    }
+  }
+  return res;
+}
+```
+
 ## 滑动窗口
 
 ## 子串
