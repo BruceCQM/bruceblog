@@ -1488,3 +1488,158 @@ JavaScript 是单线程的，在执行代码时只能按顺序执行。为了解
 基于这种异步的规则，JavaScript 有一套自己的执行代码规则，来保证代码能够高效无阻塞地运行，这种规则就是事件循环。
 
 Node 和浏览器都给 js 提供了运行的环境，但是两者的运行机制稍有差异。
+
+## 属性遍历
+
+### `for...in`
+
+循环遍历对象**自身**和**继承**的**可枚举属性**（**不含Symbol属性**）。
+
+可遍历的属性和 `Object.keys()` 返回的一样。
+
+### `Object.keys()`
+
+返回一个数组，包含**自身**的所有**可枚举属性**（**不含Symbol属性**）。
+
+```js
+const sym = Symbol();
+const obj = {
+  age: 666,
+  name: 'Ben'
+};
+obj[sym] = 'symbol';
+
+Object.defineProperty(obj, 'hobby', {
+  value: 'football',
+  enumerable: false,
+});
+
+// [ 'age', 'name' ]
+console.log(Object.keys(obj));
+```
+
+### `Object.getOwnPropertyNames(obj)`
+
+返回一个数组，包含对象**自身**的所有属性（不含Symbol属性和原型链属性，但是包括不可枚举属性）。
+
+```js
+const sym = Symbol();
+const obj = {
+  age: 666,
+  name: 'Ben'
+};
+obj[sym] = 'symbol';
+
+Object.defineProperty(obj, 'hobby', {
+  value: 'football',
+  enumerable: false,
+});
+
+// [ 'age', 'name', 'hobby' ]
+console.log(Object.getOwnPropertyNames(obj));
+```
+
+有趣的 Object 不可枚举属性：
+
+```js
+Object.keys(Object); // []
+
+Object.getOwnPropertyNames(Object);
+// ['length', 'name', 'prototype', 'assign', 'getOwnPropertyDescriptor', 'getOwnPropertyDescriptors', 'getOwnPropertyNames', 'getOwnPropertySymbols', 'hasOwn', 'is', 'preventExtensions', 'seal', 'create', 'defineProperties', 'defineProperty', 'freeze', 'getPrototypeOf', 'setPrototypeOf', 'isExtensible', 'isFrozen', 'isSealed', 'keys', 'entries', 'fromEntries', 'values', 'groupBy']
+```
+
+### `Reflect.ownKeys(obj)`
+
+返回一个数组，包含对象**自身**的所有属性（包括Symbol属性以及不可枚举属性）。
+
+```js
+const sym = Symbol();
+const obj = {
+  age: 666,
+  name: 'Ben'
+};
+obj[sym] = 'symbol';
+
+Object.defineProperty(obj, 'hobby', {
+  value: 'football',
+  enumerable: false,
+});
+
+// [ 'age', 'name', 'hobby', Symbol() ]
+console.log(Reflect.ownKeys(obj));
+```
+
+### `Object.prototype.hasOwnProperty()`
+
+判断对象自身属性中是否具有指定的属性（包括不可枚举属性，不包含从原型链上继承的属性、不包括Symbol属性）。
+
+存在返回 true，否则返回 false。
+
+```js
+const sym = Symbol();
+const obj = {
+  age: 666,
+  name: 'Ben'
+};
+obj[sym] = 'symbol';
+Object.defineProperty(obj, 'hobby', {
+  value: 'football',
+  enumerable: false,
+});
+
+console.log(obj.hasOwnProperty('sym')); // false
+console.log(obj.hasOwnProperty('age')); // true
+console.log(obj.hasOwnProperty('name')); // true
+console.log(obj.hasOwnProperty('hobby')); // true
+```
+
+### `Object.defineProperty(obj, prop, descriptor)`
+
+在一个对象上定义一个新的属性，或者修改已有属性的描述符，并返回该对象。
+
+
+```js
+const obj = {};
+Object.defineProperty(obj, 'hobby', {
+  value: 'football',
+  enumerable: false,
+});
+```
+
+### `Object.prototype.propertyIsEnumerable()`
+
+判断指定属性是否可枚举。
+
+```js
+const obj = {};
+
+Object.defineProperty(obj, 'hobby', {
+  value: 'football',
+  enumerable: false,
+});
+
+console.log(obj.propertyIsEnumerable('hobby')); // false
+```
+
+### `Object.getOwnPropertyDescriptor(obj, prop)`
+
+返回指定对象上指定自有属性的属性描述符，不会找原型链上的属性。
+
+```js
+const obj = {};
+
+Object.defineProperty(obj, 'hobby', {
+  value: 'football',
+  enumerable: false,
+});
+
+/**
+{
+  value: 'football',
+  writable: false,
+  enumerable: false,
+  configurable: false
+}
+*/
+console.log(Object.getOwnPropertyDescriptor(obj, 'hobby'));
+```
