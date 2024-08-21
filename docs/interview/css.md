@@ -401,3 +401,79 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
 - js 动画：js 动画可能需要更多的代码和维护工作，特别是对于复杂的动画效果，它们通常需要手动处理动画的每一帧。
 
 - css 动画：css 动画通常更容易维护，因为它们将动画效果与样式分开，可以在样式表中轻松修改动画的属性和参数。
+
+## 8、三列布局
+
+### 圣杯布局
+
+主要思路：浮动 + margin-left + 相对定位。
+
+1. 写一个大容器 container，里面包含 middle、left、right 三个 div。middle 放在前面。
+
+2. container 下面的三个容器浮动，且写上高度 200px。
+
+3. 给 middle 宽度写上 100%，此时 left 和 right 被挤到第二行，给 left、right 设置宽度200px。
+
+4. 给 left 的 margin-left 设置为 -100%，此时 left 回到第一行左边，right 回到第二行左边。
+
+5. 给 right 的 margin-right 设置 -200px，此时 right 回到第一行右边。
+
+6. 此时，left 和 right 会压住 middle。
+
+7. 给 container 设置 `padding: 0 200px`，给 left 和 right 留下空间。
+
+8. 给 left 和 right 设置相对定位后，left 模块 的 left 值设置为 -200px，回到为其留下的空间，同理 right 模块设置 right 值设置为 -200px。
+
+9. 此时 container 因为子元素浮动，高度会为 0，为它增加 `overflow: hidden`，使其变为 BFC，显示正常高度。
+
+10. 此时如果页面缩的很小会出现显示混乱的问题，可以给 container 加上 min-width 属性，或者使用双飞燕布局来解决。
+
+:::tip 为什么在 container 加 padding，而不是在 middle 加？
+因为 middle 的宽度设置为 100%，设置了 padding 也是占满全屏宽度，给大容器设置，才能够给 left 和 right 留下位置。
+:::
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      overflow: hidden;
+      padding: 0 200px;
+      min-width: 400px;
+    }
+    .middle {
+      background-color: green;
+      width: 100%;
+    }
+    .left {
+      background-color: red;
+      width: 200px;
+      margin-left: -100%;
+      left: -200px;
+    }
+    .right {
+      background-color: blue;
+      width: 200px;
+      margin-right: -200px;
+      /* right: -200px; */
+    }
+    .container > div {
+      float: left;
+      height: 200px;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="middle">middle box</div>
+    <div class="left">left box</div>
+    <div class="right">right box</div>
+  </div>
+</body>
+</html>
+```

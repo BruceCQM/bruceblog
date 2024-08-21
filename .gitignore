@@ -5,4 +5,5 @@ cache
 package-lock.json
 package.json
 test.js
+test.html
 .DS_Store
