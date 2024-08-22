@@ -199,3 +199,83 @@ export default Test;
 ```
 
 这样使用 mobx 同样可以响应式修改页面，且使用 store 时编辑器会提示 store 定义的数据内容，看到store 的注释，提高编程效率。
+
+## Mobx 坑点:不能作为组件显示销毁的判断条件
+
+Mobx 定义的状态，不能以 `show && <Component />` 的形式使用，否则会报错。
+
+```js
+// testStore.js
+import { action, observable } from 'mobx';
+
+export default class TestStore {
+  @observable show = false;
+
+  @action.bound
+  setShow = (show) => {
+    this.show = show;
+  }
+}
+```
+
+```jsx
+import { Component } from '@tarojs/taro';
+import { observer } from '@tarojs/mobx';
+import MyComponent from '../components';
+import MyComponent2 from '../components';
+import store from '../store';
+const { testStore } = store || {};
+
+@observer
+class Test extends Component {
+  componentDidMount() {
+    testStore.setShow(true);
+  }
+
+  render() {
+    const { show } = testStore || {};
+    return (
+      <div>
+        {show && <MyComponent />}
+        {!show && <MyComponent2 />}
+      </div>
+    )
+  }
+}
+```
+
+上述代码运行会报如下错误：
+
+![mobx_replaceNode_error](./images/mobx/mobx_replaceNode_error.png)
+
+要避免这个报错，需要使用 state 的状态来控制组件的显示隐藏。
+
+```jsx
+import { Component } from '@tarojs/taro';
+import { observer } from '@tarojs/mobx';
+import MyComponent from '../components';
+import MyComponent2 from '../components';
+
+@observer
+class Test extends Component {
+  state = {
+    isShow: false,
+  }
+
+  componentDidMount() {
+    this.setState({ isShow: true });
+  }
+
+  render() {
+    const { isShow } = this.state;
+    return (
+      <div>
+        {isShow && <MyComponent />}
+        {!isShow && <MyComponent2 />}
+      </div>
+    )
+  }
+}
+```
+
+具体是什么原因导致的还未知，先当作一个固定用法经验之谈吧。
