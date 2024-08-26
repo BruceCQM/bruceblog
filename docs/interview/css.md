@@ -459,7 +459,6 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
       background-color: blue;
       width: 200px;
       margin-right: -200px;
-      /* right: -200px; */
     }
     .container > div {
       float: left;
@@ -472,6 +471,61 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
   <div class="container">
     <div class="middle">middle box</div>
     <div class="left">left box</div>
+    <div class="right">right box</div>
+  </div>
+</body>
+</html>
+```
+
+写法2：也可以实现三列效果，写法更容易懂。
+
+思路：float 浮动 + margin-left/right 移动位置
+
+- 三个盒子就按照从左到右 left、middle、right 的顺序排列。
+
+- 外容器 container 设置 `padding: 0 200px`，用于给 left、right 两个盒子留出空间。
+
+- left 盒子的 margin-left 设置为 -200px，往左边挪动位置。
+
+- right 盒子的 margin-right 设置为 -200px，往左边挪动位置，使之和 middle 右边贴合，三个盒子在同一行展示。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      padding: 0 200px;
+    }
+    .left {
+      background-color: red;
+      width: 200px;
+      height: 200px;
+      float: left;
+      margin-left: -200px;
+    }
+    .middle {
+      background-color: blue;
+      float: left;
+      height: 200px;
+      width: 100%;
+    }
+    .right {
+      background-color: green;
+      width: 200px;
+      height: 200px;
+      float: left;
+      margin-right: -200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">left box</div>
+    <div class="middle">middle box</div>
     <div class="right">right box</div>
   </div>
 </body>
