@@ -462,3 +462,15 @@ H5 可以使用 iframe 第三方插件 pdf.js。
 [前端实现 PDF 预览的常见方案](https://juejin.cn/post/7143088940953075743){link=card}
 
 [微信小程序使用webview打开pdf文档及显示网页内容](https://blog.csdn.net/blue__k/article/details/123401496){link=card}
+
+### 16、什么是 CI/CD，持续集成、交付、部署？
+
+> CI: Continuous Integration, CD: Continuous Delivery, CD: Continuous Deployment.
+
+文章对 CI/CD 的基本概念进行了介绍，包括持续集成、持续交付、持续部署等内容，讲解比较通俗易懂，看完可以对持续集成、交付、部署有基本的概念。
+
+持续部署，简单而言，就是提交代码后，自动构建，进行单元测试，自动部署到测试环境、预发布环境等，再自动部署到生产环境。
+
+加快了代码提交到功能上线的整个流程的速度，保证新功能第一时间部署到生产环境被使用。
+
+[一篇文章带你搞懂什么是 CI/CD - 持续集成、持续交付、持续部署？](https://blog.csdn.net/weixin_43750377/article/details/114160889){link=static}
