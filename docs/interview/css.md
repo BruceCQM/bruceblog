@@ -477,7 +477,7 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
 </html>
 ```
 
-写法2：也可以实现三列效果，写法更容易懂。
+写法2：也可以实现三列效果，写法更容易懂。（这个应该算是双飞燕布局）
 
 思路：float 浮动 + margin-left/right 移动位置
 
@@ -519,6 +519,165 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
       height: 200px;
       float: left;
       margin-right: -200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">left box</div>
+    <div class="middle">middle box</div>
+    <div class="right">right box</div>
+  </div>
+</body>
+</html>
+```
+
+### 双飞燕布局
+
+思路：浮动（不使用相对定位）
+
+1. 设置三个容器，分别是 middle、left、right。middle 模块放在前面，里面嵌套一个 middle_in 模块，用 margin 为 left 和 right 两个盒子预留空间，解决 left 和 right 占住中间元素位置的问题，且不用相对定位。
+
+2. 让三个盒子左浮动，且 left 和 right 宽度设置为 200px，middle 宽度设置为 100%，此时 left 和 right 被撑到第二行。为三个盒子设置高度。
+
+3. 让 middle_in 继承高度 100%，left 模块的 margin-left 设置为 -100%，right 的 margin-left 设置为 -200px，这样 left 和 right 会移动到第一行的左边和右边，并且压住了 middle 模块。
+
+4. 为 middle_in 设置 margin，解决被压住的问题。
+
+5. 为 container 设置 `overflow: hidden`，使其变为 BFC，高度显示正常。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      overflow: hidden;
+    }
+    .middle {
+      width: 100%;
+      height: 200px;
+      float: left;
+    }
+    .middle_in {
+      background-color: red;
+      margin: 0 200px;
+      height: 100%;
+    }
+    .left {
+      background-color: green;
+      float: left;
+      width: 200px;
+      height: 200px;
+      /* margin 的百分比是以父元素的宽度为基准，因此-100%相当于移动到了第一行最左边 */
+      margin-left: -100%;
+    }
+    .right {
+      background-color: blue;
+      float: left;
+      width: 200px;
+      height: 200px;
+      margin-left: -200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="middle">
+      <div class="middle_in">middle box</div>
+    </div>
+    <div class="left">left box</div>
+    <div class="right">right box</div>
+  </div>
+</body>
+</html>
+```
+
+### flex 布局
+
+思路：使用 [flex 布局]()。
+
+1. 设置三个容器，分别是 middle、left、right。middle 模块放在前面，设置高度。
+
+2. 外部容器设置 `display: flex`，开启 flex 布局。
+
+3. middle 模块设置 `flex: 1`，自动占满剩余的空间。
+
+4. left 和 right 模块设置宽度。
+
+5. 三个模块设置 order 排序。如果 middle 模块放中间，就不用额外设置 order 排序。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      display: flex;
+    }
+    .middle {
+      background-color: red;
+      flex: 1;
+      height: 200px;
+      order: 1;
+    }
+    .left {
+      background-color: green;
+      width: 200px;
+      height: 200px;
+      order: 0;
+    }
+    .right {
+      background-color: blue;
+      width: 200px;
+      height: 200px;
+      order: 3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="middle">middle box</div>
+    <div class="left">left box</div>
+    <div class="right">right box</div>
+  </div>
+</body>
+</html>
+```
+
+最简洁版本：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      display: flex;
+    }
+    .middle {
+      background-color: red;
+      flex: 1;
+      height: 200px;
+    }
+    .left {
+      background-color: green;
+      width: 200px;
+      height: 200px;
+    }
+    .right {
+      background-color: blue;
+      width: 200px;
+      height: 200px;
     }
   </style>
 </head>
