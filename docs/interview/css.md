@@ -690,3 +690,80 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
 </body>
 </html>
 ```
+
+## 9、z-index
+
+元素的层叠关系，是一门大大的学问。
+
+### 没有z-index的日子
+
+没有使用 z-index 的时候，元素的层叠关系由2个因素决定。
+
+1. 是否设置了 position 属性。position 属性设置为 relative、absolute、fixed、sticky 的元素层级比没有设置 position 属性（即 position 为 static）的元素高。而没有设置 position 的元素中，设置了 float 属性的元素层级比没有设置 float 的元素高。
+
+2. 元素的顺序。同类型的元素遵循「后来居上」的原则。
+
+![元素的层级](./images/css/show_level_example.png)
+
+在上图中，div1、2、3、4 设置了 position 属性，因此它们的层级高于 div 5、6。
+
+按照「后来居上」的原则，div1、2、3、4 的层级顺序是 4、3、2、1。
+
+而对于 div5、6，虽然 6 的出场顺序比 5 要晚，但由于 div5 设置了 `float: right`，因此 div5 的层级比 div6 高。
+
+综上，整体的层级顺序是：4、3、2、1、5、6。
+
+### 层叠上下文
+
+1、层叠上下文理解
+
+层叠上下文，Stacking Context，可以理解为盖楼论。
+
+z-index 存在的背景是 Stacking Context，也就是说，**z-index 只有在层叠上下文中才会生效**。
+
+> 构建层叠上下文仿佛盖楼：
+>
+> `<html>` 元素是地基，所有楼都从地基开始盖的。
+>
+> 每产生一个层叠上下文，相当于盖一座楼，z-index 相当于楼的高度。
+
+2、产生层叠上下文的方式
+
+- 元素的 position 设置为 absolute 或 relative，且 z-index 不为 auto（默认值）。
+
+- 元素的 position 设置为 fixed 或 sticky。
+
+- 元素是 flex 容器的**子元素**（元素自己本身设置 flex 是不会产生的），且 z-index 不为 auto。
+
+- 元素是 grid 容器的**子元素**，且 z-index 不为 auto。
+
+- 元素设置了 opacity，且值小于 1。
+
+- 元素有以下任意一项的值，且值不为 none :
+  - transform
+  - filter
+  - perspective
+  - clip-path
+  - mask / mask-image / mask-border
+
+- 元素有 isolation 值且值为 isolate。
+
+- 元素有 mix-blend-mode 值且值不为 normal。
+
+- 元素有 -webkit-overflow-scrolling 值且值为 touch。
+
+3、层叠上下文嵌套
+
+在嵌套的层叠上下文中，子层叠上下文被限制在父层叠上下文中。**无论子层叠上下文的 z-index 设置得多大，都无法突破父层叠上下文**。
+
+因此，要比较两个元素的层级，首先要看它们的父层叠上下文是否相等。
+
+父元素平等，子元素才有比较的意义。也是个拼爹的属性。
+
+4、Antd 的 Modal 组件
+
+Ant Design 的 Modal 组件，就是使用 position: fixed 的方式产生层叠上下文，并且 z-index 设置为 1000。
+
+![And Design Modal](./images/css/ant_design_modal.png)
+
+[为什么你的 z-index 又不管用了——最通俗易懂的 z-index 的使用讲解](https://zhuanlan.zhihu.com/p/340371083){link=static}
