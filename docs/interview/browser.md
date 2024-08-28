@@ -307,3 +307,15 @@ GC时，停止响应其他操作，这是为了安全考虑。而Javascript的GC
 [前端面试：谈谈 JS 垃圾回收机制](https://segmentfault.com/a/1190000018605776){link=static}
 
 [浏览器中的垃圾回收与内存泄漏](https://juejin.cn/post/6844903828102316045){link=static}
+
+## 4. 跨域
+
+同源策略：浏览器为了保证用户信息的安全，防止恶意网站窃取数据，禁止不同域之间的 JS 进行交互。对于浏览器而言，只要协议、域名、端口号其中一个不同，就会引发同源策略，从而限制不同域之间的交互行为。
+
+解决方案详见第一篇文章。
+
+[JS中的跨域问题及解决办法汇总](https://blog.csdn.net/lareinalove/article/details/84107476){link=static}
+
+[浏览器同源政策及其规避方法-阮一峰](https://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html){link=static}
+
+[跨域资源共享 CORS 详解-阮一峰](https://www.ruanyifeng.com/blog/2016/04/cors.html){link=static}

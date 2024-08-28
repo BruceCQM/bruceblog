@@ -474,3 +474,9 @@ H5 可以使用 iframe 第三方插件 pdf.js。
 加快了代码提交到功能上线的整个流程的速度，保证新功能第一时间部署到生产环境被使用。
 
 [一篇文章带你搞懂什么是 CI/CD - 持续集成、持续交付、持续部署？](https://blog.csdn.net/weixin_43750377/article/details/114160889){link=static}
+
+### 17、跨域及其解决方案
+
+文章详细介绍了跨域的相关概念，及其解决方案，总结得比较全面。
+
+[JS中的跨域问题及解决办法汇总](https://blog.csdn.net/lareinalove/article/details/84107476){link=static}
