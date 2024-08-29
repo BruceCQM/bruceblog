@@ -319,3 +319,101 @@ GC时，停止响应其他操作，这是为了安全考虑。而Javascript的GC
 [浏览器同源政策及其规避方法-阮一峰](https://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html){link=static}
 
 [跨域资源共享 CORS 详解-阮一峰](https://www.ruanyifeng.com/blog/2016/04/cors.html){link=static}
+
+## 5. 域名
+
+### 概述
+
+域名，Domain Name，是互联网上用于唯一标识网站和资源的字符串。
+
+由于 IP 地址不方便记忆，且无法显示出网站的名称、性质等内容，因此人们设计出域名，和 IP 地址互相映射，方便人们记忆。
+
+一个域名由几个部分组成（可能2个、3个……），以点分隔，从右往左阅读。
+
+![域名的结构](./images/browser/domain_name_structure.png)
+
+### 顶级域名 TLD
+
+顶级域名，TLD（Top-Level Domain），可以告诉用户这个域名提供什么性质的服务，如 `.edu` 是教育机构使用，`.gov` 是政府部门，`.com` 是商业机构。
+
+顶级域名既可以包含拉丁字母，也可以包含特殊字符。顶级域名最长可以达到 63 个字符，虽然大多数都是两到三个字符。
+
+- 国家顶级域名（national top-level domain names, nTLDs）。目前200多个国家都按照 ISO3166 国家代码分配了顶级域名，如：.cn（中国大陆）, .us（美国）, .uk（英国）, .jp（日本） 等。
+
+- 国际顶级域名（international top-level domain names, iTDs），如：用于商业公司的 `.com` `.top`、用于网络服务的 `.net`、用于组织协会的 `.org`，用于政府部门的 `.gov`，用于教育机构的 `.edu`，用于军事领域的 `.mil`，用于国际组织的 `.int` 等。
+
+- 新通用顶级域名，ICANN 出台的一个新的开放政策，任何个人和公司都可以申请自己的域名后缀。如：.`xyz`, `.win`, `.club`。
+
+### 二级域名 SLD
+
+二级域名，SLD（Second-Level Domain），是位于顶级域名之下的域，域名从右往左第二个部分。
+
+国际顶级域名下，是注册的名称，如：baidu, google, microsoft 等。
+
+国家顶级域名下，则表示注册类别的符号，如：com, org, edu, gov, net 等
+
+:::tip 域名充分利用
+二级域名需要备案，三级域名以及后面的不需要单独备案。
+
+例如，百度注册了 baidu.com 这个二级域名，如果需要使用 www.baidu.com、music.baidu.com，不需要单独备案，但需要在域名申请的机构网站设置一下开启三级域名，并绑定相应 IP。
+:::
+
+### 三级域名
+
+字母、数字和连接符(-)组成的名称，长度不超过 20 个字符。
+
+### 查看域名是否可用
+
+```bash
+whois baidu.com
+```
+
+```bash
+Domain Name: baidu.com
+Registry Domain ID: 11181110_DOMAIN_COM-VRSN
+Registrar WHOIS Server: whois.markmonitor.com
+Registrar URL: http://www.markmonitor.com
+Updated Date: 2023-11-30T04:07:58+0000
+Creation Date: 1999-10-11T11:05:17+0000
+Registrar Registration Expiration Date: 2026-10-11T07:00:00+0000
+Registrar: MarkMonitor, Inc.
+Registrar IANA ID: 292
+Registrar Abuse Contact Email: abusecomplaints@markmonitor.com
+Registrar Abuse Contact Phone: +1.2086851750
+Domain Status: clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)
+Domain Status: clientTransferProhibited (https://www.icann.org/epp#clientTransferProhibited)
+Domain Status: clientDeleteProhibited (https://www.icann.org/epp#clientDeleteProhibited)
+Domain Status: serverUpdateProhibited (https://www.icann.org/epp#serverUpdateProhibited)
+Domain Status: serverTransferProhibited (https://www.icann.org/epp#serverTransferProhibited)
+Domain Status: serverDeleteProhibited (https://www.icann.org/epp#serverDeleteProhibited)
+# 被百度注册了
+Registrant Organization: Beijing Baidu Netcom Science Technology Co., Ltd.
+Registrant State/Province: Beijing
+Registrant Country: CN
+Registrant Email: Select Request Email Form at https://domains.markmonitor.com/whois/baidu.com
+Admin Organization: Beijing Baidu Netcom Science Technology Co., Ltd.
+Admin State/Province: Beijing
+Admin Country: CN
+Admin Email: Select Request Email Form at https://domains.markmonitor.com/whois/baidu.com
+Tech Organization: Beijing Baidu Netcom Science Technology Co., Ltd.
+Tech State/Province: Beijing
+Tech Country: CN
+Tech Email: Select Request Email Form at https://domains.markmonitor.com/whois/baidu.com
+Name Server: ns4.baidu.com
+Name Server: ns1.baidu.com
+Name Server: ns7.baidu.com
+Name Server: ns3.baidu.com
+Name Server: ns2.baidu.com
+DNSSEC: unsigned
+URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
+```
+
+### DNS 域名解析
+
+![DNS 域名解析](./images/browser/DNS.png)
+
+详见文章：
+
+[DNS 域名详细解析过程 (最全面,看这一篇就够)](https://blog.csdn.net/bangshao1989/article/details/121913780){link=static}
+
+[什么是DNS？——DNS和域名解析详解](https://zhuanlan.zhihu.com/p/651014943){link=static}
