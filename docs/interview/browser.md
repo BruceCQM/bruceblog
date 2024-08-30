@@ -417,3 +417,59 @@ URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
 [DNS 域名详细解析过程 (最全面,看这一篇就够)](https://blog.csdn.net/bangshao1989/article/details/121913780){link=static}
 
 [什么是DNS？——DNS和域名解析详解](https://zhuanlan.zhihu.com/p/651014943){link=static}
+
+## 6. HTTP缓存
+
+在有大量数据交换的应用程序中，我们会采取一些方式将那些实时性要求不高的数据生成副本，并存储在某个相对来说可以快速到达、访问、获取的仓库，这样在需要这些数据的时候可以直接从这个仓库中获取数据。
+
+缓存的目的：
+
+- 提升数据交换的性能，提高速度。
+
+- 缓解服务器或数据库的压力。
+
+HTTP 根据是否要向服务器发送请求将缓存规则分为两类：强缓存和协商缓存。
+
+### 强缓存
+
+在强缓存中，如果命中缓存，则直接从缓存数据库中取出资源，无需再发送请求到服务器上。
+
+如果没命中缓存，则走协商缓存。
+
+判断是否命中强缓存的字段为 `Expires` 和 `Cache-Control`。`Cache-Control` 的优先级高于 `Expires`。
+
+#### 1、`Expires`
+
+`Expires` 字段是 HTTP1.0 的产物，它的值是一个绝对时间，表示资源在这个时间点之前都可以直接从缓存中获取。
+
+#### 2、`Cache-Control`
+
+`Cache-Control` 字段是 HTTP1.1 的产物，它的值是一个相对时间。
+
+![cache-control](./images/browser/cache_control.png)
+
+`Cache-Control` 常见字段的含义：
+
+- public：表示响应可以被任何对象缓存，包括客户端、CDN 代理服务器等。即使是通常不可缓存的内容，例如该响应没有 max-age 指令或 Expires 消息头。
+
+- private：表示响应只能被单个用户缓存，不能作为共享缓存（代理服务器不能缓存它）。
+
+- no-cache：可以在本地进行缓存，但每次获取资源时，都需要向服务器进行验证，如果服务器允许，才能使用本地缓存。即：需要协商缓存。
+
+- no-store：禁止缓存内容，每次必须重新请求服务器获取内容。
+
+- max-age：设置缓存存储的最大周期，超过这个时间，缓存被视为过期。单位：秒。
+
+强缓存的状态码为 200，状态码后会有个注释。
+
+![强缓存状态码后的注释](./images/browser/cache_control_200_mark.png)
+
+- from memory cache：缓存资源在内存中，浏览器（或页面标签）关闭后，内存中的缓存就会被释放，重新打开页面取不到该缓存。
+
+- from disk cache：缓存资源在磁盘中，浏览器（或页面标签）关闭后，磁盘中的缓存不会被释放，重新打开页面还可以从磁盘中获取。
+
+:::tip
+如果不想从强缓存中获取资源，windows 电脑通过 ctrl + f5 刷新页面，mac 可通过 shift + command + r 刷新页面，刷新后不会出现 from disk(or memory) cache。
+:::
+
+### 协商缓存
