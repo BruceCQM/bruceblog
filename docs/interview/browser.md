@@ -473,3 +473,51 @@ HTTP 根据是否要向服务器发送请求将缓存规则分为两类：强缓
 :::
 
 ### 协商缓存
+
+协商缓存是需要经过服务器确认是否使用缓存的机制。
+
+服务器对比客户端提供的标识，若确认缓存可以使用，则返回 304 状态码告知客户端可使用缓存，否则返回 200 状态码和新资源。
+
+虽然客户端仍然发起了请求，但服务器仅仅对比标识来确认是否可使用缓存，如果确认使用缓存就不会返回具体资源。这样虽然没有减少请求数量，但也极大地降低了服务器的负荷，可以提升请求速度和减小网络带宽。
+
+协商缓存的两组字段：`Last-Modified / If-Modified-Since`、`Etag / If-None-Match`。
+
+#### 1、`Last-Modified / If-Modified-Since`
+
+`Last-Modified` 代表资源最后的修改时间。
+
+当客户端第一次请求资源时，服务器会在响应头返回 `Last-Modified` 字段。当客户端再次访问这个资源时，会在请求头中携带 `If-Modified-Since` 字段，它的值就是上次返回的 `Last-Modified` 字段的值。
+
+服务器会对比 `If-Modified-Since` 字段和资源上次修改的时间，确认这段时间内是否有修改。如果没有，则返回 304，否则返回 200 状态码和最新资源。
+
+![Last-Modified](./images/browser/last_modified.png)
+
+#### 2、`Etag / If-None-Match`
+
+`Last-Modified / If-Modified-Since` 这组字段会存在以下问题：
+
+- 某些文件会周期性更改，但只是改变了文件的修改时间，文件的内容没有发生改变。这个时候我们并不希望客户端认为这个文件更新了，重新请求。
+
+- 某些文件修改非常频繁，例如在秒级别以下的时间进行修改（1秒内修改多次）。`Last-Modified / If-Modified-Since` 检查的时间粒度是秒级，因此无法正确判断这种情况。
+
+- 某些服务器不能精确得到文件的最后修改时间。
+
+`Etag / If-None-Match` 这组字段可以解决上述问题。Etag 通过一个校验码来对比资源是否更改过，而非通过资源的修改时间。
+
+当一个资源的内容发生变化时，它的校验码也会发生改变。
+
+当客户端第一次请求资源时，服务器会在响应头返回 `Etag` 字段。当客户端再次访问这个资源时，会在请求头中携带 `If-None-Match` 字段，它的值就是上次返回的 `Etag` 字段的值。
+
+服务器对比校验码，确认资源是否更改过。如果没有，则返回 304，否则返回 200 状态码和最新资源。
+
+![eTag](./images/browser/etag.png)
+
+Etag 的优先级高于 Last-Modified。
+
+### HTTP缓存流程总结
+
+![浏览器缓存流程](./images/browser/browser_cache.png)
+
+[详解Http缓存策略](https://www.jianshu.com/p/c78b5de7a889){link=static}
+
+[【nodejs】http强缓存协商缓存以及设置](https://blog.csdn.net/yehuozhili/article/details/103268433){link=static}
