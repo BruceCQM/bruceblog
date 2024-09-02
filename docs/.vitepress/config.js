@@ -45,6 +45,23 @@ NyswMDowMDsShU4AAAAASUVORK5CYII=" />
 </svg>
 `
 
+const WXFavicon = `
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="72px" height="72px" viewBox="0 0 72 72" enable-background="new 0 0 72 72" xml:space="preserve">
+<image id="image0" width="72" height="72" x="0" y="0"
+xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAIGNIUk0AAHomAACAhAAA+gAAAIDo 
+AAB1MAAA6mAAADqYAAAXcJy6UTwAAAG5UExURQAAAA7HZgnDYgjCYQrDYgbAXwfBYAfBYAbAXwbA 
+YAbAYAjBYQW/XwjDYgjCYiTYcgXAYAnDYgrEZAvEYwfBYQfBYBrRbRDJZw7HZgnDYQvFZAS+XgfB 
+YQvFZRDIZgjCYQfBYQO9XQbAXwvFYxHJZxDIZwfBYR/UcAfBYAjDYQC5WgjBYQ7HZQO/XhDJaA/I 
+Zg3HZRDJaAK9XQfCYQnEYgfBYAC3WCzfeQjBYQXAYAzFZAfCYR3SbgS/XwfAYA/IZhHKZxDKaQnD 
+Yx/TcAfAYAnEZAvFZAXAYAfBYAfAYAzGZQ/IZwvEYwrEYwO+XgvFZAjCYgrDYwnCYQS9XgjBYRPL 
+aQS9XgfBYAzGZQ3IZhDIZgW/XwC6WgC1VwnCYgrFYx3SbgjCYRXNawK8XB3TbgjDYgnCYgfBYB3V 
+chjOaxDJaB3TcBXMahrRbQrEYgG7XQzGZS/hewbAXwG7WwjBYQfBYAbAYB3SbgfCYQfAYArFYxDI 
+ZgO+XQW/XwfBYB3RbgO8XQO8XBLJZwK8XRrQbgzGZQG8XQfAYAW/XwW+XwfBYAS+Xge/XwO9XQG8 
+XAjBYQC6WwC5Wv///+TJ42YAAACHdFJOUwAgWo+30uXu8efVvJRiJBt7fRsnrqslDJ+YCU30RIuA 
+n7Kln5NyaDX9K8DFm3VfU1Bca4Wp2N4J3kMGX3HP+TcEFAFJ9hA7V7noQGayL4opbs2/OMxM7qKk VWv8+e6KFz3qVttQa+WcDppAL38Xc+hINXnS09s2VLH6Mnnj3OGC5sfC4Cum7DUoB44AAAABYktH RJKWBO8gAAAAB3RJTUUH6AkCAwMOXwlZKAAABHZJREFUWMPll/tfE0cQwC+JJBIBCQQCSC2+EASt GlMhEQyYhpeRVzAqFoxYoUVtqkKBWrQPu3O5uxz+x73bvcducq/wYzuffD532Z393uzs7Owsx/1P xecPnGgIhk42hk81Nbccl3K6tQEh4JEh4UjbMTDt0TKgGunorBMT6yqDBQcB6u6ph3OmV7DCKCJC 6CvvnLMCshcQvvbK6QDkLH3eOOdEFw6C8144FwQ3DkLSRXfOpYo7B5WlfjfOZToC2cG8IIP6Q4gX 0cCgC+gKlK2corj/5NDw1WvfnLl+42b8VgLx39525DTbmDPSNJqk9dpSiTuOoDGLlYfxvru1mumJ SQfOvVpPC5n4d14Wm5WuapBY7orVj+GSwWpOMMtq9Ey0TSTdQdnqWIxSfmibCkyHQ5nx3pmxaGTW mTbHgiBidsXu85KSRJQf4HAIdeccQA9Ye5qprsn5hUWgU5SIluxRfYw9qeru5Txio2M4bQM6b+rI 0k0LhZWH9AYShUYbowqm0pH1/k4+EukkI6DrlmoBc15X7Kbfz65H5bGV0hPD8HH7Q2x2lSEhJoVP JnHAGDtEWHBY2+WnIFOk709Tfdk1/FjPaJ1jnJM8k+nFE+5TXdEieS4ByT7PHUHcjSNmW5vx1oJg Hb9cxaEtLXIu8kCgJ7eR1tvXQHqBXzpl1d3wgxuIW6Q3k6TnuNsvBdgkr7cUBSi6J6DsEZWRRd2l fkBCcYsoqAb1uXI47kfGTT9pZijzAe18OQdl8HsA+Z5SnMpZ3BYrqvPJE4VtCcY9VUEXqV2nrc4o 8b1mx6sveS8cbvvIXDjIvFab3pB/+iL+POQJxC1JVCiVsItInFZeEYVfpryB7nyhQNfUllMEBMJl bwRNOul8+VZtCZP3MrxL10V6T4HiasOO4fwLdYHoxIxBI2aIxusBLVAgXA02UE5bqAP02JwaP6c2 TNPBHvEO2qVC+1e1oUCnc9FDUafJvDlInlcb3jCHlZRf9whqMSM7iE/wEntQi6slNwSpI3wDxpg9 3LwVqqqu9l3uQYET+JEzR2ipY68KBI6b5CAPBfwyaw7Tvpyq4gz47DHZaSN3PdddAh1a51aRMQns cv9krjWBNUhJGTdGGE5dY0Fa/uZ++/B+88nK8mBL++BuqTke1eu530n5pV9ZpCVzIfeZuZFzKpdQ Ew7wWpanwpgk1vSh/uFR02i2wtolVtpcAUDaxmOeaYlN6qJmv/WSGjWj3BGXD22vWhAlYz6ScwQ+ MYfXlGSeU6EerhvZCqADMiSBvy2iWXZFhqkKe2fEnlPmm8iAF2RA7an8h0h/1U5kaUO7zGg5o7V2 /3xwvTiqK6Yn9nuqhwDeWoSbL+h2lVU8YlR6fyozA9n6TF7fcSGVeUkvhforMoK//rbbAnvgiAJ5 Rbc+I6B9p1v73KpkzxHe6Zu5ZwN615xrn9efeWujRLR6ydD6/I/f/YrUvpmx4tAWTBy4UrDE/IVG xjWwP506zvVPkXQuFYgO7RzOHIaHCpHSMe6i/yX5Fz3w8IpdDvopAAAAJXRFWHRkYXRlOmNyZWF0 ZQAyMDI0LTA5LTAyVDAzOjAzOjE0KzAwOjAwZ8a+DAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyNC0w OS0wMlQwMzowMzoxNCswMDowMBabBrAAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjQtMDktMDJU MDM6MDM6MTQrMDA6MDBBjidvAAAAAElFTkSuQmCC"/>
+</svg>
+`
+
 export default {
   // 自定义网站 favicon
   head: [
@@ -89,6 +106,7 @@ export default {
         link: 'https://gitee.com/brucecai55520'
       },
       { icon: { svg: juejinFavicon }, link: 'https://juejin.cn/user/4152185650162680' },
+      { icon: { svg: WXFavicon }, link: 'https://mp.weixin.qq.com/s?__biz=MzAxOTU3NzE1Ng==&mid=2247483708&idx=1&sn=5495e66b7465a22eb4625e1c8500fb7b' },
       { icon: { svg: sfFavicon }, link: 'https://segmentfault.com/u/ning_643b67be37ac3/articles' },
       { icon: { svg: CSDNFavicon }, link: 'https://blog.csdn.net/weixin_45138590?type=blog' },
       // { icon: 'facebook', link: 'https://www.facebook.com' },
