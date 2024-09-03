@@ -521,3 +521,49 @@ Etag 的优先级高于 Last-Modified。
 [详解Http缓存策略](https://www.jianshu.com/p/c78b5de7a889){link=static}
 
 [【nodejs】http强缓存协商缓存以及设置](https://blog.csdn.net/yehuozhili/article/details/103268433){link=static}
+
+## 7. 网络攻击及防御
+
+### XSS 跨站脚本攻击
+
+恶意攻击者往 Web 页面里嵌入恶意的客户端脚本，当用户浏览此网页时，脚本就会在用户的浏览器上执行，进而达到攻击者的目的。比如获取用户的 cookie、导航到恶意网站、携带木马等。
+
+反射型 XSS：通过用户输入框，将恶意攻击脚本附加到 URL 地址的参数中。通常出现在网络的搜索框和用户登录入口。
+
+持久型 XSS：攻击者事先将恶意 js 代码上传或存储到漏洞服务器数据库中，只有受害者浏览包含此恶意 js 代码的页面，就会执行恶意代码。可实现 XSS 蠕虫。
+
+XSS 攻击方式：
+
+- 通过 `<>` 等字符，如 script 标签注入 HTML/js。
+
+- 利用 JavaScript 伪协议，通过 HTML 标签的属性值进行攻击，如 img 标签的 src 属性。
+
+- 利用 HTML 的事件执行函数，如 onerror 函数进行攻击。
+
+- 利用空格、回车或 tab 等绕过 XSS filter 的检测。
+
+- 用大小写、字符编码等绕过 XSS filter 的检测。
+
+- 拆分跨站法，将攻击的代码拆分，以绕过输入字符长度的限制。
+
+- 通过 CSS 跨站，实现攻击。
+
+防御方法：
+
+1. 使用 XSS filter：对表单属性值类型进行验证，过滤或移除特殊的 HTML 标签，过滤 js 事件。
+
+2. 特殊字符进行转义：如 `<(&lt), >(&gt), 空格(&nbsp)`、斜杠反斜杠等。
+
+3. 设置 http only cookie：当客户端发送请求时，cookie 会添加到请求头，但 js 脚本不能访问 cookie。
+
+4. 浏览器自带防御机制：主要应对反射型 XSS（HTML 内容或属性），http 响应头中自动添加 x-xss-protection，值为0（关闭），1（打开），默认打开。
+
+[前端常见的攻击方式及预防方法](https://www.jianshu.com/p/a5ff8a23b423){link=static}
+
+[前端安全-常见的攻击以及防御](https://www.cnblogs.com/zhiying/p/11018331.html){link=static}
+
+[彻底弄懂XSS和CSRF](https://segmentfault.com/a/1190000023031910){link=static}
+
+[「 典型安全漏洞系列 」01.跨站脚本攻击XSS详解](https://mp.weixin.qq.com/s?__biz=MzkyMTYyOTQ5NA==&mid=2247483841&idx=1&sn=2a8416263b5c8b71dc13b0b0ebd9dc8b){link=static}
+
+[前端必知的跨站脚本攻击（XSS）示例与解决方案](https://mp.weixin.qq.com/s?__biz=MzAwOTUyNzI3Ng==&mid=2652074681&idx=1&sn=373eb3a159cc35e86130ea6afd638704){link=static}
