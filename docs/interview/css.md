@@ -404,29 +404,31 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
 
 ## 8、三列布局
 
+[【CSS】圣杯布局和双飞翼布局（包括完整代码）](https://blog.csdn.net/weixin_42678675/article/details/118542011){link=static}
+
 ### 圣杯布局
 
 主要思路：浮动 + margin-left + 相对定位。
 
 1. 写一个大容器 container，里面包含 middle、left、right 三个 div。middle 放在前面。
 
-2. container 下面的三个容器浮动，且写上高度 200px。
+2. container 下面的三个容器浮动，且写上高度 200px。left、right 设置宽度 200px。给 container 设置 `padding: 0 200px`，给 left 和 right 留下空间。
 
-3. 给 middle 宽度写上 100%，此时 left 和 right 被挤到第二行，给 left、right 设置宽度200px。
+3. 给 middle 宽度写上 100%，此时 left 和 right 被挤到第二行。
 
-4. 给 left 的 margin-left 设置为 -100%，此时 left 回到第一行左边，right 回到第二行左边。
+4. 给 left 的 **margin-left 设置为 -100%**，此时 left 回到第一行左边，即 left 的左边框和 middle 的左边框重叠。
 
-5. 给 right 的 margin-right 设置 -200px，此时 right 回到第一行右边。
+5. 此时 left 会覆盖 middle。**给 left 设置 `position: relative`，再设置 `right: 200px`**，使其向左移动自身宽度，露出被覆盖的 middle。
 
-6. 此时，left 和 right 会压住 middle。
+6. 给 right 的 **margin-right 设置 -200px**，此时 right 回到第一行右边。
 
-7. 给 container 设置 `padding: 0 200px`，给 left 和 right 留下空间。
+（这里的 margin-right设置为负值还是不太明白，如果是margin-left为-200px，效果是right的右边和middle的右边重叠，会覆盖住middle，不符合要求）
 
-8. 给 left 和 right 设置相对定位后，left 模块 的 left 值设置为 -200px，回到为其留下的空间，同理 right 模块设置 right 值设置为 -200px。
+> margin-right 能让 right 元素被其自身右方的空白元素覆盖上去，相当于自身宽度被消除，从而能浮动到 middle 上去
 
-9. 此时 container 因为子元素浮动，高度会为 0，为它增加 `overflow: hidden`，使其变为 BFC，显示正常高度。
+7. 此时 container 因为子元素浮动，高度会为 0，为它增加 `overflow: hidden`，使其变为 BFC，显示正常高度。
 
-10. 此时如果页面缩的很小会出现显示混乱的问题，可以给 container 加上 min-width 属性，或者使用双飞燕布局来解决。
+8. 此时如果页面缩的很小会出现显示混乱的问题，可以给 container 加上 min-width 属性，或者使用双飞燕布局来解决。
 
 :::tip 为什么在 container 加 padding，而不是在 middle 加？
 因为 middle 的宽度设置为 100%，设置了 padding 也是占满全屏宽度，给大容器设置，才能够给 left 和 right 留下位置。
@@ -441,29 +443,30 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
   <title>Document</title>
   <style>
     .container {
-      overflow: hidden;
       padding: 0 200px;
-      min-width: 400px;
-    }
-    .middle {
-      background-color: green;
-      width: 100%;
+      overflow: hidden;
     }
     .left {
       background-color: red;
       width: 200px;
+      height: 200px;
+      float: left;
       margin-left: -100%;
-      left: -200px;
+      position: relative;
+      right: 200px;
     }
-    .right {
+    .middle {
       background-color: blue;
-      width: 200px;
-      margin-right: -200px;
-    }
-    .container > div {
       float: left;
       height: 200px;
-      position: relative;
+      width: 100%;
+    }
+    .right {
+      background-color: green;
+      width: 200px;
+      height: 200px;
+      float: left;
+      margin-right: -200px;
     }
   </style>
 </head>
@@ -475,6 +478,7 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
   </div>
 </body>
 </html>
+
 ```
 
 写法2：也可以实现三列效果，写法更容易懂。（这个应该算是双飞燕布局）
@@ -485,9 +489,11 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
 
 - 外容器 container 设置 `padding: 0 200px`，用于给 left、right 两个盒子留出空间。
 
-- left 盒子的 margin-left 设置为 -200px，往左边挪动位置。
+- 三个盒子设置左浮动，设置高度为 200px，middle 设置宽度为 100%，left、right 设置宽度为 200px。此时三个盒子分别在三行，因为 middle 宽度为 100%。
 
-- right 盒子的 margin-right 设置为 -200px，往左边挪动位置，使之和 middle 右边贴合，三个盒子在同一行展示。
+- left 盒子的 margin-left 设置为 -200px，往左边挪动自身宽度。此时 middle 和 left 在同一行，且 left 的右边框和 middle 左边框重合。
+
+- right 盒子的 margin-right 设置为 -200px，往左边挪动位置，使之左边框和 middle 右边贴合，三个盒子在同一行展示。
 
 ```html
 <!DOCTYPE html>
@@ -690,6 +696,67 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
 </body>
 </html>
 ```
+
+## 9、margin 为负值会发生什么
+
+1. margin-left 为负值，元素自身向左移动。
+
+2. margin-top 为负值，元素自身向上移动。
+
+3. margin-right 为负值，元素自身不动，其右边的元素向左移动。
+
+4. margin-bottom 为负值，元素自身不动，其下边的元素向上移动。
+
+```html
+<style>
+  .container {
+    display: flex;
+  }
+  .left {
+    background-color: red;
+    width: 200px;
+    height: 200px;
+    margin-right: -100px;
+  }
+  .right {
+    background-color: green;
+    width: 200px;
+    height: 200px;
+  }
+</style>
+
+<div class="container">
+  <div class="left">left box</div>
+  <div class="right">right box</div>
+</div>
+```
+
+![margin-right为负值](./images/browser/margin_right_negative.png)
+
+```html
+<style>
+  .left {
+    background-color: red;
+    width: 200px;
+    height: 200px;
+    margin-bottom: -100px;
+  }
+  .right {
+    background-color: green;
+    width: 200px;
+    height: 200px;
+  }
+</style>
+
+<div class="container">
+  <div class="left">left box</div>
+  <div class="right">right box</div>
+</div>
+```
+
+![margin-bottom为负值](./images/browser/margin_bottom_negative.png)
+
+[【CSS】margin 为负值会发生什么你想不到的事？](https://blog.csdn.net/weixin_42678675/article/details/118514164){link=static}
 
 ## 9、z-index
 
