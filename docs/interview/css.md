@@ -445,6 +445,7 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
     .container {
       padding: 0 200px;
       overflow: hidden;
+      min-width: 400px;
     }
     .left {
       background-color: red;
@@ -468,20 +469,25 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
       float: left;
       margin-right: -200px;
     }
+    .header, .footer {
+      background-color: purple;
+      min-width: 800px;
+    }
   </style>
 </head>
 <body>
+  <div class="header">header box</div>
   <div class="container">
     <div class="middle">middle box</div>
     <div class="left">left box</div>
     <div class="right">right box</div>
   </div>
+  <div class="footer">footer box</div>
 </body>
 </html>
-
 ```
 
-写法2：也可以实现三列效果，写法更容易懂。（这个应该算是双飞燕布局）
+写法2：也可以实现三列效果，写法更容易懂。
 
 思路：float 浮动 + margin-left/right 移动位置
 
@@ -504,7 +510,9 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
   <title>Document</title>
   <style>
     .container {
+      overflow: hidden;
       padding: 0 200px;
+      min-width: 400px;
     }
     .left {
       background-color: red;
@@ -526,14 +534,20 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
       float: left;
       margin-right: -200px;
     }
+    .header, .footer {
+      background-color: purple;
+      min-width: 800px;
+    }
   </style>
 </head>
 <body>
+  <div class="header">header box</div>
   <div class="container">
     <div class="left">left box</div>
     <div class="middle">middle box</div>
     <div class="right">right box</div>
   </div>
+  <div class="footer">footer box</div>
 </body>
 </html>
 ```
