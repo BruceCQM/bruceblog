@@ -772,7 +772,215 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
 
 [【CSS】margin 为负值会发生什么你想不到的事？](https://blog.csdn.net/weixin_42678675/article/details/118514164){link=static}
 
-## 9、z-index
+## 10、粘连布局
+
+粘连布局，sticky layout：
+
+- 当 main 的高度足够长时，紧跟在其后面的元素 footer 会跟在其后面。
+
+- 当 main 元素比较短时（比如小于屏幕高度），footer 则「粘连」在屏幕底部。
+
+![粘连局部，内容小于屏幕高度](./images/css/sticky_layout_1.png)
+
+![粘连局部，内容大于屏幕高度](./images/css/sticky_layout_2.png)
+
+### 方法一
+
+布局：wrap 包裹 main 容器，main 容器中包含文字内容。wrap 下面则是 footer。
+
+样式设置：
+
+1. 当内容高度小于屏幕高度时，要保证 wrap 最低高度为屏幕高度，设置 `min-height: 100%`，并且 html、body 也需要设置 `height: 100%`，保证屏幕高度能够被 wrap 继承。
+
+2. 此时 footer 刚好被挤到屏幕底部之外，即上边框和屏幕底部重合，看不到 footer。因此需要给 footer 设置 `margin-top: -30px`，向上移动自身高度。
+
+3. 当内容高度大于屏幕高度时，为了避免 footer 和 main 的内容重叠，需要给 main 设置 `padding-bottom: 30px`，保证 main 底部留出空间，避免和 footer 重叠。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      height: 100%;
+    }
+    #wrap {
+      min-height: 100%;
+    }
+    /* 内容区需要让出⼀部分区域，防⽌内容被盖住 */
+    #main {
+      background-color: brown;
+      padding-bottom: 30px;
+    }
+    #footer {
+      background-color: aqua;
+      height: 30px;
+      margin-top: -30px;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <div id="main">
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+    </div>
+  </div>
+  <div id="footer">footer</div>
+</body>
+</html>
+```
+
+### 方法二
+
+和方法一类似，唯一不同点就是把 footer 向上挪动的方式不同，通过给 wrap 设置 `margin-bottom: -30px` 来实现。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      height: 100%;
+    }
+    #wrap {
+      min-height: 100%;
+      margin-bottom: -30px;
+    }
+    /* 内容区需要让出⼀部分区域，防⽌内容被盖住 */
+    #main {
+      background-color: brown;
+      padding-bottom: 30px;
+    }
+    #footer {
+      background-color: aqua;
+      height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <div id="main">
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+    </div>
+  </div>
+  <div id="footer">footer</div>
+</body>
+</html>
+```
+
+### 方法三：flex
+
+布局：container 容器包裹 main 和 footer。
+
+样式设置：
+
+1. container 容器设置 `height: 100vh`，保证高度为屏幕高度。
+
+2. container 容器设置 `display: flex`，`flex-direction: column`，`justify-content: space-between`，开启 flex 布局，设置主轴方向从上到下，子元素排列方式为两侧贴边再平分剩余空间。
+
+3. footer 设置高度即可。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    #container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    #main {
+      background-color: brown;
+    }
+    #footer {
+      background-color: aqua;
+      height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="main">
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+      main<br />
+    </div>
+    <div id="footer">footer</div>
+  </div>
+</body>
+</html>
+```
+
+## 11、z-index
 
 元素的层叠关系，是一门大大的学问。
 
