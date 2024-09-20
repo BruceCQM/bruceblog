@@ -980,7 +980,89 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
 </html>
 ```
 
-## 11、z-index
+## 11、两列布局
+
+两列布局：一列有内容撑开，另一列自适应剩余宽度。
+
+### 方法一：float + BFC
+
+1. left 模块设置浮动。此时 right 模块会被覆盖。
+
+2. 给 right 模块设置 `overflow: hidden`，开启 BFC。BFC 不会与浮动元素重叠，解决覆盖问题。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    .left {
+      float: left;
+      background-color: pink;
+    }
+    .right {
+      overflow: hidden;
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <div class="parent">
+    <div class="left">
+      left column content
+    </div>
+    <div class="right">
+      right column content<br />
+      right column content<br />
+      right column content<br />
+    </div>
+  </div>
+</body>
+</html>
+```
+
+### 方法二：flex
+
+flex 实现起来非常简单。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    .parent {
+      display: flex;
+    }
+    .left {
+      background-color: pink;
+    }
+    .right {
+      flex: 1;
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <div class="parent">
+    <div class="left">
+      left column content
+    </div>
+    <div class="right">
+      right column content<br />
+      right column content<br />
+      right column content<br />
+    </div>
+  </div>
+</body>
+</html>
+```
+
+## 12、z-index
 
 元素的层叠关系，是一门大大的学问。
 
