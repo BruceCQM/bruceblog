@@ -486,3 +486,7 @@ H5 可以使用 iframe 第三方插件 pdf.js。
 文章介绍了如何使用 express 快速启动本地服务器，十分简便。
 
 [Express 项目启动](https://blog.csdn.net/weixin_44691608/article/details/109371958){link=static}
+
+### 19、前端如何处理10万条数据
+
+[前端工程师如何处理10万条数据](http://caibaojian.com/optimize-large-data.html){link=static}
