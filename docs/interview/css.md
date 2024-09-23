@@ -20,9 +20,43 @@ css 盒子模型分为两种：
 
 css 不同属性的百分比值，参照的基准不一样。
 
-1. 参照**父元素宽度**：padding、margin、width、text-indent。
+1. 参照**父元素内容的宽度**：padding、margin、width、text-indent。
 
-2. 参照**父元素高度**：height。
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    .father {
+      width: 400px;
+      background-color: blue;
+      box-sizing: border-box;
+      padding: 50px;
+    }
+    .son {
+      width: 50%;
+      background-color: aqua;
+    }
+  </style>
+</head>
+<body>
+  <div class="father">
+    父元素
+    <div class="son">
+      子元素
+    </div>
+  </div>
+</body>
+</html>
+```
+
+上述代码中，son 的宽度是 150px。
+
+由于 father 设置了怪异盒子模型，因此它的 width = 内容宽度 + padding + border。现在左右 padding 总共 100px，因此内容宽度为 300px。
+
+son 的 50% 宽度是参照父元素内容的宽度，所以 son 的宽度是 150px。
+
+2. 参照**父元素内容的高度**：height。
 
 3. 参照**父元素相同属性**：font-size、line-height。
 
