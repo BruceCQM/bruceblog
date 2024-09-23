@@ -1172,3 +1172,108 @@ Ant Design 的 Modal 组件，就是使用 position: fixed 的方式产生层叠
 ![And Design Modal](./images/css/ant_design_modal.png)
 
 [为什么你的 z-index 又不管用了——最通俗易懂的 z-index 的使用讲解](https://zhuanlan.zhihu.com/p/340371083){link=static}
+
+## 13、CSS 单位
+
+CSS 单位包括绝对单位和相对单位。
+
+### 绝对单位
+
+#### `px`
+
+在 CSS 中，1 像素被定义为 1/96 英寸。但具体效果取决于设备的情况。
+
+#### `cm`
+
+在 CSS 中，1 cm 大约是 37.8 pixels。
+
+#### `mm`
+
+在 CSS 中，1 mm 大约是 3.78 pixels。
+
+#### `in`
+
+在 CSS 中，1 in 大约是 96 pixels。
+
+#### `pt`
+
+在 CSS 中，1 pt 大约是 1/72 英寸，即 1.333 像素。
+
+#### `pc`
+
+在 CSS 中，1 pc 大约是 16 pixels。
+
+### 相对单位
+
+#### `em`
+
+当 `em` 和 `font-size` 属性一起使用时，`em` 是相对于父元素的字体大小而言的。
+
+```css
+.father {
+  font-size: 16px;
+}
+.son {
+  /* son 的字体大小是 24px */
+  font-size: 1.5em; 
+}
+.grandson {
+  /* grandson 的字体大小是 32px */
+  font-size: 2em;
+}
+```
+
+当 `em` 和 `width` 这类属性一起使用时，`em` 是相对于元素自身字体大小而言的。
+
+```css
+.father {
+  font-size: 16px;
+  /* father 的宽度是 32px */
+  width: 2em;
+  background-color: aqua;
+}
+```
+
+#### `rem`
+
+`rem` 是相对于根元素（即 `<html>` 元素）的字体大小而言的。
+
+在大多数浏览器中，默认字体大小是 16px，因此 html 元素的字体大小是 16px。
+
+如果用户改变了 html 元素的字体大小，那么 `rem` 的值也会改变。
+
+#### `%`
+
+百分比。详见[CSS百分比](#_2-css-百分比)
+
+#### `vw`
+
+视口宽度，1vw 为视口宽度的 1%，100vw 就是视口宽度。
+
+#### `vh`
+
+视口高度，1vh 为视口高度的 1%，100vh 就是视口高度。
+
+常用来设置元素高度铺满整个屏幕。
+
+#### `vmin` 和 `vmax`
+
+vmin 是指视口宽度和高度的较小者，vmax 是较大的那个。
+
+例如，一个视口的宽度是 1000px，高度是 600px，那么 100vmin 等于 600px，100vmax 等于 1000px。
+
+即 1vmin 为 6px，1vmax 为 10px。
+
+#### `ex`
+
+在 CSS 中，1ex 是字体 x 的高度。
+
+但是，由于小写字母 x 大小会随字体的不同有很大变化，因此 ex 单位很少被使用。
+
+#### `ch`
+
+在 CSS 中，1ch 是字体 0 字符的宽度。
+
+和 ex 类似，由于 0 的宽度会随字体的不同有较大差异，因此 ch 单位也用的不多。
+
+[CSS 单位指南](https://www.freecodecamp.org/chinese/news/css-unit-guide/){link=static}
