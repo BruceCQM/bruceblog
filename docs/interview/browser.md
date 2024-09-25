@@ -593,3 +593,125 @@ HTTP 协议在 response header 和 content 之间，有一个空行，即两组 
 例如在重定向时，将恶意代码拼接到 URL 中，从而将代码写入空行，实现攻击。
 
 防御：过滤 headers 中的非法字符。
+
+## 8、meta 标签
+
+meta 标签主要用来提供关于 HTML 文档的元信息，通常用于指定字符编码、页面描述、关键词、文档作者、视口设置、缓存设置、定义页面使用语言等。
+
+它对于提升用户体验、优化搜索引擎排名都有作用。
+
+meta 标签主要有 name 和 http-equiv 属性，都需要和 content 属性配合使用。
+
+### name 属性
+
+meta 标签的 name 属性主要用于定于页面的描述性信息，这些信息不会直接影响页面的渲染，但可以被搜索引擎识别抓取，从而优化 SEO。
+
+常见的 name 属性值及其作用：
+
+1. description：页面的描述信息，告诉搜索引擎网站的主要内容。
+
+```html
+<meta name="description" content="这是一个关于编程教程的网站">
+```
+
+2. keywords：为文档定义了一组关键词，搜索引擎会用这些关键词对文档进行分类。
+
+```html
+<meta name="description" content="编程,教程,学习">
+```
+
+3. author：页面的作者信息。
+
+```html
+<meta name="author" content="张三">
+```
+
+4. viewport：设置视口，改善网站在各种设备的外观。
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
+
+5. robots：控制搜索引擎抓取页面的方式。
+
+:::tip 属性说明
+all：文件可被检索，且页面上的链接可以查询。
+
+none：文件不可被检索，且页面上的链接不可以查询。
+
+index：文件可被检索。
+
+follow：页面上的链接可以查询。
+
+noindex：文件不可被检索，但页面上的链接可以查询。
+
+nofollow：文件可以检索，但页面上的链接不可以查询。
+:::
+
+```html
+<meta name="robots" content="index, follow">
+```
+
+### http-equiv 属性
+
+http-equiv 用于**模拟 HTTP 响应头的效果**，从而影响浏览器如何处理和显示网页内容。
+
+常见的 http-equiv 属性值及其作用：
+
+1. Content-Type：设置文档的 MIME 类型和字符编码。
+
+```html
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+```
+
+2. Refresh：设置页面刷新和重定向（跳转）。
+
+```html
+<!-- 页面将在 5 秒后自动刷新并跳转到 https://example.com -->
+<meta http-equiv="Refresh" content="5;url=https://example.com">
+```
+
+3. Expires：设置页面内容的过期时间，用于缓存控制。
+
+```html
+<!-- 必须使用GMT的时间格式 -->
+<meta http-equiv="Expires" content="Wed, 21 Oct 2023 07:28:00 GMT">
+```
+
+4. Pragma：控制缓存行为，通常和 Expires 属性一起使用。
+
+```html
+<meta http-equiv="Pragma" content="no-cache">
+```
+
+5. Set-Cookie：设置 HTTP cookie。
+
+```html
+<meta http-equiv="Set-Cookie" content="name=value;expires=DATE;path=PATH">
+```
+
+:::warning 注意事项
+http-equiv 所说的模拟 HTTP 响应头的效果，并不是指它能直接修改实际发送到浏览器响应报文的头部信息，而是在浏览器解析 HTML 文档时起作用。
+
+当浏览器加载一个包含 http-equiv 属性的 meta 标签的页面时，会根据这些标签提供的信息来调整处理页面的方式。例如，如果 meta 标签设置了 Content-Type 和 charset，浏览器会根据这些信息来解析页面内容和确定字符编码。
+
+这种模拟的效果是在客户端发生的，不会影响服务器实际发送给客户端的 HTTP 响应报文。
+
+因此，如果想修改真正的响应头部，需要在服务端中设置，而非依赖 http-equiv 属性。
+:::
+
+:::tip 为什么浏览器需要模拟HTTP响应头部
+浏览器模拟HTTP响应头部的行为通常不是其标准功能的一部分，而是特定场景下的需求驱动。以下是一些可能导致浏览器模拟HTTP响应头部的场景：
+
+- 测试和调试：在开发和测试阶段，开发者可能需要模拟不同的HTTP响应头部来测试客户端应用程序的行为。例如，模拟不同的缓存控制策略或内容类型，以确保应用程序能够正确处理各种响应。
+
+- 用户代理模拟：在某些情况下，开发者可能需要模拟不同的用户代理（User-Agent）来测试网站在不同浏览器或设备上的显示效果。这可以通过设置自定义的HTTP头部字段来实现，尽管这并不是模拟HTTP响应头部的标准做法。
+
+- 绕过限制：有时，网站可能会根据用户代理设置访问限制，模拟不同的用户代理可以帮助绕过这些限制，访问被限制的内容。
+
+- 特殊需求：在某些特殊情况下，如进行网络抓包分析或开发特定的网络应用时，可能需要模拟HTTP响应头部来满足特定的需求。
+:::
+
+[关于meta标签中的http-equiv属性使用介绍](https://www.cnblogs.com/yumo1627129/p/7198968.html){link=static}
+
+[href标签中target的几个属性值](https://www.cnblogs.com/wang-bo/p/6763795.html){link=static}
