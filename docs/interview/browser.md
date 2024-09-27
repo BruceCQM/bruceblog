@@ -715,3 +715,13 @@ http-equiv 所说的模拟 HTTP 响应头的效果，并不是指它能直接修
 [关于meta标签中的http-equiv属性使用介绍](https://www.cnblogs.com/yumo1627129/p/7198968.html){link=static}
 
 [href标签中target的几个属性值](https://www.cnblogs.com/wang-bo/p/6763795.html){link=static}
+
+## 9、iframe
+
+[Web前端之iframe详解](https://www.cnblogs.com/lvhw/p/7107436.html){link=static}
+
+[top.location和window.location.href的区别](https://www.cnblogs.com/Janejxt/p/9240440.html){link=static}
+
+[如何在window的location使用target](https://www.cnblogs.com/orac/p/6865728.html){link=static}
+
+[iframe/frameset/frame的区别](https://www.cnblogs.com/nyw1983/p/11427157.html){link=static}
