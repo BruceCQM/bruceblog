@@ -48,3 +48,4 @@
 - 2024-09-23：CSS 百分比示例补充；学习CSS单位指南；学习CSS常见布局。
 - 2024-09-25：学习meta标签。
 - 2024-09-27：学习iframe；rem和em的区别；根据设计稿确定网页rem大小。
+- 2024-09-29：学习clientWidth、offsetWidth、scrollWidth的区别。

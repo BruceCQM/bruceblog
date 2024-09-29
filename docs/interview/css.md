@@ -1367,3 +1367,113 @@ window.onresize = () => {
 ```
 
 [根据设计稿，计算出网页REM的大小，有那么难吗？](https://segmentfault.com/a/1190000041434714){link=static}
+
+## 18、cilent/offset/scrollWidth 区别
+
+### clientWidth
+
+clientWidth，客户端宽度。它表示元素**内容宽度+内边距**。
+
+其实内边距 padding 可以看作特殊的内容，因为 background-color 设置颜色也会对 padding 的区域生效。border 和 marign 就不会生效。
+
+`clientWidth = contentWidth + paddingLeft + paddingRight`。
+
+![clientWidth](./images/css/clientWidth.png)
+
+```css
+div {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  padding: 10px;
+  border: 5px solid green;
+  margin: 10px;
+}
+```
+
+在标准盒子模型下，width 属性设置的仅仅是内容区的宽度，padding 和 border 都是内容区向外扩张的，因此会撑大盒子。
+
+因此在此情况下，`clientWidth = contentWidth + paddingLeft + paddingRight = 100 + 10 + 10 = 120px`。
+
+![标准盒子模型下的clientWidth](./images/css/clientWidth_1.png)
+
+```css
+div {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  padding: 10px;
+  border: 5px solid green;
+  margin: 10px;
+  box-sizing: border-box;
+}
+```
+
+如果开启怪异盒子模式，width 属性设置的就是内容区宽度、内边距、边框的总和。设置内边距、边框就会压缩内容区宽度，不会撑大盒子。
+
+因此在此情况下，width 属性减去边框 border，就是内容区和内边距的宽度，clientWidth = 100 - 5 *2 = 90px。
+
+![怪异盒子模型下的clientWidth](./images/css/clientWidth_2.png)
+
+### offsetWidth
+
+offsetWidth 是指内容宽度 + padding + border，比 clientWidth 多加边框的宽度。
+
+`offsetWidth = contentWidth + paddingLeft + paddingRight + border`。
+
+![offsetWidth](./images/css/offsetWidth.png)
+
+```css
+div {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  padding: 10px;
+  border: 5px solid green;
+  margin: 10px;
+  /* box-sizing: border-box; */
+}
+```
+
+在标准盒子模型下，div 的 offsetWidth = 100 + 10 *2 + 5 * 2 = 130px。
+
+在怪异盒子模型下，width 属性设置的值其实就等于 offsetWidth，div 的 offsetWidth = 100px。
+
+### scrollWidth
+
+scrollWidth 可以理解为 clientWidth + 溢出内容区的宽度。
+
+如果内容没有溢出，那么 scrollWidth = clientWidth。如果内容溢出了，那么 scrollWidth = clientWidth + 溢出宽度。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    div {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      padding: 10px;
+      border: 5px solid green;
+      margin: 10px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    this is a div area.
+    this is a div area.
+    this is a div area.
+  </div>
+</body>
+</html>
+```
+
+![scrollWidth_1](./images/css/scrollWidth_1.png)
+
+![scrollWidth_2](./images/css/scrollWidth_2.png)
