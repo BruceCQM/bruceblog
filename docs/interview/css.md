@@ -1348,4 +1348,22 @@ rem 单位在一些旧版本的浏览器中不被支持，而 em 单位在所有
 
 可以这么理解，`(屏幕实际宽度 / 设计稿宽度)` 就是网页的 px 与 设计稿的 px 的缩放比例，然后再乘以 rem 和 px 的比例，就得到网页的 1rem 对应多少 px。
 
+```js
+// multiple是倍数，默认是1，也可以自定义
+const computedFontStyle = (clientWidth, designWidth, multiple = 1) => {
+  return (clientWidth / designWidth) * multiple;
+};
+
+// 每次屏幕宽度改变时，改变html标签的font-size
+window.onresize = () => {
+  // 获取html对象
+  const docEl = document.documentElement;
+  // 获取网页宽度
+  const clientWidth = docEl.clientWidth;
+  // 计算html的font-size
+  const rootFontStyle = computedFontStyle(clientWidth, 800);
+  docEl.setAttribute("style", `font-size: ${rootFontStyle}px`);
+};
+```
+
 [根据设计稿，计算出网页REM的大小，有那么难吗？](https://segmentfault.com/a/1190000041434714){link=static}
