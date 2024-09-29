@@ -1477,3 +1477,5 @@ scrollWidth 可以理解为 clientWidth + 溢出内容区的宽度。
 ![scrollWidth_1](./images/css/scrollWidth_1.png)
 
 ![scrollWidth_2](./images/css/scrollWidth_2.png)
+
+[你必须知道的 clientWidth, offsetWidth, scrollWidth.](https://segmentfault.com/a/1190000043384759){link=static}
