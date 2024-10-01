@@ -652,7 +652,7 @@ js 动画可以借助 velocity.js 来实现。velocity.js 是一个非常易用�
 
 ### flex 布局
 
-思路：使用 [flex 布局]()。
+思路：使用 flex 布局。
 
 1. 设置三个容器，分别是 middle、left、right。middle 模块放在前面，设置高度。
 
