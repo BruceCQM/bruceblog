@@ -282,8 +282,14 @@ git rebase B A
 1. 将远程指定分支与本地当前分支合并。可用于在合并到团队公共分支之前解决冲突问题，在本地合并公共分支先解决掉冲突。
 
 ```bash
+git merge origin/develop_2023-03-12
+
 git merge --no-ff origin/develop_2023-03-12
 ```
+
+合并分支的时候推荐加上 `--no-ff` 参数，禁止快进式合并，生成一个新的提交记录。
+
+[Git 合并时 --no-ff 的作用](https://blog.csdn.net/zombres/article/details/82179122){link=static}
 
 ## 版本穿梭与回滚
 
