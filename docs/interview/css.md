@@ -1505,3 +1505,30 @@ scrollWidth 可以理解为 clientWidth + 溢出内容区的宽度。
 ![scrollWidth_2](./images/css/scrollWidth_2.png)
 
 [你必须知道的 clientWidth, offsetWidth, scrollWidth.](https://segmentfault.com/a/1190000043384759){link=static}
+
+## 20、dns-prefetch和preconnect
+
+dns-prefetch：告知浏览器对指定域名进行 DNS 解析，后续请求这个域名资源时可以省掉 DNS 解析的时间。
+
+preconnect：告知浏览器与指定域名的服务器建立连接，后续请求这个域名资源时，可以直接使用已经建立好的连接，省掉 DNS+TCP+TLS 的时间。
+
+这两个属性是将解析域名和建立连接的过程提前，从而在后续真正请求资源时可以节省掉时间。
+
+如果您知道自己很快会从第三方网域下载内容，但不知道相应资源的确切网址，那么这两种资源提示就有助于提高网页速度。例如，分发 JavaScript 库、图片或字体的 CDN。
+
+```html
+<link rel="dns-prefetch" href="http://example.com">
+<link rel="preconnect" href="http://example.com">
+```
+
+如果页面需要建立与多个第三方域的连接，将它们预先连接会适得其反。preconnect 最好仅用于最关键的连接。对于其它连接，只需要使用 dns-prefetch 即可。
+
+[dns-prefetch和preconnect的实际行为探索](https://zhuanlan.zhihu.com/p/358836730){link=static}
+
+[使用 dns-prefetch,MDN](https://developer.mozilla.org/zh-CN/docs/Web/Performance/dns-prefetch){link=static}
+
+[尽早建立网络连接，以提升系统感知的网页速度](https://web.developers.google.cn/articles/preconnect-and-dns-prefetch?hl=zh-cn#establish_early_connections_with_relpreconnect){link=static}
+
+[预加载系列一：DNS Prefetching 的正确使用姿势](https://segmentfault.com/a/1190000003944417){link=static}
+
+[带你玩转prefetch, preload, dns-prefetch，defer和async](https://segmentfault.com/a/1190000011577248){link=static}
