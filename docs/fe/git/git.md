@@ -458,3 +458,84 @@ git stash apply
 ```
 
 [git stash详解](https://blog.csdn.net/stone_yw/article/details/80795669){link=card}
+
+## 实际场景
+
+### 将代码从A仓库的a分支合并到B仓库的b分支
+
+业务场景：
+
+B 仓库是灰度代码仓库，灰度完成之后，需要将代码合并到主仓库之中。主要难点就是跨仓库合并代码。
+
+目标：将 B 灰度仓库的 feature_B 分支合并到 A 主仓库的 feature_A 分支。
+
+1、下载 A 主仓库的代码。
+
+```bash
+git clone A仓库地址
+```
+
+2、创建本地分支 feature_A，并将其关联到主仓库对应的 feature_A 分支。
+
+```bash
+git checkout -b feature_A origin/feature_A
+```
+
+3、为灰度仓库添加别名。
+
+```bash
+git remote add 别名 B灰度仓库地址
+```
+
+4、拉取灰度仓库的代码到本地。
+
+```bash
+git fetch
+```
+
+5、创建本地分支 feature_B，并将其关联到灰度仓库对应的 feature_B 分支。
+
+```bash
+git checkout -b feature_B 别名/feature_B
+```
+
+6、切换到 feature_A 分支。
+
+```bash
+git checkout feature_A
+```
+
+6、在本地将 feature_B 分支合并到当前分支 feature_A 分支。
+
+```bash
+git merge feature_B
+
+# 如果出现refusing to merge unrelated histories错误，增加参数
+git merge feature_b --allow-unrelated-histories
+```
+
+合并过程中大概率是会有冲突的，解决好冲突。
+
+7、将 feature_A 分支推送到远程主仓库。
+
+```bash
+git push
+```
+
+至此，完成目标：将 B 灰度仓库的 feature_B 分支合并到 A 主仓库的 feature_A 分支。
+
+[git：实现从一个仓库的指定分支合并代码到另一个仓库的指定分支](https://blog.csdn.net/weixin_41377877/article/details/123229066){link=static}
+
+### 合并代码出现refusing to merge unrelated histories报错
+
+背景：将 B 灰度仓库的 feature_B 分支合并到 A 主仓库的 feature_A 分支的过程中，合并代码的时候出现这个报错。
+
+原因：两个分支拥有不相关的提交历史，因此 git 拒绝合并。
+
+解决方法：如果需要合并，增加 `--allow-unrelated-histories` 参数，允许合并不相关的历史。
+
+```bash
+git merge feature_B --allow-unrelated-histories
+```
+
+[git merge 合并分支时遇上refusing to merge unrelated histories的解决方案](https://blog.csdn.net/quhan97/article/details/122726787){link=static}

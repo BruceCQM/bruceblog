@@ -50,4 +50,4 @@
 - 2024-09-27：学习iframe；rem和em的区别；根据设计稿确定网页rem大小。
 - 2024-09-29：学习clientWidth、offsetWidth、scrollWidth的区别。
 - 2024-09-30：PC端和移动端项目CSS适配区别。
-- 2024-10-09：dns-prefetch和preconnect。
+- 2024-10-09：dns-prefetch和preconnect；跨仓库合并分支代码。
