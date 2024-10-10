@@ -51,3 +51,4 @@
 - 2024-09-29：学习clientWidth、offsetWidth、scrollWidth的区别。
 - 2024-09-30：PC端和移动端项目CSS适配区别。
 - 2024-10-09：dns-prefetch和preconnect；跨仓库合并分支代码。
+- 2024-10-10：学习栈内存和堆内存的区别。
