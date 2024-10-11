@@ -261,7 +261,7 @@ person.sayHello() // hello, my name is kimmy
 
 原型链实际上提供了一条查询属性和方法的路径，当我们要访问一个对象的属性时，首先看这个对象本身是否存在这个属性，如果没有，再沿着原型链查找原型对象，一直到原型链的终点为止。如果都没有，则返回 undefined。
 
-![原型链](./images/prototype_chain.png)
+![原型链](./images/js/prototype_chain.png)
 
 ### Function、Object 之间微妙的关系
 

@@ -12,24 +12,58 @@
 注意事项：`this` 指向的修正、参数的正确传递。
 
 ```js
-function debounce(func, wait) {
-  let timeout = null;
+// 写法一：使用普通函数
+function debounce(func, delay) {
+  let timer = null;
 
   return function() {
-    const context = this;
-    const args = arguments;
-
-    if (timeout) {
-      clearTimeout(timeout);
-      timeout = null;
+    // 先清除定时器
+    if (timer) {
+      clearTimeout(timer);
     }
 
-    timeout = setTimeout(function() {
+    const context = this;
+    const args = arguments;
+    // 设置定时器，delay 秒后执行回调
+    timer = setTimeout(function() {
+      // 修改this指向，指向调用者
+      // 如果直接func()，this指向window，定时器里面
       func.apply(context, args);
-    }, wait)
+    }, delay)
+  }
+}
+
+// 写法二：使用箭头函数
+function debounce(func, delay) {
+  let timer = null
+
+  return function() {
+    if(timer) {
+      clearTimeout(timer);
+    }
+    // 箭头函数没有this和arguments，用的是上层函数的，所以不用额外用变量记录
+    timer = setTimeout(() => {
+      func.apply(this, arguments);
+    }, delay);
   }
 }
 ```
+
+```html
+<button id="btn">按钮</button>
+<script>
+  const btn = document.getElementById('btn');
+  btn.onclick = debounce(function() {
+    // this应该指向btn
+    console.log('this', this);
+    // arguments有事件对象event
+    console.log('arguments', arguments);
+    // 打印出「按钮」
+    console.log(arguments[0].target.innerText);
+  }, 1000);
+</script>
+```
+![防抖结果](./images/coding_problems/debounce_result.png)
 
 ## throttle 节流
 
@@ -241,7 +275,7 @@ function unique4(arr) {
 
 json 是独立于编程语言的数据存储和表示格式，也就是说它只能存储各个语言通用的东西，JavaScript 特有的一些值无法正确 JSON 序列化。
 
-![不能 JSON 序列化的特殊值](./images/stringify_no.png)
+![不能 JSON 序列化的特殊值](./images/coding_problems/stringify_no.png)
 
 :::tip
 如图，`undefined`、JS 方法、`Symbol` 类型值经过 `stringify()` 处理后都丢失了。
