@@ -83,12 +83,9 @@ function throttle(func, wait) {
   let previous = 0;
 
   return function () {
-    const context = this;
-    const args = arguments;
     const now = +new Date();
-
     if (now - previous >= wait) {
-      func.apply(context, args);
+      func.apply(this, arguments);
       previous = now;
     }
   };
@@ -101,21 +98,77 @@ function throttle(func, wait) {
 - 事件触发，设置定时器，在 n 秒之后执行回调函数并清空定时器
 - 若 n 秒内再次触发事件，不会做任何动作
 
+这种写法是触发事件之等待 delay 后再执行回调。
+
 ```js
-function throttle(func, wait) {
+// 写法一：普通函数
+function throttle(func, delay) {
   let timer = null;
 
   return function () {
+    // 有定时器，停止后续操作
+    if (timer) {
+      return;
+    }
+
     const context = this;
     const args = arguments;
-    if (!timer) {
-      timer = setTimeout(() => {
-        func.apply(context, args);
-        clearTimeout(timer);
-        timer = null;
-      }, wait);
-    }
+    timer = setTimeout(() => {
+      func.apply(context, args);
+      // 要设置成null，用clearTimeout只是停掉计时器，timer还是会记录着定时器编号
+      timer = null;
+    }, delay);
   };
+}
+
+// 写法二：箭头函数
+function throttle(func, delay) {
+  let timer = null;
+  return function() {
+    if (timer) {
+      return;
+    }
+    timer = setTimeout(() => {
+      func.apply(this, arguments);
+      timer = null;
+    }, delay);
+  }
+}
+```
+
+这种写法是触发事件后马上执行回调，和时间戳的方式相同效果。
+
+```js
+function throttle2(func, delay) {
+  let timer = null;
+  return function () {
+    if (timer) {
+      return;
+    }
+    // 调用func的时机不同
+    func.apply(this, arguments);
+    timer = setTimeout(() => {
+      timer = null;
+    }, delay);
+  };
+}
+```
+
+也可以使用一个变量标志。
+
+```js
+function throttle(func, delay) {
+  let flag = true;
+  return function() {
+    if (!flag) {
+      return;
+    }
+    flag = false;
+    setTimeout(() => {
+      func.apply(this, arguments);
+      flag = true;
+    }, delay);
+  }
 }
 ```
 
