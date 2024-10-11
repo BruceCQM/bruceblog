@@ -490,3 +490,9 @@ H5 可以使用 iframe 第三方插件 pdf.js。
 ### 19、前端如何处理10万条数据
 
 [前端工程师如何处理10万条数据](http://caibaojian.com/optimize-large-data.html){link=static}
+
+### 20、Mac如何在finder中显示`.`开头文件
+
+在 finder 里面按 ⌘⇧.（Cmd+Shift+.）键，即可切换隐藏文件的显示与隐藏。
+
+[mac系统如何显示.开头的文件？](https://www.zhihu.com/question/40870712){link=static}
