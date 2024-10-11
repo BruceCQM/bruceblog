@@ -496,3 +496,17 @@ H5 可以使用 iframe 第三方插件 pdf.js。
 在 finder 里面按 ⌘⇧.（Cmd+Shift+.）键，即可切换隐藏文件的显示与隐藏。
 
 [mac系统如何显示.开头的文件？](https://www.zhihu.com/question/40870712){link=static}
+
+### 21、解决Windows删除node_modules太慢问题
+
+安装 rimraf 工具，使用其进行删除。
+
+```bash
+npm install rimraf -g
+
+rimraf node_modules
+```
+
+感觉并没有多快，也要三四分钟，不过是比直接删除快一点吧。
+
+[如何快速删除node_modules文件夹（windows+linux）](https://blog.csdn.net/RingoH/article/details/117957190){link=static}
