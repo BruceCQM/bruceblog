@@ -131,6 +131,76 @@ nvm uninstall <version>   // 卸载指定版本的 node
 
 [nvm 详细安装步骤以及使用（window10 系统）](https://blog.csdn.net/Anony_me/article/details/124153201){link=card}
 
+### nvm 使用问题
+
+1、nvm 下载 node 很慢，或者卡住、下载失败
+
+打开 nvm 目录，找到 setting.txt 文件打开。
+
+复制如下代码。
+
+```
+node_mirror: https://npmmirror.com/mirrors/node/
+npm_mirror: https://npmmirror.com/mirrors/npm/
+```
+
+[nvm 下载node时很慢或卡住或下载失败](https://zhuanlan.zhihu.com/p/683202282){link=static}
+
+## Npm
+
+### Npm 常用命令
+
+[npm常用命令大全](https://blog.csdn.net/penngo/article/details/127845211){link=static}
+
+1、设置镜像
+
+```bash
+#1,淘宝镜像源
+npm config set registry https://registry.npmmirror.com
+# 这个淘宝镜像源用不了了，报证书无效的错误
+npm config set registry https://registry.npm.taobao.org
+
+#2,腾讯云镜像源
+npm config set registry http://mirrors.cloud.tencent.com/npm/
+
+#3,华为云镜像源
+npm config set registry https://mirrors.huaweicloud.com/repository/npm/
+
+# 官方默认全局镜像
+npm config set registry https://registry.npmjs.org
+
+#检查当前镜像
+npm config get registry
+```
+
+2、安装依赖
+
+```bash
+# 全局安装
+npm install express -g
+npm install express --global
+
+# 安装到运行时依赖dependencies
+npm install express --save
+npm install express -S
+
+# 安装到开发时依赖devDependencies
+npm install express --save-dev
+npm install express -D
+```
+
+### npm 使用问题
+
+1、Windows 系统，vscode 终端运行 npm 命令，报错「找不到命令」
+
+问题描述：cmd 中可以运行，但 vscode 中无法运行。`node -v` 都无法运行。
+
+解决办法：使用管理员身份打开 powershell，输入 `set-executionpolicy remotesigned` 命令，它会提示安全风险，输入「y」回车确认即可。
+
+再重启电脑，vscode 就能正常使用 node 和 npm 命令。
+
+[Vscode 无法运行 npm 命令 报错 - 程序“npm”无法运行: 找不到应用程序所在位置](https://blog.csdn.net/qq_45094823/article/details/139946346){link=card}
+
 ## serve
 
 serve 在本地启动一个静态资源服务器，可以在本地运行查看项目打包的效果。
