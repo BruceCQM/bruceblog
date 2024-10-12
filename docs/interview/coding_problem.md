@@ -352,16 +352,20 @@ function unique5(arr) {
 
 ## shallowClone 浅拷贝
 
+### 手撸浅拷贝
+
 ```js
 function shallowClone(obj) {
   // 不是对象直接返回
-  if(obj === null || typeof obj !== 'object' || || obj instanceof RegExp) {
+  if(obj === null || typeof obj !== 'object' || obj instanceof RegExp) {
     return obj;
   }
 
   // 对象循环拷贝
   const res = obj instanceof Array ? [] : {};
+  // for...in 可以遍历自身和继承而来的可枚举属性
   for(let key in obj) {
+    // 是对象自身的属性才拷贝，继承来的不拷贝
     if(obj.hasOwnProperty(key)) {
       res[key] = obj[key];
     }
@@ -373,6 +377,66 @@ function shallowClone(obj) {
 由于 `typeof null` 的结果是 `object`，因此需要单独判断 `null` 值，否则拷贝 `null` 值会得到空对象 `{}`，比较怪异。
 
 JS 发展到今天，除了手撸一个浅拷贝函数之外，还能使用 `Object.assign()`、`...扩展运算符` 浅拷贝对象和数组，`concat()`、`slice()` 浅拷贝数组。
+
+### Object.assign()
+
+Object.assign() 方法可以把任意多个对象的可枚举属性拷贝给目标对象，然后返回目标对象。
+
+```js
+var obj1 = { a: 10, b: { b: 20 }, c: { c: 30} };
+var obj2 = Object.assign({}, obj1);
+obj2.a = 100;
+obj2.b = 200;
+obj2.c.c = 300;
+
+console.log(obj1); // { a: 10, b: { b: 20}, c: { c: 300 } }
+console.log(obj2); // { a: 100, b: 200, c: { c: 300 } }
+```
+
+### lodash 的 _.clone 方法
+
+使用 lodash 库提供的 _.clone 方法进行浅拷贝。
+
+```js
+var _ = require('lodash');
+var obj1 = {
+    a: 1,
+    b: { f: { g: 1 } },
+    c: [1, 2, 3]
+};
+var obj2 = _.clone(obj1);
+
+console.log(obj1.b.f === obj2.b.f); // true
+```
+
+### 扩展运算符
+
+```js
+var obj = { a: 1 };
+var obj2 = { ...obj };
+```
+
+### Array.prototype.concat()
+
+浅拷贝数组。
+
+```js
+let arr = [1, 3, { username: 'kobe' }];
+let arr2 = arr.concat();    
+arr2[2].username = 'wade';
+console.log(arr); //[ 1, 3, { username: 'wade' } ]
+```
+
+### Array.prototype.slice()
+
+浅拷贝数组。
+
+```js
+let arr = [1, 3, { username: 'kobe' }];
+let arr2 = arr.slice();    
+arr2[2].username = 'wade';
+console.log(arr); //[ 1, 3, { username: 'wade' } ]
+```
 
 ## deepClone 深拷贝
 
