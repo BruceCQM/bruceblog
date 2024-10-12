@@ -146,6 +146,12 @@ npm_mirror: https://npmmirror.com/mirrors/npm/
 
 [nvm 下载node时很慢或卡住或下载失败](https://zhuanlan.zhihu.com/p/683202282){link=static}
 
+2、 `nvm use xxx` 命令报权限不足
+
+使用管理员身份运行 cmd，再运行这个命令。
+
+[nvm use 报错：You do not have sufficient privilege to perform this operation](https://blog.csdn.net/JudyC/article/details/121702250){link=static}
+
 ## Npm
 
 ### Npm 常用命令
