@@ -374,3 +374,19 @@ module.exports = {
   },
 }
 ```
+
+## webpack 问答
+
+1、.less 文件经过 less-loader 处理成 .css 文件之后，是否还会经过 css-loader 的处理呢?
+
+需要的，每个 loader 一般只做一件事情。拿解析 less 为例，需要先将 less 转换成 css，这个是 less-loader 处理，处理成 css 之后，但是由于 webpack 并不能识别 css 文件，依然需要 css-loader 将 css 转换成 commonjs 对象放到 js 里面，最后页面渲染的时候要想把样式显示出来，需要借助 style-loader 或者 MiniCssExtractPlugin.loader 把 css 插入到 html 里面的 style 或者以 link 外部 css 的方式。
+
+每个 loader 就是一个函数，可以把这个过程理解成流水线的方式。
+
+2、loader 之间应该也存在叠加处理，类似流水线一般的吗?比如 url-loader 和 file-loader 之间。
+
+这个就看写loader 的作者了，可以把 loader 的职责分的更细，比如把 url-loader 的功能拆成 file-loader 和一个用于base64的 loader，也可以一个 loader 做几件事情。我更倾向把 loader 责任划分的更细和清楚。
+
+3、process.env.NODE_ENV 到底是什么呢，是 node 提供的运行环境参数还是啥？
+
+process.env 这个会返回用户的环境变量，而NODE_ENV是环境变量里面用的较多的一个，用来设置当前构建脚本是开发阶段和生产阶段。如果将mode设置成development，则process.env.NODE_ENV的值就是development，production也同理。
