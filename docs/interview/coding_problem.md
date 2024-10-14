@@ -445,21 +445,23 @@ console.log(arr); //[ 1, 3, { username: 'wade' } ]
 ### 手撸深拷贝
 ```js
 function deepClone(obj) {
-  if(obj === null || typeof obj !== 'object' || || obj instanceof RegExp) {
+  if(obj === null || typeof obj === 'function' || typeof obj !== 'object' ||  instanceof RegExp) {
     return obj;
   }
 
   const res = obj instanceof Array ? [] : {};
   for(let key in obj) {
     if(obj.hasOwnProperty(key)) {
-      res[key] = typeof obj[key] === 'object' ? deepClone(obj[key]) : obj[key];
+      res[key] = deepClone(obj[key]);
     }
   }
   return res;
 }
 ```
 
-上述方式是比较基础的深拷贝实现方式，能实现日常开发常见对象的拷贝，没有考虑 DOM 对象、时间对象等特殊情况。不过也能应对日常开发的需求了，如果需要拷贝特殊对象再进行额外的考虑即可。
+上述方式是比较基础的深拷贝实现方式，能实现日常开发常见对象的拷贝，没有考虑 DOM 对象、时间对象等特殊情况。
+
+不过也能应对日常开发的需求了，如果需要拷贝特殊对象再进行额外的考虑即可。例如像 RegExp 正则对象，如果不直接返回，而是进入后续的逻辑判断，就会返回一个空对象。
 
 ### `JSON`
 

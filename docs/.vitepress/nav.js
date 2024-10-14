@@ -33,7 +33,7 @@ export default [
     ]
   },
   {
-    text: '面试宝典',
+    text: '宝典',
     link: '/interview/javascript'
   },
   {
