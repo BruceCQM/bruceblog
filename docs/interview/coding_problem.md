@@ -563,6 +563,35 @@ const res = await deepClone(obj);
 
 [MDN 结构化克隆算法](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Structured_clone_algorithm){link=card}
 
+## 实现once函数，传入的函数只执行一次
+
+```js
+function once(func) {
+  // 缓存函数调用结果
+  let result;
+  return function() {
+    // func执行过一次，直接返回缓存的结果
+    if (!func) {
+      return result;
+    }
+    result = func.apply(this, arguments);
+    // 表示func已经执行过一次
+    func = null;
+    return result;
+  }
+}
+
+const obj = {}; 
+obj.addOnce = once(function(a, b) {
+  console.log(this);
+  return a + b;
+});
+console.log(obj.addOnce(1,2)); // { addOnce: fn() } 3
+console.log(obj.addOnce(3,4)); // 还是3，且不会再打印this
+```
+
+[JavaScript写一个 once 函数，让传入函数只执行一次](https://juejin.cn/post/7061973702451134477){link=static}
+
 ## 求数组最值
 
 取出数组的最大值或最小值，以取出最大值为例。
