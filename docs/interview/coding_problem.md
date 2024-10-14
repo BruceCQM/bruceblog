@@ -469,6 +469,37 @@ function deepClone(obj) {
 
 这种方法简单方便，但无法正确拷贝 JS 特有的数据类型，如 `undefined`、JS 方法、`Symbol`、`Infinity`、`NaN`。
 
+- undefined、JS Function、Symbol 直接丢失了。
+
+- null、NaN、Infinity 转换成 null。
+
+- date 日期对象转换成对应的日期时间字符串，正则对象、map、set 转换为空对象。
+
+```js
+const obj = {
+  a: 1,
+  name: 'hello',
+  flag: true,
+  n: null,
+  b: undefined,
+  say: function() {},
+  s: Symbol(123),
+  c: Infinity,
+  d: NaN,
+  arr: [1,2],
+  date: new Date(),
+  reg: new RegExp(),
+  map: new Map(),
+  set: new Set()
+}
+
+console.log('obj ', obj);
+const res = JSON.parse(JSON.stringify(obj));
+console.log('res ', res);
+```
+
+![JSON深拷贝](./images/coding_problems/deepCopy_JSON.png)
+
 ### `lodash`
 
 使用 `lodash` 的 `cloneDeep()` 方法。
