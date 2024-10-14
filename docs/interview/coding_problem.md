@@ -565,6 +565,8 @@ const res = await deepClone(obj);
 
 ## 实现once函数，传入的函数只执行一次
 
+实现一个 once 函数，要求传入的函数只能执行一次，且第二次及以后再调用时，仍会返回第一次执行的值。
+
 ```js
 function once(func) {
   // 缓存函数调用结果
@@ -589,6 +591,13 @@ obj.addOnce = once(function(a, b) {
 console.log(obj.addOnce(1,2)); // { addOnce: fn() } 3
 console.log(obj.addOnce(3,4)); // 还是3，且不会再打印this
 ```
+
+利用闭包，我们返回的新函数有两个 “私有” 的变量可以访问：
+
+- 传入的 fn 函数。
+- 额外声明的用于缓存结果的 result 变量。
+
+当返回的新函数被调用时，我们先将参数传给 fn，拿到返回值缓存到 result。然后将 fn 设置为 undefined（或 null），用于标识别已经执行了一次，最后返回 result。
 
 [JavaScript写一个 once 函数，让传入函数只执行一次](https://juejin.cn/post/7061973702451134477){link=static}
 
