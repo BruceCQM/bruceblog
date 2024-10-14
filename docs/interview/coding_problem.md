@@ -438,6 +438,8 @@ arr2[2].username = 'wade';
 console.log(arr); //[ 1, 3, { username: 'wade' } ]
 ```
 
+[js深拷贝和浅拷贝及其实现方式](https://segmentfault.com/a/1190000039310119){link=static}
+
 ## deepClone 深拷贝
 
 深拷贝就是在浅拷贝的基础上判断遍历拷贝的值是否为对象，如果是对象，则递归调用深拷贝函数。
@@ -469,7 +471,7 @@ function deepClone(obj) {
 
 这种方法简单方便，但无法正确拷贝 JS 特有的数据类型，如 `undefined`、JS 方法、`Symbol`、`Infinity`、`NaN`。
 
-- undefined、JS Function、Symbol 直接丢失了。
+- undefined、JS 函数、Symbol 直接丢失了。
 
 - null、NaN、Infinity 转换成 null。
 
@@ -505,6 +507,17 @@ console.log('res ', res);
 使用 `lodash` 的 `cloneDeep()` 方法。
 
 日常开发最佳解决方案，使用成熟的解决方案。缺点是需要额外引入第三方库。
+
+```js
+var _ = require('lodash');
+var obj1 = {
+  a: 1,
+  b: { f: { g: 1 } },
+  c: [1, 2, 3]
+};
+var obj2 = _.cloneDeep(obj1);
+console.log(obj1.b.f === obj2.b.f); // false
+```
 
 ### `MessageChannel`
 
