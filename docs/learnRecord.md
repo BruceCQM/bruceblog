@@ -82,7 +82,7 @@
 47、手写promise.all和promise.race
 48、vue和react中动态路由传递参数
 49、快排的应用
-51、toString和valueOf
+51、toString和valueOf ✅
 52、正则表达式
 53、本地存储和cookie
 54、dom事件流和0级、2级事件

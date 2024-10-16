@@ -285,7 +285,283 @@ str.toString(); // 'hello'
 
 ### 对象转换为数字
 
+在需要将对象转换为数字时：
+
+1、调用 valueOf() 方法，如果返回基本数据类型（string、number、boolean、undefined、null），则将这个结果转换为数字，转换失败返回 NaN。
+
+2、调用 toString() 方法，如果返回基本数据类型（string、number、boolean、undefined、null），则将这个结果转换为数字，转换失败返回 NaN。
+
+3、转换失败，报错。
+
+Symbol 也是基本数据类型，但是它转换成数字时，会报错。
+
+例子1：
+
+```js
+// 保存原始的valueOf
+var valueOf = Object.prototype.valueOf;
+var toString = Object.prototype.toString;
+
+// 添加valueOf日志
+Object.prototype.valueOf = function() {
+    console.log('valueOf');
+    return valueOf.call(this);
+};
+// 添加toString日志
+Object.prototype.toString = function() {
+    console.log('toString');
+    return toString.call(this);
+};
+var a = {};
+console.log(++a);
+```
+
+输出结果：
+
+```js
+valueOf
+toString
+NaN
+```
+
+分析：
+
+1、valueOf 返回对象本身，不是基本类型，继续执行 toString。
+
+2、toString 返回 "[object Object]"，是基本类型，将其转换为数字得到 NaN。
+
+例子2：
+
+```js
+// 保存原始的valueOf
+var valueOf = Object.prototype.valueOf;
+var toString = Object.prototype.toString;
+
+// 添加valueOf日志
+Object.prototype.valueOf = function() {
+    console.log('valueOf');
+    // 返回原始值
+    return '666';
+};
+// 添加toString日志
+Object.prototype.toString = function() {
+    console.log('toString');
+    return toString.call(this);
+};
+var a = {};
+console.log(++a);
+```
+
+输出结果：
+
+```js
+valueOf
+667 // 666 + 1 = 667
+```
+
+例子3：valueOf 返回 Symbol。
+
+```js
+// 保存原始的valueOf
+var valueOf = Object.prototype.valueOf;
+var toString = Object.prototype.toString;
+
+// 添加valueOf日志
+Object.prototype.valueOf = function() {
+    console.log('valueOf');
+    return Symbol(111);
+};
+// 添加toString日志
+Object.prototype.toString = function() {
+    console.log('toString');
+    return toString.call(this);
+};
+var a = {};
+console.log(++a);
+```
+
+输出结果：
+
+```js
+valueOf
+TypeError: Cannot convert a Symbol value to a number
+```
+
+例子4：toString() 返回对象。
+
+```js
+// 保存原始的valueOf
+var valueOf = Object.prototype.valueOf;
+var toString = Object.prototype.toString;
+
+// 添加valueOf日志
+Object.prototype.valueOf = function() {
+    console.log('valueOf');
+    return valueOf.call(this);
+};
+// 添加toString日志
+Object.prototype.toString = function() {
+    console.log('toString');
+    return [];
+};
+var a = {};
+console.log(++a);
+```
+
+输入结果：
+
+```js
+valueOf
+toString
+TypeError: Cannot convert object to primitive value
+```
+
 ### 对象转换为字符串
+
+和转换为数字类似，在需要将对象转换为字符串时：
+
+1、调用 valueOf() 方法，如果返回基本数据类型（string、number、boolean、undefined、null），则将这个结果转换为字符串并返回。
+
+2、调用 toString() 方法，如果返回基本数据类型（string、number、boolean、undefined、null），则将这个结果转换为字符串并返回。
+
+3、转换失败，报错。
+
+Symbol 也是基本数据类型，但是它转换成字符串时，会报错。
+
+例子1：
+
+```js
+// 保存原始的valueOf
+var valueOf = Object.prototype.valueOf;
+var toString = Object.prototype.toString;
+
+// 添加valueOf日志
+Object.prototype.valueOf = function() {
+    console.log('valueOf');
+    return valueOf.call(this);
+};
+// 添加toString日志
+Object.prototype.toString = function() {
+    console.log('toString');
+    return toString.call(this);
+};
+var a = {};
+console.log('love' + a);
+```
+
+输出结果：
+
+```js
+valueOf
+toString
+love[object Object]
+```
+
+分析：
+
+1、valueOf 返回对象本身，不是基本类型，继续执行 toString。
+
+2、toString 返回 "[object Object]"，是基本类型，将其转换为字符串最终打印 "love[object Object]"。
+
+例子2：valueOf 返回基本类型数据和Symbol。
+
+```js
+Object.prototype.valueOf = function() {
+  console.log('valueOf');
+  return null;
+  // 返回Symbol
+  return Symbol();
+};
+var a = {};
+console.log('love' + a);
+```
+
+输出结果：
+
+```js
+valueOf
+lovenull
+
+// 返回Symbol报错
+valueOf
+TypeError: Cannot convert a Symbol value to a string
+```
+
+例子3：toString 返回对象。
+
+```js
+// 保存原始的valueOf
+var valueOf = Object.prototype.valueOf;
+var toString = Object.prototype.toString;
+
+// 添加valueOf日志
+Object.prototype.valueOf = function() {
+    console.log('valueOf');
+    return valueOf.call(this);
+};
+// 添加toString日志
+Object.prototype.toString = function() {
+    console.log('toString');
+    return {};
+};
+var a = {};
+console.log('love' + a);
+```
+
+输出结果：
+
+```js
+valueOf
+toString
+TypeError: Cannot convert object to primitive value
+```
+
+:::warning 特殊情况：alert()
+如果是 alert() 函数将对象转换为字符串，则先执行 toString() 再执行 valueOf()。
+
+```js
+// 保存原始的valueOf
+var valueOf = Object.prototype.valueOf;
+var toString = Object.prototype.toString;
+
+// 添加valueOf日志
+Object.prototype.valueOf = function () {
+    console.log('valueOf');
+    return valueOf.call(this);
+};
+// 添加toString日志
+Object.prototype.toString = function () {
+    console.log('toString');
+    return this;
+};
+var a = {};
+alert(a);
+
+// 输出结果：
+toString
+valueOf
+Uncaught TypeError: Cannot convert object to primitive value
+```
+:::
+
+### 一道面试题
+
+```js
+var a = {};
+var b = {};
+var c = {};
+c[a] = 1;
+c[b] = 2;
+
+console.log(c[a]);
+console.log(c[b]);
+```
+
+js 中对象的属性名是以字符串形式存储的（ES6 后 Symbol 也可以作为属性名），因此当对象用作属性名时，会被转换为字符串。
+
+根据转换规则，a、b 都会被转换为 "[object Object]"，因此实际上 c 只有一个键值对，即 `{ "[object Object]": 2 }`。
+
+所以最终结果是打印出两个 2。
 
 ### 总结
 
@@ -298,6 +574,8 @@ valueOf() 优先级更高。当 valueOf() 没有被重写，并且返回基本�
 - 是不是所有场景都会调用 valueOf() 和 toString()？
 
 不是。对象转换为数字、字符串会调用，转换为布尔值不会。
+
+[聊一聊valueOf和toString](https://juejin.cn/post/6844903967097356302){link=static}
 
 ## 基本数据类型为何能调用方法？
 
