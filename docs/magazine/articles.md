@@ -510,3 +510,9 @@ rimraf node_modules
 感觉并没有多快，也要三四分钟，不过是比直接删除快一点吧。
 
 [如何快速删除node_modules文件夹（windows+linux）](https://blog.csdn.net/RingoH/article/details/117957190){link=static}
+
+### 22、解决Chrome自动转换HTTPS的方法
+
+第三种方法亲测有效。将该网站的不安全内容设置为允许。
+
+[解决Chrome浏览器自动转换https的四种方法](https://blog.csdn.net/hgfzero/article/details/136912237){link=static}
