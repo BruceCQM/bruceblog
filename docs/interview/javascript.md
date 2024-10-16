@@ -157,8 +157,147 @@ a.toString() // '123'
 a = true
 a.toString() // 'true'
 ```
-
 :::
+
+## valueOf() 和 toString()方法
+
+### valueOf()
+
+valueOf 是 Object.prototype 上的方法，它的作用是将传入的数据转换为对象。如果数据本身就是对象，就会直接返回这个数据，否则就会将其转换为对象再返回。
+
+但很多内置对象都会重写这个方法，来适应实际需求。
+
+valueOf() 作用在基本数据类型上，可以理解为调用了对应的包装类方法，返回对象。
+
+```js
+// 基本数据类型不能直接调用 Object.prototype 上的方法
+var valueOf = Object.prototype.valueOf;
+
+valueOf.call(666); // Number {666}
+valueOf.call('hello'); // String {'hello'}
+valueOf.call(false); // Boolean {false}
+
+// Uncaught TypeError: Cannot convert undefined or null to object
+valueOf.call(null);
+valueOf.call(undefined);
+```
+
+valueOf() 方法作用在引用数据类型上，有些对象重写了 valueOf() 方法，不是返回原本的对象。
+
+|对象|valueOf 返回值|
+|--|--|
+|Object|对象本身|
+|Array|数组本身|
+|Date|时间戳|
+|Function|函数本身|
+|Boolean|返回原始布尔值|
+|Number|返回原始数值|
+|String|返回原始字符串|
+
+```js
+const obj = { age: 18 };
+const arr = [1,2,3];
+const time = new Date();
+const func = function () {};
+const bool = new Boolean(false);
+const num = new Number(888);
+const str = new String('hello');
+
+obj.valueOf(); // {age: 18}
+arr.valueOf(); // [1,2,3]
+time.valueOf(); // 1729044501685
+func.valueOf(); // f() {}，函数本身
+bool.valueOf(); // false
+num.valueOf(); // 888
+str.valueOf(); /// 'hello'
+```
+
+### toString()
+
+toString 是 Object.prototype 上的方法，它返回一个表示该对象的字符串。
+
+1、Object.prototype.toString() 判断对象类型
+
+Object.prototype.toString() 返回 `"[object Type]"`，这里的 `Type` 是对象的类型。
+
+如果对象有 `Symbol.toStringTag` 属性，其值是一个字符串，则它的值将被用作 `Type`。
+
+很多内置对象，例如 `Map`、`Symbol` 都有 `Symbol.toStringTag`。一些早年的对象没有，但仍然有一个特殊的标签作为 `Type`。
+
+特殊地，`arguments` 对象返回的是 `[object Arguments]`。
+
+```js
+Object.prototype.toString.call(123) // [object Number]
+Object.prototype.toString.call('abc') // [object String]
+Object.prototype.toString.call(true) // [object Boolean]
+Object.prototype.toString.call(undefined) // [object Undefined]
+Object.prototype.toString.call(null) // [object Null]
+Object.prototype.toString.call(Symbol(123)) // [object Symbol]
+Object.prototype.toString.call(BigInt(123)) // [object BigInt]
+Object.prototype.toString.call({}) // [object Object]
+Object.prototype.toString.call([]) // [object Array]
+Object.prototype.toString.call(function () {}) // [object Function]
+
+function func() {
+  return Object.prototype.toString.call(arguments); // [object Arguments]
+}
+```
+
+```js
+const obj = { age: 18 };
+obj[Symbol.toStringTag] = 'TestType';
+Object.prototype.toString.call(obj); // [object TestType]
+
+const obj = { age: 18 };
+obj[Symbol.toStringTag] = 888;
+Object.prototype.toString.call(obj); // [object Object]
+```
+
+2、toString() 转换规则
+
+和 valueOf() 一样，很多内置对象也重写了 toString() 方法，以适应实际需求。
+
+|对象|toString 返回值|
+|--|--|
+|Object|"[object Object]"|
+|Array|以逗号分隔的字符串，数组每个元素分别调用 toString()，再把结果用逗号连接起来|
+|Date|时间字符串|
+|Function|声明函数的JS源代码字符串|
+|Boolean|"true" 或 "false"|
+|Number|"数字值"|
+|String|"字符串"|
+
+```js
+const arr = [1,2,3, new Date(), { age: 11 }];
+const time = new Date();
+const func = function () { console.log(11); };
+const bool = new Boolean(false);
+const num = new Number(888);
+const str = new String('hello');
+
+arr.toString(); // '1,2,3,Wed Oct 16 2024 11:02:40 GMT+0800 (中国标准时间),[object Object]'
+time.toString(); // 'Wed Oct 16 2024 10:59:45 GMT+0800 (中国标准时间)'
+func.toString(); // 'function () { console.log(11); }'
+bool.toString(); // 'false'
+num.toString(); // '888'
+str.toString(); // 'hello'
+```
+
+### 对象转换为数字
+
+### 对象转换为字符串
+
+### 总结
+
+- valueOf() 和 toString() 哪个优先级更高？
+
+valueOf() 优先级更高。当 valueOf() 没有被重写，并且返回基本类型数据时，才会调用 toString()。
+
+但 alert() 将对象转换为字符串是特殊情况，会优先调用 toString()，toString() 没有返回基本类型数据才调用 valueOf()。
+
+- 是不是所有场景都会调用 valueOf() 和 toString()？
+
+不是。对象转换为数字、字符串会调用，转换为布尔值不会。
 
 ## 基本数据类型为何能调用方法？
 
