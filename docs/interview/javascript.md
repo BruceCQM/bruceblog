@@ -577,6 +577,8 @@ valueOf() 优先级更高。当 valueOf() 没有被重写，并且返回基本�
 
 [聊一聊valueOf和toString](https://juejin.cn/post/6844903967097356302){link=static}
 
+[Object.prototype.toString()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/toString){link=static}
+
 ## 基本数据类型为何能调用方法？
 
 基本数据类型都有其对应的包装类，能够调用方法是因为进行了自动封装。
