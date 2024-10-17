@@ -1532,3 +1532,69 @@ preconnect：告知浏览器与指定域名的服务器建立连接，后续请�
 [预加载系列一：DNS Prefetching 的正确使用姿势](https://segmentfault.com/a/1190000003944417){link=static}
 
 [带你玩转prefetch, preload, dns-prefetch，defer和async](https://segmentfault.com/a/1190000011577248){link=static}
+
+## 21、CSS 绘制三角形
+
+div 宽高设置为 0，接着设置对应的边框颜色和边框宽度，即可实现。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    div {
+      width: 0;
+      height: 0;
+    }
+    /* 等腰三角形 */
+    .box {
+      border-bottom: 20px solid red;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+    }
+    .box1 {
+      border-left: 20px solid blue;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+    }
+    /* 直角三角形 */
+    .box2 {
+      border-left: 20px solid orange;
+      border-bottom: 20px solid orange;
+      border-top: 20px solid transparent;
+      border-right: 20px solid transparent;
+    }
+    .box3 {
+      border-top: 20px solid purple;
+      border-right: 20px solid purple;
+      border-bottom: 20px solid transparent;
+      border-left: 20px solid transparent;
+    }
+    /* 小的直角三角形 */
+    .box4 {
+      border-top: 20px solid green;
+      border-right: 20px solid transparent;
+    }
+    .box5 {
+      border-bottom: 20px solid pink;
+      border-left: 20px solid transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="box"></div>
+  <div class="box1"></div>
+  <div class="box2"></div>
+  <div class="box3"></div>
+  <div class="box4"></div>
+  <div class="box5"></div>
+</body>
+</html>
+```
+
+![css三角形](./images/css/CSS_triangle.png)
+
+[纯 CSS 实现绘制各种三角形（各种角度）](https://www.cnblogs.com/chengxs/p/11406278.html){link=static}
