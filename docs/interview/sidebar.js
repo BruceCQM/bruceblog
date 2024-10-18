@@ -23,4 +23,8 @@ export default [
     text: 'FE coding',
     link: '/interview/coding_problem'
   },
+  {
+    text: 'Mobile',
+    link: '/interview/mobile_end'
+  },
 ]
