@@ -725,3 +725,31 @@ http-equiv 所说的模拟 HTTP 响应头的效果，并不是指它能直接修
 [如何在window的location使用target](https://www.cnblogs.com/orac/p/6865728.html){link=static}
 
 [iframe/frameset/frame的区别](https://www.cnblogs.com/nyw1983/p/11427157.html){link=static}
+
+## 9、本地存储和cookie
+
+一、本地存储
+
+localStorage 是 HTML5 标准中新加入的技术，它不是什么划时代的新东西。
+
+早在 IE6 的时候，就有一个叫 userData 的东西用于本地存储，而当时考虑到浏览器的兼容性，更为通用的方案是使用 Flash。
+
+如今，localStorage 已经被绝大多数浏览器所支持。如果你的网站需要支持 IE6+，那么使用 userData 也是种不错的选择。
+
+二、cookie
+
+cookie 是小甜饼的意思，顾名思义，cookie 确实非常小，大小限制在 4KB 左右。
+
+它的主要用途是保存登录信息，比如登录网站常见的「记住密码」，就是通过在 cookie 中存入一段辨别用户身份的数据来实现的。
+
+三、区别
+
+- 请求是否携带。cookie 在浏览器和服务器之间来回传递，而 sessionStorage 和 localStorage 不会自动把数据发给服务器，仅在本地保存。
+
+- cookie 数据存在路径的概念，可以限制 cookie 只属于某个路径下。
+
+- 存储大小不同。cookie 数据不能超过 4KB，因为每次 HTTP 请求都会携带 cookie，因此 cookie 只适合保存很小的数据，如会话标识。sessionStorage 和 localStorage 存储大小比 cookie 大很多，可以达到 5M。
+
+- 数据有效期不同。sessionStorage 只在当前浏览器窗口关闭前有效，在窗口关闭后就会失效，不能够持久保持。localStorage 始终有效，窗口或浏览器关闭也一直保存，因此用作持久数据。cookie 只在设置的过期时间之前有效，即使窗口或浏览器关闭。
+
+- 作用域不同。sessionStorage 只在当前窗口共享。localStorage 和 cookie 在同一个浏览器（Chrome和Firefox不会共享）的所有同源窗口共享。
