@@ -1795,6 +1795,8 @@ for (const item of obj) {
 
 ## DOM 事件流
 
+### DOM 事件流概述
+
 事件流描述的是页面接收事件的顺序，它包含三个阶段：事件捕获阶段、目标阶段、事件冒泡阶段。
 
 事件捕获阶段是指事件从 DOM 的最顶层节点开始，逐级向下传递到具体节点的过程。事件首先发生在 document 上，然后依次传递给 html、body 及其子节点，最后到达目标节点。
@@ -1802,6 +1804,50 @@ for (const item of obj) {
 事件冒泡阶段相反，是指事件从目标节点开始，逐级向上传递到最顶层节点的过程。事件到达事件目标后不会停止，会逐层向上冒泡，直到 document 对象，和事件捕获阶段相反。
 
 ![事件流](./images/js/event_stream.jpg)
+
+### DOM0级事件
+
+DOM0级事件，是指通过「行内绑定」或「动态绑定」的方式进行事件绑定。
+
+行内绑定：
+
+```html
+<input id="myButton" type="button" value="Click Me" onclick="alert('Hello1');" >
+```
+
+动态绑定：
+```js
+// 动态绑定
+document.getElementById('myButton').onclick = function() {
+  alert('Hello2');
+}
+
+// 删除事件处理程序
+document.getElementById('myButton').onclick = null;
+```
+
+行内绑定和动态绑定的区别：
+
+- 行内绑定：回调函数的 this 指向 window 对象。
+- 动态绑定：回调函数的 this 指向绑定的 DOM 元素。
+
+DOM0级事件最终只能绑定一个回调函数，在添加事件处理函数时，后面的事件会覆盖前面的事件。
+
+另外，DOM0级事件具有较好的跨浏览器优势，兼容性较好。
+
+### DOM2级事件
+
+DOM2级事件，是指通过 addEventListener() 或 removeEventListener() 进行事件绑定和删除。
+
+DOM2级事件中，可以对同一个元素的同一个事件绑定多个事件处理函数。
+
+[关于DOM事件流、DOM0级事件与DOM2级事件](https://www.cnblogs.com/leophen/p/11405579.html){link=static}
+
+[JS中DOM0,DOM2,DOM3级事件模型解析](https://www.jianshu.com/p/bbd6e600c0d3){link=static}
+
+[五分钟了解DOM 事件模型](https://juejin.cn/post/6844903850323755021){link=static}
+
+### 事件委托
 
 事件委托：利用事件冒泡的特性，将里层的事件委托给外层，根据 event 对象的属性进行事件委托，改善性能。
 
@@ -1845,7 +1891,13 @@ box.onclick = function(event) {
 }
 ```
 
+### 事件监听函数 adddEventListener
+
 `adddEventListener(event.type, handle, boolean)`：添加事件监听器，第三个参数默认为 false，表示在冒泡阶段触发事件。设置为 true 则表示在捕获阶段触发事件。
+
+[addEventListener的第三个参数](https://juejin.cn/post/7081836998071156744){link=static}
+
+### 阻止事件冒泡
 
 `event.stopPropagation()`：阻止事件进一步传播，包括捕获、冒泡。根据事件监听器触发的阶段，决定什么时候阻止事件继续传播。
 
