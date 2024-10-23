@@ -930,6 +930,8 @@ Function.prototype.myBind = function (context, ...arg1) {
 
 ## 手写 Promise.all 和 Promise.race
 
+[手写promise的方法（all、race、allSettled、any、finally），你会几个](https://blog.csdn.net/weixin_45774485/article/details/122462081){link=static}
+
 ### Promise.all
 
 要点：
@@ -1002,6 +1004,8 @@ Promise.myAll([promise1, promise2, promise3]).then((value) => {
 - 返回一个 promise 实例。
 
 - 只要传入的 promise 有一个状态发生改变，返回的 promise 状态就会改变，结果就是状态改变的 promise 的结果。
+
+- 如果传入一个空数组，返回的 promise 一直保持在 pending 状态。
 
 ```js
 Promise.myRace = function(arr) {
