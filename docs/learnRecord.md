@@ -60,6 +60,7 @@
 - 2024-10-18：学习 PWA 技术。
 - 2024-10-21：学习本地存储和cookie。
 - 2024-10-22：学习DOM0、2级事件。
+- 2024-10-23：学习手写Promise.all和Promise.race。
 
 基础剩余内容：
 13、重写bind ✅
@@ -83,7 +84,7 @@
 44、JS反射机制以及Reflect详解
 45、SPA单页面的理解
 46、Vue的provide/inject
-47、手写promise.all和promise.race
+47、手写promise.all和promise.race ✅
 48、vue和react中动态路由传递参数
 49、快排的应用
 51、toString和valueOf ✅

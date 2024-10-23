@@ -927,3 +927,118 @@ Function.prototype.myBind = function (context, ...arg1) {
   return result;
 }
 ```
+
+## 手写 Promise.all 和 Promise.race
+
+### Promise.all
+
+要点：
+
+- Promise.all() 方法接收一个 iterable 类型数据（如数组、字符串）。下面的实现代码没有做这一步判断。
+
+:::tip 检查是否是可迭代数据
+通过检查数据的 `Symbol.iterator` 是不是 `function` 来判断是否为可迭代对象。
+:::
+[[JS] 检查一个对象是否可迭代](https://blog.csdn.net/sinat_36246371/article/details/103671711){link=static}
+
+- 返回一个 promise 实例。
+
+- 当所有 promise 都成功是，返回的 promise 才会成功，并且成功的结果是所有 promise 的成功返回值组成的数组。
+
+- 当有一个 promise 失败了，返回的 promise 就会失败，并且失败的结果是第一个失败 promise 的结果。
+
+- 如果传入一个空数组，返回一个成功状态的 promise，且成功结果是一个空数组。
+
+```js
+Promise.myAll = function(arr) {
+  // 传入的Promise个数
+  const len = arr.length;
+  const res = new Array(len);
+  // 进入fullfilled状态的promise个数
+  let count = 0;
+  // 如果传入空数组，直接返回一个已fulfilled状态的promise
+  if (len === 0) {
+    return Promise.resolve(arr);
+  }
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < len; i++) {
+      // Promise.resolve可将非Promise对象转为Promise对象
+      Promise.resolve(arr[i]).then((value) => {
+        // 成功的结果保存在res对应索引位置
+        res[i] = value;
+        // 成功promise个数+1
+        count += 1;
+        // 若全部promise都成功，则返回结果
+        if (count === len) {
+          resolve(res);
+        }
+      }, (err) => {
+        // 有一个promise失败，直接进入失败状态
+        reject(err);
+      })
+    }
+  })
+}
+
+const promise1 = Promise.resolve(3);
+const promise2 = 42;
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, "foo1");
+});
+
+Promise.myAll([promise1, promise2, promise3]).then((value) => {
+  console.log('val ', value);
+}, (err) => {
+  console.log('err ', err);
+}); // val [3, 42, "foo1"]
+```
+
+### Promise.race
+
+要点：
+
+- 传入的参数也是 iterable 类型数据。
+
+- 返回一个 promise 实例。
+
+- 只要传入的 promise 有一个状态发生改变，返回的 promise 状态就会改变，结果就是状态改变的 promise 的结果。
+
+```js
+Promise.myRace = function(arr) {
+  return new Promise((resolve, reject) => {
+    for (let i = 0;i < arr.length;i++) {
+      // 只要有一个promise状态改变了，就调用函数
+      Promise.resolve(arr[i]).then(resolve, reject);
+    }
+  })
+}
+
+// 和下面的写法是一样的
+Promise.myRace = function(arr) {
+  return new Promise((resolve, reject) => {
+    for (let i = 0;i < arr.length;i++) {
+      Promise.resolve(arr[i]).then((res) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      })
+    }
+  })
+}
+
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, "foo1");
+});
+const promise4 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 200, "foo2");
+});
+const promise5 = new Promise((resolve, reject) => {
+  setTimeout(reject, 100, "foo3");
+});
+
+Promise.myRace([promise3, promise4, promise5]).then((value) => {
+  console.log('val ', value);
+}, (err) => {
+  console.log('err ', err);
+}); // err foo3
+```
