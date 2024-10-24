@@ -2291,3 +2291,76 @@ alert( curriedSum(1)(2)(3) ); // 6，全柯里化
 - 否则，返回一个偏函数，它将重新调用 `curried`，将之前传入的参数和新的参数一并传入。
 
 - 直到参数数量足够，才调用原函数，得到最终结果。
+
+### 参数不确定柯里化实现
+
+原始函数参数个数不确定。
+
+面试题：实现如下一个累乘函数。
+
+```js
+curry(1)(2)(3) = 6;
+curry(1,2,3) = 6;
+curry(1,2)(3) = 6;
+curry(1)(2)(3)(4) = 24;
+curry(1)(2)(3)(4)(5) = 120;
+```
+
+方法一：
+
+```js
+function curry(...args) {
+  function multiple(arr) {
+    return arr.reduce((a, b) => a * b);
+  }
+
+  return function fn(...args2) {
+    // 判断有没有传递参数，如果有，存储参数，返回fn
+    if (args.length > 0) {
+      args.push(...args2);
+      return fn;
+    }
+    // 没有传递参数，调用累乘方法计算累乘结果并返回
+    return multiple(args);
+  }
+}
+
+console.log(curry(1,2)(3)(4,5)); // [Function: fn]
+console.log(curry(1,2)(3)(4,5)()); // 120
+```
+
+方法一其实并不完全符合要求，注意最后的调用方式，它需要 `()` 调用不传递参数，才会执行最后的累乘方法返回最终结果。
+
+[函数柯里化实现sum(1)(2)(3)(4)...无限累加](https://blog.csdn.net/wingxabc/article/details/111167582){link=static}
+
+方法二：
+
+利用浏览器控制台会隐式调用 `toString()` 方法。
+
+```js
+function curry() {
+  const args = Array.prototype.slice.call(arguments);
+
+  const inner = function() {
+    args.push(...arguments);
+    return inner;
+  }
+  inner.toString = function() {
+    return args.reduce((a, b) => a * b, 1);
+  }
+  return inner;
+}
+
+console.log(curry(1,2)(3)(4,5)); // [Function: inner] { toString: [Function (anonymous)] }
+console.log(curry(1,2)(3)(4,5).toString()); // 120
+```
+
+但实际上，无论是 `curry(1,2)(3)(4,5)` 还是 `console.log(curry(1,2)(3)(4,5))`，浏览器都不会隐式调用 `toString()` 方法。
+
+![curry柯里化](./images/js/curry_function.png)
+
+浏览器调用 `alert()` 方法才能隐式调用 `toString()` 方法。
+
+![curry_function_alert](./images/js/curry_function_alert.png)
+
+[js面试高频题：函数柯里化的实现（彻底弄懂）](https://blog.csdn.net/double_sweet1/article/details/122786636){link=static}
