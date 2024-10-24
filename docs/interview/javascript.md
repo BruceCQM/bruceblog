@@ -2179,3 +2179,115 @@ new String() 返回的是大小不确定的对象，存在堆内存中。
 :::
 
 [14-JS堆和栈内存-闭包与内存泄露 - 闭包之所以能访问父函数的局部变量是因为这些变量存放在堆内存中](https://www.cnblogs.com/haoqiyouyu/p/14683600.html){link=static}
+
+## 函数柯里化
+
+[柯里化函数（Currying），什么是柯里化，为什么要进行柯里化，高级柯里化函数的实现](https://blog.csdn.net/m0_52409770/article/details/123359123){link=static}
+
+### 柯里化概述
+
+柯里化（Currying）是把接受多个参数的函数，转换成接受一个参数的函数，并且这个新函数会返回一个函数。
+
+它是一种函数的转换，例如将 `f(a,b,c)` 转换成 `f(a)(b)(c)`。
+
+举个简单的例子：
+
+```js
+// curry(f) 执行柯里化转换
+function curry(f) {
+  return function(a) {
+    return function(b) {
+      return f(a, b);
+    };
+  };
+}
+
+// 用法
+function sum(a, b) {
+  return a + b;
+}
+
+let curriedSum = curry(sum);
+
+alert( curriedSum(1)(2) ); // 3
+```
+
+柯里化函数 curry() 对传入的函数执行柯里化，从原来的 `f(a,b)` 转换成 `f(a)(b)` 执行。
+
+可以理解为，把 sum 函数的 a、b 两个参数，变成了先用一个函数接收 a，接着返回一个函数去接收处理 b 参数。
+
+lodash 也实现了柯里化函数：[`_curry`](https://lodash.com/docs#curry)。
+
+### 柯里化的应用场景
+
+1、参数复用
+
+柯里化后的函数可以记住之前传入的参数，从而实现参数的复用。
+
+假设有一个用于格式化和输出信息的日志函数 `log(date, importance, message)`。
+
+```js
+function log(date, importance, message) {
+  alert(`[${date.getHours()}:${date.getMinutes()}] [${importance}] ${message}`);
+}
+```
+
+经过柯里化之后，可以复用参数。
+
+```js
+// 函数柯里化
+log = _.curry(log);
+
+// 固定第一个参数为当前时间
+const logNow = log(new Date());
+// 假设有很多地方需要logNow，就不用重复传递当前日期时间了，让参数得以复用
+logNow('INFO', 'message');
+logNow('ERROR', 'message');
+
+// 还可以继续固定第二个参数
+const debugNow = logNow('DEBUG');
+debugNow('message');
+```
+
+2、延迟执行
+
+柯里化后的函数可以在需要的时候才进行计算，从而实现延迟执行。
+
+如上述例子，debugNow 函数并没有立即执行，而是等待 message 参数传入之后才执行打印工作，从而实现了延迟执行。
+
+### 柯里化的实现
+
+原始函数的参数数量是确定的。
+
+```js
+function curry(func) {
+  return function curried(...args) {
+    // func.length 是函数的参数个数
+    if (args.length >= func.length) {
+      return func.apply(this, args);
+    } else {
+      return function(...args2) {
+        return curried.apply(this, args.concat(args2));
+      }
+    }
+  }
+}
+```
+
+```js
+function sum(a, b, c) {
+  return a + b + c;
+}
+
+let curriedSum = curry(sum);
+
+alert( curriedSum(1, 2, 3) ); // 6，仍然可以被正常调用
+alert( curriedSum(1)(2,3) ); // 6，对第一个参数的柯里化
+alert( curriedSum(1)(2)(3) ); // 6，全柯里化
+```
+
+- 如果传入的 `args` 长度大于等于原始函数的参数个数（`func.length`），直接调用原函数。
+
+- 否则，返回一个偏函数，它将重新调用 `curried`，将之前传入的参数和新的参数一并传入。
+
+- 直到参数数量足够，才调用原函数，得到最终结果。
