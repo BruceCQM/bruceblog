@@ -226,6 +226,11 @@ arr.some((item, index, arr) => item === 6) // true
 let arr = [1, 2, 3, 4, 5]
 arr.reduce((pre, cur, index, arr) => pre + cur) // 15
 arr.reduce((pre, cur, index, arr) => pre + cur, 10) // 25
+
+// 扁平化数组
+const arrays = [[1, 2], [3, 4], [5, 6]];
+const flattened = arrays.reduce((acc, cur) => acc.concat(cur), []);
+console.log(flattened); // 输出: [1, 2, 3, 4, 5, 6]
 ```
 
 #### `reduceRight()`
