@@ -2311,12 +2311,19 @@ curry(1)(2)(3)(4)(5) = 120;
 ```js
 function curry(...args) {
   function multiple(arr) {
-    return arr.reduce((a, b) => a * b);
+    return arr.reduce((a, b) => a * b, 1);
+  }
+
+  // 假设要求第一层参数没传，返回1
+  if (args.length <= 0) {
+    return 1;
+    // 或者选择抛出一个错误
+    // return new Error('Please pass params');
   }
 
   return function fn(...args2) {
     // 判断有没有传递参数，如果有，存储参数，返回fn
-    if (args.length > 0) {
+    if (args2.length > 0) {
       args.push(...args2);
       return fn;
     }
@@ -2325,6 +2332,7 @@ function curry(...args) {
   }
 }
 
+console.log(curry()); // 1
 console.log(curry(1,2)(3)(4,5)); // [Function: fn]
 console.log(curry(1,2)(3)(4,5)()); // 120
 ```
