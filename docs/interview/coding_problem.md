@@ -1046,3 +1046,46 @@ Promise.myRace([promise3, promise4, promise5]).then((value) => {
   console.log('err ', err);
 }); // err foo3
 ```
+
+## 用 ES5 实现 const
+
+由于ES5环境没有block的概念，所以是无法百分百实现const，只能是挂载到某个对象下，要么是全局的window，要么就是自定义一个object来当容器。
+
+```js
+var __const = function __const (data, value) {
+  // 把要定义的data挂载到window下，并赋值value
+  window.data = value
+  // 利用Object.defineProperty的能力劫持当前对象，并修改其属性描述符
+  Object.defineProperty(window, data, {
+    enumerable: false,
+    configurable: false,
+    get: function () {
+      return value
+    },
+    set: function (data) {
+      // 当要对当前属性进行赋值时，则抛出错误
+      if (data !== value) {
+        throw new TypeError('Assignment to constant variable.')
+      } else {
+        return value
+      }
+    }
+  })
+}
+__const('a', 10)
+console.log(a)
+delete a
+console.log(a)
+// 因为const定义的属性在global下也是不存在的，所以用到了enumerable: false来模拟这一功能
+for (let item in window) {
+  // 因为不可枚举，所以不执行
+  if (item === 'a') {
+    console.log(window[item])
+  }
+}
+a = 20 // 报错
+```
+
+[如何在 ES5 环境下实现一个const ？](https://juejin.cn/post/6844903848008482824){link=static}
+
+[如何用es5实现const](https://blog.csdn.net/Alive_tree/article/details/107839058){link=static}

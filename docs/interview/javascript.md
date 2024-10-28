@@ -2597,5 +2597,3 @@ console.log('last');
 [setTimeout和setImmediate以及process.nextTick的区别](https://blog.csdn.net/lijingdan123123/article/details/121088267){link=static}
 
 [JavaScript中事件循环和Nodejs中事件循环](https://blog.csdn.net/u014465934/article/details/89176879){link=static}
-
-[](){link=static}
