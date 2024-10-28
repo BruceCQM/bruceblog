@@ -2372,3 +2372,230 @@ console.log(curry(1,2)(3)(4,5).toString()); // 120
 ![curry_function_alert](./images/js/curry_function_alert.png)
 
 [js面试高频题：函数柯里化的实现（彻底弄懂）](https://blog.csdn.net/double_sweet1/article/details/122786636){link=static}
+
+## 事件循环 event loop
+
+### 事件循环概述
+
+为了协调事件，比如用户交互、脚本、渲染、网络任务等，浏览器必须使用事件循环。
+
+JS 是单线程的，在执行代码时只能够按顺序执行。为了避免 JS 代码执行时的阻塞，所以 JS 是异步的，比如在遇到定时器 setTimeout 时，不会停下来等待定时器到期，而是继续执行后面的代码，等定时器到期了，再执行定时器的回调函数。
+
+基于这种异步的机制，JS 有一套自己执行代码的规则，来保证代码可以高效无阻塞地运行，这种规则就是事件循环。
+
+Nodejs 和浏览器的事件循环机制稍有差异。
+
+### 浏览器的事件循环机制
+
+事件循环的主要过程是，从宏任务队列中取出一个宏任务开始执行，在执行过程中如果遇到其它宏任务，则添加到宏任务队列当中；如果遇到微任务，则添加到微任务队列当中。
+
+等执行完此次宏任务之后，开始执行微任务队列的微任务。在执行微任务的过程中如果又遇到宏任务，则添加到宏任务队列；遇到微任务，添加到微任务队列。
+
+等清空微任务队列之后，再从宏任务队列取出下一个宏任务，重复上述过程直到所有任务都完成为止。
+
+常见的宏任务：script标签整体代码、setTimeout、setInterval、setImmediate、I/O、requestAnimationFrame。
+
+常见的微任务：Promise.then catch finally、process.nextTick、MutationObserver、async/await（本质上也是Promise）。
+
+|宏任务|浏览器|Node|
+|-|-|-|
+|I/O|✅|✅|
+|setTimeout|✅|✅|
+|setInterval|✅|✅|
+|setImmediate|✖|✅|
+|requestAnimationFrame|✅|✖|
+
+|微任务|浏览器|Node|
+|-|-|-|
+|Promise.then catch finally|✅|✅|
+|process.nextTick|✖|✅|
+|MutationObserver|✅|✖|
+|async/await|✅|✅|
+
+### Node的事件循环机制
+
+> Node.js采用V8作为js的解析引擎，而I/O处理方面使用了自己设计的libuv，libuv是一个基于事件驱动的跨平台抽象层，封装了不同操作系统一些底层特性，对外提供统一的API，事件循环机制也是它里面的实现。
+
+Node 的事件循环包含 6 个阶段，如下图所示。
+
+![Node事件循环](./images/js/node_event_loop.png)
+
+![Node事件循环](./images/js/node_event_loop2.png)
+
+每个阶段的含义：
+
+- timers: 这个阶段执行定时器队列中的回调如 setTimeout() 和 setInterval()。
+
+- I/O callbacks: 这个阶段执行几乎所有的回调。但是不包括close事件，定时器和setImmediate()的回调。
+
+- idle, prepare: 这个阶段仅在内部使用，可以不必理会。
+
+- poll: 等待新的I/O事件，node在一些特殊情况下会阻塞在这里。
+
+- check: setImmediate()的回调会在这个阶段执行。
+
+- close callbacks: 例如socket.on('close', ...)这种close事件的回调。
+
+:::danger setImmediate和setTimeout(fn,0)的区别
+在 ⽂件 I/O、⽹络 I/O 中，setImmediate()会先于 setTimeout(fn,0)。
+
+其他⼀般情况下，setTimeout(fn,0)会先于 setImmediate()。因为在 poll 阶段后，⻢上就进⼊ check 队列，从⽽进⾏ setImmediate 的回调。后⾯循环了之后才到 setTimeout()。
+
+但是把它们放到⼀个 I/O 回调⾥⾯，就⼀定是 setImmediate() 先执⾏，因为 poll 阶段后⾯就是check 阶段。
+
+后面有例子说明。
+:::
+
+### 浏览器和Node的区别
+
+主要体现在对微任务的处理时机的不同：
+
+浏览器中，微任务在当前宏任务执行完成之后执行。
+
+Node.js 中，微任务会在事件循环的各个阶段之间执行。也就是会在每个阶段的所有宏任务执行完后，去执行微任务。
+
+举个例子：
+
+```js
+setTimeout(()=>{
+    console.log('timer1')
+    Promise.resolve().then(function() {
+        console.log('promise1')
+    })
+}, 0)
+
+setTimeout(()=>{
+    console.log('timer2')
+    Promise.resolve().then(function() {
+        console.log('promise2')
+    })
+}, 0)
+
+//浏览器输出结果
+timer1
+promise1
+timer2
+promise2
+
+//Node输出结果
+timer1
+timer2
+promise1
+promise2
+```
+
+因为 setTimout 都属于 Node.js 事件循环的 timers 阶段，因此会执行完两个setTimeout，然后执行微任务。
+
+在以往的 Node 版本中，也就是 11.0 之前， JS 的执⾏栈的顺序是：执⾏同类型的所有宏任务 -> 在间隙时间执⾏微任务 ->event loop 完毕执⾏下⼀个 event loop。
+
+⽽在最新版本的 11.0 之后，NodeJS 为了向浏览器靠⻬，对底部进⾏了修改，最新的执⾏栈顺序和浏览器的执⾏栈顺序已经是⼀样了：执⾏⾸个宏任务 -> 执⾏宏任务中的微任务 -> event loop 执⾏完毕执⾏下⼀个eventloop。
+
+因此，其实现在 **Node.js 和浏览器的事件循环机制都是相同的了**。
+
+### 代码题
+
+看代码说结果。
+
+```js
+async function say() {
+  await new Promise((resolve) => setTimeout(() => {
+    resolve();
+    new Promise((res) => {
+      console.log('timout in await');
+      res();
+    }).then(() => console.log('then in await'))
+  }, 0));
+  console.log('await finish');
+}
+say();
+
+setTimeout(() => {
+  console.log(3)
+})
+
+new Promise((resolve) => {
+  console.log(4)
+  resolve();
+}).then(() => {
+  console.log(5)
+  process.nextTick(() => {
+    console.log(6)
+  })
+})
+
+process.nextTick(() => {
+  console.log(1);
+  process.nextTick(() => {
+    console.log('nextTick in nextTick');
+  });
+  new Promise((resolve) => {
+    console.log(8);
+    resolve();
+  }).then(() => {
+    console.log(7)
+  })
+})
+
+new Promise((resolve) => {
+  console.log(10)
+}).then(() => {
+  console.log(9)
+})
+
+console.log(2)
+
+const fs = require('fs');
+
+fs.readFile('./package.json', () => {
+  setTimeout(() => {
+    console.log('fs => timeout');
+  });
+  setImmediate(() => {
+    console.log('fs => setImmediate');
+  })
+});
+
+setTimeout(() => {
+  console.log('timeout666');
+}, 0);
+
+setImmediate(() => {
+  console.log('setImmediate');
+});
+
+setTimeout(() => {
+  console.log('timeout');
+});
+
+process.nextTick(() => {
+  console.log('nextTick');
+});
+
+console.log('last');
+```
+
+在 Node 14.18.1 版本的运行结果如下：
+
+![运行结果](./images/js/event_loop_result.png)
+
+要点如下：
+
+- await 的 Promise 状态完成后，后面的代码就添加到微任务队列中，相当于 then()。因此 `await finish` 在 `then in await` 之前。
+
+- 微任务执行过程中如果又遇到微任务，则会继续添加到微任务队列中。
+
+- Promise 要状态改变才会执行 then 函数，添加微任务，因此 `console.log(9)` 这行没有打印，因为没有执行 resolve()。
+
+- 在文件 I/O 中，setImmediate() 会优先于 setTimeout(fn, 0)。因此 `fs => setImmediate` 在 `fs => timeout` 之前。
+
+- 其它一般情况下，setTimeout(fn, 0) 会先于 setImmediate()。因此 `timeout666` 和 `timeout` 都在 `setImmediate` 之前。
+
+- process.nextTick() 的优先级要永远高于 Promise 的微任务。因此 `1` 和 `nextTick`、`nextTick in nextTick` 在 `console.log(5)` 之前。
+
+[从setTimeout和Promise的执行顺序来了解JS的执行机制](https://juejin.cn/post/6855129007558492174){link=static}
+
+[setTimeout和setImmediate以及process.nextTick的区别](https://blog.csdn.net/lijingdan123123/article/details/121088267){link=static}
+
+[JavaScript中事件循环和Nodejs中事件循环](https://blog.csdn.net/u014465934/article/details/89176879){link=static}
+
+[](){link=static}

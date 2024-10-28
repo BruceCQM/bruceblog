@@ -62,10 +62,11 @@
 - 2024-10-22：学习DOM0、2级事件。
 - 2024-10-23：学习手写Promise.all和Promise.race。
 - 2024-10-24：学习实现柯里化函数；阅读正则表达式第一章节基础。
+- 2024-10-28：学习事件循环eventloop。
 
 基础剩余内容：
 13、重写bind ✅
-14、event loop
+14、event loop ✅
 16、http
 17、websocket
 18、实现多页通讯的方法
