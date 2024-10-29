@@ -1052,27 +1052,29 @@ Promise.myRace([promise3, promise4, promise5]).then((value) => {
 由于ES5环境没有block的概念，所以是无法百分百实现const，只能是挂载到某个对象下，要么是全局的window，要么就是自定义一个object来当容器。
 
 ```js
-var __const = function __const (data, value) {
-  // 把要定义的data挂载到window下，并赋值value
-  window.data = value
-  // 利用Object.defineProperty的能力劫持当前对象，并修改其属性描述符
-  Object.defineProperty(window, data, {
+function _const(key, value) {
+  var globalObject
+  if (typeof window === 'undefined') {
+    globalObject = global;
+  } else {
+    globalObject = window;
+  }
+  // 给全局对象设置属性
+  Object.defineProperty(globalObject, key, {
+    // 设置不可枚举，模拟const定义的值「遍历全局对象无法找到」的效果
     enumerable: false,
     configurable: false,
-    get: function () {
-      return value
+    get() {
+      return value;
     },
-    set: function (data) {
-      // 当要对当前属性进行赋值时，则抛出错误
-      if (data !== value) {
-        throw new TypeError('Assignment to constant variable.')
-      } else {
-        return value
-      }
+    set() {
+      // 只要赋值就报错
+      throw new Error('Assignment to constant variable.')
     }
   })
-}
-__const('a', 10)
+};
+
+_const('a', 10)
 console.log(a)
 delete a
 console.log(a)
@@ -1083,7 +1085,14 @@ for (let item in window) {
     console.log(window[item])
   }
 }
-a = 20 // 报错
+a = 10 // 报错
+
+_const('obj', { age: 22 });
+console.log(obj); // { age: 22 }
+obj.age = 24;
+obj.name = 'hello';
+console.log(obj); // { age: 24, name: 'hello' }
+obj = { name: 'world' }; // 报错
 ```
 
 [如何在 ES5 环境下实现一个const ？](https://juejin.cn/post/6844903848008482824){link=static}
