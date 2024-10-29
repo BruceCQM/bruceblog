@@ -27,4 +27,8 @@ export default [
     text: 'Mobile',
     link: '/interview/mobile_end'
   },
+  {
+    text: 'JS Methods',
+    link: '/interview/methods_index'
+  }
 ]
