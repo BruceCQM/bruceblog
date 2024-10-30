@@ -1053,12 +1053,7 @@ Promise.myRace([promise3, promise4, promise5]).then((value) => {
 
 ```js
 function _const(key, value) {
-  var globalObject
-  if (typeof window === 'undefined') {
-    globalObject = global;
-  } else {
-    globalObject = window;
-  }
+  var globalObject = typeof window === 'undefined' ? global : window;
   // 给全局对象设置属性
   Object.defineProperty(globalObject, key, {
     // 设置不可枚举，模拟const定义的值「遍历全局对象无法找到」的效果

@@ -2554,3 +2554,44 @@ console.log('last');
 [setTimeout和setImmediate以及process.nextTick的区别](https://blog.csdn.net/lijingdan123123/article/details/121088267){link=static}
 
 [JavaScript中事件循环和Nodejs中事件循环](https://blog.csdn.net/u014465934/article/details/89176879){link=static}
+
+## 事件循环进阶
+
+重点文章：
+
+[深入解析 EventLoop 和浏览器渲染、帧动画、空闲回调的关系](https://zhuanlan.zhihu.com/p/142742003){link=static}
+
+问题：
+
+1. 每一轮 Event Loop 都会伴随着渲染吗？
+2. requestAnimationFrame 在哪个阶段执行，在渲染前还是后？在 microTask 的前还是后？
+3. requestIdleCallback 在哪个阶段执行？如何去执行？在渲染前还是后？在 microTask 的前还是后？
+4. resize、scroll 这些事件是何时去派发的
+
+总结：
+
+1. 事件循环不一定每轮都伴随着重渲染，决定浏览器视图是否渲染的因素很多，例如屏幕刷新率、页面性能、页面是否在后台执行等。
+2. requestAnimationFrame 在屏幕渲染之前执行，非常适合用来做动画。
+3. requestIdleCallback 在屏幕渲染之后执行，并且是否有空执行要看浏览器的调度，如果要求它在某个时间内强制执行，可以设置 timeout 参数。
+4. resize 和 scroll 事件其实⾃带节流，它只在 Event Loop 的渲染阶段去派发事件到
+EventTarget 上。
+
+### Dom 渲染时机
+
+一般而言，Dom 渲染发生在微任务队列清空之后，下一个宏任务开始之前。由于 UI 线程和 js 线程互斥的关系，页面真正的渲染与浏览器的刷新频率也有关。
+
+GUI 渲染线程和 JS 引擎线程互斥，由于 JS 是可操纵 DOM 的，如果在修改这些元素属性同时渲染界面，即 JS 线程和渲染线程同时运行。那么渲染线程前后获得的元素数据可能不一致。
+
+因此，为了防止渲染出现不可预期的结果，GUI 渲染线程总是等待当前 JS 线程的任务清空后，把统一收集到的 DOM 操作提交给渲染线程，进行一次有效的屏幕更新。
+
+其它文章：
+
+[dom操作执行的执行与渲染在javascript事件循环机制的哪个阶段](https://blog.csdn.net/m0_37756431/article/details/135272473){link=static}
+
+[dom更新到底在javascript事件循环的哪个阶段？「前端每日一题v22.11.17」](https://juejin.cn/post/7167001630242504734){link=static}
+
+[熟悉requestidlecallback到了解react ric polyfill实现](https://juejin.cn/post/6844904196345430023){link=static}
+
+[requestAnimationFrame和requestIdleCallback是宏任务还是微任务](https://juejin.cn/post/7134972903816167455){link=static}
+
+[requestAnimationFrame的polyfill](https://cloud.tencent.com/developer/article/1195363){link=static}
