@@ -2584,6 +2584,96 @@ GUI 渲染线程和 JS 引擎线程互斥，由于 JS 是可操纵 DOM 的，如
 
 因此，为了防止渲染出现不可预期的结果，GUI 渲染线程总是等待当前 JS 线程的任务清空后，把统一收集到的 DOM 操作提交给渲染线程，进行一次有效的屏幕更新。
 
+### requestAnimationFrame() 执行时机
+
+requestAnimationFrame() 会在重新渲染前调用。
+
+但至于什么时候重新渲染，其实才是最主要的问题，得看浏览器的想法。
+
+浏览器执行任务的顺序：
+
+1. 从task任务队列中取第一个task（比如setTimeout、setIntervel的回调，也可以将同一轮循环中的所有同步代码看作是一个宏任务），执行它。
+
+2. 执行微任务队列里的所有微任务。
+
+3. 浏览器判断是否更新渲染屏幕，如果需要重新绘制，则执行步骤4-13，如果不需要重新绘制，则流程回到步骤1，这样不断循环。
+
+4. 触发resize、scroll事件，建立媒体查询（执行一个任务中如果生成了微任务，则执行完任务该后就会执行所有的微任务，然后再执行下一个任务）。
+
+5. 建立css动画（执行一个任务中如果生成了微任务，则执行完该任务后就会执行所有的微任务，然后再执行下一个任务）。
+
+6. 执行requestAnimationFrame回调（执行一个任务中如果生成了微任务，则执行完该任务后就会执行所有的微任务，然后再执行下一个任务）。
+
+7. 执行 IntersectionObserver 回调（执行一个任务中如果生成了微任务，则执行完该任务后就会执行所有的微任务，然后再执行下一个任务）。
+
+8. 更新渲染屏幕。
+
+9. 浏览器判断当前帧是否还有空闲时间，如果有空闲时间，则执行步骤10-12。
+
+10. 从 requestIdleCallback回调函数队列中取第一个，执行它。
+
+11. 执行微任务队列里的所有微任务。
+
+12. 流程回到步骤9，直到requestIdleCallback回调函数队列清空或当前帧没有空闲时间。
+
+13. 流程回到步骤1，这样不断循环。
+
+一个例子：
+
+[rAF在EventLoop的表现](https://www.cnblogs.com/zhangmingzhao/p/18028506){link=static}
+
+```js
+setTimeout(() => {
+  console.log("setTimeout");
+}, 0);
+Promise.resolve()
+  .then(() => {
+    console.log(2);
+  })
+  .then(() => {
+    console.log(3);
+  });
+new Promise((resolve) => {
+  console.log(4);
+  resolve();
+}).then(() => {
+    console.log(5);
+    return 6;
+  })
+  .then(Promise.resolve(7))
+  .then((res) => {
+    console.log(res);
+  });
+setTimeout(() => {
+    console.log('setTimeout2');
+});
+requestAnimationFrame(() => {
+  console.log("animation");
+});
+```
+
+在 Chrome 130.0.6723.70，屏幕刷新率 120FPS， 中可以试出三种结果：
+
+- 4 2 5 3 6 animation setTimeout setTimeout2
+
+- 4 2 5 3 6 setTimeout setTimeout2 animation
+
+- 4 2 5 3 6 setTimeout animation setTimeout2
+
+其中第一、二种试出的概率较高，第三种较低。
+
+按照上述的任务顺序，可以这样来理解：
+
+- 第一种情况，清空完微任务队列后，浏览器马上执行了一次渲染，因此打印了 animation，两个定时器宏任务放到下一帧中执行。
+
+- 第二种情况，清空完微任务队列，执行完两个定时器宏任务，浏览器才决定要渲染，所以 animation 最后打印。
+
+- 第三种情况，同理可得，清空完微任务队列，执行了第一个定时器宏任务，浏览器决定渲染，因此打印了 animation。剩余的定时器宏任务留到下一帧执行。
+
+⚠️ 所以难搞清楚的其实是浏览器渲染的时机，你无法精准预测浏览器会何时进行重新渲染。
+
+### 参考文章
+
 其它文章：
 
 [dom操作执行的执行与渲染在javascript事件循环机制的哪个阶段](https://blog.csdn.net/m0_37756431/article/details/135272473){link=static}
