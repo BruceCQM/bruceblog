@@ -2672,16 +2672,14 @@ requestAnimationFrame(() => {
 
 ⚠️ 所以难搞清楚的其实是浏览器渲染的时机，你无法精准预测浏览器会何时进行重新渲染。
 
-### 参考文章
+[requestAnimationFrame和requestIdleCallback是宏任务还是微任务](https://juejin.cn/post/7134972903816167455){link=static}
 
-其它文章：
+### 其它参考文章
 
 [dom操作执行的执行与渲染在javascript事件循环机制的哪个阶段](https://blog.csdn.net/m0_37756431/article/details/135272473){link=static}
 
 [dom更新到底在javascript事件循环的哪个阶段？「前端每日一题v22.11.17」](https://juejin.cn/post/7167001630242504734){link=static}
 
 [熟悉requestidlecallback到了解react ric polyfill实现](https://juejin.cn/post/6844904196345430023){link=static}
-
-[requestAnimationFrame和requestIdleCallback是宏任务还是微任务](https://juejin.cn/post/7134972903816167455){link=static}
 
 [requestAnimationFrame的polyfill](https://cloud.tencent.com/developer/article/1195363){link=static}
