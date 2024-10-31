@@ -764,13 +764,14 @@ var n = new Math(); // Math is not a constructor
 
 ```js
 // ES5 实现
-Function.prototype.myCall = function (context) {
-  // 如果 context 为空，则挂载到全局对象上，Node 是 global
-  // Object(context) 是为了防止传入基本类型
-  var context = context ? Object(context) : window;
+Function.prototype.myCall = function (obj) {
+  // 如果 obj 为空，则挂载到全局对象上，Node 是 global
+  // Object(obj) 是为了防止传入基本类型
+  var context = obj ? Object(obj) : window;
 
   // 为了防止属性名冲突，拼接上当前时间戳
   var key = 'fn' + new Date().getTime();
+  // var key = 'fn' + +new Date();
   context[key] = this;
 
   // 获取参数，从第二个开始，第一个是 context 
@@ -797,8 +798,8 @@ Function.prototype.myCall = function (context) {
 
 ```js
 // ES5 实现
-Function.prototype.myCall = function (context) {
-  var context = context ? Object(context) : window;
+Function.prototype.myCall = function (obj) {
+  var context = obj ? Object(obj) : window;
 
   var key = 'fn' + new Date().getTime();
   context[key] = this;
@@ -816,8 +817,8 @@ Function.prototype.myCall = function (context) {
 }
 
 // 使用 Symbol
-Function.prototype.myCall = function (context) {
-  var context = context ? Object(context) : window;
+Function.prototype.myCall = function (obj) {
+  var context = obj ? Object(obj) : window;
 
   // 每个 Symbol 都是独一无二的，不会冲突
   var key = Symbol();
@@ -836,8 +837,8 @@ Function.prototype.myCall = function (context) {
 }
 
 // ES6 实现
-Function.prototype.myCall = function (context, ...rest) {
-  const context = context ? Object(context) : window;
+Function.prototype.myCall = function (obj, ...rest) {
+  const context = obj ? Object(obj) : window;
 
   const key = Symbol();
   context[key] = this;

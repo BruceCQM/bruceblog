@@ -516,3 +516,19 @@ rimraf node_modules
 第三种方法亲测有效。将该网站的不安全内容设置为允许。
 
 [解决Chrome浏览器自动转换https的四种方法](https://blog.csdn.net/hgfzero/article/details/136912237){link=static}
+
+### 23、纯CSS实现网格背景
+
+作者介绍几种方法，使用纯 CSS，实现网页背景的网格效果。
+
+[纯CSS实现网格背景](https://spacexcode.com/blog/pure-css-grid-line/){link=static}
+
+### 24、快速开发AI的工作流模式
+
+作者介绍了开发 AI 的工作流模式，不懂编程的人也能上手。
+
+工作流模式：采用 AI 服务商提供的工作流（workflow），编排每个步骤，形成自动化操作。
+
+一个免费的 AI 应用开发平台就是[扣子](https://www.coze.cn/)，这是字节跳动旗下的产品。
+
+[AI 开发的捷径：工作流模式](https://www.ruanyifeng.com/blog/2024/10/coze.html){link=static}

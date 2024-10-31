@@ -734,5 +734,25 @@ export default [
         link: 'https://www.yikm.net/'
       },
     ]
+  },
+  {
+    title: '周刊的网站',
+    items: [
+      {
+        title: 'wechat-article-exporter',
+        desc: '开源的微信公众号文章在线导出工具，可用来批量下载某个公众号的文章',
+        link: 'https://github.com/jooooock/wechat-article-exporter',
+      },
+      {
+        title: 'Image to Excel',
+        desc: '表格图片转成 Excel 文件的在线服务',
+        link: 'https://itexcel.izhiyakeji.com/',
+      },
+      {
+        title: '加水印',
+        desc: '图片加水印的网页工具，纯前端应用，不需要服务器',
+        link: 'https://github.com/pdmaker/watermark-master',
+      },
+    ]
   }
 ]

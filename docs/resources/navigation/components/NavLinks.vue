@@ -5,7 +5,7 @@
   </h2>
   <div class="bb-links">
     <NavLink v-for="{ icon, title, desc, link } in items" :key="link"
-      :icon="icon" :title="title" :desc="desc" :link="link" />
+      :icon="icon || logoImg" :title="title" :desc="desc" :link="link" />
   </div>
 </template>
 
@@ -13,6 +13,7 @@
 import NavLink from './NavLink.vue';
 import { slugify } from '@mdit-vue/shared';
 import { computed } from 'vue';
+import logoImg from '/logo.png'
 
 export default {
   name: "NavLinks",
@@ -30,6 +31,7 @@ export default {
     const formatTitle = computed(() => slugify(props.title))
     return {
       formatTitle,
+      logoImg
     }
   }
 }
