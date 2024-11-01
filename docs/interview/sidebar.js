@@ -28,6 +28,10 @@ export default [
     link: '/interview/mobile_end'
   },
   {
+    text: '性能优化',
+    link: '/interview/optimization'
+  },
+  {
     text: 'JS Methods',
     link: '/interview/methods_index'
   }
