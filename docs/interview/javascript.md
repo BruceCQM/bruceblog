@@ -2683,3 +2683,53 @@ requestAnimationFrame(() => {
 [熟悉requestidlecallback到了解react ric polyfill实现](https://juejin.cn/post/6844904196345430023){link=static}
 
 [requestAnimationFrame的polyfill](https://cloud.tencent.com/developer/article/1195363){link=static}
+
+## JS 反射机制以及 Reflect 详解
+
+JS 反射机制就是提供了一组检查和操作对象内部属性和方法的 API。
+
+Reflect 是一个内建对象而不是函数对象，不能用 new 去构造一个实例，它提供了方法去拦截 JS 的一些操作，且它的所有属性和方法都是静态的。
+
+```js
+const a = new Reflect(); // TypeError: Reflect is not a constructor
+```
+
+ES6 为了操作对象而提供了新的 API。它将 Object 对象的一些明显属于语言内部的方法（例如 `Object.defineProperty`），放到 Reflect 对象上。
+
+它可以搭配 Proxy 使用，为 Proxy 的 handler 提供了与 Object 对象同名同作用的 API。
+
+对象的接口过于复杂，我们需要一个专门的对象来做这个事情，Reflect 的诞生将内部接口无差别的反射出来，且对象接口属于强类型语言的反射，把它们分散到静态方法并不合适，ES6 将其收敛到 Reflect 是对语言的进一步规范，是元变成概念的特性，也可使性能得到提升。
+
+### ES6 引入反射机制的原因
+
+#### 1. 统一对象操作接口
+
+在 S6 之前，JavaScript 中已经存在一些用于操作对象的方法，如 `Object.defineProperty()`、`Object.getOwnPropertyDescriptor()` 等。然而，这些方法分布在不同的对象上，没有一个统一的接口。通过引入 Reflect 对象，ES6 将这些方法统一起来，使得开发者能够更方便地使用这些方法，而不需要记住多个 API。
+
+#### 2. 更好地处理错误
+
+Reflect 方法在操作失败时会返回 `false`，而不是抛出异常。这使得开发者能够更容易地处理错误，而不需要使用 `try...catch` 语句。此外，Reflect 方法还能够返回更详细的错误信息，有助于调试。
+
+#### 3. 更好地支持代理
+
+ES6 引入了 Proxy 对象，用于创建代理对象，以便在访问或修改对象属性时执行自定义操作。Reflect 对象提供了一组与 Proxy 对象相对应的 API，使得开发者能够更方便地实现代理功能。
+
+#### 4. 更好地元编程支持
+
+反射机制使得开发者能够在运行时检查和修改对象的属性和方法，从而实现更高级的编程技巧，如元编程。
+
+元编程是指编写能够在运行时修改自身或其他程序的代码，这在某些场景下非常有用，例如框架和库的开发。
+
+#### 5. 更好的兼容性
+
+Reflect 对象提供了一组与 EC6 之前版本中类似的方法，这使得开发者能够更容易地将旧代码迁移到新版本的 JavaScript 中。
+
+总之，ES6 引入反射机制的主要原因是为了提供一种统一、易于使用且功能强大的方式来操作对象，从而提高代码的可读性、可维护性和可扩展性。
+
+### Reflect 详解
+
+[JS 反射机制及 Reflect 详解](https://www.cnblogs.com/Leophen/p/14838608.html){link=static}
+
+其它参考文章：
+
+[ES6设计反射Reflect的意义是什么？(除了把key in obj、delete这些方式函数化)?](https://www.zhihu.com/question/276403215){link=static}

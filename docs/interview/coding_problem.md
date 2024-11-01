@@ -1203,7 +1203,7 @@ function Student(name, age) {
 }
 // 关键语句
 Student.prototype = new Person();
-// 这种写法算是一种优化，减少一次执行父类构造函数，效果相同
+// 这种写法算是一种优化，减少一次执行父类构造函数，效果相同。其实这么写就变成了寄生组合式继承了。
 // Student.prototype = Object.create(Person.prototype);
 // 重写Student.prototype的constructor属性，使其指向Student
 Student.prototype.constructor = Student;
