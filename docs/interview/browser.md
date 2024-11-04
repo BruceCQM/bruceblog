@@ -753,3 +753,154 @@ cookie 是小甜饼的意思，顾名思义，cookie 确实非常小，大小限
 - 数据有效期不同。sessionStorage 只在当前浏览器窗口关闭前有效，在窗口关闭后就会失效，不能够持久保持。localStorage 始终有效，窗口或浏览器关闭也一直保存，因此用作持久数据。cookie 只在设置的过期时间之前有效，即使窗口或浏览器关闭。
 
 - 作用域不同。sessionStorage 只在当前窗口共享。localStorage 和 cookie 在同一个浏览器（Chrome和Firefox不会共享）的所有同源窗口共享。
+
+## 10、HTML、css、JS 加载顺序
+
+正常的加载顺序：
+
+- 浏览器一遍下载 HTML，一边解析。
+
+- CSS 文件的加载是与 DOM 的加载并行的。
+
+- 加载过程中发现 script 标签，暂停解析，把控制权交给 JS 引擎。
+
+- 如果 script 标签引用了外部脚本，就下载该脚本，否则直接执行。
+
+- 执行完毕，控制权交还给渲染引擎，恢复往下解析 HTML 网页。
+
+多个 link 文件：
+
+并行加载，先加载完的先解析，若有相同的选择器，后面的会把前面的合并。
+
+多个 script 文件：
+
+顺序下载，JS 脚本不会与 DOM 并行加载，倘若 JS 脚本过大，则可能导致浏览器页面显示滞后，出现「假死」状态，称为「阻塞效应」。
+
+[html,css,js加载顺序](https://www.cnblogs.com/yingsong/p/6170780.html){link=static}
+
+## 11、script 标签问题
+
+### defer、async 属性
+
+defer：
+
+JS 脚本**并行加载**，等页面解析完成后，再按照书写**顺序执行**。在 DOMContentLoaded 事件触发之前执行 JS 脚本，不会阻塞页面的解析。
+
+对于内置而不是连接外部脚本的 script 标签，以及动态生成的 script 标签，defer 属性不起作用。
+
+async：
+
+JS 脚本**并行加载**，下载完成后，**马上执行脚本**，阻塞 HTML 解析。执行完成后恢复解析。
+
+使用该属性，一般代表这个文件不依赖于别的 JS 和 CSS 文件，且 JS 脚本不会修改 DOM 和样式。
+
+如果同时使用 defer 和 async 属性，则 **async 优先**。
+
+![defer和async属性](./images/browser/js_defer_async.png)
+
+### 为何 JS 加载执行阻塞 HTML 解析
+
+1、为了防止 JS 修改 DOM 树，需要重新构建 DOM 树的情况出现。
+
+JS 中可能会创建、删除 DOM 节点，这些操作会对 DOM 树产生影响。如果不阻塞 HTML 解析，等浏览器解析完标签生成 DOM 树后，JS 修改了某些节点，浏览器又需要重新解析生成 DOM 树，性能会降低。
+
+2、避免 DOM 操作顺序不可控。
+
+例如，假设有一个脚本在解析到某个元素之前插入了一个新的元素，而后续的脚本依赖于这个新插入的元素。如果解析过程不被阻塞，后续的脚本可能会在新元素插入之前执行，导致错误。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example</title>
+</head>
+<body>
+  <div id="header">Header</div>
+  <script>
+    document.getElementById('header').innerText = 'New Header';
+    document.createElement('div').id = 'newElement';
+    document.body.appendChild(document.getElementById('newElement'));
+  </script>
+  <div id="content">Content</div>
+  <script>
+    document.getElementById('newElement').innerText = 'This is a new element';
+  </script>
+</body>
+</html>
+```
+
+第二个 script 标签尝试修改 `#newElement` 的内容。如果第一个 script 标签没有阻塞解析，`#newElement` 可能还没有被添加到 DOM 中，导致报错。
+
+3、避免资源加载顺序混乱
+
+JavaScript 脚本可能依赖于其他资源，如其他脚本文件、CSS 文件或数据文件。如果这些资源的加载顺序不可控，可能会导致脚本执行时所需的资源尚未加载完毕。
+
+例如，假设有一个脚本依赖于某个外部库，如果这个库的加载被延迟，脚本可能会在库加载之前执行，导致错误。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <script src ="j1.js" ></script>
+  <script src ="j2.js" ></script>
+</body>
+</html>
+```
+
+j2 脚本依赖于 j1 脚本，如果不阻塞解析，则可能出现先加载执行 j2 脚本的情况，而此时 j1 脚本还未加载完毕，导致报错。
+
+### script 标签最佳实践
+
+1、将 JS 脚本放在页面底部，或者在 JS 代码中使用 window.onload 事件。
+
+两个好处：
+
+- 避免 JS 脚本的下载和执行阻塞页面的解析，阻塞其它资源的加载。让静态 HTML 页面快速显示出来。
+
+- 在 DOM 结构生成之前调用 DOM 会报错，如果 JS 脚本放到网页最后，就可以避免这个问题。
+
+2、使用 defer 和 async 属性。
+
+让 JS 脚本异步加载，避免阻塞页面解析。
+
+若 JS 执行顺序有要求，使用 defer，否则可以使用 async。
+
+## 12、DOMContentLoaded 和 load 事件
+
+[DOMContentLoaded](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/DOMContentLoaded_event)：
+
+> The DOMContentLoaded event fires when the HTML document has been completely parsed, and all deferred scripts (`<script defer src="…">` and `<script type="module">`) have downloaded and executed. It doesn't wait for other things like images, subframes, and async scripts to finish loading.
+
+HTML 加载和解析完成，并且所有延迟脚本（`<script defer src='...'`）下载执行完成后，触发 DOMContentLoaded 事件。
+
+DOMContentLoaded 不会等待样式表加载，但延迟脚本会等待。因此 CSS 的加载本身不会直接阻塞 DOM 的加载解析，但会通过阻塞 JS 间接阻塞 DOM。
+
+[load](https://developer.mozilla.org/zh-CN/docs/Web/Events/load)：
+
+> The load event is fired when the whole page has loaded, including all dependent resources such as stylesheets, scripts, iframes, and images, except those that are loaded lazily.
+
+load 在整个页面所有相关资源，比如 CSS、图片等，都加载完成之后触发。
+
+HTML 解析过程与 DOMContentLoaded 触发时机；异步脚本、延迟脚本与 DOMContentLoaded 的关系详见：
+
+[load/domContentLoaded事件、异步/延迟Js 与DOM解析](https://www.cnblogs.com/Bonnie3449/p/8419609.html){link=static}
+
+## 13、link 和 @import 的区别
+
+- link 属于 HTML 标签，而 @import 则是 CSS 提供的方式。
+
+- 当页面被加载时，link 引用的 css 会同时被加载，而 @import 引用的 css 会等页面全部被下载完才会被加载。
+
+- @import 是 css2.1 提出的，老浏览器不兼容，IE5 以上才能识别。link 没有限制。
+
+- DOM 可控性区别：link 可以通过 js 来操作 DOM，来插入 link 标签改变样式；DOM 是基于文档的，@import 是一种 css 语法，所以不能操作 DOM。
+
+[link和@import的区别](https://blog.csdn.net/weixin_46661988/article/details/110245094){link=static}
+
+## 14、CSS 如何阻塞 DOM 树的解析和渲染
+
