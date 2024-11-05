@@ -532,3 +532,9 @@ rimraf node_modules
 一个免费的 AI 应用开发平台就是[扣子](https://www.coze.cn/)，这是字节跳动旗下的产品。
 
 [AI 开发的捷径：工作流模式](https://www.ruanyifeng.com/blog/2024/10/coze.html){link=static}
+
+### 25、前端常用公共CDN
+
+文章罗列了常用的CDN。其中[字节跳动CDN](https://cdn.bytedance.com/)和[CDNJS](https://cdnjs.com/)可以访问。
+
+[常用公共前端CDN库](https://segmentfault.com/a/1190000044938700){link=static}

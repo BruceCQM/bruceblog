@@ -439,14 +439,31 @@ export default [
     ]
   },
   {
-    title: '常用工具',
+    title: 'CDN',
     items: [
+      {
+        icon: 'https://cdn.bytedance.com/src/res/favicon.png',
+        title: '字节跳动静态资源公共库',
+        desc: '字节跳动静态资源公共库',
+        link: 'https://cdn.bytedance.com/'
+      },
+      {
+        icon: 'https://cdnjs.com/favicon.png',
+        title: 'cdnjs',
+        desc: 'Simple. Fast. Reliable.Content delivery at its finest.',
+        link: 'https://cdnjs.com/'
+      },
       {
         icon: 'https://www.bootcdn.cn/assets/ico/favicon.ico?1679156171739',
         title: 'BootCDN',
         desc: '稳定、快速、免费的前端开源项目 CDN 加速服务',
         link: 'https://www.bootcdn.cn/'
       },
+    ]
+  },
+  {
+    title: '常用工具',
+    items: [
       {
         icon: 'https://caniuse.com/img/favicon-128.png',
         title: 'Can I Use',
