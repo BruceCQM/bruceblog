@@ -68,7 +68,7 @@
 - 2024-10-31：学习js继承。
 - 2024-11-01：复习js继承；学习反射机制和Reflect；SPA单页面的理解、前端首屏性能优化。
 - 2024-11-04：HTML、css、js加载顺序；script标签问题；DOMContentLoaded事件；link和@import的区别。
-- 2024-11-05：学习css阻塞DOM解析渲染；浏览器渲染页面的流程。
+- 2024-11-05：学习css阻塞DOM解析渲染；浏览器渲染页面的流程；学习CDN。
 
 基础剩余内容：
 13、重写bind ✅
@@ -97,7 +97,7 @@
 37、xhr和fetch的区别
 38、根据请求的数据实现百分比
 40、web worker
-42、从输入url到页面渲染的过程 ✅
+42、从输入url到页面渲染的过程
 43、HTTP请求方式
 46、Vue的provide/inject
 48、vue和react中动态路由传递参数
