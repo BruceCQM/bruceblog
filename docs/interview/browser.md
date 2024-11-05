@@ -85,11 +85,13 @@ requestAnimationFrame(callback) 触发的 callback 方法会接受一个时间�
 
 ### 重排重绘是什么？
 
-- 重排（reflow）：又叫回流。当页面元素的**几何属性**（如宽、高、内外边距、position、display:none）发生变化，导致元素的位置大小发生改变时，浏览器需要重新**构建渲染树（计算 DOM 元素最终在屏幕显示的大小和位置）**，这个过程称为重排。一个节点的重排往往会导致它的子节点以及同级节点的重排。
+- 重排（reflow）：又叫回流。当页面元素的**几何属性**（如宽、高、内外边距、position、display:none）发生变化，导致元素的位置大小发生改变时，浏览器需要重新**进行布局Layout（计算 DOM 元素最终在屏幕显示的大小和位置）**，这个过程称为重排。一个节点的重排往往会导致它的子节点以及同级节点的重排。
 
 - 重绘（repaint）：元素的样式发生改变，浏览器需要重新**将元素绘制到屏幕**上，这个过程称为重绘。
 
 - 重排一定导致重绘，重绘不一定导致重排（如仅仅是颜色发生变化）。
+
+![webkit渲染流程](./images/browser/webkit_render_process.png)
 
 ### 重排的触发原因
 
@@ -904,3 +906,124 @@ HTML 解析过程与 DOMContentLoaded 触发时机；异步脚本、延迟脚本
 
 ## 14、CSS 如何阻塞 DOM 树的解析和渲染
 
+结论：
+
+- css 加载不会阻塞 DOM 树解析，但会阻塞 DOM 树渲染。
+
+- css 加载会阻塞 js 执行，而 js 会阻塞 DOM 树解析，因此如果 css 后面有 js，css 会通过阻塞 js 间接阻塞 DOM 树的解析。
+
+[css加载会造成阻塞吗？](https://juejin.cn/post/6844903667733118983){link=static}
+
+测试浏览器：Chrome 130.0.6723.92（正式版本）(arm64)。
+
+### css 是否阻塞 DOM 的解析与渲染
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>css阻塞</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      h1 {
+        color: red !important
+      }
+    </style>
+    <script>
+      function h () {
+        console.log(document.querySelectorAll('h1'))
+      }
+      setTimeout(h, 0)
+    </script>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1>这是红色的</h1>
+  </body>
+</html>
+```
+
+将浏览器网络速度调成 3G 的慢速，运行上述 HTML 代码。可以看到：
+
+- bootstrap.css 还没下载完成时，控制台已经打印了 h1。因此可以得知 css 的加载不会阻塞 DOM 的解析。
+
+- bootstrap.css 还没下载完成时，页面是空白的，下载完成之后页面才显示出 h1 的红色字体。因此可得知 css 的加载会阻塞 DOM 的渲染。
+
+:::warning css 为什么要阻塞 DOM 树的渲染呢？
+因为 css 可能会修改 DOM 节点的样式，如果 css 加载不阻塞 DOM 的渲染，那么当 css 加载解析完成后，DOM 树可能又需要重新渲染一次，造成性能损耗。
+
+因此，浏览器选择先把 DOM 树解析完，把可以做的工作先做好，等待 css 加载完成后，再根据最终的样式渲染 DOM 树。
+
+另外，如果 css 加载不阻塞 DOM 树渲染，那么页面可能一开始会是一种样式，等到 css 加载完之后又变成另一个样式，影响了用户体验。
+:::
+
+### css 加载是否阻塞 js 执行
+
+css 加载不会阻塞后续 js 代码的下载，但会阻塞执行。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>css阻塞</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+      console.log('before css')
+      var startDate = new Date()
+    </script>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1>这是标题</h1>
+    <script>
+      var endDate = new Date()
+      console.log('after css')
+      console.log('经过了' + (endDate -startDate) + 'ms')
+    </script>
+  </body>
+</html>
+```
+
+![css阻塞js执行](./images/browser/css_block_js.png)
+
+同样地，将浏览器网络速度调成 3G 的慢速，运行上述 HTML 代码。可以看到：
+
+- `before css` 先打印出来。在 bootstrap.css 下载完之前，都没有打印 `after css`，页面也没有展示 h1 标题。
+
+- bootstrap.css 下载完成后，才打印出 `after css`，并且打印出经过的时间。因此可得知，css 加载会阻塞后面的 js 语句的执行。
+
+:::warning css 加载为什么阻塞 js 执行？
+JavaScript 代码可能依赖于某些样式属性，如果在样式表未加载完毕时执行 JavaScript，可能会导致脚本无法正确获取或设置这些属性。
+
+例如，假设 JavaScript 代码需要获取某个元素的高度或宽度，如果样式表未加载完毕，这些属性可能还未被正确设置，导致脚本返回错误的结果。
+:::
+
+## 15、浏览器渲染页面流程
+
+webkit 渲染流程：
+
+![webkit渲染流程](./images/browser/webkit_render_process.png)
+
+Gecko 渲染流程：
+
+![gecko渲染流程](./images/browser/gecko_render_process.png)
+
+- 解析 HTML，生成 DOM 树。
+
+- 解析 CSS，生成 CSSOM 树（CSS 对象模型树）。
+
+- 将 DOM 树和 CSSOM 树合并，生成 render 渲染树。
+
+- 根据渲染树进行布局，即重排操作，计算元素在屏幕上显示的位置和尺寸。
+
+- 绘制页面元素，显示到屏幕上。
+
+可以看出：
+
+1. DOM解析和CSS解析是两个并行的进程，所以这也解释了为什么CSS加载不会阻塞DOM的解析。
+
+2. 由于Render Tree是依赖于DOM Tree和CSSOM Tree的，因此要等到CSSOM Tree构建完成，也就是CSS资源加载完成(或者CSS资源加载失败)后，才能开始渲染。因此，CSS加载是会阻塞DOM渲染。
+
+3. 由于js可能会操作之前的DOM节点和css样式，因此浏览器会维持html中css和js的顺序。因此，样式表会在后面的js执行前先加载执行完毕。所以css会阻塞后面js的执行。

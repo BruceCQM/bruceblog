@@ -68,32 +68,18 @@
 - 2024-10-31：学习js继承。
 - 2024-11-01：复习js继承；学习反射机制和Reflect；SPA单页面的理解、前端首屏性能优化。
 - 2024-11-04：HTML、css、js加载顺序；script标签问题；DOMContentLoaded事件；link和@import的区别。
+- 2024-11-05：学习css阻塞DOM解析渲染；浏览器渲染页面的流程。
 
 基础剩余内容：
 13、重写bind ✅
 14、event loop ✅
-16、http
-17、websocket
-18、实现多页通讯的方法
-24、三次握手、四次挥手
 30、JS继承 ✅
-31、冒泡排序与快排
 34、柯里化实现累加累乘 ✅
-35、vue监控数组以及响应式说明
-36、SVG和canvas区别
-37、xhr和fetch的区别
-38、根据请求的数据实现百分比
 39、CSS绘制三角形 ✅
-40、web worker
 41、html、css、js的加载顺序 ✅
-42、从输入url到页面渲染的过程
-43、HTTP请求方式
 44、JS反射机制以及Reflect详解 ✅
 45、SPA单页面的理解 ✅
-46、Vue的provide/inject
 47、手写promise.all和promise.race ✅
-48、vue和react中动态路由传递参数
-49、快排的应用
 51、toString和valueOf ✅
 52、正则表达式 ✅
 53、本地存储和cookie ✅
@@ -101,4 +87,19 @@
 55、手动实现防抖节流 ✅
 58、深拷贝的实现 ✅
 59、once函数，接受函数，只执行一次 ✅
+16、http
+17、websocket
+18、实现多页通讯的方法
+24、三次握手、四次挥手
+31、冒泡排序与快排
+35、vue监控数组以及响应式说明
+36、SVG和canvas区别
+37、xhr和fetch的区别
+38、根据请求的数据实现百分比
+40、web worker
+42、从输入url到页面渲染的过程
+43、HTTP请求方式
+46、Vue的provide/inject
+48、vue和react中动态路由传递参数
+49、快排的应用
 61、移动端相关问题
