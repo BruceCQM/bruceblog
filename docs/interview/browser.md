@@ -1083,3 +1083,25 @@ CDN 工作流程：
 ![CDN 工作流程](./images/browser/CDN_work_process.png)
 
 [什么是CDN？它解决了什么难题？5分钟让你明明白白！](https://cloud.tencent.com/developer/article/1779335){link=static}
+
+## 17、从输入URL到渲染页面的流程
+
+主要流程：
+
+1、DNS 域名解析
+
+2、TCP 三次握手建立连接
+
+3、发送 HTTP 请求
+
+4、服务器处理请求并返回 HTTP 报文
+
+5、浏览器解析渲染页面
+
+6、缓存（要谈及浏览器缓存，详见第6题）
+
+7、断开连接
+
+详细内容参考：
+
+[从URL输入到页面展现到底发生什么？](https://segmentfault.com/a/1190000017184701){link=static}
