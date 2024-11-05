@@ -97,7 +97,7 @@
 37、xhr和fetch的区别
 38、根据请求的数据实现百分比
 40、web worker
-42、从输入url到页面渲染的过程
+42、从输入url到页面渲染的过程 ✅
 43、HTTP请求方式
 46、Vue的provide/inject
 48、vue和react中动态路由传递参数
