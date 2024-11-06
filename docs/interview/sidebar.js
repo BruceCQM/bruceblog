@@ -16,6 +16,10 @@ export default [
     link: '/interview/css'
   },
   {
+    text: 'html',
+    link: '/interview/html'
+  },
+  {
     text: 'LeetCode Top 100',
     link: '/interview/leetcode_top_100'
   },
