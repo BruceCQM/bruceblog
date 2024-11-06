@@ -36,6 +36,10 @@ export default [
     link: '/interview/optimization'
   },
   {
+    text: '场景题',
+    link: '/interview/scene'
+  },
+  {
     text: 'JS Methods',
     link: '/interview/methods_index'
   }
