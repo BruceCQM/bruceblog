@@ -2733,3 +2733,105 @@ Reflect 对象提供了一组与 EC6 之前版本中类似的方法，这使得�
 其它参考文章：
 
 [ES6设计反射Reflect的意义是什么？(除了把key in obj、delete这些方式函数化)?](https://www.zhihu.com/question/276403215){link=static}
+
+## XHR 和 fetch
+
+### 概述
+
+xhr 和 fetch 都是获取远端数据的方式。
+
+Fetch API是在2015年提出的，并在2017年正式成为W3C的推荐标准。而XHR是在1999年微软公司发布IE浏览器5.0版时引入的，用于在浏览器与服务器之间进行异步通信。
+
+XHR（XMLHttpRequest）是一种在浏览器中用于与服务器进行异步通信的API，通过发送HTTP请求并处理服务器返回的数据，实现异步获取各种格式的数据(如xml、json、html等)，以实现页面的无刷新更新和动态交互。
+
+Fetch API是基于Promise的，用于在JavaScript中发出HTTP请求。它是XHR的升级版，提供了更简洁的语法和更好的错误处理机制。
+
+### xhr
+
+在 fetch 出现之前，发送异步请求默认都是通过 Ajax，它的底层使用了宿主环境的 xhr 对象来实现异步请求。
+
+XMLHttpRequest 是一个构造函数，创建的对象用于和服务器进行交互。通过 XMLHttpRequest 可以在不刷新页面的情况下请求特定 URL，即允许网页在不影响用户操作的情况下，更新页面的局部内容。
+
+Ajax 是 XHR 的一个实例。
+
+```js
+var xhr = new XMLHttpRequest();
+xhr.open("get","example.php", true);
+xhr.send();
+xhr.onreadystatechange = function(){
+  if(xhr.readyState === 4){
+    if(xhr.status == 200){
+      console.log(xhr.responseText);
+    }
+  }
+}
+```
+
+xhr 的详细用法见：
+
+[AJAX XHR-请求](https://www.w3cschool.cn/ajax/ajax-xmlhttprequest-send.html){link=static}
+
+### fetch
+
+Fetch API 提供了一个 JavaScript 接口，用于发起网络请求和处理响应。它还提供了一个全局 fetch() 方法，该方法提供了一种简单、合理的方式来跨网络异步获取资源。
+
+fetch 默认返回一个 Promise 对象，支持 async 和 await，使用它可以更加简洁地编写 http 请求逻辑。fetch 还可以简易地配置请求头的参数。
+
+fetch 是原生 JS 方法，没有使用 XMLHttpRequest 对象，因此使用 fetch 不需要引用 http 的类库。
+
+fetch 不管请求处理成功还是失败，都会触发 Promise 的 resolve 状态回调。这一点和 Ajax 有所不同。fetch 只有当网络故障导致请求发送失败或者跨域的时候才会触发 reject 的回调。
+
+可以通过 response 对象的 ok 属性判断是否是真正的成功。
+
+fetch 默认不携带 cookie，要使用 cookie 需要添加配置项：`fetch(url, { credentials: 'include' })`。
+
+```js
+fetch('flowers.jpg').then(function(response) {
+  if(response.ok) {
+    return response.blob();
+  }
+  throw new Error('Network response was not ok.');
+}).then(function(myBlob) { 
+  var objectURL = URL.createObjectURL(myBlob); 
+  myImage.src = objectURL; 
+}).catch(function(error) {
+  console.log('There has been a problem with your fetch operation: ', error.message);
+});
+```
+
+```js
+// 所有情况都携带cookie
+fetch('https://example.com', {
+  credentials: 'include'  
+})
+// 目前改为默认是same-origin
+// 同源的情况下带cookie
+fetch('https://example.com', {
+  credentials: 'same-origin'  
+})
+// 忽略cookie
+fetch('https://example.com', {
+  credentials: 'omit'  
+})
+```
+
+fetch 更多参数：
+
+```js
+fetch(url, {
+  body: JSON.stringify(data), // must match 'Content-Type' header
+  cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+  credentials: 'same-origin', // include, same-origin, *omit
+  headers: {
+    'user-agent': 'Mozilla/4.0 MDN Example',
+    'content-type': 'application/json'
+  },
+  method: 'POST', // *GET, POST, PUT, DELETE, etc.
+  mode: 'cors', // no-cors, cors, *same-origin
+  redirect: 'follow', // manual, *follow, error
+  referrer: 'no-referrer', // *client, no-referrer
+})
+```
+
+[XHR 和 Fetch 的使用详解和区别总结](https://blog.csdn.net/weixin_41275295/article/details/100699978){link=static}
+
