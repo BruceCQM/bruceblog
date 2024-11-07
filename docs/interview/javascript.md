@@ -3008,3 +3008,40 @@ self.close();
 ```
 
 ### 使用场景
+
+1、同页面的 Web Worker
+
+Worker 可以载入与主线程同个网页的代码。主要流程是：在主线程网页插入 script 标签，其中的 type 属性设置浏览器不认识的值，这样浏览器就不会执行其中的代码；获取这个 script 标签的内容，通过 `new Blob()` 将代码转化为二进制对象，再通过 `window.URL.createObjectURL()` 生成 URL，最后让 Worker 加载这个 URL。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script id="worker" type="app/worker">
+    setInterval(function () {
+      postMessage('worker');
+    }, 1000);
+  </script>
+  <script>
+    var blob = new Blob([document.querySelector('#worker').textContent]);
+    var url = window.URL.createObjectURL(blob);
+    var worker = new Worker(url);
+
+    worker.onmessage = function (e) {
+      console.log(e.data);
+    };
+  </script>
+</body>
+</html>
+```
+
+每秒打印一次 "worker"。
+
+2、Worker 轮询服务器状态。
+
+3、Worker 内部还能再新建 Worker 线程，⽤于计算密集型任务。
