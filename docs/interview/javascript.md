@@ -2919,4 +2919,92 @@ self.importScripts
 
 ### 基本使用
 
+#### 一、主线程
+
+```js
+// 创建worker线程
+var worker = new Worker('work.js', { name: 'workerTest' });
+
+// 向Worker线程发送消息
+worker.postMessage('Hello World');
+worker.postMessage({ method: 'echo', args: ['Work'] });
+
+// 监听Worker线程发回来的消息
+worker.onmessage = function (event) {
+  // 事件对象的 data 属性包含发送回来的数据
+  console.log('Received message ' + event.data);
+  worker.postMessage('Work done!');
+}
+
+// 监听Worker线程是否发生错误
+worker.onerror(function (event) {
+  console.log([
+    'ERROR: Line ', e.lineno, ' in ', e.filename, ': ', e.message
+  ].join(''));
+});
+worker.addEventListener('error', function (event) {
+  // ...
+});
+
+// 关闭Worker线程
+worker.terminate();
+```
+
+#### 二、Worker 线程
+
+`self` 和 `this` 是 Worker 线程的全局对象。Worker 线程的代码写在加载的网络脚本里面。
+
+监听来自主线程的消息，并向主线程发送消息。
+
+```js
+// 监听来自主线程的消息
+self.addEventListener('message', function (e) {
+  // 同样的，主线程的数据是事件对象的 data 属性
+  var data = e.data;
+  switch (data.type) {
+    case 'start':
+      // 向主线程发送消息
+      self.postMessage('WORKER STARTED: ' + data.msg);
+      break;
+    case 'stop':
+      self.postMessage('WORKER STOPPED: ' + data.msg);
+      // 在Worker内部关闭Worker线程
+      self.close();
+      break;
+    default:
+      self.postMessage('Unknown command: ' + data.msg);
+  };
+}, false);
+
+// 也可以使用 onmessage 写法
+self.onmessage = function (e) {
+  self.postMessage('Received: ' + e.data);
+}
+
+// 可以省略掉 self
+addEventListener('message', function (e) {
+  postMessage('You said: ' + e.data);
+}, false);
+```
+
+Worker 内部加载其它脚本。
+
+```js
+importScripts('script1.js');
+// 加载多个脚本
+importScripts('script1.js', 'script2.js');
+```
+
+Worker 内部监听错误。
+
+```js
+self.onerror = function (e) {}
+```
+
+Worker 关闭自身。
+
+```js
+self.close();
+```
+
 ### 使用场景
