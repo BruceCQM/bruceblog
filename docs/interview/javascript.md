@@ -2835,3 +2835,88 @@ fetch(url, {
 
 [XHR 和 Fetch 的使用详解和区别总结](https://blog.csdn.net/weixin_41275295/article/details/100699978){link=static}
 
+## Web Worker
+
+[Web Worker 使用教程](https://www.ruanyifeng.com/blog/2018/07/web-worker.html){link=static}
+
+### 概述
+
+JS  是单线程模型，所有任务只能在一个线程上完成，一次只能做一件事。
+
+Web Worker 允许主线程创造 worker 线程，将一些任务分配给它运行。在主线程运行的同时，worker 线程在后台运行，互不干扰。等到 worker 线程完成任务，再把结果返回给主线程。
+
+这样一来，一些计算密集型或高延迟的任务，就可以被 worker 线程负担，主线程（通常负责 UI 交互就会很流畅，不会被阻塞或者拖慢。
+
+worker 线程一旦创建成功，就会始终运行，不会被主线程上的活动（如用户点击按钮、提交表单）打断。这样有利于随时响应主线程的通信。但是，这样也使得 worker 比较耗费资源，不应该过度使用，一旦使用完毕，就应该关闭。
+
+Web Worker 的限制：
+
+- 同源限制
+
+分配给 worker 线程运行的脚本文件，必须和主线程的脚本文件同源。
+
+- 文件限制
+
+Worker 线程无法读取本地文件，即无法打开本机的文件系统 `file://`，它所加载的脚本，必须来自网络。
+
+- DOM 限制
+
+Worker 线程所在的全局对象，和主线程不一样，无法读取主线程所在网页的 DOM，也无法使用 document、window、parent 这些对象。但可以使用 navigator 和 location 对象。
+
+- 脚本限制
+
+Worker 线程不能使用 `alert()` 和 `confirm()` 方法，但可以使用 XMLHttpRequest 对象发出 AJAX 请求。
+
+- 通信限制
+
+Worker 线程和主线程不在同一个上下文环境，它们不能直接通信，必须通过消息完成。`postMessage` 发送消息，`onmessage` 监听消息。
+
+### API
+
+#### 一、主线程
+
+主线程通过 `Worker()` 构造函数，创建 Worker 线程。
+
+该函数接收两个参数，第一个是脚本的网址，必须遵守同源策略，且只能加载 JS 脚本；第二个参数是配置对象，可以用来指定 Worker 的名称，用来区分多个 Worker 线程。
+
+如果脚本下载失败，Worker 就会默默失败。
+
+```js
+var worker = new Worker('worker.js', { name: 'worker111' });
+```
+
+`Worker()` 构造函数返回一个 Worker 对象，主线程可通过 Worker 线程对象提供的属性方法操作 Worker 线程。
+
+```bash
+Worker.onerror：指定 error 事件的监听函数。
+
+Worker.onmessage：指定 message 事件的监听函数，发送过来的数据在 Event.data 属性中。
+
+Worker.onmessageerror：指定 messageerror 事件的监听函数。发送的数据无法序列化成字符串时，会触发这个事件。
+
+Worker.postMessage()：向 Worker 线程发送消息。
+
+Worker.terminate()：立即终止 Worker 线程。
+```
+
+#### 二、Worker 线程
+
+Web Worker 有自己的全局对象，不是主线程的 window，而是一个专门为 Worker 定制的全局对象。因此定义在 window 上面的对象和方法，不是全部都可以使用。
+
+```shell
+self.name：Worker 的名字。该属性只读，由构造函数指定。
+
+self.onmessage：指定 message 事件的监听函数。
+
+self.onmessageerror：指定 messageerror 事件的监听函数。发送的数据无法序列化成字符串时，会触发这个事件。
+
+self.close()：关闭 Worker 线程。
+
+self.postMessage()：向产生这个 Worker 线程的线程发送消息。
+
+self.importScripts
+```
+
+### 基本使用
+
+### 使用场景
