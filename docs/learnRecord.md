@@ -70,6 +70,7 @@
 - 2024-11-04：HTML、css、js加载顺序；script标签问题；DOMContentLoaded事件；link和@import的区别。
 - 2024-11-05：学习css阻塞DOM解析渲染；浏览器渲染页面的流程；学习CDN；从输入URL到页面渲染。
 - 2024-11-06：学习Canvas的基本用法、Canvas和SVG的区别；学习xhr和fetch的区别;根据请求的数据实现百分比。
+- 2024-11-07：学习Web Worker。
 
 基础剩余内容：
 13、重写bind ✅
@@ -92,6 +93,7 @@
 36、SVG和canvas区别 ✅
 37、xhr和fetch的区别 ✅
 38、根据请求的数据实现百分比 ✅
+40、web worker ✅
 
 16、http
 17、websocket
@@ -99,7 +101,6 @@
 24、三次握手、四次挥手
 31、冒泡排序与快排
 35、vue监控数组以及响应式说明
-40、web worker
 43、HTTP请求方式
 46、Vue的provide/inject
 48、vue和react中动态路由传递参数
