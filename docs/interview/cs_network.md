@@ -37,3 +37,5 @@
 - 体育实况更新
 
 - 股票基金报价实时更新
+
+[WebSocket 原理与应用](https://www.cnblogs.com/frank-link/p/14835705.html){link=static}
