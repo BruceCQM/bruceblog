@@ -39,7 +39,6 @@ export default [
   {
     text: '知也无涯',
     items: [
-      { text: '计算机基础', link: '/cs/network' },
       { text: 'Python', link: '/lang/python/crawler' }
     ]
   },

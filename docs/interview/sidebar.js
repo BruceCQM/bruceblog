@@ -1,5 +1,13 @@
 export default [
   {
+    text: 'html',
+    link: '/interview/html'
+  },
+  {
+    text: 'css',
+    link: '/interview/css'
+  },
+  {
     text: 'JavaScript',
     link: '/interview/javascript'
   },
@@ -10,18 +18,6 @@ export default [
   {
     text: 'Browser',
     link: '/interview/browser'
-  },
-  {
-    text: 'css',
-    link: '/interview/css'
-  },
-  {
-    text: 'html',
-    link: '/interview/html'
-  },
-  {
-    text: 'LeetCode Top 100',
-    link: '/interview/leetcode_top_100'
   },
   {
     text: 'FE coding',
@@ -42,5 +38,13 @@ export default [
   {
     text: 'JS Methods',
     link: '/interview/methods_index'
-  }
+  },
+  {
+    text: '计算机网络',
+    link: '/interview/cs_network'
+  },
+  {
+    text: 'LeetCode Top 100',
+    link: '/interview/leetcode_top_100'
+  },
 ]
