@@ -160,6 +160,18 @@ TCP 的保活功能，它是一种用于检测和维护 TCP 连接存活状态�
 
 - 影响电池寿命：对于移动设备来说，保活探测报文会增加设备的功耗，从而影响电池寿命。
 
+## 队头阻塞问题
+
+简要介绍看这两篇文章，HTTP2.0 的队头阻塞和 TCP 的队头阻塞问题。
+
+[HTTP/2做错了什么？刚刚辉煌2年就要被弃用了！？](https://blog.51cto.com/u_13626762/4945161){link=static}
+
+[HTTP 3.0彻底放弃TCP，TCP到底做错了什么？](https://blog.51cto.com/u_13626762/5731626){link=static}
+
+深入分析介绍看这篇文章，长文预警！
+
+[关于队头阻塞（Head-of-Line blocking），看这一篇就足够了](https://zhuanlan.zhihu.com/p/330300133){link=static}
+
 ## HTTP 状态码
 
 ### 总览
