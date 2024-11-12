@@ -246,6 +246,16 @@ TLS包含⼏个基本阶段：
 
 [HTTP1.0、HTTP2.0、HTTP 3.0及HTTPS简要介绍](https://blog.csdn.net/glpghz/article/details/106063833){link=static}
 
+## UDP 如何保证连接可靠性
+
+- 前向纠错（Forward Error Correction，FEC）：HTTP3.0 使用 FEC 技术来纠正数据包的丢失。即在发送数据包的同时，发送一些冗余数据，接收方可以利用这些冗余数据来还原丢失的数据包，从而提高数据的可靠性。
+
+- 重传机制：HTTP3.0 在 QUIC 中实现了自己的重传机制，当发生数据包丢失或损坏时，会进行重传，确保数据的可靠传输。
+
+- 拥塞控制：HTTP3.0 基于 QUIC 实现了自己的额拥塞控制机制，可以根据网络实时情况自适应地调整数据传输的速率，避免网络拥堵和数据包丢失。
+
+[Http 2.0和http3.0对⽐之前的版本, 分别做了哪些改进?](https://www.yuque.com/__workers/brucecai-svygq/iaetod/gtpqtct2n9tzaiki/pdf?key=exports%3Apdf%3Adoc%3A175195566%3A1719327309000-73bf0fee&export_type=pdf&copyright_watermark=&image_copyright_watermark=&x-yuque-fc-token=q0ELo7G4tw9sU6xN-fouJQ%3D%3D%7CwUro1s8VK8HoxER8_QNeWpwp2RGbJ2_H5llz7Mf1nTE%3D){link=static}
+
 ## HTTP 状态码
 
 ### 总览
