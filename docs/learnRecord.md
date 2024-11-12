@@ -97,9 +97,9 @@
 37、xhr和fetch的区别 ✅
 38、根据请求的数据实现百分比 ✅
 40、web worker ✅
+16、http ✅
+17、websocket ✅
 
-16、http
-17、websocket
 18、实现多页通讯的方法
 24、三次握手、四次挥手
 31、冒泡排序与快排
