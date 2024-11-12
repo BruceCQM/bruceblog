@@ -228,6 +228,10 @@ TLS包含⼏个基本阶段：
 
 [SSL与TLS到底有何区别，一见分晓](https://blog.csdn.net/luo_boke/article/details/114220450){link=static}
 
+加密相关各种概念明晰：
+
+[数字签名/数字证书/对称/非对称加密/CA 等概念明晰](https://juejin.cn/post/7032540460774080543){link=static}
+
 ## HTTP 状态码
 
 ### 总览
