@@ -172,6 +172,24 @@ TCP 的保活功能，它是一种用于检测和维护 TCP 连接存活状态�
 
 [关于队头阻塞（Head-of-Line blocking），看这一篇就足够了](https://zhuanlan.zhihu.com/p/330300133){link=static}
 
+## HTTP 和 HTTPS
+
+HTTPS：以安全为目标的 HTTP 通道，简单而言就是 HTTP 的安全版，它在 HTTP 下加入了 SSL 层。
+
+SSL（Secure Socket Layer）是安全套接层，目的是保证数据传输的安全和完整。
+
+TLS（Transport Layer Security）是传输层安全，它是 SSL 的改进版。
+
+SSL 位于应用层和传输层之间，处理的对象是数据流，加密算法是 RC4 对称加密。
+
+- HTTPS 协议需要到 ca 申请证书，一般免费证书较少，因此需要一定费用。
+
+- HTTP 是超文本传输协议，信息是明文传输，HTTPS 则是具有安全性的 SSL 加密传输协议。
+
+- HTTP 和 HTTPS 使用的是完全不同的连接方式，使用端口也不同，前者是 80，后者是 443。
+
+- HTTP 的连接很简单，是无状态的；HTTPS 协议是由 SSL+HTTP 协议构建的可进行加密传输、身份认证的网络协议，比 HTTP 协议安全。
+
 ## HTTP 状态码
 
 ### 总览
