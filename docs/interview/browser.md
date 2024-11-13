@@ -1330,3 +1330,84 @@ wss.on('connection', function(client) {
   </script>
 </body>
 ```
+
+### SharedWorker
+
+SharedWorker 是 WebWorker 的升级版，WebWorker 只能在同一个窗口内使用，而 SharedWorker 可以实现多个同源窗口之间通信。
+
+- SharedWorker 是纯客户端的，没有服务端参与。
+
+- SharedWorker 在客户端维护一个对象 worker.js，消息存储在 worker.js 中的 data 中。
+
+- SharedWorker 接收消息也不是自动的，需要使用定时器。
+
+SharedWorker.js 文件：
+
+```js
+// 保存共享数据
+let data = '连接成功';
+
+// 每当一个页面中new SharedWorker("worker.js")时，就会为新创建的worker绑定onconnect事件处理函数
+onconnect = function(e) {
+  // 获取当前sharedworker对象
+  let client = e.ports[0];
+  // worker收到消息时
+  client.onmessage = function(e) {
+    // 如果收到的消息为空，说明客户端需要获取共享数据data
+    if (e.data === '') {
+      // 发送共享数据data
+      client.postMessage(data);
+    } else {
+      // 否则设置共享数据
+      data = e.data;
+    }
+  }
+}
+```
+
+消息发送页面：
+
+```html
+<body>
+  <input id="input1" type="text" />
+  <button id="send">发送</button>
+</body>
+<script>
+  var input1 = document.getElementById('input1');
+  var send = document.getElementById('send');
+  var worker = new SharedWorker("http://127.0.0.1:8080/sharedworker.js");
+  worker.port.start();
+  send.onclick=function(){
+    worker.port.postMessage(input1.value.trim())
+  }
+</script>
+```
+
+消息接收页面：
+
+```html
+<body>
+  <h3>msg1：<span id="recMsg"></span></h3>
+  <script>
+    var recMsg = document.querySelector('#recMsg');
+    var worker=new SharedWorker("http://127.0.0.1:8080/sharedworker.js");
+    // 当worker.js中给当前客户端返回了data，会触发当前客户端的message事件。data的值，自动保存进事件对象e的data属性中
+    worker.port.addEventListener("message",function(e){
+      recMsg.innerHTML = e.data;
+    })
+    worker.port.start();
+    // 接收端反复向共享的worker.js对象中发送空消息，获取data的值
+    setInterval(function(){
+      worker.port.postMessage("");
+    },500);
+  </script>
+</body>
+```
+
+![sharedworker多页通讯](./images/browser/sharedworker_send_msg.png)
+
+:::warning 注意事项
+创建 Worker 线程使用到的 JS 文件必须是在线地址，且是同源的，不能是本地系统的地址。因此，需要启动本地服务，可以以 `http://127.0.0.1:8080/sharedworker.js` 地址的形式访问 js 文件。
+
+在这里使用的是 http-server 启动本地服务器。
+:::
