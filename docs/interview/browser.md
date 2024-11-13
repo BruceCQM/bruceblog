@@ -1412,6 +1412,46 @@ onconnect = function(e) {
 在这里使用的是 http-server 启动本地服务器。
 :::
 
+### BroadcastChannel
+
+BroadcastChannel 可以帮我们创建一个用于广播的通信频道。当所有页面都监听**同一频道**的消息时，其中某一个页面通过它发送的消息就会被其他所有页面收到。
+
+它允许同源的浏览器上下文（例如窗口、标签页、iframe 等）之间进行实时通信。
+
+消息发送页面：
+
+```html
+<body>
+  <input id="input1" type="text" />
+  <button id="send">发送</button>
+</body>
+<script>
+  var input1 = document.getElementById('input1');
+  var send = document.getElementById('send');
+  // 发送页面和接受页面指定相同的频道名称，才能互相通信
+  var bc = new BroadcastChannel('test');
+  send.onclick=function(){
+    bc.postMessage(input1.value.trim())
+  }
+</script>
+```
+
+消息接收页面：
+
+```html
+<body>
+  <h3>msg1：<span id="recMsg"></span></h3>
+  <script>
+    var recMsg = document.querySelector('#recMsg');
+    var bc = new BroadcastChannel('test');
+    // 发送页面和接受页面指定相同的频道名称，才能互相通信
+    bc.onmessage = function(e) {
+      recMsg.innerText = e.data;
+    }
+  </script>
+</body>
+```
+
 [实现浏览器内多个标签页面之间通信的四种方法](https://blog.csdn.net/weixin_46399753/article/details/105211771){link=static}
 
 [面试官：前端跨页面通信，你知道哪些方法？](https://segmentfault.com/a/1190000018731597){link=static}
