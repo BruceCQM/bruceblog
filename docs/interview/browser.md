@@ -1105,3 +1105,97 @@ CDN 工作流程：
 详细内容参考：
 
 [从URL输入到页面展现到底发生什么？](https://segmentfault.com/a/1190000017184701){link=static}
+
+## 18、实现多页通讯
+
+多页通讯，是指浏览器不同标签页面之间的通信。
+
+### cookie+setInerval
+
+cookie 是在同一个浏览器下的同源窗口共享，因此可以用于不同标签页之间的通信。
+
+优点：兼容性良好。
+
+缺点：
+
+- cookie 空间有限，容量为 4k 左右。
+
+- 每次 HTTP 请求都会把 cookie 带上，包括那些只需要本地用到而服务器用不到的，浪费带宽。
+
+- 定时器频率太大影响浏览器性能，太小又可能影响时效性。
+
+发送消息页面：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input id="input1" type="text" />
+  <input id="input2" type="text" />
+  <button id="send">发送</button>
+</body>
+<script>
+  var input1 = document.getElementById('input1');
+  var input2 = document.getElementById('input2');
+  var send = document.getElementById('send');
+  send.onclick = function() {
+    var val1 = input1.value.trim();
+    var val2 = input2.value.trim();
+    // 设置cookie
+    document.cookie = `msg1=${val1}`;
+    document.cookie = `msg2=${val2}`;
+  }
+</script>
+</html>
+```
+
+消息接收页面：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h3>msg1：<span id="recMsg"></span></h3>
+  <h3>msg2：<span id="recMsg2"></span></h3>
+  <script>
+    // age=999; msg=000
+    // {"age":"999","msg":"000"}
+    function getValue(key) {
+      // 把cookie转化为JSON字符串，再转化为对象，方便取值
+      var cookies = '{"' + document.cookie.replace(/=/g,'":"').replace(/;\s+/g,'","') + '"}';
+      cookies = JSON.parse(cookies);
+      return cookies[key];
+    }
+    var recMsg = document.querySelector('#recMsg');
+    var recMsg2 = document.querySelector('#recMsg2');
+    // 使用定时器，轮询cookie，实现自动刷新页面内容
+    setInterval(() => {
+      recMsg.innerText = getValue('msg1');
+    }, 500)
+    setInterval(() => {
+      recMsg2.innerText = getValue('msg2');
+    }, 500)
+  </script>
+</body>
+</html>
+```
+
+![cookie实现多页通讯](./images/browser/send_msg_cookie.png)
+
+:::warning 页面打开注意点
+当你在本地文件系统（例如，通过 file:// 协议）打开一个 HTML 文件时，浏览器可能会出于安全原因限制 cookie 的设置。这是一个常见的问题，因为在本地文件系统中运行的页面没有通过 HTTP 服务器提供，因此缺少了一些安全策略，例如跨域限制和安全策略。
+
+也就是说，如果直接打开 HTML 文件，`document.cookie = xxx` 是无法设置 cookie 的，因此需要通过启动本地服务来运行 HTML 文件。
+
+可以使用 vscode 的 Live Server 插件打开 HTML 文件。
+:::
