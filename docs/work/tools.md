@@ -1,5 +1,71 @@
 # 日常开发工具
 
+## 启动本地服务方式
+
+### serve
+
+serve 在本地启动一个静态资源服务器，可以在本地运行查看项目打包的效果。
+
+:::tip node版本≥14
+serve v14 onwards requires Node v14 to run. Please use serve v13 if you cannot upgrade to Node v14.
+:::
+
+安装。
+
+```bash
+npm install -g serve
+```
+
+启动服务器，首先先打包完本地项目，一般会生成 `build` 或 `dist` 目录。
+
+```bash
+# 进入build或dist目录
+serve
+
+# 在项目根目录
+serve -s build
+serve -s dist
+
+# 指定端口号
+serve -p 3000
+```
+
+### http-server
+
+以 Mac 为例。
+
+全局安装 `http-server`： 
+
+```bash
+npm install -g http-server
+```
+
+如果遇到权限不足的报错，可以使用 `sudo` 命令，需要输入一遍 Mac 密码。
+
+```bash
+/usr/local/bin/http-server -> /usr/local/lib/node_modules/http-server/bin/http-server
+npm ERR! code EACCES
+npm ERR! syscall symlink
+```
+
+```bash
+sudo npm install -g http-server
+```
+
+在项目文件夹中启动 http-server 服务器：
+
+```bash
+http-server
+```
+
+默认情况下，HTTP 服务器将在 `localhost:8080` 上运行。这样即可访问文件，如 `http://localhost:8080/yourfile.js`。
+
+### 使用 Live Server 插件
+
+安装使用 vscode 的 Live Server 插件。右键点击编辑器中的 HTML 文件，选择 `Open with Live Server`。
+
+但这种方式只能访问 HTML 文件，不能访问 JS 文件。
+
 ## classnames
 
 一个实用的工具库，方便我们根据条件动态组合类名。
@@ -206,34 +272,6 @@ npm install express -D
 再重启电脑，vscode 就能正常使用 node 和 npm 命令。
 
 [Vscode 无法运行 npm 命令 报错 - 程序“npm”无法运行: 找不到应用程序所在位置](https://blog.csdn.net/qq_45094823/article/details/139946346){link=card}
-
-## serve
-
-serve 在本地启动一个静态资源服务器，可以在本地运行查看项目打包的效果。
-
-:::tip node版本≥14
-serve v14 onwards requires Node v14 to run. Please use serve v13 if you cannot upgrade to Node v14.
-:::
-
-安装。
-
-```bash
-npm install -g serve
-```
-
-启动服务器，首先先打包完本地项目，一般会生成 `build` 或 `dist` 目录。
-
-```bash
-# 进入build或dist目录
-serve
-
-# 在项目根目录
-serve -s build
-serve -s dist
-
-# 指定端口号
-serve -p 3000
-```
 
 ## Charles
 
