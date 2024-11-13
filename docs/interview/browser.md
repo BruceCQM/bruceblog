@@ -1199,3 +1199,57 @@ cookie 是在同一个浏览器下的同源窗口共享，因此可以用于不�
 
 可以使用 vscode 的 Live Server 插件打开 HTML 文件。
 :::
+
+### localStorage
+
+localStorage 也是在同一浏览器的同源窗口中共享，因此也可用于实现多页通讯。
+
+消息接收页通过监听 `onstorage` 事件，实现消息的监听修改与接收。
+
+onstorage 以及 storage 事件，针对都是**⾮当前⻚⾯**对 localStorage 进⾏修改时才会触发，当前⻚⾯修改 localStorage 不会触发监听函数。
+
+在对原有数据的值进行修改时才会触发，比如原本已经有一个 key 为 a，值为 b 的 localStorage，再执行：`localStorage.setItem(‘a’, ‘b’)`，是不会触发监听函数的（不修改不触发监听）。
+
+优点：容量大，可以达到 5M；时效性也很好。
+
+缺点：兼容性不如 cookie；只能监听除了当前页面的 localStorage 修改。
+
+消息发送页：
+
+```html
+<body>
+  <input id="input1" type="text" />
+  <input id="input2" type="text" />
+  <button id="send">发送</button>
+</body>
+<script>
+  var input1 = document.getElementById('input1');
+  var input2 = document.getElementById('input2');
+  var send = document.getElementById('send');
+  send.onclick = function() {
+    var val1 = input1.value.trim();
+    var val2 = input2.value.trim();
+    localStorage.setItem('msg1', val1);
+    localStorage.setItem('msg2', val2);
+  }
+</script>
+```
+
+消息接收页：
+
+```html
+<body>
+  <h3>msg1：<span id="recMsg"></span></h3>
+  <h3>msg2：<span id="recMsg2"></span></h3>
+  <script>
+    var recMsg = document.querySelector('#recMsg');
+    var recMsg2 = document.querySelector('#recMsg2');
+    window.addEventListener('storage', function() {
+      recMsg.innerText = localStorage.getItem("msg1");
+      recMsg2.innerText = localStorage.getItem("msg2");
+    })
+  </script>
+</body>
+```
+
+![localStorage实现多页通讯](./images/browser/localStorage_send_msg.png)
