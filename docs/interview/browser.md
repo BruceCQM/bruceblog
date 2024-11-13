@@ -1253,3 +1253,80 @@ onstorage 以及 storage 事件，针对都是**⾮当前⻚⾯**对 localStorag
 ```
 
 ![localStorage实现多页通讯](./images/browser/localStorage_send_msg.png)
+
+### websocket
+
+cookie 和 localStorage 的方式只使用到客户端，没有使用服务端。而 websocket 使用到服务端，send.html 发送消息到 WebSocketServer，WebSocketServer 再实时把消息发给 receive.html。
+
+优点：对于前端来说，使用简单，功能灵活，如果部署了 webSocket 服务器，可以实现实时通信。
+
+缺点：需要服务端技术的支持，如果 websocket 数据量比较大的话，会严重消耗服务器的资源。
+
+服务器搭建：
+
+新建webSocket文件夹，在webSocket目录下打开终端，运行npm init初始化一个简单的node项目（因为需要引入ws包），一直按回车到结束就初始了一个简单的node项目。再安装ws包，运行npm i -save ws，在webSocket目录下新建sever.js、send.html、receive.html文件。
+
+```js
+// server.js
+var WebSocketServer = require('ws').Server;
+var wss = new WebSocketServer({ port: 8080 });
+//创建保存所有已连接到服务器的客户端对象的数组
+var clients=[]; 
+//为服务器添加connection事件监听，当有客户端连接到服务端时，立刻将客户端对象保存进数组中。
+wss.on('connection', function(client) {
+  console.log("一个客户端连接到服务器");
+  // 如果没有这个client对象，说明是第一次连接，就加入到clients中
+  if(clients.indexOf(client)===-1){
+    clients.push(client);
+    console.log("有"+clients.length+"个客户端在线");
+    //为每个client对象绑定message事件，当某个客户端发来消息时，自动触发
+    client.on('message', function (msg) {
+      console.log("收到消息:"+msg);
+      //遍历clients数组中每个其他客户端对象，并发送消息给其他客户端
+      for(var c of clients){
+        if(c!=client){
+          c.send(msg);
+        }
+      }
+    })
+  }
+}); 
+```
+
+发送消息页面：
+
+```html
+<body>
+  <input id="msg" type="text"> 
+  <button id="send">发送</button>
+  <script>
+    //建立到服务端webSocket连接
+    var ws = new WebSocket("ws://localhost:8080");
+    send.onclick = function(){
+      if(msg.value.trim()!==""){
+        // 将消息发到服务器
+        ws.send(msg.value.trim());
+      }
+    }
+  </script>
+</body>
+```
+
+接收消息页面：
+
+```html
+<body>
+  <h1>收到消息：<span id="recMsg"></span></h1>
+  <script>
+    //建立到服务端webSocket连接
+    var ws = new WebSocket("ws://localhost:8080");
+    //当连接被打开时，注册接收消息的处理函数
+    ws.onopen=function(event) {
+      //当有消息发过来时，就将消息放到显示元素上
+      ws.onmessage=function(event) {
+        recMsg.innerHTML=event.data;
+      }
+    }
+  </script>
+</body>
+```
