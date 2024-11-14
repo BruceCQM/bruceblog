@@ -1454,4 +1454,6 @@ BroadcastChannel 可以帮我们创建一个用于广播的通信频道。当所
 
 [实现浏览器内多个标签页面之间通信的四种方法](https://blog.csdn.net/weixin_46399753/article/details/105211771){link=static}
 
+重要：
+
 [面试官：前端跨页面通信，你知道哪些方法？](https://segmentfault.com/a/1190000018731597){link=static}
