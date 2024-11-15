@@ -580,3 +580,39 @@ MSL 是 Maximum Segment Lifetime，报文最大生存时间，它是任何报文
 - 另外，在这个 2MSL 时间中，就可以使本次连接产生的所有报文都从网络中消失。这样新的连接中就不会出现旧连接的请求报文。
 
 为什么不是 4MSL 或者更长呢？因为连续丢包的概率非常小，忽略它比解决它更有性价比。
+
+## 简单请求和复杂请求
+
+简单请求和复杂请求是跨域资源共享（CORS）机制中定义的两种请求类型，它们的主要区别在于是否会触发 CORS 预检请求。
+
+简单请求不会触发预检请求，而复杂请求会触发预检请求以确保服务器允许跨域访问。
+
+:::warning CORS 的原理
+跨域资源共享标准新增了一组 HTTP 首部字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源。
+
+另外，规范要求，对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 GET 以外的 HTTP 请求，或者搭配某些 MIME 类型的 POST 请求），浏览器必须首先使用 OPTIONS 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨域请求。服务器确认允许之后，才发起实际的 HTTP 请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）。
+:::
+
+### 简单请求
+
+简单请求的定义，同时满足以下要求：
+
+- 请求方法：`GET、POST、HEAD`。
+
+- 请求头：不能指定 `Accept、Accept-Language、Content-Language、Content-Type` 之外的头信息，且 `Content-Type` 的值仅限于 `text/plain、multipart/form-data、application/x-www-form-urlencoded`。
+
+- `Content-Type`：仅限于上述三者之一。
+
+- XMLHttpRequestUpload 对象：没有注册任何事件监听器。
+
+- 没有使用 ReadableStream 对象。
+
+### 复杂请求
+
+复杂请求是指不满足简单请求条件的所有请求。例如，使用 `PUT、DELETE` 等 HTTP 方法，或者发送 `Content-Type` 为 `application/json` 的请求。
+
+### 区别
+
+- 预检请求：简单请求不会触发预检请求，而复杂请求会触发预检请求。
+
+- 安全性：复杂请求通过预检请求增加了安全性，确保服务器了解并允许跨域请求。
