@@ -47,4 +47,8 @@ export default [
     text: 'LeetCode Top 100',
     link: '/interview/leetcode_top_100'
   },
+  {
+    text: '算法相关',
+    link: '/interview/algorithm'
+  },
 ]
