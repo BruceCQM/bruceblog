@@ -104,3 +104,70 @@ const arr = [12,4,6,2,1,88];
 quickSort(arr, 0, 3);
 console.log(arr); // [ 2, 4, 6, 12, 1, 88 ]
 ```
+
+## 快排应用：寻找第K大元素
+
+每进⾏⼀次快速排序的 partition 操作，就能找到这次我们选中的基准值排序之后的正确位置。
+
+如果它的位置刚好是排序之后第 K 个最⼤元素的位置，即 length - k，我们直接得到了答案；因为进⾏ partition 操作之后，位于基准值之前的元素都要⼩于基准值，位于基准值之后的元素都要⼤于等于基准值。
+
+- 如果它的位置⼩于排序之后第 K 个最⼤元素的位置，我们就去它之后寻找第 K 个最⼤元素；
+- 如果它的位置⼤于排序之后第 K 个最⼤元素的位置，我们就去它之前寻找第 K 个最⼤元素；
+
+```js
+
+
+function swap(nums, left, right) {
+  const temp = nums[left];
+  nums[left] = nums[right];
+  nums[right] = temp;
+}
+
+// 哨兵划分
+function partition(nums, left, right) {
+  let i = left;
+  let j = right;
+  while(i < j) {
+    while (i < j && nums[j] >= nums[left]) {
+      j -= 1;
+    }
+    while (i < j && nums[i] <= nums[left]) {
+      i += 1;
+    }
+    swap(nums, i, j);
+  }
+  swap(nums, i, left);
+  return i;
+}
+
+function quickSort(nums, k, left, right) {
+  const tagIndex = nums.length - k;
+  if (left < right) {
+    const pviot = partition(nums, left, right);
+    if (pviot === tagIndex) {
+      return nums[tagIndex];
+    }
+    quickSort(nums, k, left, pviot - 1);
+    quickSort(nums, k, pviot + 1, right);
+  }
+  return nums[tagIndex];
+
+  // 或者这样写
+  // if (left >= right) {
+  //   return nums[tagIndex];
+  // }
+  // const pviot = partition(nums, left, right);
+  // if (pviot === tagIndex) {
+  //   return nums[tagIndex];
+  // }
+  // quickSort(nums, k, left, pviot - 1);
+  // quickSort(nums, k, pviot + 1, right);
+  // return nums[tagIndex];
+}
+
+const arr = [1, 5, 3, 9, 6, 4, 2];
+const res = quickSort(arr, 3, 0, arr.length - 1);
+console.log(res); // 5
+```
+
+[快排查找第k大元素，o(n)](https://leetcode.cn/problems/kth-largest-element-in-an-array/solutions/1315936/kuai-pai-cha-zhao-di-kda-yuan-su-on-by-h-hb9s/)
