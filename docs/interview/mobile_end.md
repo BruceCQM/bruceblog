@@ -136,6 +136,8 @@ html {
 
 [移动端300ms延迟原因及解决方案](https://juejin.cn/post/6844904031026937864){link=static}
 
+[移动端点击事件延迟的诞生消亡史](https://cloud.tencent.com/developer/article/1668429){link=static}
+
 ### 音视频相关
 
 1. 自动播放
@@ -157,3 +159,104 @@ ios 部分机型不⽀持循环播放。解决⽅案：监听播放完成事件 
 4. 其它
 
 ios 视频⾃动全屏播放：设置内联属性 `playsinline webkit-playsinline`。
+
+
+### 移动端 1px 问题
+
+1px 问题指的是在一些 Retina 屏幕的机型上，移动端页面的 1px 会变得很粗，呈现出不止 1px 的效果。
+
+原因很简单：css 中的 1px 并不能和移动设备上的 1px 画上等号。它们之间的比例关系有一个专门的属性来描述：设备像素比。
+
+```bash
+# 设备像素⽐
+window.devicePixelRatio = 设备的物理像素 / CSS像素
+```
+
+⼀个物理像素等于多少个设备像素取决于移动设备的屏幕特性(是否是Retina)和⽤户缩放⽐例。
+
+> 把原先元素的 border 去掉，然后利⽤ `:before` 或者 `:after` 重做 border ，并 transform 的 scale 缩⼩⼀半，原
+先的元素相对定位，新做的 border 绝对定位。
+
+解决方案：
+
+#### 1、伪元素先放⼤后缩⼩
+
+在⽬标元素的后⾯追加⼀个 `::after` 伪元素，让这个元素布局为 absolute 之后、整个伸展开铺在⽬标元素上，然后把它的宽和⾼都设置为⽬标元素的两倍，border 值设为 1px。接着借助 CSS 动画特效中的放缩能⼒，把整个伪元素缩⼩为原来的 50%。此时，伪元素的宽⾼刚好可以和原有的⽬标元素对⻬，⽽ border 也缩⼩为了 1px 的⼆分之⼀，间接地实现了 0.5px 的效果。(dpr为2的情况)
+
+```css
+.scale {
+  position: relative;
+  border: none;
+}
+.scale::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  background: #000;
+  width: 100%;
+  height: 1px;
+  transform: scaleY(0.5);
+  transform-origin: 0 0;
+}
+```
+
+#### 2、rem+系统缩放
+
+- 主体适配采⽤ rem 适配，并放⼤ rem 的基值(dpr 倍)。
+
+- 再通过系统缩放 缩回 dpr 倍，initial-scale=1/dpr。
+
+```js
+var dpr = window.devicePixelRatio||1;
+var styleNode = document.createElement("style");
+var w = document.documentElement.clientWidth*dpr/16;
+styleNode.innerHTML="html{font-size:"+w+"px!important}";
+document.head.appendChild(styleNode);
+
+var scale = 1/dpr;
+var meta = document.querySelector("meta[name='viewport']");
+meta.content="width=device-width,initial-scale="+scale;
+```
+
+#### 3、响应式+变换缩放
+
+通过meta视⼝标签根据不同的dpr对不同的⻚⾯进⾏缩放。这需要通过 JS 进⾏动态的设置。简单的说，假如想设置 1px 的线，在 dpr=2 情况下，⻚⾯就缩放到原来的⼀半，此时就会正常显示 1px 的线；在 dpr=3 的情况下，⻚⾯就缩放到原来的三分之⼀，此时也能够正常显示 1px 的线。
+
+```css
+@media only screen and (-webkit-device-pixel-ratio:2 ) {
+  #test{
+  transform: scaleY(.5);
+  }
+}
+@media only screen and (-webkit-device-pixel-ratio:3 ) {
+  #test{
+  transform: scaleY(.333333333333333333);
+  }
+}
+```
+
+[移动端1px问题解决方案](https://juejin.cn/post/6959736170158751780){link=static}
+
+[移动端1px实现方式](https://juejin.cn/post/7025806468255334408){link=static}
+
+### 禁⽌数字识别为电话号码
+
+```html
+<meta name="format-detection" content="telephone=no">
+```
+
+### transition闪屏
+
+```css
+.box {
+  -webkit-transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+}
+```
+
+### CSS3 动画卡顿
+
+可以开启 GPU 硬件加速，但使用硬件加速的时候也要注意，因为这个也有坑，不合理使用反而会让应用越来越卡。
+
+[CSS3 动画在 iOS 上为什么会因为页面滚动也停止？](https://www.zhihu.com/question/24268253){link=static}
