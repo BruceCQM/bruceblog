@@ -62,7 +62,9 @@ son 的 50% 宽度是参照父元素内容的宽度，所以 son 的宽度是 15
 
 4. 相对定位的元素，top、bottom 参照的是父元素 **内容（content）** 的高度，left、right 参照的是父元素内容的宽度。
 
-5. 绝对定位的元素，参照的分别是**最近的定位元素包含 padding 的高度和宽度**。绝对定位的元素以最近的设置了定位的元素为参照元素，只要 position 不是 static 就算是设置了定位，因为 static 是默认值。
+5. 绝对定位的元素，top、bottom、left、right 参照的分别是**最近的定位元素包含 padding 的高度和宽度**。绝对定位的元素以最近的设置了定位的元素为参照元素，只要 position 不是 static 就算是设置了定位，因为 static 是默认值。
+
+6. 参照元素自身宽高的属性：border-radius、background-size、transform、translate、transform-origin。
 
 ## 3. css 定位
 
