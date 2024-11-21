@@ -8,6 +8,7 @@ export default [
       { text: '富文本编辑器', link: '/work/editor' },
       { text: 'Mobx 那些事儿', link: '/work/mobx' },
       { text: '日常开发工具', link: '/work/tools' },
+      { text: '碎碎记', link: '/work/problems' },
     ]
   },
   {
