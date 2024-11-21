@@ -41,3 +41,25 @@
 - meta viewport 标签只对移动端浏览器有效，对 PC 端浏览器是无效的
 
 [详解meta-viewport标签中的width和initial-scale属性](https://blog.csdn.net/leman314/article/details/111936863){link=static}
+
+## 移动端适配
+
+移动端适配的目标是，在不同的移动端设备中网页显示相同的效果。要求严格的公司甚至要求不同设备每行显示的字数都一样。
+
+几种常见的适配方案：
+
+- rem 布局
+
+- vm/vh 布局
+
+- 百分比布局
+
+- 响应式布局
+
+-  px 为主，搭配 vw/vh、媒体查询与 flex 进行布局
+
+参考文章：
+
+[移动端适配的5种方案](https://juejin.cn/post/6953091677838344199){link=static}
+
+[一次说清楚，以后不要再问移动端怎么适配了！](https://zhuanlan.zhihu.com/p/267774232){link=static}
