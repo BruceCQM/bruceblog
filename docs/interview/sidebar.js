@@ -16,15 +16,15 @@ export default [
     link: '/interview/es6.md'
   },
   {
-    text: 'Browser',
+    text: '浏览器',
     link: '/interview/browser'
   },
   {
-    text: 'FE coding',
+    text: '前端编程题',
     link: '/interview/coding_problem'
   },
   {
-    text: 'Mobile',
+    text: '移动端',
     link: '/interview/mobile_end'
   },
   {
@@ -36,7 +36,7 @@ export default [
     link: '/interview/scene'
   },
   {
-    text: 'JS Methods',
+    text: 'JS 方法',
     link: '/interview/methods_index'
   },
   {
