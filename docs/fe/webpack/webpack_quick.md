@@ -423,3 +423,31 @@ CSS 内联的思路是：先将 css 提取打包成一个独立的 css 文件（
 
 CSS 内联的演示已经以文章的形式更新到博客里面（https://github.com/cpselvis/blog/issues/5）
 CSS 内联的例子（https://github.com/cpselvis/geektime-webpack-course/tree/master/code/chapter03/inline-resource）
+
+7、热更新插件 HotModuleReplacementPlugin 的作用？
+
+热更新中最核心的是 HMR Server 和 HMR Runtime。
+
+HMR Server 是服务端，用来将变化的 js 模块通过 websocket 的消息通知给浏览器端。
+
+HMR Runtime是浏览器端，用于接受 HMR Server 传递的模块数据，浏览器端可以看到 .hot-update.json 的文件过来。
+
+HotModuleReplacementPlugin 的作用：webpack 构建出来的 bundle.js 本身是不具备热更新的能力的，HotModuleReplacementPlugin 的作用就是将 HMR runtime 注入到 bundle.js，使得 bundle.js 可以和HMR server建立 websocket 的通信连接。
+
+简单来说就是让 bundle.js 具备热更新的能力。
+
+在 webpack 配置文件中可以不必手动引入 HotModuleReplacementPlugin，只要配置了 `hot: true` 就会自动引入。
+
+8、webpack-dev-server 和 hot-module-replacement-plugin 之间的区别
+
+webpack-dev-server(WDS)的功能提供 bundle server的能力，就是生成的 bundle.js 文件可以通过 localhost://xxx 的方式去访问，另外 WDS 也提供 livereload(浏览器的自动刷新)。
+
+hot-module-replacement-plugin 的作用是提供 HMR 的 runtime，并且将 runtime 注入到 bundle.js 代码里面去。一旦磁盘里面的文件修改，那么 HMR server 会将有修改的 js module 信息发送给 HMR runtime，然后 HMR runtime 去局部更新页面的代码。因此这种方式可以不用刷新浏览器。
+
+单独写两个包也是出于功能的解耦来考虑的。简单来说就是：hot-module-replacement-plugin 包给 webpack-dev-server 提供了热更新的能力。
+
+9、为什么浏览器有刷新？
+
+webpack-dev-server 默认是会在内容编译完成后自动刷新(liveload)浏览器的，此处增加了 HotModuleReplacementPlugin 插件之后可以做到 HMR的。
+
+如果HMR失败的化会降级使用 liveload 自动刷新浏览器模式。
