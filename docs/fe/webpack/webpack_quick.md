@@ -451,3 +451,9 @@ hot-module-replacement-plugin 的作用是提供 HMR 的 runtime，并且将 run
 webpack-dev-server 默认是会在内容编译完成后自动刷新(liveload)浏览器的，此处增加了 HotModuleReplacementPlugin 插件之后可以做到 HMR的。
 
 如果HMR失败的化会降级使用 liveload 自动刷新浏览器模式。
+
+10、js 文件为什么不是用 contenthash？
+
+因为 js 没有 contenthash，只能从 chunkhash 和 hash 中选择。
+
+hash 对于 js 的含义是整个构建的文件指纹，每次构建有任何文件变了这个值都会变。所以 js 只能用 chunkhash。
