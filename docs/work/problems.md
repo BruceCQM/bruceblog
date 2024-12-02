@@ -29,3 +29,26 @@
 ![font-weight不生效](./images/problems/font-weight.png)
 
 [font-weight 失效移动安卓处理方法](https://blog.csdn.net/weixin_41697143/article/details/104517239){link=card}
+
+## iOS机型二级页面返回到首页不刷新问题
+
+宿主环境：某银行APP，机型：iPhone。
+
+解决代码：
+```js
+// 解决ios部分机型二级页返回不刷新的问题
+window.onpageshow = async (event) => {
+  if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+    if (isIOS()) {
+      // 刷新页面操作
+      this.refreshPage();
+    }
+  }
+};
+```
+
+- `window.onpageshow` 事件在页面显示时触发，包括从缓存中恢复页面时。
+
+- `event.persisted` 属性表明页面是否在缓存中加载的。
+
+- `window.performance.navigation.type` 属性返回页面导航的类型，其中 2 表示页面通过浏览器的「前进」或「后退」按钮加载的。
