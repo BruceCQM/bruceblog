@@ -538,3 +538,9 @@ rimraf node_modules
 文章罗列了常用的CDN。其中[字节跳动CDN](https://cdn.bytedance.com/)和[CDNJS](https://cdnjs.com/)可以访问。
 
 [常用公共前端CDN库](https://segmentfault.com/a/1190000044938700){link=static}
+
+### 26、vscode力扣插件使用
+
+记得要登录，否则没法正常使用。
+
+[vscode中配置 leetcode 插件](https://blog.csdn.net/chumingqian/article/details/138629649){link=static}
