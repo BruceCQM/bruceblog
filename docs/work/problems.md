@@ -52,3 +52,54 @@ window.onpageshow = async (event) => {
 - `event.persisted` 属性表明页面是否在缓存中加载的。
 
 - `window.performance.navigation.type` 属性返回页面导航的类型，其中 2 表示页面通过浏览器的「前进」或「后退」按钮加载的。
+
+## iOS机型二级页面返回,上一级页面状态没重置
+
+机型：iPhone 14，系统：iOS 16.0.3。
+
+问题描述：H5页面，从A页面跳转到B页面，在B页面调用 `Taro.navigateBack()` 后退路由，回到A页面，发现A页面的状态没有重置，从而导致其子组件重复执行了 `componentDidMount` 生命周期钩子。
+
+而子组件的 `componentDidMount` 生命周期钩子又存在跳转到B页面的逻辑，因此导致页面来回跳转，陷入死循环。
+
+问题代码模拟：
+
+```js
+// A.jsx
+import SubComponent from '../SubComponent';
+
+export default class AComponent extends Component {
+  render() {
+    const { showSub } = AStore || {};
+    return (
+      {showSub && <SubComponent />}
+    )
+  }
+}
+
+// SubComponent.jsx
+export default class SubComponent extends Component {
+  componentDidMount() {
+    this.jumpToB();
+  }
+}
+```
+
+关键就在于 showSub，它的默认值是 false，其它机型从B页面返回的时候，它都会重置为 false，而在 iPhone14 中确始终是 true，导致 SubComponent 重复执行了 componentDidMount 生命周期钩子。
+
+解决办法：针对 iOS 机型，在 componentDidMount 中增加变量判断，控制只执行一次初始化的跳转。由于没有办法精准判断 iPhone14，同时为了减少影响范围，只判断 iOS 机型，安卓机型不做处理。
+
+```js
+// SubComponent.jsx
+let isIOSFirst = true;
+export default class SubComponent extends Component {
+  componentDidMount() {
+    if (isIOS() && !isIOSFirst) {
+      return;
+    }
+    if (isIOS()) {
+      isIOSFirst = false;
+    }
+    this.jumpToB();
+  }
+}
+```
