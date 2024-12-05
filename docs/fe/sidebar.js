@@ -71,6 +71,7 @@ export default [
       { text: 'webpack 基础', link: '/fe/webpack/webpack_basis' },
       { text: 'vite', link: '/fe/webpack/vite' },
       { text: 'Babel', link: '/fe/webpack/babel' },
+      { text: 'webpack 实战', link: '/fe/webpack/webpack_actual_use'}
     ]
   },
   {
