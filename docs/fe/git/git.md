@@ -418,8 +418,13 @@ git push 别名 本地分支:远程分支
 2. 如果远程分支被省略，表示将本地分支推送到与之存在追踪关系的远程分支（通常两者同名），如果该远程分支不存在，则会被新建
 
 ```bash
+# 这两句命令作用是相同的
 git push origin master
+
+git push --set-upstream origin master
 ```
+
+![git push upstream](./images/git_push_upstream.png)
 
 3. 如果省略本地分支名，等同于推送一个空的本地分支到远程分支，表示删除指定的远程分支，等同于
 
