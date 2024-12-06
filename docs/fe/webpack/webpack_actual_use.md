@@ -127,7 +127,7 @@ HTML 文件使用 raw-loader：
 
 ### css内联
 
-方案一：使用 style-loader。
+#### 方案一：使用 style-loader。
 
 ```js
 module.exports = {
@@ -139,8 +139,10 @@ module.exports = {
           {
             loader: 'style-loader',
             options: {
-              insertAt: 'top', // 样式插入到head
-              singleton: true, // 将所有的style标签合并成一个
+              // 样式插入到head标签顶部，bottom就是head的底部
+              insertAt: 'top',
+              // 将所有的style标签合并成一个
+              singleton: true,
             }
           },
           'css-loader',
@@ -152,4 +154,68 @@ module.exports = {
 }
 ```
 
-方案二：使用 html-inline-css-webpack-plugin。
+样式插入到head标签顶部，所有style标签合并成一个：
+
+![style-loader-top-singleton](./images/style_loader_top_singleton.png)
+
+样式插入到head标签底部，style标签不合并：
+
+![style-loader-bottom-not-singleton](./images/style_loader_bottom_not_singleton.png)
+
+#### 方案二：使用 html-inline-css-webpack-plugin。
+
+核心思路是：将页面打包过程的产生的所有 CSS 提取成一个独立的文件，然后将这个 CSS 文件内联进 HTML head 里面。这里需要借助 mini-css-extract-plugin 和 html-inline-css-webpack-plugin 来实现 CSS 的内联功能。
+
+安装依赖：
+
+```bash
+npm i html-inline-css-webpack-plugin@1.2.1 mini-css-extract-plugin@0.6.0 -D
+```
+
+修改配置：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "less-loader",
+        ],
+      },
+    ]
+  }
+  plugins: [
+    new MiniCssExtractPlugin({
+        filename: '[name]_[contenthash:8].css'
+    }),
+    new HtmlWebpackPlugin(),
+    new HTMLInlineCSSWebpackPlugin()
+  ]
+};
+```
+
+注：html-inline-css-webpack-plugin 需要放在 html-webpack-plugin 后面。
+
+![html-inline-css-webpack-plugin](./images/html_inline_css_webpack_plugin.png)
+
+#### 两种方式区别
+
+使用 html-inline-css-webpack-plugin，生成的 html 静态文件中已经引入了样式。
+
+而 style-loader 生成的 html 文件本身是没有引入样式的，是在运行 html 文件的时候动态引入，因此查看网页源代码可以看到样式引入。
+
+:::warning
+style-loader 插入样式是一个动态的过程，你可以直接查看打包后的 html 源码，并不会看到 html 有 style 样式的。
+
+css-loader 的作用是将 css 转换成 commonjs 对象，也就是样式代码会被放到 js 里面去了。style-loader 是代码运行时动态的创建 style 标签，然后将 css style 插入到 style 标签里面去，对应的源码：https://github.com/webpack-contrib/style-loader/blob/master/src/runtime/injectStylesIntoStyleTag.js#L260
+
+html-inline-css-webpack-plugin CSS 内联的思路是：先将 css 提取打包成一个独立的 css 文件（使用MiniCssExtractPlugin.loader），然后读取提取出的 css 内容注入到页面的 style 里面去。这个过程在构建阶段完成。
+:::
+
+### 更多文章
+
+[webpack4如何实现资源内联](https://github.com/cpselvis/blog/issues/5){link=static}
