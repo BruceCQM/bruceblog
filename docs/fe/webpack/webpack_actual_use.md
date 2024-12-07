@@ -219,3 +219,13 @@ html-inline-css-webpack-plugin CSS 内联的思路是：先将 css 提取打包�
 ### 更多文章
 
 [webpack4如何实现资源内联](https://github.com/cpselvis/blog/issues/5){link=static}
+
+## 多页面应用打包通用方案
+
+多页面应用（MPA）概念：每⼀次⻚⾯跳转的时候，后台服务器都会给返回⼀个新的 html ⽂档，这种类型的⽹站也就是多⻚⽹站，也叫做多⻚应⽤。
+
+现状：每多一个页面，都需要修改 webpack 配置，在 entry 中增加一个入口，同时要增加一个 html-webpack-plugin 配置，删除一个页面也是同理，非常麻烦。
+
+多页面打包期望效果：增加或删除页面，不需要手动修改 webpack 配置，可以自动生成配置。
+
+主要思路：读取指定目录下的文件（这个目录路径是需要提前约定好的，比如都是按照 `src/search/index.js` 这样的方式组织文件目录，入口文件名都约定为 `index.js`），在打包的时候动态设置 entry 和 html-webpack-plugin 配置。
