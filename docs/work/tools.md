@@ -273,6 +273,29 @@ npm install express -D
 
 [Vscode 无法运行 npm 命令 报错 - 程序“npm”无法运行: 找不到应用程序所在位置](https://blog.csdn.net/qq_45094823/article/details/139946346){link=card}
 
+2、npm 安装很慢怎么解决
+
+可以先切换镜像源，如果还是很慢，使用 cnpm 进行依赖安装。
+
+```bash
+# 注册模块镜像
+npm set registry https://registry.npmmirror.com  
+
+# node-gyp 编译依赖的 node 源码镜像  
+npm set disturl https://npmmirror.com/dist 
+
+# 清空缓存  
+npm cache clean --force  
+
+# 安装cnpm  
+npm install -g cnpm --registry=https://registry.npmmirror.com
+
+# 使用cnpm安装依赖
+cnpm install xxx
+```
+
+[npm使用国内淘宝镜像（最新地址](https://blog.csdn.net/chaoPerson/article/details/136121885){link=static}
+
 ## Charles
 
 Charles 是网络代理应用软件。
