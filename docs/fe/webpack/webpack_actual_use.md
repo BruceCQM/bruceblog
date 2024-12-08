@@ -1,6 +1,6 @@
 # webpack 实战
 
-本文内容是极客时间《玩转webpack》课程的内容整理笔记。
+本文内容是极客时间[《玩转webpack》](https://time.geekbang.org/course/intro/100028901)课程的内容整理笔记。
 
 ## postcss插件autoprefixer自动补齐css属性前缀
 
@@ -229,3 +229,69 @@ html-inline-css-webpack-plugin CSS 内联的思路是：先将 css 提取打包�
 多页面打包期望效果：增加或删除页面，不需要手动修改 webpack 配置，可以自动生成配置。
 
 主要思路：读取指定目录下的文件（这个目录路径是需要提前约定好的，比如都是按照 `src/search/index.js` 这样的方式组织文件目录，入口文件名都约定为 `index.js`），在打包的时候动态设置 entry 和 html-webpack-plugin 配置。
+
+需要使用到的依赖：[glob](https://www.npmjs.com/package/glob/v/7.2.3)。使用 `glob.sync()` 方法匹配所有满足条件的文件路径。
+
+安装依赖：
+
+```bash
+npm i glob@7.1.4 -D
+```
+
+修改 webpack 配置，动态匹配 src 目录下每个页面的 index 文件路径，然后设置 entry 和 html-webpack-plugin 配置。
+
+```js
+const setMPA = () => {
+  const entry = {};
+  const htmlWebpackPlugins = [];
+
+  // ['C:/Users/xxx/src/index/index.js','C:/Users/xxx/src/search/index.js']
+  const entryFile = glob.sync(path.join(__dirname, './src/*/index.js'));
+  Object.keys(entryFile).map(value => {
+    // 'C:/Users/xxx/src/search/index.js'
+    const entryFile = entryFile[value];
+    // [
+    //   'src/search/index.js',
+    //   'search',
+    //   index: 81,
+    //   input: 'C:/Users/xxx/src/search/index.js',
+    //   groups: undefined
+    // ]
+    const match = entryFile.match(/src\/(.*)\/index\.js/);
+    const pageName = match && match[1];
+    entry[pageName] = entryFile;
+    htmlWebpackPlugins.push(new HtmlWebpackPlugin({
+      template: path.join(__dirname, `src/${pageName}/index.html`),
+      filename: `${pageName}.html`,
+      // 指定生成的html要使用哪些chunk
+      chunks: [pageName],
+      // css、js自动注入到html中
+      inject: true,
+      minify: {
+        html5: true,
+        collapseWhitespace: true,
+        preserveLineBreaks: false,
+        minifyCSS: true,
+        minifyJS: true,
+        removeComments: false,
+      },
+    }))
+  })
+
+  return {
+    entry,
+    htmlWebpackPlugins,
+  }
+}
+
+const { entry, htmlWebpackPlugins } = setMPA();
+
+module.exports = {
+  entry,
+  plugins: [
+    ...htmlWebpackPlugins,
+    new HTMLInlineCSSWebpackPlugin(),
+    new CleanWebpackPlugin(),
+  ]
+}
+```
