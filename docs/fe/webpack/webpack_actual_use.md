@@ -2,6 +2,77 @@
 
 本文内容是极客时间[《玩转webpack》](https://time.geekbang.org/course/intro/100028901)课程的内容整理笔记。
 
+## 代码压缩
+
+### JS 代码压缩
+
+在 webpack4 中，已经内置了 uglify-webpack-plugin 这个插件，打包出来的 JS 文件默认已经压缩过，无需再手动调用。
+
+当然也可以手动调用，去修改它的配置参数，比如开启并行压缩。
+
+### CSS 代码压缩
+
+所需依赖：optimize-css-assets-webpack-plugin、cssnano 预处理器。
+
+安装依赖：
+
+```bash
+npm i optimize-css-assets-webpack-plugin@5.0.1 cssnano@4.1.10 -D
+```
+
+修改配置：
+
+```js
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new OptimizeCSSAssetsPlugin({
+      assetNameRegExp: /\.css$/g,
+      cssProcessor: require('cssnano'),
+    })
+  ]
+}
+```
+
+### HTML 文件压缩
+
+所需插件：html-webpack-plugin，设置压缩参数。
+
+安装依赖：
+
+```bash
+npm i html-webpack-plugin@3.2.0 -D
+```
+
+修改配置：
+
+```js
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src/search/index.html"),
+      filename: "search.html",
+      // 指定生成的html要使用哪些chunk
+      chunks: ["search"],
+      // css、js自动注入到html中
+      inject: true,
+      // 设置HTML文件的压缩参数
+      minify: {
+        html5: true,
+        collapseWhitespace: true,
+        preserveLineBreaks: false,
+        minifyCSS: true,
+        minifyJS: true,
+        removeComments: false,
+      },
+    })
+  ]
+}
+```
+
 ## 自动清理构建目录产物
 
 不太优雅的做法：通过 npm scripts 清理构建目录，在执行打包命令之前先删除目录。
