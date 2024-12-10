@@ -2,6 +2,36 @@
 
 本文内容是极客时间[《玩转webpack》](https://time.geekbang.org/course/intro/100028901)课程的内容整理笔记。
 
+## 自动清理构建目录产物
+
+不太优雅的做法：通过 npm scripts 清理构建目录，在执行打包命令之前先删除目录。
+
+```bash
+rm -rf ./dist && webpack
+
+rimraf ./dist && webpack
+```
+
+使用插件：clean-webpack-plugin。
+
+安装依赖：
+
+```bash
+npm i clean-webpack-plugin@2.0.2 -D
+```
+
+修改配置：
+
+```js
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new CleanWebpackPlugin(),
+  ]
+}
+```
+
 ## postcss插件autoprefixer自动补齐css属性前缀
 
 根据 Can I Use 规则（ https://caniuse.com/ ），决定是否增加css属性前缀。
