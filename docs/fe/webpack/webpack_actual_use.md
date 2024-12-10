@@ -295,3 +295,77 @@ module.exports = {
   ]
 }
 ```
+
+## 使用 source map
+
+什么是 source map：source map 是一个信息文件，记录这转换后的代码与转换前的代码的位置对应关系。有了它，代码报错的时候，浏览器就可以直接显示原始代码，而不是转换后的代码。为开发者调试提供了很大方便。
+
+[JavaScript Source Map 详解](https://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html){link=static}
+
+一般在开发环境开启 source map，在生产环境关闭，避免泄露源代码。
+
+线上排查问题可以将 source map 上传到错误监控系统。
+
+source map 关键字：
+
+- eval：使用 eval 包裹模块代码。
+
+- source map：产生 `.map` 文件。
+
+- cheap：不包含列信息。
+
+- inline：将 `.map` 作为 DataURI 嵌入，不单独生成 `.map` 文件。
+
+- module：包含 loader 的 source map。
+
+![source map类型](./images/source_map_type.png)
+
+在 webpack 配置中，通过设置 `devtool` 参数来开启 source map。
+
+```js
+module.exports = {
+  devtool: 'source-map',
+}
+```
+
+不同类型的 source map 的区别：
+
+### `devtool: 'eval'`
+
+每个模块的代码用 `eval()` 包裹，不会生成 source map 文件。这种方式可以加快构建速度，但调试时只能看到编译后的代码，无法看到原始代码。
+
+![eval 生成的chunk](./images/eval_chunk.png)
+
+![eval 类型的报错](./images/eval_error.png)
+
+![eval 类型源码](./images/eval_sources_code.png)
+
+### `devtool: 'source-map'`
+
+会生成一个单独的 source map 文件，包含完整的信息，体积较大。调试的时候可以看到原始代码。
+
+![source-map 生成的chunk](./images/source_map_chunk.png)
+
+![source-map 类型的报错](./images/source_map_error.png)
+
+![source-map 类型源码](./images/source_map_sources_code.png)
+
+### `devtool: 'cheap-source-map'`
+
+生成不包含列信息，只包含行信息的 source map 文件，体积会小一些。调试时只能看到编译后的代码，无法看到原始代码。
+
+![cheap-source-map 生成的chunk](./images/cheap_source_map_chunk.png)
+
+![cheap-source-map 类型的报错](./images/cheap_source_map_error.png)
+
+![cheap-source-map 类型源码](./images/cheap_source_map_sources_code.png)
+
+### `devtool: 'inline-source-map'`
+
+不单独生成 source map 文件，将 source map 作为 DataURI 嵌入到 bundle 中，会大大增加 bundle 的体积，调试时可以看到原始代码。
+
+![inline-source-map 生成的chunk](./images/inline_source_map_chunk.png)
+
+![inline-source-map 类型的报错](./images/inline_source_map_error.png)
+
+![inline-source-map 类型源码](./images/inline_source_map_sources_code.png)
