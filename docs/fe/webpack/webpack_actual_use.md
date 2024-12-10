@@ -2,6 +2,78 @@
 
 本文内容是极客时间[《玩转webpack》](https://time.geekbang.org/course/intro/100028901)课程的内容整理笔记。
 
+## 解析 ES6
+
+webpack 不能识别 ES6 语法，因此需要使用 babel-loader 进行转换。
+
+使用 babel-loader，需要增加 `.babelrc` 增加配置。比如：
+
+```json
+{
+  // 一个preset可以理解为是一系列plugin的集合
+  "presets": [
+    "@babel/preset-env",
+  ],
+  // 一个plugin可以理解为一个功能
+  "plugins": [
+    "@babel/proposal-class-properties",
+  ]
+}
+```
+
+安装依赖：
+
+```bash
+npm i @babel/core@7.26.0 @babel/preset-env@7.26.0 babel-loader@8.0.5 -D
+```
+
+创建 `.babelrc` 文件，增加 ES6 配置：
+
+```json
+{
+  "presets": [
+    // es6的babel配置
+    "@babel/preset-env",
+  ]
+}
+```
+
+修改 webpack 配置：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      test: /.js$/,
+      use: 'babel-loader',
+    ]
+  }
+}
+```
+
+## 解析 React JSX
+
+所需依赖：react、react-dom、@babel/preset-react。
+
+安装依赖：
+
+```bash
+npm i react@16.8.6 react-dom@16.8.6 @babel/preset-react@7.0.0 -D
+```
+
+`.babelrc` 文件增加 React 的 babel preset 配置。
+
+```js
+{
+  "presets": [
+    // es6的babel配置
+    "@babel/preset-env",
+    // react的babel配置
+    "@babel/preset-react",
+  ]
+}
+```
+
 ## 代码压缩
 
 ### JS 代码压缩
