@@ -542,3 +542,49 @@ module.exports = {
 ![inline-source-map 类型的报错](./images/inline_source_map_error.png)
 
 ![inline-source-map 类型源码](./images/inline_source_map_sources_code.png)
+
+## 提取页面公共资源
+
+### html-webpack-externals-plugin
+
+思路：将 React、react-dom 等基础库通过 cdn 引入，不打入 bundle 中。
+
+所需插件：html-webpack-externals-plugin。用于将外部资源（如 CDN 上的库）引入到项目中，而不需要将这些库打包进最终的输出文件中。
+
+安装插件：
+
+```bash
+npm i html-webpack-externals-plugin@3.8.0 -D
+```
+
+修改 webpack 配置：
+
+```js
+module.exports = {
+  plugins: [
+    new HtmlWebpackExternalsPlugin({
+      externals: [
+        {
+          // 指定要引入的模块名称，和 import ... from "xxx" 中的 xxx 对应
+          module: "react",
+          // 模块的加载地址
+          entry: "https://unpkg.com/react@16/umd/react.development.js",
+          // 指定模块在全局作用域中的变量名
+          global: "React",
+        },
+        {
+          module: "react-dom",
+          entry: "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
+          global: "ReactDOM",
+        }
+      ]
+    })
+  ]
+}
+```
+
+生成的 html 中会自动通过 script 标签引入基础包。
+
+![html-webpack-externals-plugin](./images/html_webpack_externals_plugin.png)
+
+### SplitChunksPlugin
