@@ -86,4 +86,4 @@
 - 2024-12-06：力扣-128-最长连续序列；webpack css内联实战内容补充。
 - 2024-12-10：力扣-9-回文数；webpack 使用 source map。
 - 2024-12-11：力扣-283-移动零；html-webpack-externals-plugin提取基础包。
-- 2024-12-12：力扣-11-盛最多水的容器；SplitChunksPlugin分离公共代码。
+- 2024-12-12：力扣-11-盛最多水的容器；SplitChunksPlugin分离公共代码；tree-shaking的学习。

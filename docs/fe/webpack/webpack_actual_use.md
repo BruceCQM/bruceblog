@@ -654,3 +654,82 @@ module.exports = {
 - `/(react|react-dom)/`：匹配路径中包含 `react` 或 `react-dom` 的模块，匹配规则更加宽松，一般 react 和 react-dom 都在 node_modules 目录下。
 
 - `/[\\/]node_modules[\\/](react|react-dom)/`：匹配 node_modules 目录下的 react 和 react-dom 模块，匹配规则更加严格。一般建议使用匹配更严格的写法，避免匹配到其它路径的模块。
+
+## Tree-shaking 的使用和原理分析
+
+### 概念
+
+什么是 Tree-shaking 摇树优化？
+
+Tree-shaking 是指对没有使用的代码进行删除，减小打包体积。
+
+在 Webpack 打包时，1个模块可能会有多个方法，只要其中某个方法被使用到了，整个文件都会被打到 bundle 里面去。这些没用的冗余方法实际上没必要打包进去。Tree-shaking 就是只把使用到的方法打入 bundle，没有使用的方法会在 uglify 阶段被删除掉。
+
+webpack 默认支持 Tree-shaking，在生产模式下自动开启 Tree-shaking。把 mode 设置为 none，就会关闭 tree-shaking。
+
+要求：必须使用 ES6 语法，CJS 的方式不支持。
+
+### 原理
+
+DCE（Dead Code Elimination，死代码消除）：
+
+- 代码不会执行，不可到达。
+
+```js
+if (false) {
+  console.log('不会执行');
+}
+```
+
+- 代码执行的结果不会被用到。例如函数的执行返回结果，没有赋值给一个变量。
+
+- 代码只会影响死变量。例如有一段代码修改了某个变量，但是这个变量没有被用到。
+
+Tree-shaking 通过 DCE 分析哪些代码是没用的，然后删除。
+
+Tree-shaking 原理利用了 ES6 模块的特点：
+
+- `import` 语句只能在模块的顶层出现。
+
+- `import` 的模块名称只能是字符串常量。不能动态设置 import 的内容。
+
+- `import` 一个模块之后，不能对它进行修改。
+
+CJS 可以根据不同的条件去 require 不同的模块，因此不能进行 Tree-shaking。
+
+Tree-shaking 其实是对代码进行静态分析，在编译的过程中，哪些模块的代码会使用到，是需要确定下来的。不能在运行时才去分析哪些代码使用到。接着对没有使用到的代码在 uglify 阶段进行擦除。
+
+### 注意点
+
+Tree-shaking 对代码有要求：里面的函数不能有副作用，否则 Tree-shaking 会失效。
+
+:::warning 什么是副作用？
+副作用这个概念来源于函数式编程(FP)，纯函数是没有副作用的，也不依赖外界环境或者改变外界环境。纯函数的概念是：接受相同的输入，任何情况下输出都是一样的。
+
+非纯函数存在副作用，副作用就是：相同的输入，输出不一定相同。或者这个函数会影响到外部变量、外部环境。
+
+函数如果调用了全局对象或者改变函数外部变量，则说明这个函数有副作用。
+:::
+
+```js
+export function pureFunction(a, b) {
+    return a + b;
+}
+
+export function impureFunction(data) {
+    console.log('Logging data:', data);
+    return data.length;
+}
+```
+
+- pureFunction: 这是一个纯函数，因为它只根据输入参数计算结果，并且没有其他副作用。这种函数适合 Tree-shaking。
+
+- impureFunction: 这是一个有副作用的函数，因为它调用了 console.log，这会导致外部状态的变化，并且返回的结果也可能不相同。这种函数不适合 Tree-shaking。
+
+#### 为什么有副作用的函数会影响 Tree-shaking？
+
+Tree-shaking 是一种优化技术，它通过静态分析代码来移除未使用的代码。如果一个函数有副作用，编译器无法确定这个函数是否会被执行，因此会保留这个函数以确保程序的正确性。
+
+例如，如果我们只导入并使用 pureFunction，但不使用 impureFunction，Tree-shaking 会尝试移除 impureFunction 以减少最终打包的文件大小。但由于 impureFunction 有副作用，编译器会保留它，以防止潜在的副作用影响程序的行为。
+
+为了使 Tree-shaking 更有效，尽量编写无副作用的纯函数。如果有副作用的函数，确保它们被显式地调用，而不是依赖于静态分析来决定是否保留。
