@@ -111,7 +111,7 @@ var longestConsecutive = function (nums) {
 
 ### 283.[移动零](https://leetcode.cn/problems/move-zeroes/description/)
 
-标签：双指针
+标签：快慢指针
 
 题目：
 
@@ -138,7 +138,7 @@ var moveZeroes = function (nums) {
 
 ### 11.[盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/description/)
 
-标签：双指针
+标签：头尾指针
 
 题目：
 

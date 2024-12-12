@@ -588,3 +588,69 @@ module.exports = {
 ![html-webpack-externals-plugin](./images/html_webpack_externals_plugin.png)
 
 ### SplitChunksPlugin
+
+SplitChunksPlugin 是 webpack 内置的一个插件，用于分离代码块，无需另外安装。
+
+使用 SplitChunksPlugin 分离基础库和公共业务模块。
+
+修改配置：
+
+```js
+const setMPA = () => {
+  const entry = {};
+  const htmlWebpackPlugins = [];
+  const entryFiles = glob.sync(path.join(__dirname, './src/*/index.js'));
+  Object.keys(entryFiles).map((index) => {
+    const entryFile = entryFiles[index];
+    const match = entryFile.match(/src\/(.*)\/index\.js/);
+    const pageName = match && match[1];
+    entry[pageName] = entryFile;
+
+    htmlWebpackPlugins.push(new HtmlWebpackPlugin({
+      template: path.join(__dirname, `src/${pageName}/index.html`),
+      filename: `${pageName}.html`,
+      // 指定生成的html要使用哪些chunk
+      // 要使用分包的chunk，需要额外指定
+      // 顺序一般是基础库、公共业务、页面对应chunk
+      chunks: ['vendors', 'commons', pageName],
+      inject: true,
+    }));
+  })
+
+  return {
+    entry,
+    htmlWebpackPlugins,
+  }
+}
+
+module.exports = {
+  optimization: {
+    splitChunks: {
+      // 最小体积，包大小大于minSize才会提取出来，单位是Bytes字节
+      minSize: 0,
+      cacheGroups: {
+        // 如果设置了name，打包的chunk会命名为name，否则使用键名作为chunk名称
+        vendors: {
+          test: /(react|react-dom)/,
+          // test: /[\\/]node_modules[\\/](react|react-dom)/,
+          // 如果要使用，需要把name对应的属性添加到htmlWebpackPlugin的chunk参数数组里
+          name: 'vendors',
+          chunks: 'all',
+        },
+        commons: {
+          name: 'commons',
+          chunks: 'all',
+          // 至少引用2次才提取
+          minChunks: 2,
+        }
+      },
+    }
+  }
+}
+```
+
+两段正则的区别：
+
+- `/(react|react-dom)/`：匹配路径中包含 `react` 或 `react-dom` 的模块，匹配规则更加宽松，一般 react 和 react-dom 都在 node_modules 目录下。
+
+- `/[\\/]node_modules[\\/](react|react-dom)/`：匹配 node_modules 目录下的 react 和 react-dom 模块，匹配规则更加严格。一般建议使用匹配更严格的写法，避免匹配到其它路径的模块。
