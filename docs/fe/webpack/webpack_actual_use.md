@@ -733,3 +733,5 @@ Tree-shaking 是一种优化技术，它通过静态分析代码来移除未使�
 例如，如果我们只导入并使用 pureFunction，但不使用 impureFunction，Tree-shaking 会尝试移除 impureFunction 以减少最终打包的文件大小。但由于 impureFunction 有副作用，编译器会保留它，以防止潜在的副作用影响程序的行为。
 
 为了使 Tree-shaking 更有效，尽量编写无副作用的纯函数。如果有副作用的函数，确保它们被显式地调用，而不是依赖于静态分析来决定是否保留。
+
+[谈谈tree-shaking](https://juejin.cn/post/6956522989810614308){link=static}
