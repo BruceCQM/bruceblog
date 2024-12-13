@@ -2,6 +2,54 @@
 
 简要记录些工作中遇到的杂七杂八问题。
 
+## 那些比较复杂的CSS选择器
+
+1、`.radio:not(:last-child)::after`
+
+选择所有不是其父元素最后一个子元素的 `.radio` 元素，并在其后插入伪元素。
+
+也就是选择除了最后一个的其它所有 `.radio` 元素。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .radio-group {
+        display: flex;
+        align-items: center;
+      }
+      .radio {
+        position: relative;
+        padding-right: 20px;
+      }
+      .radio:not(:last-child)::after {
+        content: "|";
+        position: absolute;
+        right: 0;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="radio-group">
+      <label class="radio">Option 1</label>
+      <label class="radio">Option 2</label>
+      <label class="radio">Option 3</label>
+      
+      <div class="radio-group2">
+        <label class="radio">Option 11</label>
+        <label class="radio">Option 22</label>
+        <label class="radio">Option 33</label>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
 ## iPhone 如何安装 whistle 证书
 
 简要步骤：
