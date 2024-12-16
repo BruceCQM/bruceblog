@@ -655,6 +655,84 @@ module.exports = {
 
 - `/[\\/]node_modules[\\/](react|react-dom)/`：匹配 node_modules 目录下的 react 和 react-dom 模块，匹配规则更加严格。一般建议使用匹配更严格的写法，避免匹配到其它路径的模块。
 
+## 代码分割与动态import
+
+对于⼤的 Web 应⽤来讲，将所有的代码都放在⼀个⽂件中显然是不够有效的，特别是当你的某些代码块是在某些特殊的时候才会被使⽤到。
+
+webpack 有⼀个功能就是将你的代码库分割成 chunks（语块），当代码运⾏到需要它们的时候再进⾏加载。
+
+代码分割的场景：
+
+- 抽离公共代码，比如基础包、公共业务模块等。
+
+- 脚本懒加载，使得初始下载的代码体积更小。
+
+懒加载 JS 脚本的方式：
+
+- CommonJS：require 语句。require 语句本身就支持动态引入模块的。
+
+- ES6：动态 import。目前没有原生支持，需要 babel 转换。
+
+#### 动态 import 的使用
+
+安装插件：
+
+```bash
+npm i @babel/plugin-syntax-dynamic-import@7.2.0 -D
+```
+
+增加 `.babelrc` 文件配置：
+
+```js
+{
+  "presets": [
+    // es6的babel配置
+    "@babel/preset-env",
+    // react的babel配置
+    "@babel/preset-react",
+  ],
+  "plugins": [
+    // 动态 import 配置
+    "@babel/plugin-syntax-dynamic-import"
+  ]
+}
+```
+
+增加 Text 组件：
+
+```jsx
+// text.js
+import React from 'react';
+
+export default () => <div>动态 import</div>
+```
+
+点击动态引入 Text 组件：
+
+```js
+class Search extends React.Component {
+  state = {
+    Text: null,
+  }
+
+  loadComponent = () => {
+    // 动态加载Text组件
+    import('./text.js').then((Text) => {
+      this.setState({ Text: Text.default });
+    })
+  }
+
+  render() {
+    const { Text } = this.state;
+    return <div className='search-text'>
+      Search Text
+      { Text ?  <Text /> : null }
+      <img src={logo} onClick={this.loadComponent} />
+    </div>
+  }
+}
+```
+
 ## Tree-shaking 的使用和原理分析
 
 ### 概念

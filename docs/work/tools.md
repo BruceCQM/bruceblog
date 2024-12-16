@@ -2,35 +2,7 @@
 
 ## 启动本地服务方式
 
-### serve
-
-serve 在本地启动一个静态资源服务器，可以在本地运行查看项目打包的效果。
-
-:::tip node版本≥14
-serve v14 onwards requires Node v14 to run. Please use serve v13 if you cannot upgrade to Node v14.
-:::
-
-安装。
-
-```bash
-npm install -g serve
-```
-
-启动服务器，首先先打包完本地项目，一般会生成 `build` 或 `dist` 目录。
-
-```bash
-# 进入build或dist目录
-serve
-
-# 在项目根目录
-serve -s build
-serve -s dist
-
-# 指定端口号
-serve -p 3000
-```
-
-### http-server
+### http-server(good)
 
 以 Mac 为例。
 
@@ -59,6 +31,34 @@ http-server
 ```
 
 默认情况下，HTTP 服务器将在 `localhost:8080` 上运行。这样即可访问文件，如 `http://localhost:8080/yourfile.js`。
+
+### serve
+
+serve 在本地启动一个静态资源服务器，可以在本地运行查看项目打包的效果。
+
+:::tip node版本≥14
+serve v14 onwards requires Node v14 to run. Please use serve v13 if you cannot upgrade to Node v14.
+:::
+
+安装。
+
+```bash
+npm install -g serve
+```
+
+启动服务器，首先先打包完本地项目，一般会生成 `build` 或 `dist` 目录。
+
+```bash
+# 进入build或dist目录
+serve
+
+# 在项目根目录
+serve -s build
+serve -s dist
+
+# 指定端口号
+serve -p 3000
+```
 
 ### 使用 Live Server 插件
 
