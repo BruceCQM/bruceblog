@@ -733,6 +733,12 @@ class Search extends React.Component {
 }
 ```
 
+运行效果：点击图片后会使用 jsonp 方式请求 JS 文件。
+
+![动态import请求](./images/dynamic_import_request.png)
+
+![动态import的script语句](./images/dynamic_import_script.png)
+
 ## Tree-shaking 的使用和原理分析
 
 ### 概念
