@@ -318,6 +318,17 @@ export default [
     ]
   },
   {
+    title: '代码规范',
+    items: [
+      {
+        icon: 'https://eslint.nodejs.cn/favicon.ico',
+        title: 'Eslint 规则参考',
+        desc: 'ESLint 中的规则按类型分组',
+        link: 'https://eslint.nodejs.cn/docs/latest/rules',
+      }
+    ]
+  },
+  {
     title: 'JavaScript 库',
     items: [
       {
