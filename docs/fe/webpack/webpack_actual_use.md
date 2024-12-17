@@ -920,3 +920,77 @@ Scope Hoisting：
 案例重现：
 
 某⼯程师⼩明在做充值业务时，修改了苹果⽀付配置，将 JSON 配置增加了重复的 key 。代码发布后，有⼩部分使⽤了 vivo ⼿机的⽤户反馈充值⻚⾯⽩屏，⽆法在 app 内进⾏充值。最后问题定位是：vivo ⼿机使⽤了系统⾃带的 webview ⽽没有使⽤ X5 内核，解析 JSON 时遇到重复 key 报错，导致⻚⾯⽩屏。
+
+这种语法错误其实可以通过 ESlint 捕获。
+
+行业优秀的额 ESlint 规范：
+
+Airbnb: [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb)、 [eslint-config-airbnb-base](https://www.npmjs.com/package/eslint-config-airbnb-base)。
+
+eslint-config-airbnb 包含了 React 的 ESlint 规范，如果不需要 React，可以使用 eslint-config-airbnb-base。
+
+ESlint 的两种落地方式：
+
+- 和 CI/CD 集成：在构建部署之前进行 ESlint 检查。
+
+- webpack 与 ESlint 集成：webpack 打包之前进行 ESlint 检查，有语法错误则报错，停止打包。
+
+所需插件：eslint、eslint-loader、eslint-plugin-import、eslint-plugin-jsx-a11y、eslint-plugin-react。
+
+规则集：eslint-config-airbnb。
+
+安装依赖：
+
+```bash
+npm i eslint@5.16.0、eslint-loader@2.1.2、eslint-plugin-import@2.17.3、eslint-plugin-jsx-a11y@6.2.1、eslint-plugin-react@7.13.0 -D
+
+npm i eslint-config-airbnb@17.1.0 -D
+```
+
+增加 `.eslintrc.js` 配置文件：
+
+```js
+module.exports = {
+  // 指定ESlint解析器
+  parser: 'babel-eslint',
+  // 继承的规则
+  extends: 'airbnb',
+  // 指定想要启用的环境。开启后ESlint会自动识别这些环境提供的全局变量，如node的require
+  env: {
+    browser: true,
+    node: true,
+  },
+  // 更多规则：https://eslint.nodejs.cn/docs/latest/rules/
+  rules: {
+    "indent": ['error', 2],
+    "import/no-extraneous-dependencies": 'off',
+    // jsx、js文件都可以包含JSX语法
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "global-require": "warn",
+    "array-callback-return": "off",
+    "eol-last": "warn",
+  }
+}
+```
+
+修改 webpack 配置：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /.js$/,
+        use: [
+          'babel-loader',
+          'eslint-loader',
+        ],
+      },
+    ]
+  }
+}
+```
+
+即可看到文件一堆报错了。
