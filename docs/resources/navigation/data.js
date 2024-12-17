@@ -325,6 +325,12 @@ export default [
         title: 'Eslint 规则参考',
         desc: 'ESLint 中的规则按类型分组',
         link: 'https://eslint.nodejs.cn/docs/latest/rules',
+      },
+      {
+        icon: 'https://eslint.nodejs.cn/favicon.ico',
+        title: 'Eslint 旧版规则页面',
+        desc: 'ESLint 旧版规则页面',
+        link: 'https://eslint.cn/docs/rules/',
       }
     ]
   },
