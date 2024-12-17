@@ -89,3 +89,4 @@
 - 2024-12-12：力扣-11-盛最多水的容器；SplitChunksPlugin分离公共代码；tree-shaking的学习。
 - 2024-12-13：力扣-15-三数之和；学习Scope hositing。
 - 2024-12-16：复习力扣-15-三数之和；代码分割与动态import。
+- 2024-12-17：在webpack中使用ESlint。
