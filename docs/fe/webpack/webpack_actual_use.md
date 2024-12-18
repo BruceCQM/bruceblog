@@ -1021,6 +1021,13 @@ module.exports = {
 └── package.json
 ```
 
+实现库函数：
+
+```js
+// src/index.js
+export default function add(a, b) {}
+```
+
 安装依赖：
 
 ```bash
@@ -1095,3 +1102,40 @@ package.json 文件增加 scripts 命令，每次执行 `npm publish` 发布之�
 
 在这里是第一种情况造成的，包名称被占用。将 package.json 的 name 属性修改一下，再重新发布就成功了。
 :::
+
+### 使用发布的库
+
+```js
+// ESM 方式
+import largeNumber from 'large-number-kimmy';
+const addRes = largeNumber('999', '123');
+
+// CJS 方式
+const largeNumber = require('large-number-kimmy');
+const addRes = largeNumber('999', '123');
+```
+
+script 引入，试了下，只能够直接引入打包出来的文件，不能直接引入入口文件，否则浏览器报错：process is not defined。
+
+这种方式 window 对象挂载了 largeNumber 方法。
+
+```html
+<!-- 如果直接引入入口文件，浏览器报process is not defined的错误 -->
+<!-- <script src="https://unpkg.com/large-number-kimmy"></script> -->
+<script src="https://unpkg.com/large-number-kimmy@1.0.0/dist/large-number.min.js"></script>
+<script>
+  console.log(largeNumber);
+  console.log(window.largeNumber);
+  console.log(largeNumber('999', '100'));
+</script>
+```
+
+npm 的包都会自动生成一个对应的 unpkg.com 链接，它是一个全球性的 CDN，可以让开发者直接通过 script 标签引入。https://unpkg.com/large-number-kimmy@1.0.0/dist/large-number.min.js。
+
+在请求 https://unpkg.com/large-number-kimmy 的时候，遇到了 302临时重定向 的响应，记录一下：
+
+![302_found_1](./images/302_found_1.png)
+
+![302_found_2](./images/302_found_2.png)
+
+![302_found_3](./images/302_found_3.png)
