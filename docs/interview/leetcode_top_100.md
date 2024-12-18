@@ -138,7 +138,7 @@ var moveZeroes = function (nums) {
 
 ### 11.[盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/description/)
 
-标签：头尾指针
+标签：头尾双指针
 
 题目：
 
@@ -168,7 +168,7 @@ var maxArea = function (height) {
 
 ### 15. [三数之和](https://leetcode.cn/problems/3sum/description/)
 
-标签：双指针、排序
+标签：头尾双指针、排序
 
 题目：
 
@@ -210,11 +210,13 @@ var threeSum = function (nums) {
 
 ### 42.[接雨水](https://leetcode.cn/problems/trapping-rain-water/description/)
 
-标签：双指针、数组
+标签：头尾双指针、数组
 
 题目：
 
 ![42.接雨水](./images/leetcode/question-42.png)
+
+主要思路：计算每个位置能接的水的数量，求和。每个位置能接的数量，是左边最高的柱子和右边最高的柱子中较小的那个，减去当前位置的值。
 
 代码：
 
@@ -244,7 +246,7 @@ var trap = function (height) {
   return res;
 }
 
-// 方法二：用双指针优化
+// 方法二：用头尾双指针优化
 var trap = function (height) {
   var left = 0, right = height.length - 1;
   var leftMax = 0, rightMax = 0;
