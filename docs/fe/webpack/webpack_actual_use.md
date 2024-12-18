@@ -994,3 +994,104 @@ module.exports = {
 ```
 
 即可看到文件一堆报错了。
+
+## webpack 打包库和组件
+
+### 开发与发布
+
+使用 webpack 打包 js 库，并发布到 npm 上。
+
+实现一个大整数加法库的打包，要求：
+
+- 需要打包压缩版和非压缩版
+
+- 支持 AMD/CJS/ESM 模块和 script 引入
+
+库目录结构：
+
+```shell
+.
+├── dist
+│   ├── large-number.js
+│   └── large-number.min.js
+├── src
+│   └── index.js # 库源代码
+├── index.js # 入口文件
+├── webpack.config.js
+└── package.json
+```
+
+安装依赖：
+
+```bash
+npm i webpack@4.31.0 webpack-cli@3.3.2 terser-webpack-plugin@1.3.0 -D
+```
+
+修改 webpack 配置：
+
+```js
+const TerserPlugin = require('terser-webpack-plugin');
+
+module.exports = {
+  entry: {
+    'large-number': './src/index.js',
+    'large-number.min': './src/index.js',
+  },
+  output: {
+    filename: '[name].js',
+    // 指定暴露出去的库的名称，也支持以全局变量的方式引用它
+    library: 'largeNumber',
+    // 支持 AMD/CJS/ESM 模块和 script 引入
+    libraryTarget: 'umd',
+    // 方便使用，如果不加使用组件的时候需要 largeNumber.default 来用
+    libraryExport: 'default',
+  },
+  mode: 'none',
+  // 只针对 .min.js 结尾的文件进行压缩
+  optimization: {
+    minimize: true,
+    minimizer: [
+      // uglifyJsPlugin不能压缩ES6语法，会报错，推荐使用TerserPlugin
+      new TerserPlugin({
+        include: /\.min\.js$/,
+      }),
+    ],
+  },
+};
+```
+
+[output.libraryTarget](https://webpack.docschina.org/configuration/output/#outputlibrarytarget)
+
+设置入口文件：
+
+```js
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./dist/large-number.min.js');
+} else {
+  module.exports = require('./dist/large-number.js');
+}
+```
+
+package.json 文件增加 scripts 命令，每次执行 `npm publish` 发布之前都会执行 `prepublish` 钩子进行打包。
+
+```json
+{
+  "scripts": {
+    "prepublish": "webpack"
+  }
+}
+```
+
+将库发布到 npm 上，首先执行 `npm login` 命令，输入用户名、密码、邮箱登录 npm，接着将 npm 源设置为默认的值 `npm config set registry https://registry.npmjs.org/`，最后执行 `npm publish` 命令发布。
+
+:::danger 发布问题
+执行 `npm publish` 发布时，出现错误：403 Forbidden - PUT https://registry.npmjs.org/large-number - You do not have permission to publish "large-number". Are you logged in as the correct user?
+
+查了资料，可能是因为以下的原因导致：
+
+- 包名已被占用：你尝试发布的包名已经被其他用户注册。
+
+- 登录用户错误：你当前登录的 npm 用户没有权限发布该包。
+
+在这里是第一种情况造成的，包名称被占用。将 package.json 的 name 属性修改一下，再重新发布就成功了。
+:::
