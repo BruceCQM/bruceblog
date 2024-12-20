@@ -156,6 +156,12 @@ export default [
         desc: '下一代的前端工具链，为开发提供极速响应',
         link: 'https://vitejs.cn/vite3-cn/'
       },
+      {
+        icon: 'https://assets.rspack.dev/rspack/favicon-128x128.png',
+        title: 'Rspack',
+        desc: 'Rust应用，用于取代webpack，速度飞快，非常兼容webpack，几乎可以不修改webpack的配置',
+        link: 'https://rspack.dev/zh/'
+      },
     ]
   },
   {
