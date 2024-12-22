@@ -1139,3 +1139,232 @@ npm 的包都会自动生成一个对应的 unpkg.com 链接，它是一个全�
 ![302_found_2](./images/302_found_2.png)
 
 ![302_found_3](./images/302_found_3.png)
+
+## webpack实现SSR打包
+
+### SSR 概述
+
+服务端渲染SSR（Server Side Rendering），是指在服务器上完成页面的渲染工作，将渲染后的 HTML 结果发送给客户端浏览器。与之相对的是 CSR（Client-Side Rendering），即客户端渲染，所有的渲染逻辑都在浏览器端执行。
+
+SSR 的优势：
+
+- 首屏加载速度更快：对于依赖大量数据展示的应用，SSR 可以提前在服务器端获取数据并生成完整的 HTML，减少首次内容绘制时间（FCP），提升用户体验。
+
+- SEO 友好：搜索引擎爬虫可以直接抓取到完整的 HTML 内容，无需等待 JavaScript 执行完毕，有利于提高搜索引擎排名。
+
+- 更好的用户体验：用户打开网页时可以立即看到内容，而不是先看到空白页再加载内容，提升了用户的满意度。
+
+- 降低客户端压力：部分计算任务可以在服务器端完成，减轻了浏览器端的压力，特别是对于性能较弱的移动设备来说更为明显。
+
+但需要注意的事，SSR 会增加服务器的负担，因此是否采用 SSR 需要根据实际情况决定。不过服务器的性能只要砸钱够多就不是问题。
+
+服务端：所有模板等资源都存储在服务端；内网机器拉取数据更快；一个 HTML 返回所有数据。
+
+SSR 中浏览器和服务器交互流程：
+
+![SSR 中浏览器和服务器交互流程](./images/SSR_interaction.png)
+
+SSR 和 CSR 的区别：
+
+![SSR 和 CSR 的区别](./images/SSR_CSR.png)
+
+SSR 的核心是减少请求数量。
+
+### webpack实现基本SSR
+
+安装 express：
+
+```bash
+npm i express@4.17.1 -D
+```
+
+新增 scripts 命令：
+
+```json
+{
+  "scripts": {
+    "build:ssr": "webpack --config webpack.ssr.js"
+  },
+}
+```
+
+新增 webpack.ssr.js 配置文件，注意点见代码注释：
+
+```js
+const path = require('path');
+const glob = require('glob');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const setMPA = () => {
+  const entry = {};
+  const htmlWebpackPlugins = [];
+  // SSR匹配的入口文件多一个server后缀
+  const entryFiles = glob.sync(path.join(__dirname, './src/*/index-server.js'));
+  Object.keys(entryFiles).map((index) => {
+    const entryFile = entryFiles[index];
+
+    // SSR匹配的入口文件多一个server后缀
+    const match = entryFile.match(/src\/(.*)\/index-server\.js/);
+    const pageName = match && match[1];
+
+    if (pageName) {
+      entry[pageName] = entryFile;
+      htmlWebpackPlugins.push(new HtmlWebpackPlugin({
+        template: path.join(__dirname, `src/${pageName}/index.html`),
+        filename: `${pageName}.html`,
+        chunks: ['vendors', 'commons', pageName],
+        inject: true,
+      }));
+    }
+  });
+
+  return {
+    entry,
+    htmlWebpackPlugins,
+  };
+};
+
+const { entry, htmlWebpackPlugins } = setMPA();
+
+module.exports = {
+  entry,
+  output: {
+    path: path.join(__dirname, 'dist'),
+    // 输出文件名修改
+    filename: '[name]-server.js',
+    // libraryTarget设置为umd
+    libraryTarget: 'umd',
+  },
+  mode: 'none',
+  module: {
+    rules: [
+      {
+        test: /.js$/,
+        use: [
+          'babel-loader',
+        ],
+      },
+      {
+        test: /.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+        ],
+      },
+    ],
+  },
+  plugins: [
+    ...htmlWebpackPlugins,
+  ],
+  // 不能设置提取基础库，否则服务端无法引入React，导致展示不出来
+  // optimization: {
+  //   splitChunks: {
+  //     minSize: 0,
+  //     cacheGroups: {
+  //       vendors: {
+  //         test: /(react|react-dom)/,
+  //         name: 'vendors',
+  //         chunks: 'all',
+  //       },
+  //     },
+  //   },
+  // },
+};
+```
+
+search 文件夹下新增 index-server.js 文件，编写组件。
+
+两个注意点：
+
+- 引入模块需要使用 CJS，如 `const React = require('react');`。
+
+- 最后要以组件形式导出，打包出针对服务端的组件：`module.exports = <Search />`。
+
+```js
+const React = require('react');
+const logo = require('./images/avatar.png');
+
+// eslint-disable-next-line no-unused-vars
+class Search extends React.Component {
+  state = {
+    Text: null,
+  }
+
+  loadComponent = () => {
+    // 动态加载Text组件
+    import('./text.js').then((Text) => {
+      this.setState({ Text: Text.default });
+    });
+  }
+
+  render() {
+    const { Text } = this.state;
+    return (
+      <div className="search-text">
+        Search Text Love you
+        <br />
+        加法结果：
+        <div className="second-text">This is second title</div>
+        { Text ? <Text /> : null }
+        <img src={logo} onClick={this.loadComponent} alt="" />
+      </div>
+    );
+  }
+}
+
+module.exports = <Search />;
+```
+
+根目录新建 server 文件夹，新建 index.js 文件，编写服务端代码。
+
+服务端的注意点：
+
+- 使用 react-dom/server 的 renderToString 方法将 React 组件渲染成字符串。
+
+- 将组件拼成完整的HTML字符串模板。
+
+- 一些浏览器特有的对象，如 window，需要进行 hack 处理。
+
+```js
+if (typeof window === 'undefined') {
+  global.window = {};
+}
+
+const express = require('express');
+const { renderToString } = require('react-dom/server');
+const SSR = require('../dist/search-server.js');
+
+// eslint-disable-next-line arrow-parens, arrow-body-style
+const renderMarkup = str => {
+  // 将组件拼成完整的HTML字符串模板
+  return (`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>react ssr</title>
+      </head>
+      <body>
+        <div id="root">${str}</div>
+      </body>
+    </html>
+  `);
+};
+
+const server = (port) => {
+  const app = express();
+  app.use(express.static('dist'));
+
+  app.get('/search', (req, res) => {
+    const html = renderMarkup(renderToString(SSR));
+    res.status(200).send(html);
+  });
+
+  app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
+  });
+};
+
+server(process.env.PORT || 3000);
+```
+
+最后运行 `node xxx/index.js` 命令启动服务，访问 http://127.0.0.1:3000/search 即可。
