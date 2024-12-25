@@ -223,7 +223,6 @@ Taro.eventCenter 是全局的消息中心，即使页面消失了还是会存在
 componentDidMount() {
   Taro.eventCenter.on('EVENT_1', () => {
     Taro.navigateTo({ url: '/pages/A/index' });
-    this.doSomething();
   });
 }
 
@@ -256,4 +255,46 @@ componentDidMount() {
     this.doSomething();
   });
 }
+```
+
+### 实现特殊需求
+
+特殊业务案例：A页面跳到B页面，再从B页面跳转到A页面后，需要在A页面toast提示长文案。
+
+注意点：触发事件后，是先执行了事件回调，设置了 isFromB 标记，再跳转到新的 A 页面，执行 componentDidMount 的内容，根据标记判断是否需要显示提示。要把 eventCenter 看做一个独立的东西，事件触发后马上就执行事件回调。
+
+```js
+// A.js
+componentDidMount() {
+  // 进入A页面，通过判断是否从B页面跳转过来，如果是则Toast提示
+  const isFromB = Taro.getStorageSync('isFromB', 'SESSION');
+  this.setState({ showTips: isFromB });
+  // 判断完后清除标记
+  Taro.removeStorageSync('isFromB');
+
+  // 监听B页面触发的事件
+  Taro.eventCenter.on('EVENT_1', () => {
+    // 取消监听，避免重复监听
+    Taro.eventCenter.off('EVENT_1');
+    // 设置标记，说明要从B页面跳到A页面了
+    Taro.setStorageSync('isFromB', true, 'SESSION');
+    Taro.navigateTo({ url: '/pages/A/index' });
+  });
+}
+
+onClick = () => {
+  Taro.navigateTo({ url: '/pages/B/index' });
+}
+
+<Button onClick={this.onClick}>按钮A</Button>
+{ showTips && <Toast show={showTips} text='长文案' duration={2000} />}
+```
+
+```js
+// B.js
+onClick = () => {
+  Taro.eventCenter.trigger('EVENT_1');
+}
+
+<Button onClick={this.onClick}>按钮B</Button>
 ```
