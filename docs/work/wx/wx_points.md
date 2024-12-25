@@ -158,3 +158,52 @@ num = Number(str); // num和str不相同
 ```
 
 [使用微信小程序的过程中 点击marker获取markerId 并不是数据的id?](https://developers.weixin.qq.com/community/develop/doc/00080074b54048165a0d6d3b35b800){link=card}
+
+## showToast 提示的问题
+
+### 文案有长度限制
+
+[小程序基础库在1.9.0以上，但wx.showToast内容在真机上还是显示不全？](https://developers.weixin.qq.com/community/develop/doc/00066e522dcba0e903d11311661800){link=static}
+
+小程序的 [showToast()](https://developers.weixin.qq.com/miniprogram/dev/api/ui/interaction/wx.showToast.html) 提示有长度限制，最多展示两行。对于长文本要么使用其它 Toast 组件，要是改用 [showModal()](https://developers.weixin.qq.com/miniprogram/dev/api/ui/interaction/wx.showModal.html) 对话框展示
+
+一个通用的做法是，自己封装一个方法，如果文案长度小于20，使用 showToast，否则使用 showModal。其实这也应当成为公司 toast 提示的规范。如果想使用 showToast 的样式，必须要精简文案。
+
+```js
+const myToast = (options) => {
+  const { msg = '' } = options || {};
+  if (msg.length <= 0) {
+    return;
+  }
+  if (msg.length < 20) {
+    Taro.showToast({ ...options, title: msg });
+  } else {
+    Taro.showModal({
+      ...options,
+      content: msg,
+      showCancel: false,
+    })
+  }
+}
+```
+
+### 闪一下消失
+
+[wx.navigateTo 打断wx.showToast ！？](https://developers.weixin.qq.com/community/develop/doc/000a6a819f8f604ba652e53956b800){link=static}
+
+showToast() 是依赖于页面存在的，不是全局的，因此当前页面消失 showToast 也会跟着消失，所以会出现 navigateTo() 跳转页面时 showToast 闪一下就消失的问题。
+
+可以现在A页面 showToast 提示完，在 success 回调中使用 navigateTo 跳转到B页面。
+
+如果需要在B页面 toast 提示，只能尝试下在 navigateTo 的 success 回调中调用 showToast，但大概率还是会闪烁的，因为 success 回调很快就会触发，但跳转页面一般会卡。可以尝试下设置定时器延时 1.5s 再 showToast 提示，根据实际情况调整时间。
+
+```js
+Taro.navigateTo({
+  url: 'xxx',
+  success() {
+    setTimeout(() => {
+      Taro.showToast({ title: '提示文案', duration: 2000 })
+    }, 1500)
+  }
+})
+```
