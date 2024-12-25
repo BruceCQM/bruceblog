@@ -207,3 +207,53 @@ Taro.navigateTo({
   }
 })
 ```
+
+## eventCenter 全局事件监听
+
+[Taro 消息机制](https://docs.taro.zone/docs/apis/about/events/){link=static}
+
+Taro.eventCenter 是全局的消息中心，即使页面消失了还是会存在，因此应该有意识在某些时机取消监听，否则可能会对同一个事件注册了多次监听。例如可以在事件触发后，就取消事件的监听。
+
+所谓全局消息中心，就是 Taro.eventCenter 注册的监听事件，当前页面消失了，也还是存在，不依赖于页面，是独立存在的。
+
+像如下代码就会导致重复监听，导致事件触发多次。
+
+```js
+// A.js
+componentDidMount() {
+  Taro.eventCenter.on('EVENT_1', () => {
+    Taro.navigateTo({ url: '/pages/A/index' });
+    this.doSomething();
+  });
+}
+
+onClick = () => {
+  Taro.navigateTo({ url: '/pages/B/index' });
+}
+
+<Button onClick={this.onClick}>按钮A</Button>
+
+// B.js
+onClick = () => {
+  Taro.eventCenter.trigger('EVENT_1');
+}
+
+<Button onClick={this.onClick}>按钮B</Button>
+```
+
+如上所示，A 页面点击按钮会跳转到 B 页面，B 页面点击按钮会触发事件 EVENT_1。而在 A 中注册监听全局事件 EVENT_1，触发事件后跳转到 A 页面。实现了两个页面间的跳转。
+
+由于使用 navigateTo 进行跳转，因此每次跳转都会新开一个 A 页面，都会执行 componentDidMount 的内容，重复导致重复监听了 EVENT_1 事件。如果没有取消监听，从第二次开始就会执行多次 `Taro.navigateTo({ url: '/pages/A/index' });` 等内容。
+
+因此要梳理清楚逻辑，必要时需要取消监听。
+
+```js
+componentDidMount() {
+  Taro.eventCenter.on('EVENT_1', () => {
+    // 取消监听，避免重复监听
+    Taro.eventCenter.off('EVENT_1');
+    Taro.navigateTo({ url: '/pages/A/index' });
+    this.doSomething();
+  });
+}
+```
