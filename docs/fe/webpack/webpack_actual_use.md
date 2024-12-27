@@ -1368,3 +1368,94 @@ server(process.env.PORT || 3000);
 ```
 
 最后运行 `node xxx/index.js` 命令启动服务，访问 http://127.0.0.1:3000/search 即可。
+
+:::danger ssr 打包的问题
+浏览器的全局变量 (Node.js 中没有 document, window)
+
+- 组件适配：将不兼容的组件根据打包环境进⾏适配
+
+- 请求适配：将 fetch 或者 ajax 发送请求的写法改成 isomorphic-fetch 或者 axios
+
+样式问题 (Node.js ⽆法解析 css)
+
+- ⽅案⼀：服务端打包通过 ignore-loader 忽略掉 CSS 的解析
+
+- ⽅案⼆：将 style-loader 替换成 isomorphic-style-loader
+:::
+
+### SSR 让样式生效
+
+在上面实现基本 SSR 之中，最终打开的页面是没有 css 样式的，因为没有引入样式，组件外面包裹的 html 内容是自己手写上去的。
+
+要想引入样式，要使用客户端打包出来的 html 文件，在其中设置占位符，动态插入组件。
+
+HTML 模板中设置占位符，要将组件插入到这里。
+
+```html
+<!-- src/search/index.html -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Document</title>
+</head>
+<body>
+  <!-- 以注释的形式设置占位符，也不影响正常展示 -->
+  <div id="root"><!--HTML_PLACEHOLDER--></div>
+</body>
+</html>
+```
+
+webpack 打包生成的 html 文件长这样，会在 `<head>` 中插入了样式，也留下了占位符。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Document</title>
+<style>.search-text{font-size:.26666667rem;color:red;display:-webkit-box;display:-ms-flexbox;display:flex}</style></head>
+<body>
+  <!-- 以注释的形式设置占位符，也不影响正常展示 -->
+  <div id="root"><!--HTML_PLACEHOLDER--></div>
+<script type="text/javascript" src="search-server.js"></script></body>
+</html>
+```
+
+在服务端中，读取这个文件，将占位符替换成组件，再返回给客户端。
+
+```js
+if (typeof window === 'undefined') {
+  global.window = {};
+}
+
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const { renderToString } = require('react-dom/server');
+const SSR = require('../dist/search-server.js');
+
+// 默认读取的是二进制的buffer数据，所以要加上 utf-8
+const template = fs.readFileSync(path.join(__dirname, '../dist/search.html'), 'utf-8');
+
+const renderMarkup = str => {
+  // 将占位符替换成组件
+  return template.replace('<!--HTML_PLACEHOLDER-->', str);
+};
+
+const server = (port) => {
+  const app = express();
+  app.use(express.static('dist'));
+
+  app.get('/search', (req, res) => {
+    const html = renderMarkup(renderToString(SSR));
+    res.status(200).send(html);
+  });
+
+  app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
+  });
+};
+
+server(process.env.PORT || 3000);
+```
+
+![SSR样式生效](./images/webpack_ssr_css.png)
