@@ -1459,3 +1459,91 @@ server(process.env.PORT || 3000);
 ```
 
 ![SSR样式生效](./images/webpack_ssr_css.png)
+
+### 首屏数据处理
+
+思路和让样式生效类似，服务端获取数据，替换占位符。
+
+mock 数据：
+
+```json
+{
+	"error": [],
+	"extra": [],
+	"data": {
+		"list": [
+			[{
+				"sub_count": 5556,
+				"column_type": 1,
+				"id": 192,
+				"column_price_market": 9900,
+				"column_bgcolor": "#F6F7FB",
+				"column_title": "SQL必知必会",
+				"column_cover_small": "https:\/\/static001.geekbang.org\/resource\/image\/1c\/38\/1c5a5b154b543af952312eef33217438.jpg",
+				"column_cover": "https:\/\/static001.geekbang.org\/resource\/image\/c7\/0d\/c7ee0aabbcb6d2da09a1b4a56c1a730d.jpg",
+				"had_sub": false,
+				"price_type": 2,
+				"column_unit": "45讲",
+				"is_experience": false,
+				"column_ctime": 1559640855,
+				"update_frequency": "每周一 \/ 三 \/ 五更新",
+				"is_onboard": true,
+				"author_intro": "清华大学计算机博士",
+				"column_sku": 100029501,
+				"column_cover_wxlite": "https:\/\/static001.geekbang.org\/resource\/image\/cd\/f0\/cd26b744d388dbd4387dcfaa66dd8bf0.jpg",
+				"column_price": 6800,
+				"column_price_sale": 6800,
+				"author_name": "陈旸",
+				"column_subtitle": "从入门到数据实战"
+			}]
+		],
+		"nav": [{
+			"id": 1,
+			"name": "专栏",
+			"color": "#5ba6ff",
+			"icon": "https:\/\/static001.geekbang.org\/resource\/image\/dd\/9e\/dd8cbc79f017d1b01f643c7ea929d79e.png"
+		}, {
+			"id": 3,
+			"name": "视频课程",
+			"color": "#79c109",
+			"icon": "https:\/\/static001.geekbang.org\/resource\/image\/4a\/c3\/4aebe8fb752fa21a0fd989a45d9847c3.png"
+		}, {
+			"id": 2,
+			"name": "微课",
+			"color": "#5ba6ff",
+			"icon": "https:\/\/static001.geekbang.org\/resource\/image\/9c\/f1\/9c223ccae33c5245a3009857582f1df1.png"
+		}]
+	},
+	"code": 0
+}
+```
+
+HTML 模板中设置占位符，`<!--INITIAL_DATA_PLACEHOLDER-->` 用来替换首屏数据。
+
+```html
+<!-- src/search/index.html -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Document</title>
+</head>
+<body>
+  <!-- 以注释的形式设置占位符，也不影响正常展示 -->
+  <div id="root"><!--HTML_PLACEHOLDER--></div>
+  <!--INITIAL_DATA_PLACEHOLDER-->
+</body>
+</html>
+```
+
+服务端获取数据，并将数据设置到 window 对象之下。
+
+```js
+const data = require('./data.json');
+
+const renderMarkup = str => {
+  const dataStr = JSON.stringify(data);
+  // 将数据占位符替换成一个script语句，将数据挂载到window对象下，这样即可全局访问首屏数据
+  return template.replace('<!--HTML_PLACEHOLDER-->', str)
+    .replace('<!--INITIAL_DATA_PLACEHOLDER-->', `<script>window.__initial_data=${dataStr}</script>`);
+};
+```
