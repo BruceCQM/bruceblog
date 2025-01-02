@@ -1547,3 +1547,65 @@ const renderMarkup = str => {
     .replace('<!--INITIAL_DATA_PLACEHOLDER-->', `<script>window.__initial_data=${dataStr}</script>`);
 };
 ```
+
+## 优化构建时命令行的显示日志
+
+现状：构建的时候展示了一大堆日志信息，很多并不需要开发者关注。
+
+`stats` 参数可以控制日志的显示。
+
+|参数值|描述|
+|---|---|
+|"errors-only"|只在发生错误时输出|
+|"minimal"|只在发生错误或有新的编译时输出|
+|"none"|没有输出|
+|"normal"|标准输出|
+|"verbose"|全部输出|
+
+对于生产的 webpack 配置：
+
+```js
+// webpack.prod.js
+module.exports = {
+  stats: 'errors-only',
+}
+```
+
+对于开发的 webpack 配置：
+
+```js
+// webpack.dev.js
+module.exports = {
+  devServer: {
+    stats: 'minimal',
+  }
+}
+```
+
+`stats` 参数配置的位置不相同。
+
+使用 webpack 内置的 `stats` 参数，命令行的输出还是不够直观优美，可以使用 friendly-errors-webpack-plugin 插件优化日志提示。
+
+安装插件：
+
+```bash
+npm i friendly-errors-webpack-plugin@1.7.0 -D
+```
+
+修改配置：
+
+```js
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new FriendlyErrorsWebpackPlugin(),
+  ]
+}
+```
+
+![friendly-errors-webpack-plugin](./images/friendly_error_plugin.png)
+
+:::warning 注意事项
+friendly-errors-webpack-plugin 插件只是增加一句有颜色标识的提示，例如成功绿色、失败红色。还是需要搭配 `stats` 参数使用的，`stats` 参数负责精简日志输出。
+:::
