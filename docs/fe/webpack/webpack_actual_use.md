@@ -1609,3 +1609,58 @@ module.exports = {
 :::warning 注意事项
 friendly-errors-webpack-plugin 插件只是增加一句有颜色标识的提示，例如成功绿色、失败红色。还是需要搭配 `stats` 参数使用的，`stats` 参数负责精简日志输出。
 :::
+
+## 构建异常和中断处理
+
+在 CI/CD 的 pipline 或者发布系统需要知道当前构建状态。
+
+每次构建完成后输⼊ `echo $?` 可以获取错误码。
+
+webpack4 之前的版本构建失败不会抛出错误码 (error code)，从 webpack4 开始构建失败默认抛出 `0` 的错误码。
+
+Node.js 中的 `process.exit()` 规范：
+
+- 0 表示成功完成，回调函数中，err 为 null。
+
+- ⾮ 0 表示执⾏失败，回调函数中，err 不为 null，err.code 就是传给 exit 的数字。
+
+我们如何主动捕获并处理构建错误？
+
+通过增加一个自定义 plugin 来捕获处理构建错误。compiler 在每次构建结束后会触发 done 这个 hook，process.exit 主动处理构建报错。
+
+webpack4 的写法：
+
+```js
+module.exports = {
+  plugins: [
+    function () {
+      // this 就是 compiler 对象
+      this.hooks.done.tap('done', (stats) => {
+        if (stats.compilation.errors && stats.compilation.errors.length && process.argv.indexOf('--watch') === -1) {
+          // 在这里可以做一些自定义的错误上报工作，如错误日志、错误量
+          console.log('build error');
+          // 自定义错误码为1
+          process.exit(1);
+        }
+      })
+    }
+  ]
+}
+```
+
+webpack3 的写法：
+
+```js
+module.exports = {
+  plugins: [
+    function () {
+      this.plugin('done', (stats) => {
+        if (stats.compilation.errors && stats.compilation.errors.length && process.argv.indexOf('--watch') === -1) {
+          console.log('build error');
+          process.exit(1);
+        }
+      })
+    }
+  ]
+}
+```
