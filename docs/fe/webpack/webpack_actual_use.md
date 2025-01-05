@@ -74,6 +74,62 @@ npm i react@16.8.6 react-dom@16.8.6 @babel/preset-react@7.0.0 -D
 }
 ```
 
+## 解析样式文件
+
+### 解析 CSS
+
+解析 CSS 使用到的 loader：css-loader、style-loader。
+
+css-loader 用于加载 .css 文件，并且转换成 commonjs 对象。style-loader 将样式通过 `<style>` 标签插入到 head 中。
+
+安装依赖：
+
+```bash
+npm i css-loader@2.1.1 style-loader@0.23.1 -D
+```
+
+修改配置：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      }
+    ]
+  }
+}
+```
+
+### 解析 Less
+
+只需要在解析 less 的基础上增加一个 less-loader 即可，它的作用是将 less 转换成 css。
+
+less-loader 是依赖 less 的，因此需要一起安装。
+
+安装依赖：
+
+```bash
+npm i less@3.9.0 less-loader@5.0.0 -D
+```
+
+修改配置：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.less$/,
+        use: ['style-loader', 'css-loader', 'less-loader'],
+      }
+    ]
+  }
+}
+```
+
 ## 代码压缩
 
 ### JS 代码压缩
