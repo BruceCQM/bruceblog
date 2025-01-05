@@ -132,6 +132,8 @@ module.exports = {
 
 ## 解析图片和字体
 
+### 方式一：file-loader
+
 解析图片和字体使用到的 loader：file-loader。
 
 安装依赖：
@@ -155,6 +157,41 @@ module.exports = {
       {
         test: /.(ttf|woff|woff2|eot)$/,
         use: 'file-loader',
+      }
+    ]
+  }
+}
+```
+
+### 方式二：url-loader
+
+url-loader 也可以处理图片和字体，并且可以设置较小资源转换为 base64。
+
+实际上 url-loader 内部是使用了 file-loader。
+
+安装依赖：
+
+```bash
+npm i url-loader@1.1.2 -D
+```
+
+修改配置：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            // 设置小于 10KB 的图片为 base64
+            options: {
+              limit: 10240
+            }
+          }
+        ]
       }
     ]
   }
