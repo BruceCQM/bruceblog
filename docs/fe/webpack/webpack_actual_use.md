@@ -165,7 +165,7 @@ module.exports = {
 
 ### 方式二：url-loader
 
-url-loader 也可以处理图片和字体，并且可以设置较小资源转换为 base64。
+url-loader 也可以处理图片和字体，并且可以设置较小资源转换为 base64，不单独生成文件，直接打入到 bundle 中。
 
 实际上 url-loader 内部是使用了 file-loader。
 
@@ -197,6 +197,44 @@ module.exports = {
   }
 }
 ```
+
+## webpack文件监听
+
+文件监听是指在发现源码发生变化时，自动重新构建出新的输出文件。
+
+文件监听的原理：轮询判断文件的最后编辑时间是否变化。如果文件发生变化，不会立刻告诉监听者，而是先缓存起来，等待 aggregateTimeout 时间后，再重新构建。如果等待的时间内有其它文件也被修改了，会一起重新构建。
+
+webpack 开启监听模式的两种方式：
+
+- 启动 webpack 命令时，增加 `--watch` 参数。这种方式的缺陷是，每次重新构建完需要手动刷新浏览器。
+
+```bash
+# package.json
+{
+  "scripts": {
+    "watch": "webpack --watch"
+  },
+}
+```
+
+- 在 webpack.config.js 配置文件中，设置 `watch: true`。
+
+```js
+module.exports = {
+  // 是否开启文件监听
+  watch: true,
+  // 开启文件监听后，watchOptions才会生效
+  watchOptions: {
+    // 忽略监听的文件或文件夹，默认为空
+    ignored: /node_modules/,
+    // 监听到变化后等300ms再重新构建，默认300ms
+    aggregateTimeout: 300,
+    // 判断文件是否发生变化，是通过不停询问系统，指定文件有没有变化实现的，默认每秒询问1000次
+    poll: 1000
+  }
+}
+```
+ 
 
 ## 代码压缩
 
