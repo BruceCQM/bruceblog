@@ -130,6 +130,37 @@ module.exports = {
 }
 ```
 
+## 解析图片和字体
+
+解析图片和字体使用到的 loader：file-loader。
+
+安装依赖：
+
+```bash
+npm i file-loader@3.0.1 -D
+```
+
+修改配置：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      // 解析图片
+      {
+        test: /.(png|jpg|gif|svg)$/,
+        use: 'file-loader',
+      },
+      // 解析字体
+      {
+        test: /.(ttf|woff|woff2|eot)$/,
+        use: 'file-loader',
+      }
+    ]
+  }
+}
+```
+
 ## 代码压缩
 
 ### JS 代码压缩
