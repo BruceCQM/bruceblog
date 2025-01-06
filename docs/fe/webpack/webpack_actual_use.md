@@ -316,7 +316,7 @@ HotModuleReplacementPlugin 的作用：webpack 构建出来的 bundle.js 本身�
 
 - Contenthash：根据⽂件内容来定义 hash ，⽂件内容不变，则 contenthash 不变。
 
-### JS 文件设置文件指纹
+### JS 设置文件指纹
 
 JS 文件一般使用 chunkhash 设置文件指纹。
 
@@ -328,6 +328,76 @@ module.exports = {
   }
 }
 ```
+
+### CSS 设置文件指纹
+
+CSS 要设置文件指纹，首先需要把 CSS 文件单独提取出来，不能使用 style-loader，需要使用 mini-css-extract-plugin 将 CSS 样式单独抽离成一个文件。
+
+安装依赖：
+
+```bash
+npm i mini-css-extract-plugin@0.6.0 -D
+```
+
+修改配置：
+
+```js
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        // MiniCssExtractPlugin.loader和style-loader是不能同时使用的，它们的功能互斥
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name]_[contenthash:8].css'
+    })
+  ]
+}
+```
+
+
+### 图片设置文件指纹
+
+图片的文件指纹通过设置 file-loader 的 `name` 参数来设置。
+
+file-loader 的占位符：
+
+|占位符名称|含义|
+|---|---|
+|[ext]|资源后缀名|
+|[name]|文件名称|
+|[path]|文件的相对路径|
+|[folder]|文件所在文件夹|
+|[contenthash]|文件的内容hash，默认是md5生成|
+|[hash]|文件的内容hash，默认是md5生成|
+|[emoji]|一个随机的指代文件内容的emoji|
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif|jpeg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            // 注意，图片的hash其实就是contenthash
+            options: { name: '[name]_[hash:8].[ext]' }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
 
 ## 代码压缩
 
