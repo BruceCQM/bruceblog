@@ -234,7 +234,77 @@ module.exports = {
   }
 }
 ```
- 
+
+## webpack热更新及原理分析
+
+在上一节的 webpack 文件监听中，虽然文件修改可以自动重新构建，但还需要手动刷新浏览器才能看到最新内容。
+
+WDS 可以解决这个问题。和 watch 参数相比，它的好处在于构建的内容存在内存当中，而不是存在磁盘中，因此速度更快。另外，搭配 HotModuleReplacementPlugin 插件使用，可以实现浏览器自动刷新。
+
+需要使用到的插件：webpack-dev-server（安装webpack时默认会安装、无需单独手动安装）、HotModuleReplacementPlugin（webpack的内置插件）。
+
+修改运行命令：
+
+```json
+{
+  "scripts": {
+    "dev": "webpack-dev-server --config webpack.dev.js --open"
+  }
+}
+```
+
+增加配置：
+
+```js
+// webpack.dev.js
+const webpack = require('webpack');
+
+module.exports = {
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  devServer: {
+    // HotModuleReplacementPlugin插件起作用的基础目录
+    contentBase: './dist',
+    // 开启热更新，设置了这个参数就不用配HotModuleReplacementPlugin插件了，二选一
+    // hot: true,
+  },
+}
+```
+
+WDS 热更新原理分析：
+
+![热更新原理分析](./images/hot_replace_analyse.png)
+
+Bundle Server：让浏览器可以通过 `https://localhost:8080/` 的形式访问 bundle.js。
+
+HMR Server 是在 webpack 端的服务器，它会在 bundle.js 中注入 HMR Runtime，两者通过 websocket 通信，文件发生更新时 HMR Server 就会通知到 HMR Runtime。
+
+- 启动阶段：1、2、A、B。
+
+JS 源代码经过 webpack compiler 编译器的处理，生成的 bundle 传递给 Bundle Server，Bundle Server 让浏览器可以通过 `https://localhost:8080/` 的形式访问 bundle.js。
+
+- 热更新阶段：1、2、3、4。
+
+JS 源代码经过 webpack compiler 编译器的处理，生成的 bundle 传递给 HMR Server，HMR Server 将变化的内容传递给 HMR Runtime，一般是通过 JSON 的形式，HMR Runtime 局部更新页面内容。
+
+热更新也可以使用 webpack-dev-middleware 来实现热更新，使用起来更复杂，也更加灵活。
+
+:::tip 小节问答
+1、热更新插件 HotModuleReplacementPlugin 的作用？
+
+热更新中最核心的是 HMR Server 和 HMR Runtime。
+
+HMR Server 是服务端，用来将变化的 js 模块通过 websocket 的消息通知给浏览器端。
+
+HMR Runtime是浏览器端，用于接受 HMR Server 传递的模块数据，浏览器端可以看到 .hot-update.json 的文件过来。
+
+HotModuleReplacementPlugin 的作用：webpack 构建出来的 bundle.js 本身是不具备热更新的能力的，HotModuleReplacementPlugin 的作用就是将 HMR runtime 注入到 bundle.js，使得 bundle.js 可以和HMR server建立 websocket 的通信连接。
+
+简单来说就是让 bundle.js 具备热更新的能力。
+
+在 webpack 配置文件中可以不必手动引入 HotModuleReplacementPlugin，只要配置了 `hot: true` 就会自动引入。
+:::
 
 ## 代码压缩
 
