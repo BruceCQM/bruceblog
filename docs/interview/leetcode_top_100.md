@@ -268,6 +268,38 @@ var trap = function (height) {
 
 ## 滑动窗口
 
+### 3. [无重复字符的最长子串](https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/)
+
+标签：哈希表、左右指针
+
+题目：
+
+![3.无重复字符的最长子串](./images/leetcode/question-3.png)
+
+代码：
+
+```js
+var lengthOfLongestSubstring = function (s) {
+  // map记录每个字符以及目前为止最后一次出现的位置
+  var map = new Map();
+  // 注意左指针从 -1 开始
+  var left = -1;
+  var res = 0, len = s.length;
+  for (var right = 0;right < len;right++) {
+    var ch = s[right];
+    if (map.has(ch)) {
+      // 更新左指针
+      left = Math.max(left, map.get(ch));
+    }
+    // 记录当前字符以及索引
+    map.set(ch, right);
+    // 更新最大长度
+    res = Math.max(res, right - left);
+  }
+  return res;
+}
+```
+
 ## 子串
 
 ## 普通数组
