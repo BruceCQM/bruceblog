@@ -78,6 +78,7 @@ export default [
     text: 'Other',
     collapsed: true,
     items: [
+      { text: '正则表达式', link: '/fe/reg/reg' },
       { text: 'Git', link: '/fe/git/git' },
       { text: 'Vscode', link: '/fe/ide/vscode' },
       { text: 'Vuepress', link: '/fe/vuepress/vuepress' },
