@@ -300,6 +300,45 @@ var lengthOfLongestSubstring = function (s) {
 }
 ```
 
+### 438. [找到字符串中所有字母异位词](https://leetcode.cn/problems/find-all-anagrams-in-a-string/description/)
+
+标签：双指针、数组、字符串
+
+题目：
+
+![438.找到字符串中所有字母异位词](./images/leetcode/question-438.png)
+
+思路：
+
+假设 p 的长度是 n。
+
+定长滑窗：枚举 s 的所有长为 n 的子串 s′，如果 s′ 的每种字母的出现次数，和 p 的每种字母的出现次数都相同，那么 s′ 是 p 的异位词。
+
+代码：
+
+```js
+var findAnagrams = function (s, p) {
+  const ans = [];
+  const cntP = new Array(26).fill(0); // 统计 p 的每种字母的出现次数
+  const cntS = new Array(26).fill(0); // 统计 s 的长为 len(p) 的子串 s' 的每种字母的出现次数
+  for (const c of p) {
+    cntP[c.charCodeAt() - 'a'.charCodeAt()]++; // 统计 p 的字母
+  }
+  for (let right = 0; right < s.length; right++) {
+    cntS[s[right].charCodeAt() - 'a'.charCodeAt()]++; // 右端点字母进入窗口
+    const left = right - p.length + 1;
+    if (left < 0) { // 窗口长度不足 len(p)
+      continue;
+    }
+    if (cntP.toString() === cntS.toString()) { // s' 和 p 的每种字母的出现次数都相同
+      ans.push(left); // s' 左端点下标加入答案
+    }
+    cntS[s[left].charCodeAt() - 'a'.charCodeAt()]--; // 左端点字母离开窗口
+  }
+  return ans;
+};
+```
+
 ## 子串
 
 ## 普通数组
