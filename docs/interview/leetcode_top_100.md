@@ -317,25 +317,62 @@ var lengthOfLongestSubstring = function (s) {
 代码：
 
 ```js
+// 代码纯享版
 var findAnagrams = function (s, p) {
-  const ans = [];
-  const cntP = new Array(26).fill(0); // 统计 p 的每种字母的出现次数
-  const cntS = new Array(26).fill(0); // 统计 s 的长为 len(p) 的子串 s' 的每种字母的出现次数
-  for (const c of p) {
-    cntP[c.charCodeAt() - 'a'.charCodeAt()]++; // 统计 p 的字母
+  var res = [];
+  var arrP = new Array(26).fill(0);
+  var arrS = new Array(26).fill(0);
+
+  for (var c of p) {
+    arrP[c.charCodeAt() - 'a'.charCodeAt()] += 1;
   }
-  for (let right = 0; right < s.length; right++) {
-    cntS[s[right].charCodeAt() - 'a'.charCodeAt()]++; // 右端点字母进入窗口
-    const left = right - p.length + 1;
-    if (left < 0) { // 窗口长度不足 len(p)
+
+  for (var right = 0;right < s.length;right++) {
+    arrS[s[right].charCodeAt() - 'a'.charCodeAt()] += 1;
+    var left = right - p.length + 1;
+    if (left < 0) {
       continue;
     }
-    if (cntP.toString() === cntS.toString()) { // s' 和 p 的每种字母的出现次数都相同
-      ans.push(left); // s' 左端点下标加入答案
+    if (arrP.join('') === arrS.join('')) {
+      res.push(left);
     }
-    cntS[s[left].charCodeAt() - 'a'.charCodeAt()]--; // 左端点字母离开窗口
+    arrS[s[left].charCodeAt() - 'a'.charCodeAt()] -= 1;
   }
-  return ans;
+  return res;
+}
+```
+
+```js
+// 详细注释版
+var findAnagrams = function (s, p) {
+  var res = [];
+  // 统计 p 每种字母出现次数
+  var arrP = new Array(26).fill(0);
+  // 统计 s 长为 len(p) 的子串 s' 每种字母的出现次数
+  var arrS = new Array(26).fill(0);
+  for (var c of p) {
+    // charCodeAt() 返回字符的 Unicode 编码值，'a' 的 charCodeAt() 为 97
+    arrP[c.charCodeAt() - 'a'.charCodeAt()] += 1;
+  }
+
+  for (var right = 0; right < s.length; right++) {
+    // 开始记录子串 s' 每种字母的出现次数
+    // 右端点字母进入窗口
+    arrS[s[right].charCodeAt() - 'a'.charCodeAt()] += 1;
+    const left = right - p.length + 1;
+    // 窗口长度不足 len(p)
+    if (left < 0) {
+      continue;
+    }
+    // s' 和 p 的每种字母的出现次数都相同
+    if (arrP.join('') === arrS.join('')) {
+      // 记录子串的起始索引位置
+      res.push(left);
+    }
+    // 左端点字母离开窗口
+    arrS[s[left].charCodeAt() - 'a'.charCodeAt()] -= 1;
+  }
+  return res;
 };
 ```
 
