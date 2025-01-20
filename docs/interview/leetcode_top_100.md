@@ -284,8 +284,8 @@ var lengthOfLongestSubstring = function (s) {
   var map = new Map();
   // 注意左指针从 -1 开始
   var left = -1;
-  var res = 0, len = s.length;
-  for (var right = 0;right < len;right++) {
+  var res = 0;
+  for (var right = 0;right < s.length;right++) {
     var ch = s[right];
     if (map.has(ch)) {
       // 更新左指针
