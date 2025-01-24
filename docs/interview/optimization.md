@@ -207,3 +207,83 @@ const getUserInfoApiOnce = async (params, force = false) => {
   }
 }
 ```
+
+## 资源优化
+
+### 无用页面清除
+
+废弃的页面清除下线，缩减包体积大小，减少资源请求耗时。
+
+### 优化构建包体积
+
+问题：
+
+- 资源包拆分不合理，某个包文件会成为性能瓶颈。若某个 js 文件很大，其它 js 文件需要等最大的 js 文件加载完成才能被解析，最大文件的加载时间会成为性能瓶颈。
+
+- 包体积不能太大，也不能太小。
+
+解决思路：
+
+- 把体积很大的包拆分到其它 js 文件中，让所有包文件大小保持基本一致，尽可能让所有 js 文件请求同时结束，避免 js 加载瓶颈。
+
+- 非首屏需要的组件，不要打入首屏的包中。比如验证码组件、vconsole（一个用于调试的工具）。可设置为链接预请求（prefetch），它和预加载（preload）的区别在于，它是闲时下载，不会阻塞首屏 chunk 的下载。
+
+- 体积较小的 chunk 包进行合并，较小的构建脚本它的等待时间会比加载时间还长。构建脚本最优的状态是每个 chunk 体积基本保持一致，不要太大或太小。
+
+### 抽取公共模块
+
+对于每个业务模块都需要使用到的 js 内容，可放在在线脚本中，进入首页时即可加载，其它模块直接使用缓存，无需重复加载。
+
+比如，可以把 lodash 打入在线脚本中，在构建脚本中声明这个依赖走线上的脚本，不再打入 chunk 中，减小包体积。
+
+### js 资源预加载
+
+在 head 标签里面使用 link 标签进行 js 文件预加载，提前加载好 js 文件，等到使用的时候就可以直接使用。
+
+html底部script标签使用js文件。
+
+```html
+<head>
+  <link rel="preload" as="script" href="hello.js" />
+</head>
+<body>
+  <div id="app"></div>
+  <script src="hello.js"></script>
+</body>
+```
+
+### 域名预连接
+
+使用 link 标签进行域名预连接，对后续需要使用的域名提前建立好连接，减少等待时间。
+
+```html
+<link rel="preconnect" href="https://love.you1.com" />
+<link rel="preconnect" href="https://love.you2.com" />
+<link rel="preconnect" href="https://love.you3.com" />
+```
+
+### 图片资源优化
+
+- 小 icon 可以直接使用 base64 打入页面，减少图片请求次数。
+
+- 对于比较大的图片，可对图片进行压缩。非首屏使用的图片可使用懒加载。
+
+### postcss 不再兼容太旧版本浏览器
+
+目前的 postcss 配置，在 css 文件编译后产生大量不需要的前缀样式内容，造成 css 文件体积过大。
+
+现状：
+
+```js
+browsers: ['last 3 versions', 'Android >= 4.1', 'ios >= 8']
+```
+
+如今 IOS 版本已经较高，IOS8 基本没有用户使用，可以省去为兼容 IOS8 额外产生的 css 内容。
+
+修改为：
+
+```js
+browsers: ['last 3 versions', 'Android >= 5', 'ios >= 9.3']
+```
+
+调整后总包体积下降 500+KB。要在兼容性和性能之间取得平衡。
