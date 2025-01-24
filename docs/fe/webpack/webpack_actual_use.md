@@ -530,7 +530,7 @@ module.exports = {
             options: {
               plugins: () => [
                 require("autoprefixer")({
-                  browsers: ["last 6 version", ">1%", "ios 4"],
+                  browsers: ["last 6 versions", ">1%", "ios 4"],
                 }),
               ],
             },
@@ -541,6 +541,12 @@ module.exports = {
   }
 }
 ```
+
+其中，`browsers: ["last 6 versions", ">1%", "ios 4"]` 指主流浏览器最后的6个版本，全球使用率超过 1% 的浏览器版本，以及 iOS4 版本以上的浏览器，为这些指定版本的浏览器自动补齐 CSS 前缀。
+
+一般来说，如果要兼容的浏览器版本越旧，需要补充的 CSS 前缀越多，会增加构建包的体积。
+
+因此，需要综合评判，需要为哪些版本的浏览器进行兼容，在兼容性和性能上进行权衡。如果一些旧版本的浏览器已经没有什么用户使用了，就没有必要再进行兼容处理。
 
 ## 静态资源内联
 
