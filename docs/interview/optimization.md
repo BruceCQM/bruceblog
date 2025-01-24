@@ -75,3 +75,135 @@ SPA (Single Page Application) 是指在页面初始化的时候加载相应的 H
 ### 前端首屏性能优化
 
 ![前端首屏性能优化](./images/optimization/performance_optimization.png)
+
+## 接口优化
+
+### 接口数量收敛
+
+问题：接口调用数量多，且存在重复调用。
+
+解决思路：
+
+- 相同接口请求合并成一个。对于请求参数不同，但是接口 id 相同的请求，考虑是否可以根据接口特性，通过合并参数，将多个接口请求合并为一个，减少接口请求次数。
+
+- 前端可将某些基础信息缓存起来，如用户信息，后续可从缓存中获取，减少页面请求。
+
+- 对于同一类型的数据，如最近三天账单、最近一个月账单，后台可改造接口，提供聚合接口一次性返回所有信息，减少前端接口请求次数。
+
+### 接口调用顺序调整
+
+问题：接口调用顺序不合理，如串行请求、请求时机过于靠后。
+
+解决思路：
+
+- 没有依赖关系的接口，将串行请求改为并行请求，避免滥用 await 关键字。
+
+- 接口请求发起时机尽可能提前。比如都在页面初始化之后立即发起请求。
+
+- 和当前页面无关的接口，不要放在当前页面请求。比如，和首页无关的接口，不要放在首页发起请求。
+
+### 组件接口优化
+
+问题：
+
+- 组件内部的接口请求存在不必要的串行。
+
+- 页面接口请求阻塞了组件内部接口调用。
+
+- 每个组件内部都各自调用接口，可能会导致重复请求同一个接口，且页面无法控制这些接口的调用。
+
+解决思路：
+
+- 没有依赖关系的接口，串行改为并行。
+
+- 存在弱关系依赖的接口（比如后调用的接口，需要根据先调用接口的结果判断是否发起请求，但请求参数不依赖于先调用接口的结果），如果大部分场景都会调用到后面的接口，可考虑统一并行调用，再根据结果判断是否使用数据。
+
+- 页面的接口请求，尽量不要阻塞组件的接口调用。对于大部分业务场景都会展示的组件，可以考虑初始化页面时默认渲染组件，待页面请求完毕相关接口之后，再根据状态数据判断组件是否隐藏。从而提前了组件内部的接口调用时机。
+
+- 比较好的方案是：组件内部不发起接口请求，由页面统一查询之后，以参数形式将结果传入组件。将组件的请求控制权都上交给页面，有利于页面对接口进行统一调度。
+
+### 控制接口只调用一次
+
+通过代码实现，相同接口只调用一次。提供参数让业务方决定是否强制调用接口。
+
+方式一：通过事件监听方式。
+
+```js
+// api/user/index.js
+// 用户接口定义
+const getUserInfoApi = async (params) => {
+  try {
+    const res = await fetch('/api/user/info', { params });
+    return res;
+  } catch (e) {
+    return {};
+  }
+}
+
+// 控制用户接口只调用一次
+const getUserInfoApiOnce = async (params, force = false) => {
+  // 若强制调用接口，则直接调用接口
+  if (force) {
+    const res = await getUserInfoApi(params);
+    // 将接口数据存储到mobx中
+    store.setUserInfo(res);
+    return res;
+  }
+
+  return new Promise(async (resolve) => {
+    const { userInfo } = store || {};
+    // 如果userInfo是空对象{}，说明有一个请求正在执行，此时监听queryUserInfo事件，等请求执行完成后，会发送接口结果
+    if (userInfo && Object.keys(userInfo).length === 0) {
+      Taro.eventCenter.on('queryUserInfo', (res) => {
+        resolve(res);
+      })
+    } else if (!userInfo) {
+      // userInfo 默认值是null，因此userInfo为空说明是第一个请求
+      // 将userInfo设置为空对象，表示有一个请求正在执行，拦截后续请求
+      store.setUserInfo({});
+      const res = await getUserInfoApi(params);
+      store.setUserInfo(res);
+      // 接口请求完成后，触发queryUserInfo事件，发送接口结果
+      Taro.eventCenter.trigger('queryUserInfo', res);
+      resolve(res);
+    } else {
+      // 若userInfo有值，则直接返回
+      resolve(userInfo);
+    }
+  })
+}
+```
+
+方式二：通过标识记录
+
+```js
+// api/user/index.js
+// 用户接口定义
+const getUserInfoApi = async (params) => {
+  try {
+    const res = await fetch('/api/user/info', { params });
+    return res;
+  } catch (e) {
+    return {};
+  }
+}
+
+let pendingPromise = null;
+
+// 控制用户接口只调用一次
+const getUserInfoApiOnce = async (params, force = false) => {
+  if (!force && pendingPromise) {
+    return pendingPromise;
+  }
+
+  try {
+    pendingPromise = getUserInfoApi(params);
+    const res = await pendingPromise;
+    store.setUserInfo(res);
+    return res;
+  } catch (e) {
+    pendingPromise = null;
+    return {};
+  }
+}
+```
