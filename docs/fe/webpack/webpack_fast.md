@@ -54,6 +54,8 @@ module.exports = smp.wrap({
 
 ## 体积分析：webpack-bundle-analyzer
 
+可以分析第三方模块、业务组件代码大小。
+
 安装依赖：
 
 ```bash
@@ -81,3 +83,19 @@ module.exports = {
 ![优化之后](./images/bundle_analyser_2.png)
 
 除了公共包，如果有某些组件体积很大，可以使用懒加载的方式引入，就不用打到主包中。
+
+## 速度优化：使用高版本的webpack和Node.js
+
+要提升构建速度，推荐使用高版本的 webpack 和 Node.js。
+
+webpack4 的构建时间会比 webpack3 降低 60%~98%。
+
+高版本的 webpack 推荐使用高版本的 Node.js，高版本的 V8 引擎做了更多优化。
+
+- V8带来的优化：for of 替代 forEach、Map 和 Set 替代 Object、includes 替代 indexOf。
+
+- 使用更快的 md4 hash 算法。
+
+- webpack AST 可以直接从 loader 传递给 AST，减少解析时间。
+
+- 使用字符串方法替代正则表达式。
