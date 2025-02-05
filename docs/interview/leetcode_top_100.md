@@ -378,6 +378,74 @@ var findAnagrams = function (s, p) {
 
 ## 子串
 
+### 560. [和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/description/)
+
+标签：哈希表、前缀和
+
+题目：
+
+![560.和为 K 的子数组](./images/leetcode/question-560.png)
+
+代码：
+
+```js
+// 方法一：双重遍历，时间复杂度O(n^2)
+var subarraySum = function (nums, k) {
+  var count = 0;
+  for (var i = 0;i < nums.length;i++) {
+    var sum = 0;
+    for (var j = i;j < nums.length;j++) {
+      sum += nums[j];
+      if (sum === k) {
+        count += 1;
+      }
+    }
+  }
+  return count;
+}
+```
+
+```js
+// 方法二：前缀和 + 哈希表，时间复杂度O(n)
+var subarraySum = function (nums, k) {
+  var map = new Map();
+  map.set(0, 1);
+  var prefix = 0;
+  var count = 0;
+  for (var num of nums) {
+    prefix += num;
+    if (map.has(prefix - k)) {
+      count += map.get(prefix - k);
+    }
+    if (map.has(prefix)) {
+      map.set(prefix, map.get(prefix) + 1);
+    } else {
+      map.set(prefix, 1);
+    }
+  }
+  return count;
+}
+
+// 使用普通对象代码会更加简洁,但效率没有map高
+var subarraySum = function (nums, k) {
+  var obj = { 0: 1 };
+  var prefix = 0;
+  var count = 0;
+  for (var num of nums) {
+    prefix += num;
+    if (obj[prefix - k]) {
+      count += obj[prefix - k];
+    }
+    if (obj[prefix]) {
+      obj[prefix] += 1;
+    } else {
+      obj[prefix] = 1;
+    }
+  }
+  return count;
+}
+```
+
 ## 普通数组
 
 ## 矩阵
