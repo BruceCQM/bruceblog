@@ -51,4 +51,14 @@ export default [
     text: '算法相关',
     link: '/interview/algorithm'
   },
+  {
+    text: '构建工具',
+    collapsed: false,
+    items: [
+      { text: 'webpack 概念', link: '/interview/webpack/webpack_concepts' },
+      { text: 'webpack 深入学习', link: '/interview/webpack/webpack_deep' },
+      { text: 'vite', link: '/interview/webpack/vite' },
+      { text: 'Babel', link: '/interview/webpack/babel' },
+    ]
+  },
 ]
