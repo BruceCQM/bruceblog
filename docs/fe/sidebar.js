@@ -67,7 +67,8 @@ export default [
     items: [
       { text: 'webpack 极速入门', link: '/fe/webpack/webpack_quick' },
       { text: 'webpack 基础', link: '/fe/webpack/webpack_basis' },
-      { text: 'webpack 实战', link: '/fe/webpack/webpack_actual_use'}
+      { text: 'webpack 实战', link: '/fe/webpack/webpack_actual_use'},
+      { text: 'webpack 优化策略', link: '/fe/webpack/webpack_fast'},
     ]
   },
   {
