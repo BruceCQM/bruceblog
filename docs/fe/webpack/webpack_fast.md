@@ -51,3 +51,33 @@ module.exports = smp.wrap({
 - sass-loader 耗费了24秒，可以考虑采用 less 会不会更加合理？可以对比两者的耗时。
 
 - ExtractTextPlugin 插件也耗费了1分56秒，可以深入阅读插件的源码，看是否有可以优化的地方，根据团队实际的情况，将插件 fork 过来进行优化。
+
+## 体积分析：webpack-bundle-analyzer
+
+安装依赖：
+
+```bash
+npm install webpack-bundle-analyzer@3.3.2 -D
+```
+
+修改 webpack 配置：
+
+```js
+// require('webpack-bundle-analyzer') 导入的是一个对象
+// require('webpack-bundle-analyzer').BundleAnalyzerPlugin 才是构造函数
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+module.exports = {
+  plugins: [
+    new BundleAnalyzerPlugin(),
+  ]
+}
+```
+
+![优化之前](./images/bundle_analyser_1.png)
+
+可以看到，React 相关内容和 babel-polyfill 占了很大的体积，可以针对性进行优化。例如通过 CDN 引入，就不用打到 bundle 中了。
+
+![优化之后](./images/bundle_analyser_2.png)
+
+除了公共包，如果有某些组件体积很大，可以使用懒加载的方式引入，就不用打到主包中。
