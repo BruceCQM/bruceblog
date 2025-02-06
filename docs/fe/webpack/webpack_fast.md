@@ -114,6 +114,8 @@ webpack4 的构建时间会比 webpack3 降低 60%~98%。
 
 ### HappyPack
 
+原理：每次 webapck 解析一个模块，HappyPack 会将它及它的依赖分配给 worker 线程中。
+
 安装依赖，在 webpack4 中要使用 5.x 版本。
 
 ```bash
@@ -143,6 +145,8 @@ module.exports = {
 ```
 
 ### thread-loader
+
+原理：每次 webpack 解析一个模块，threadloader 会将它及它的依赖分配给 worker 线程中。
 
 安装依赖：
 
@@ -214,3 +218,77 @@ module.exports = {
 
 - 兼容性: 确保你使用的**加载器**支持多线程处理。大多数现代加载器都支持，但最好检查一下文档。
 :::
+
+## 多进程并行压缩代码
+
+并行压缩代码，也可以提高构建速度。
+
+### parallel-uglify-plugin 插件
+
+```js
+const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
+
+module.exports = {
+  plugins: [
+    new ParallelUglifyPlugin({
+      uglifyJS: {
+        output: {
+          beautify: false,
+          comments: false,
+        },
+        compress: {
+          warnings: false,
+          drop_console: true,
+          collapse_vars: true,
+          reduce_vars: true,
+        }
+      }
+    })
+  ]
+}
+```
+
+### uglify-webpack-plugin 插件
+
+开启 parallel 参数。
+
+```js
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        warnings: false,
+      },
+      parallel: true
+    })
+  ]
+}
+```
+
+### terser-webpack-plugin 插件※
+
+terser-webpack-plugin 开启 parallel 参数。推荐使用该方法。
+
+安装依赖：
+
+```bash
+npm install terser-webpack-plugin@1.3.0 -D
+```
+
+修改配置：
+
+```js
+const TerserPlugin = require('terser-webpack-plugin');
+
+module.exports = {
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        parallel: true
+      })
+    ]
+  }
+}
+```
