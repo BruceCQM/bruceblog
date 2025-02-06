@@ -446,6 +446,41 @@ var subarraySum = function (nums, k) {
 }
 ```
 
+### 239. [滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/description/)
+
+标签：单调递减队列、数组
+
+题目：
+
+![239.滑动窗口最大值](./images/leetcode/question-239.png)
+
+代码：
+
+```js
+var maxSlidingWindow = function (nums, k) {
+  if (nums.length === 0 || k === 0) {
+    return [];
+  }
+  var deque = [];
+  var res = [];
+  for (var j = 0, i = 1 - k;j < nums.length;j++, i++) {
+    if (i > 0 && deque[0] === nums[i - 1]) {
+      deque.shift();
+    }
+
+    while (deque.length > 0 && deque[deque.length - 1] < nums[j]) {
+      deque.pop();
+    }
+
+    deque.push(nums[j]);
+    if (i >= 0) {
+      res.push(deque[0]);
+    }
+  }
+  return res;
+}
+```
+
 ## 普通数组
 
 ## 矩阵
