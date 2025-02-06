@@ -99,3 +99,118 @@ webpack4 的构建时间会比 webpack3 降低 60%~98%。
 - webpack AST 可以直接从 loader 传递给 AST，减少解析时间。
 
 - 使用字符串方法替代正则表达式。
+
+## 多进程多实例构建
+
+多进程多实例并行解析资源，对于复杂的项目，可以显著提高构建速度。
+
+可选方案：
+
+- HappyPack：为 webpack3 编写的多进程构建插件，后续已经没有维护，webpack4 不推荐使用。
+
+- thread-loader：webpack4 官方推出的多进程构建 loader，推荐使用。
+
+- parallel-webpack
+
+### HappyPack
+
+安装依赖，在 webpack4 中要使用 5.x 版本。
+
+```bash
+npm install happypack@5.0.1 -D
+```
+
+修改 webpack 配置：
+
+```js
+const HappyPack = require('happypack');
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: 'happypack/loader',
+      },
+    ],
+  },
+  plugins: [
+    new HappyPack({
+      loaders: ['babel-loader'],
+    })
+  ]
+}
+```
+
+### thread-loader
+
+安装依赖：
+
+```bash
+npm install thread-loader@2.1.2 -D
+```
+
+修改 webpack 配置：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          {
+            loader: 'thread-loader',
+            options: { 
+              workers: 3,
+              workerParallelJobs: 50,
+              poolTimeout: 2000,
+            },
+          },
+          'babel-loader',
+        ]
+      }
+    ]
+  }
+}
+```
+
+参数说明：
+
+- workers: 并行工作的线程数。通常设置为 CPU 核心数减一。
+
+- workerParallelJobs: 每个线程可以并行处理的任务数。
+
+- poolTimeout: 当一个工作线程空闲超过这个时间（以毫秒为单位）时，它会被终止。设置为 2000 毫秒是一个合理的默认值。
+
+只有支持多线程处理的 loader 才能使用 thread-loader，比如 `babel-loader`、`css-loader`、`ts-loader`。
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'thread-loader',
+            options: [
+              workers: 3,
+            ],
+          },
+          'style-loader',
+          'css-loader',
+        ]
+      }
+    ]
+  }
+}
+```
+
+:::danger 注意事项
+- 启动开销: 启动线程是有开销的，因此对于非常小的任务，使用 thread-loader 可能会增加构建时间。确保你的任务足够耗时，才能从多线程中获益。
+
+- 内存使用: 每个线程都会占用一定的内存，因此在配置 workers 时要考虑到你的系统内存限制。
+
+- 兼容性: 确保你使用的**加载器**支持多线程处理。大多数现代加载器都支持，但最好检查一下文档。
+:::
