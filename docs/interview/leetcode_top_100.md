@@ -463,16 +463,22 @@ var maxSlidingWindow = function (nums, k) {
   }
   var deque = [];
   var res = [];
-  for (var j = 0, i = 1 - k;j < nums.length;j++, i++) {
+  // i、j 分别表示滑动窗口的左右边界
+  for (var i = 1 - k, j = 0; j < nums.length; i++, j++) {
+    // 滑动窗口往右移动时，首先删除队列中不存在于窗口中的元素
     if (i > 0 && deque[0] === nums[i - 1]) {
       deque.shift();
     }
 
+    // 保证队列的单调递减，将队列中所有小于当前元素的元素删除
     while (deque.length > 0 && deque[deque.length - 1] < nums[j]) {
       deque.pop();
     }
 
+    // 将当前元素加入队列
     deque.push(nums[j]);
+    // 当滑动窗口的宽度为 k 时，将当前窗口的最大值加入结果数组
+    // deque是单调递减队列，第一个元素是最大的
     if (i >= 0) {
       res.push(deque[0]);
     }

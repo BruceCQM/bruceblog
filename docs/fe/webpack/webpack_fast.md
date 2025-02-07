@@ -292,3 +292,7 @@ module.exports = {
   }
 }
 ```
+
+## 预编译资源模块
+
+之前提过2种分离基础包的方式，一种是使用 html-webpack-externals-plugin 插件，通过 CDN 引入；一种是通过 splitChunks 进行分包。
