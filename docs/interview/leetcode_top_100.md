@@ -302,7 +302,7 @@ var lengthOfLongestSubstring = function (s) {
 
 ### 438. [找到字符串中所有字母异位词](https://leetcode.cn/problems/find-all-anagrams-in-a-string/description/)
 
-标签：双指针、数组、字符串
+标签：双指针、数组、字符串、滑动窗口
 
 题目：
 
@@ -484,6 +484,61 @@ var maxSlidingWindow = function (nums, k) {
     }
   }
   return res;
+}
+```
+
+### 76. [最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/description/)
+
+标签：双指针、数组、字符串、滑动窗口
+
+题目：
+
+![76.最小覆盖子串](./images/leetcode/question-76.png)
+
+代码：
+
+```js
+var isCovered = function (arrS, arrT) {
+  for (var i = 'A'.charCodeAt(); i <= 'Z'.charCodeAt(); i++) {
+    if (arrS[i] < arrT[i]) {
+      return false;
+    }
+  }
+  for (var j = 'a'.charCodeAt(); j <= 'z'.charCodeAt(); j++) {
+    if (arrS[j] < arrT[j]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+var minWindow = function (s, t) {
+  var len = s.length;
+  // 'z'的charCodeAt()为122，所以其实长度123就够用了
+  var arrS = new Array(128).fill(0);
+  var arrT = new Array(128).fill(0);
+  // 记录t中每个字符的出现次数
+  for (var ch of t) {
+    arrT[ch.charCodeAt()] += 1;
+  }
+
+  var ansLeft = -1, ansRight = len;
+  var left = 0;
+  for (var right = 0; right < len; right++) {
+    // 右端点字母进入窗口
+    arrS[s[right].charCodeAt()] += 1;
+    while (isCovered(arrS, arrT)) {
+      // 如果找到更短的子串，则更新ansLeft和ansRight
+      if (right - left < ansRight - ansLeft) {
+        ansLeft = left;
+        ansRight = right;
+      }
+      // 左端点字母离开窗口
+      arrS[s[left].charCodeAt()] -= 1;
+      left += 1;
+    }
+  }
+  return ansLeft < 0 ? '' : s.substring(ansLeft, ansRight + 1);
 }
 ```
 
