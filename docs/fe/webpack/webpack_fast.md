@@ -293,6 +293,142 @@ module.exports = {
 }
 ```
 
-## 预编译资源模块
+## DLL预编译资源模块
+
+### 概述
 
 之前提过2种分离基础包的方式，一种是使用 html-webpack-externals-plugin 插件，通过 CDN 引入；一种是通过 splitChunks 进行分包。
+
+但这两种都有一定的缺点。
+
+- html-webpack-externals-plugin 插件：抽离出来的包会以 script 标签的形式引入，如果项目的基础包和公共业务模块数量多起来，就会增加大量的 script 标签；而且每个包都需要在 webpack 配置中增加一条配置项，一个基础库需要指定一个 CDN，还有业务包，使用起来不方便。
+
+- splitChunks：splitChunks 没有 html-webpack-externals-plugin 的缺点，但是每次构建的时候都需要对抽离出来的基础包进行分析编译，而这些基础包一般都是很少改动的，没有必要每次构建都进行编译。
+
+DLL 是 webpack 内置的两个插件，用于将基础包预先编译成单独的 DLL（Dynamic Link Library）文件，后续构建时直接使用 DLL 文件，而不需要再次编译基础包，从而加快打包速度。包括 DLLPlugin 和 DLLReferencePlugin 两个插件。
+
+DLLPlugin：
+
+- 预编译基础库：将不常变化的基础库、业务模块预编译成一个或多个 DLL 文件。
+
+- 提高构建速度：通过预编译，后续的构建过程不需要再重新编译这些基础库，从而加快构建速度。
+
+DLLReferencePlugin：
+
+- 引用预编译好的 DLL 文件，避免每次构建重新编译基础库。
+
+### 用法
+
+新增 dll 配置文件 webpack.dll.js：
+
+```js
+const path = require('path');
+const webpack = require('webpack');
+
+module.exports = {
+  entry: {
+    // 指定要分离的基础包；要分离业务包，增加一条key即可
+    libraryCai: ['react', 'react-dom'],
+    // commonLibrary: ['ui', 'xxx']
+  },
+  output: {
+    filename: '[name].dll.js',
+    path: path.join(__dirname, 'library'),
+    library: '[name]',
+  },
+  plugins: [
+    new webpack.DllPlugin({
+      // DllPlugin的name需要和output的library保持一致
+      name: '[name]',
+      path: path.join(__dirname, 'library/[name]-manifest.json')
+    })
+  ]
+}
+```
+
+package.json 文件增加 scripts 命令：
+
+```json
+{
+  "scripts": {
+    "dll": "webpack --config webpack.dll.js"
+  }
+}
+```
+
+运行 `npm run dll` 命令，就可以生成 dll 文件和 manifest 描述文件。
+
+![dllplugin 结果](./images/dllplugin.png)
+
+修改 webpack 配置文件，使用 DLLReferencePlugin 引用编译好的 dll 文件。如果需要引入多个 dll 文件，要书写多个 DLLReferencePlugin 配置。
+
+```js
+const webpack = require('webpack');
+
+module.exports = {
+  plugins: [
+    new webpack.DllReferencePlugin({
+      manifest: require('./library/libraryCai-manifest.json'),
+    }),
+    // new webpack.DllReferencePlugin({
+    //   manifest: require('./library/commonLibrary-manifest.json'),
+    // }),
+  ]
+}
+```
+
+📢注意：打包生成的 html 文件中需要通过 script 标签引入 `libraryCai.dll.js` 文件，否则会报错 `libraryCai is not defined`。
+
+可以使用 add-asset-html-webpack-plugin 插件，自动将 dll 文件插入到 html 文件中。
+
+:::tip add-asset-html-webpack-plugin
+add-asset-html-webpack-plugin 是一个 Webpack 插件，用于将指定的静态资源（如 DLL 文件、CSS 文件等）自动注入到生成的 HTML 文件中。
+:::
+
+
+安装依赖：
+
+```bash
+npm install add-asset-html-webpack-plugin -D
+```
+
+修改配置：
+
+```js
+const webpack = require('webpack');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    // 将静态资源文件以script标签形式加入到html文件中，可以引入多个
+    new AddAssetHtmlPlugin([
+      { filepath: require.resolve('./library/libraryCai.dll.js') },
+      { filepath: require.resolve('./library/commmonLibrary.dll.js') },
+    ]),
+    new webpack.DllReferencePlugin({
+      manifest: require('./library/libraryCai-manifest.json'),
+    }),
+  ]
+}
+```
+
+add-asset-html-webpack-plugin 会把指定的资源文件复制到 dist 目录中，因此生成的 html 文件即可自动引入，不用担心路径问题。
+
+![dllreferenceplugin](./images/dllreferenceplugin.png)
+
+:::warning 问答
+1、dll的方式好像在webpack4里面应用的不是很多了，webpack4已经做了优化，我查看了下vue-cli以及create-react-app都抛弃了这个配置，具体原因地址：https://github.com/vuejs/vue-cli/issues/1205
+
+是的，如果项目使用了 Webpack4，确实对 dll 的依赖没那么大，使用 dll 相对来说提升也不是特别明显。而且有 hard-source-webpack-plugin 可以极大提升二次构建速度。
+
+不过从实际前端工程中来说， dll 还是很有必要掌握的。对于一个团队而言，基本是采用相同的技术栈，要么 React、要么Vue 等等。这个时候，通常的做法都是把公共框架打成一个 common bundle 文件供所有项目使用。比如我们团队会将 react、react-dom、redux、react-redux 等等打包成一个公共库。dll 可以很好的满足这种场景：将多个npm包打成一个公共包。因此团队里面的分包方案使用 dll 还是很有价值，常见的会从整个工程的角度分为基础包（react、redux等）、业务公共包（所有业务都要用到的监控上报脚本、页面初始化脚本）、某个业务的js。
+
+2、dllplugin和splitChunks可以一起用吗?有没有什么区别和联系?
+
+可以一起使用。 DllPlugin 通常用于基础包（框架包、业务包）的分离。
+
+SplitChunks 虽然也可以做 DllPlugin 的事情，但是更加推荐使用 SplitChunks 去提取页面间的公共 js 文件。因为使用 SplitChunks 每次去提取基础包还是需要耗费构建时间的，如果是 DllPlugin 只需要预编译一次，后面的基础包时间都可以省略掉。
+
+3、webpack5 已经不需要这样做了
+https://github.com/webpack/webpack/issues/6527
+:::
