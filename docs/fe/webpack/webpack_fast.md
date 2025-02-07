@@ -432,3 +432,117 @@ SplitChunks 虽然也可以做 DllPlugin 的事情，但是更加推荐使用 Sp
 3、webpack5 已经不需要这样做了
 https://github.com/webpack/webpack/issues/6527
 :::
+
+## 启用缓存提升二次构建速度
+
+常见缓存思路：
+
+- babel-loader 开启缓存
+
+- terser-webpack-plugin 开启缓存
+
+- 使用 cache-loader 缓存其它 loader 的输出结果
+
+- 使用 hard-source-webpack-plugin 缓存构建过程中间结果
+
+### babel-loader
+
+babel-loader 缓存路径为：`node_modules/.cache/babel-loader`。
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              // 开启缓存
+              cacheDirectory: true,
+              // 是否压缩缓存文件。false不压缩，可以提高缓存读写速度，但会占用更多磁盘空间
+              cacheCompression: false,
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### terser-webpack-plugin
+
+terser-webpack-plugin 缓存路径为：`node_modules/.cache/terser-webpack-plugin`。
+
+```js
+const TerserPlugin = require('terser-webpack-plugin');
+module.exports = {
+  plugins: [
+    new TerserPlugin({
+      parallel: true,
+      // 开启压缩缓存
+      cache: true,
+    })
+  ]
+}
+```
+
+### cache-loader
+
+cache-loader 用于缓存其他加载器的输出结果，从而加快构建速度。它适用于那些处理时间较长的加载器，比如 babel-loader、ts-loader 或 sass-loader。
+
+cache-loader 缓存路径为：`node_modules/.cache/cache-loader`。
+
+安装依赖：
+
+```bash
+npm install cache-loader -D
+```
+
+修改配置，以缓存 babel-loader 为例：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          'cache-loader',
+          'babel-loader',
+          'eslint-loader',
+        ]
+      }
+    ]
+  }
+}
+```
+
+### hard-source-webpack-plugin
+
+hard-source-webpack-plugin 通过缓存构建过程中生成的中间产物，提高后续构建的速度。
+
+hard-source-webpack-plugin 缓存路径为：`node_modules/.cache/hard-source`。
+
+安装依赖：
+
+```bash
+npm install hard-source-webpack-plugin@0.13.1 -D
+```
+
+修改配置：
+
+```js
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+module.exports = {
+  plugins: [
+    new HardSourceWebpackPlugin(),
+  ]
+}
+```
+
+缓存结果：
+
+![缓存结果示例](./images/webpack_cache_results.png)
