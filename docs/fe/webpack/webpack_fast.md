@@ -635,3 +635,76 @@ module.exports = {
 `nodir: true` 的作用：确保只返回文件路径，而不包括目录路径。如果包含目录路径，可能会导致不必要的处理或错误，因此通常只需要文件路径。
 
 ![擦除css](./images/purge_css_plugin.png)
+
+## 图片压缩
+
+使用 Node 库的 imagemin 或者 tinypng API。
+
+Imagemin 的优点：有很多定制选项、可以引入更多第三方优化插件，例如pngquant、可以处理多种图片格式。
+
+Imagemin 的压缩原理： 
+
+- pngquant: 是一款PNG压缩器，通过将图像转换为具有alpha通道（通常比24/32位PNG文件小60-80％）的更高效的8位PNG格式，可显著减小文件大小。
+
+- pngcrush:其主要目的是通过尝试不同的压缩级别和PNG过滤方法来降低PNGIDAT数据流的大小。
+
+- optipng:其设计灵感来自于pngcrush。optipng可将图像文件重新压缩为更小尺寸，而不会丢失任何信息。
+
+- tinypng:也是将24位png文件转化为更小有索引的8位图片，同时所有非必要的metadata也会被剥离掉。
+
+安装依赖：
+
+```bash
+npm install image-webpack-loader -D
+```
+
+修改配置：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(jpeg|png|gif|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name]_[hash:8].[ext]',
+            },
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              mozjpeg: {
+                progressive: true,
+              },
+              optipng: {
+                enabled: false,
+              },
+              pngquant: {
+                quality: [0.65, 0.90],
+                speed: 4,
+              },
+              gifsicle: {
+                interlaced: false,
+              },
+              webp: {
+                quality: 75,
+              },
+            },
+          },
+        ]
+      }
+    ]
+  }
+}
+```
+
+没有试成功，运行报错，没有解决。
+
+试了几种方式，都不行：
+
+[webpack loader 使用之 image-webpack-loader (图片压缩)](https://blog.csdn.net/weixin_42508745/article/details/131181236){link=static}
+
+[image-webpack-loader下载报错问题](https://blog.csdn.net/qq_28222917/article/details/129488186){link=static}
