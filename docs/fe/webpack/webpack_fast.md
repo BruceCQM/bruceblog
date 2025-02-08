@@ -546,3 +546,26 @@ module.exports = {
 缓存结果：
 
 ![缓存结果示例](./images/webpack_cache_results.png)
+
+## 缩小构建目标
+
+webpack 在构建的时候，其实没有必要所有文件都进行处理和转换。比如，node_modules 里的第三方库 js 文件其实可以不用解析的，能发布到 npm 上的包质量一般都比较好，差的包我们也不会使用。因此，可以给 babel-loader 排除掉 node_modules 目录下的文件。
+
+可以使用 `include` 和 `exclude` 字段，并且要设置绝对路径。
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: 'babel-loader',
+        // 指定babel-loader只处理src目录下的文件
+        // 必须要指定绝对路径，path.resolve就是生成绝对路径
+        include: path.resolve('src'),
+        // exclude: path.resolve('node_modules'),
+      }
+    ]
+  }
+}
+```
