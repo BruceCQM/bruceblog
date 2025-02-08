@@ -594,3 +594,44 @@ module.exports = {
   },
 }
 ```
+
+## 擦除无用css
+
+Tree-shaking 是擦除无用的 js 内容，同样的，我们可以使用 PurgeCSS 来擦除无用的 css，从而减小 css 文件体积。
+
+purgecss-webpack-plugin 插件需要和 mini-extract-css-plugin 插件一起使用。
+
+安装依赖：
+
+```bash
+npm install purgecss-webpack-plugin@1.5.0 -D
+```
+
+修改配置：
+
+```js
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const PurgeCSSPlugin = require('purgecss-webpack-plugin');
+
+const PATHS = {
+  // PurgecssPlugin插件需要传绝对路径
+  src: path.resolve(__dirname, 'src'),
+}
+module.exports = {
+  plugins: [
+    new MiniCssExtractPlugin({
+      name: '[name]_[contenthash:8].css',
+    }),
+    new PurgecssPlugin({
+      path: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+    })
+  ],
+}
+```
+
+``path: glob.sync(`${PATHS.src}/**/*`, { nodir: true })`` 表示匹配 src 目录下所有的文件。
+
+`nodir: true` 的作用：确保只返回文件路径，而不包括目录路径。如果包含目录路径，可能会导致不必要的处理或错误，因此通常只需要文件路径。
+
+![擦除css](./images/purge_css_plugin.png)
