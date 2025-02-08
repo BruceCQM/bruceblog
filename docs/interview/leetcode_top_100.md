@@ -340,6 +340,30 @@ var findAnagrams = function (s, p) {
   }
   return res;
 }
+
+// 数组弄长一点，代码简洁一点
+var findAnagrams = function(s, p) {
+  var len = s.length;
+  // 'z' 的 charCodeAt() 为 122，其实123就可以了，128好看点
+  var arrS = new Array(128).fill(0);
+  var arrP = new Array(128).fill(0);
+  for (var ch of p) {
+    arrP[ch.charCodeAt()] += 1;
+  }
+  var res = [];
+  for (var right = 0; right < len; right++) {
+    arrS[s[right].charCodeAt()] += 1;
+    var left = right - p.length + 1;
+    if (left < 0) {
+      continue;
+    }
+    if (arrS.toString() === arrP.toString()) {
+      res.push(left);
+    }
+    arrS[s[left].charCodeAt()] -= 1;
+  }
+  return res;
+}
 ```
 
 ```js
