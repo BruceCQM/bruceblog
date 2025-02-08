@@ -708,3 +708,35 @@ module.exports = {
 [webpack loader 使用之 image-webpack-loader (图片压缩)](https://blog.csdn.net/weixin_42508745/article/details/131181236){link=static}
 
 [image-webpack-loader下载报错问题](https://blog.csdn.net/qq_28222917/article/details/129488186){link=static}
+
+## 使用动态polyfill服务
+
+polyfill 是让旧版浏览器能够使用 js 新特性的方式。比如某些浏览器不能使用 Promise，polyfill 就会使用旧版本的 js 语法实现 Promise，提供给浏览器使用。
+
+如果把 polyfill 都打包进去，占用的体积会很大。
+
+![polyfiil 体积](./images/polyfill_chunk.png)
+
+但目前其实大部分的用户浏览器都可以支持 js 新特性，为了少部分用户的兼容性，所有用户都要加载 polyfill，其实很没有必要。
+
+下面是 Promise 的支持情况，类似的还有 Map、Set 等。
+
+![promise支持情况](./images/promise_can_use.png)
+
+polyfill 的几种方案：
+
+![polyfill 的几种方案](./images/polyfill_differences.png)
+
+第三种方案是自己把常用的 polyfill 封装起来，就不需要把所有特性都加载，可以减小体积。但仍然需要所有用户都加载，而且如果以后需要增加特性，需要重新发布版本，不太灵活。
+
+更加优雅的方案是使用 polyfill-service，浏览器会请求 polyfill-service，它会根据请求 UA 判断用户浏览器的版本，自动加载对应的 polyfill。从而做到按需引用 Polyfill。
+
+如何使用动态 polyfill service？
+
+- polyfill.io 官方提供的服务
+
+- 自建 polyfill 服务
+
+polyfill service 的缺点：某些奇葩浏览器可能无法正确识别 UA，从而无法加载 polyfill。
+
+解决方案：如果判断失败，就加载全部的 polyfill，这是降级方案。
