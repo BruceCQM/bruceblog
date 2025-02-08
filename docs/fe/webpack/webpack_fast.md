@@ -554,6 +554,7 @@ webpack 在构建的时候，其实没有必要所有文件都进行处理和转
 可以使用 `include` 和 `exclude` 字段，并且要设置绝对路径。
 
 ```js
+const path = require('path');
 module.exports = {
   module: {
     rules: [
@@ -567,5 +568,29 @@ module.exports = {
       }
     ]
   }
+}
+```
+
+## 减小搜索范围
+
+使用 resolve 配置，可以减少搜索路径，提高构建速度。
+
+```js
+const path = require('path');
+module.exports = {
+  resolve: {
+    // 指定查找路径，直接到指定路径查找React，减少查找时间
+    alias: {
+      react: path.resolve(__dirname, './node_modules/react/umd/react.production.min.js'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom/umd/react-dom.production.min.js'),
+    },
+    // 没有后缀名的文件，去寻找文件名加.js的文件
+    extensions: ['.js'],
+    // 查找package.json的main字段内容作为入口文件
+    mainFields: ['main'],
+    // 添加modules字段，指定模块查找的目录顺序
+    // 减小模块搜索层级
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+  },
 }
 ```
