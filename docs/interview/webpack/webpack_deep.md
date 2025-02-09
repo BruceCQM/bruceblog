@@ -108,8 +108,6 @@ console.log('🥬 333 ');
 
 - index.js 符合 cacheGroups.common 规则，抽离到名为 common 的 chunk 中。
 
-![代码分割产生chunk](./images/split-chunks.png)
-
 ## bundle
 
 bundle 是 webpack 输出的最终文件，包含了所有的代码和依赖，可以直接在浏览器中运行。
