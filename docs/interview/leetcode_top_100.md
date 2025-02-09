@@ -568,6 +568,40 @@ var minWindow = function (s, t) {
 
 ## 普通数组
 
+### 53. [最大子数组和](https://leetcode.cn/problems/maximum-subarray/description/)
+
+标签：动态规划、数组
+
+题目：
+
+![53.最大子数组和](./images/leetcode/question-53.png)
+
+思路：
+
+- 动态规划的是首先对数组进行遍历，当前最大连续子序列和为 sum，结果为 ans
+- 如果 sum > 0，则说明 sum 对结果有增益效果，则 sum 保留并加上当前遍历数字
+- 如果 sum <= 0，则说明 sum 对结果无增益效果，需要舍弃，则 sum 直接更新为当前遍历数字
+- 每次比较 sum 和 ans的大小，将最大值置为ans，遍历结束返回结果
+
+代码：
+
+```js
+var maxSubArray = function (nums) {
+  var res = nums[0];
+  // sum 表示当前最大的子数组之和
+  var sum = 0;
+  for (var n of nums) {
+    if (sum > 0) {
+      sum += n;
+    } else {
+      sum = n;
+    }
+    res = Math.max(res, sum);
+  }
+  return res;
+}
+```
+
 ## 矩阵
 
 ## 链表
