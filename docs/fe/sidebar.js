@@ -69,6 +69,7 @@ export default [
       { text: 'webpack 基础', link: '/fe/webpack/webpack_basis' },
       { text: 'webpack 实战', link: '/fe/webpack/webpack_actual_use'},
       { text: 'webpack 优化策略', link: '/fe/webpack/webpack_fast'},
+      { text: 'webpack 源码阅读', link: '/fe/webpack/webpack_source_code'},
     ]
   },
   {

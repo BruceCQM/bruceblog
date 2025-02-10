@@ -523,6 +523,7 @@ var maxSlidingWindow = function (nums, k) {
 
 ```js
 var isCovered = function (arrS, arrT) {
+  // 一定要注意是小于等于 ≤ ！
   for (var i = 'A'.charCodeAt(); i <= 'Z'.charCodeAt(); i++) {
     if (arrS[i] < arrT[i]) {
       return false;
