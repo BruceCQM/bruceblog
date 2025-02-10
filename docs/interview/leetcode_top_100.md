@@ -603,6 +603,45 @@ var maxSubArray = function (nums) {
 }
 ```
 
+### 56. [合并区间](https://leetcode.cn/problems/merge-intervals/description/)
+
+标签：排序、数组
+
+题目：
+
+![56.合并区间](./images/leetcode/question-56.png)
+
+思路：
+
+用数组 merged 存储最终的答案。
+
+首先，将列表中的区间按照**左端点**升序排序。然后将第一个区间加入 merged 数组中，并按顺序依次考虑之后的每个区间：
+
+如果当前区间的左端点在数组 merged 中最后一个区间的右端点之后，那么它们不会重合，我们可以直接将这个区间加入数组 merged 的末尾；
+
+否则，它们重合，我们需要用当前区间的右端点更新数组 merged 中最后一个区间的右端点，将其置为二者的较大值。
+
+代码：
+
+```js
+var merge = function (intervals) {
+  intervals.sort((a, b) => a[0] - b[0]);
+  var res = [];
+  for (var p of intervals) {
+    var len = res.length;
+    // 若列表为空，或当前区间和上一个区间不重合，直接添加
+    if (len <= 0 || p[0] > res[len - 1][1]) {
+      res.push(p);
+    } else {
+      // 区间重合，更新 res 中最后一个区间的右端点
+      res[len - 1][1] = Math.max(p[1], res[len - 1][1]);
+    }
+  }
+  return res;
+}
+```
+
+
 ## 矩阵
 
 ## 链表
