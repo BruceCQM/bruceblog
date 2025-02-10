@@ -106,7 +106,7 @@ module.exports = {
 
 可以看到，这两个文件被打包在同一个 chunk 中。
 
-![multi-main-entry](./images/multi-main-entry.png)
+![multi-main-entry](../images/webpack/multi-main-entry.png)
 
 ### 对象语法
 
@@ -135,7 +135,7 @@ module.exports = {
 
 打包后，生成了2个chunk。
 
-![entry对象语法](./images/entry-obj.png)
+![entry对象语法](../images/webpack/entry-obj.png)
 
 :::danger TIP
 “webpack 配置的可扩展” 是指，这些配置可以重复使用，并且可以与其他配置组合使用。这是一种流行的技术，用于将关注点从环境(environment)、构建目标(build target)、运行时(runtime)中分离。然后使用专门的工具（如 webpack-merge）将它们合并起来。
@@ -168,9 +168,9 @@ module.exports = {
 
 上述配置，设置了 `dependOn` 前后的区别如下。
 
-![dependOn之前](./images/dependOn-before.png)
+![dependOn之前](../images/webpack/dependOn-before.png)
 
-![dependOn之后](./images/dependOn-after.png)
+![dependOn之后](../images/webpack/dependOn-after.png)
 
 
 :::danger 注意事项
@@ -189,7 +189,7 @@ module.exports = {
 }
 ```
 
-![runtime-dependon-error](./images/runtime-dependon-error.png)
+![runtime-dependon-error](../images/webpack/runtime-dependon-error.png)
 
 2. `runtime` 不能指向已经存在的入口名称，否则会报错。
 
@@ -205,7 +205,7 @@ module.exports = {
 }
 ```
 
-![runtime-same-entrypoint](./images/runtime-same-entrypoint.png)
+![runtime-same-entrypoint](../images/webpack/runtime-same-entrypoint.png)
 
 3. `dependOn` 不能循环引用，否则会报错。
 
@@ -221,7 +221,7 @@ module.exports = {
 }
 ```
 
-![dependOd 循环引用](./images/depend-circular.png)
+![dependOd 循环引用](../images/webpack/depend-circular.png)
 :::
 
 ## 入口常见场景
@@ -353,7 +353,7 @@ module.exports = {
 
 `'./index.css'` 会如下报错。
 
-![test属性不是绝对路径报错](./images/test-absolute-path.png)
+![test属性不是绝对路径报错](../images/webpack/test-absolute-path.png)
 
 ### 多个loader转换
 

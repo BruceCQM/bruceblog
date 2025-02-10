@@ -44,7 +44,7 @@ export const add = (a, b) => {
 
 如今，浏览器是可以正常运行这份代码的。那么浏览器是怎么处理这些文件的引用关系的？
 
-![浏览器运行 import 语句的 js 文件](./images/browser-run-import.png)
+![浏览器运行 import 语句的 js 文件](../images/webpack/browser-run-import.png)
 
 浏览器会将 import 语句处理成一个个 http 网络请求，去获取 import 引入的各个模块。
 
@@ -53,7 +53,7 @@ export const add = (a, b) => {
 :::danger HTML 引用 JS 模块报错
 HTML 引用了带有 import 语句的 js 文件，浏览器直接打开会报跨域的错误。
 
-![HTML 引用 JS 模块报错](./images/html-CORS-error.png)
+![HTML 引用 JS 模块报错](../images/webpack/html-CORS-error.png)
 
 原本来自相同的目录或子目录的本地文件是同源的，但是这有安全隐患，后面浏览器将所有本地文件视为不透明来源，因此加载**包含本地资源**的本地文件会导致 CORS 错误。
 

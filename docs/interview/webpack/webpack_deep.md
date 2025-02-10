@@ -130,7 +130,7 @@ module、chunk、bundle 其实就是同一份代码，在不同转换场景下�
 我们直接写出来的是 module，webpack 处理时是 chunk，最后生成的浏览器可直接运行的是 bundle。
 :::
 
-![module、chunk和bundle的区别](./images/module-chunk-bundle.png)
+![module、chunk和bundle的区别](../images/webpack/module-chunk-bundle.png)
 
 index.css 和 common.js 在 index.js 中被引⼊，打包⽣成的 index.bundle.css 和n index.bundle.js 都属于 chunk 0，utils.js 因为是独⽴打包的，它⽣成的 utils.bundle.js 属于 chunk 1。
 
@@ -201,7 +201,7 @@ js 使用的是 chunkhash，如果 js 模块发生改变，则 chunkhash 也会�
 
 webpack 在随着 chunk 生成 bundle 时，会输出一个 chunkId。
 
-![chunkId](./images/chunkId.png)
+![chunkId](../images/webpack/chunkId.png)
 
 生产环境下 chunkId 是以自增的数字命名，因此增加 chunk 或减少 chunk 时，会导致顺序乱掉。
 
