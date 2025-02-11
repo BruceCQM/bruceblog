@@ -641,6 +641,59 @@ var merge = function (intervals) {
 }
 ```
 
+### 189. [旋转数组](https://leetcode.cn/problems/rotate-array/description/)
+
+标签：数组、双指针
+
+题目：
+
+![189.旋转数组](./images/leetcode/question-189.png)
+
+思路：
+
+方法一：使用额外的数组。
+
+可以使用额外的数组来将每个元素放至正确的位置。用 n 表示数组的长度，我们遍历原数组，将原数组下标为 i 的元素放至新数组下标为 `(i+k) mod n` 的位置，最后将新数组拷贝至原数组即可。
+
+方法二：数组翻转。
+
+该方法基于如下的事实：当我们将数组的元素向右移动 k 次后，尾部 `k mod n` 个元素会移动至数组头部，其余元素向后移动 `k mod n` 个位置。
+
+该方法为数组的翻转：首先将所有元素翻转，这样尾部的 `k mod n` 个元素就被移至数组头部，再翻转 [0, (k mod n) − 1] 区间的元素和 [k mod n, n−1] 区间的元素即能得到最后的答案。
+
+![189.翻转数组](./images/leetcode/thinking-189.png)
+
+代码：
+
+```js
+// 方法一：使用额外的数组
+var rotate = function (nums, k) {
+  var len = nums.length;
+  var arr = new Array(len);
+  for (var i = 0; i < len; i++) {
+    arr[(i + k) % len] = nums[i];
+  }
+  for (var j = 0; j < len; j++) {
+    nums[j] = arr[j];
+  }
+}
+
+// 方法二：翻转数组
+var rotate = function (nums, k) {
+  var reverse = function (start, end) {
+    while (start <= end) {
+      [nums[start], nums[end]] = [nums[end], nums[start]];
+      start += 1;
+      end -= 1;
+    }
+  }
+  var len = nums.length;
+  k = k % len;
+  reverse(0, len - 1);
+  reverse(0, k - 1);
+  reverse(k, len - 1);
+}
+```
 
 ## 矩阵
 
