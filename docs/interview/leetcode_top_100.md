@@ -695,6 +695,43 @@ var rotate = function (nums, k) {
 }
 ```
 
+### 238. [除自身以外数组的乘积](https://leetcode.cn/problems/product-of-array-except-self/description/)
+
+标签：数组、双指针
+
+题目：
+
+![238.除自身以外数组的乘积](./images/leetcode/question-238.png)
+
+思路：
+
+```
+原数组：       [1       2       3       4]
+左部分的乘积：   1       1      1*2    1*2*3
+右部分的乘积： 2*3*4    3*4      4      1
+结果：        1*2*3*4  1*3*4   1*2*4  1*2*3*1
+```
+
+当前位置的结果就是它左部分的乘积再乘以它右部分的乘积。因此需要进行两次遍历，第一次遍历用于求左部分的乘积，第二次遍历在求右部分的乘积的同时，再将最后的计算结果一起求出来。
+
+代码：
+
+```js
+var productExceptSelf = function (nums) {
+  var len = nums.length;
+  var res = new Array(len).fill(1);
+  var left = 0, right = len - 1;
+  var lp = 1, rp = 1;
+  while (left < len && right >= 0) {
+    res[left] *= lp;
+    res[right] *= rp;
+    lp *= nums[left++];
+    rp *= nums[right--];
+  }
+  return res;
+}
+```
+
 ## 矩阵
 
 ## 链表
