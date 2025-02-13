@@ -1,5 +1,24 @@
 # 日常开发工具
 
+## whistle代理到本地服务
+
+SwitchOmega 配置，将浏览器的请求都转发到 whistle 代理服务器上。
+
+![SwitchOmega 配置](./images/tools/switchyomega.png)
+
+本地运行系统 127.0.0.1:3002，运行 `w2 start -p 8888` 启动 whistle，并配置规则。
+
+![whistle 配置规则](./images/tools/whistle_config.png)
+
+```bash
+^example.cn/*/loan/*** 127.0.0.1:3002
+
+example.cn/js 127.0.0.1:3002
+example.cn/static 127.0.0.1:3002
+```
+
+和预想的流程不一样，这样子配置后，首先是原来 https://example.cn/MINIAPP/test/js/chunk.0baauew1.js 的请求路径会变成 https://example.cn/js/chunk.0baauew1.js，接着 https://example.cn/js/chunk.0baauew1.js 再转发到本地服务器处理。
+
 ## 启动本地服务方式
 
 ### http-server(good)
