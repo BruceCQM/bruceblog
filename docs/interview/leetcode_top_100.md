@@ -730,6 +730,41 @@ var productExceptSelf = function (nums) {
   }
   return res;
 }
+
+// 使用除法的做法
+var productExceptSelf = function(nums) {
+  var len = nums.length;
+  var product = 1;
+  var zeroCount = 0;
+  var zeroIndex = -1;
+  for (var k = 0;k < len;k++) {
+    if (nums[k] !== 0) {
+      // 计算所有非零元素的乘积
+      product *= nums[k];
+    } else {
+      zeroCount += 1;
+      zeroIndex = k;
+    }
+  }
+  
+  var res = new Array(len).fill(0);
+  // 有两个及以上0，结果就都是0
+  if (zeroCount >= 2) {
+    return res;
+  }
+
+  // 有1个0，除了0那一位，其它都是0
+  if (zeroCount === 1) {
+    res[zeroIndex] = product;
+    return res;
+  }
+
+  // 没有0，每个位置的值就是所有元素乘积除以自身
+  for (var i = 0;i < nums.length;i++) {
+    res[i] = product / nums[i];
+  }
+  return res;
+}
 ```
 
 ## 矩阵
