@@ -767,6 +767,98 @@ var productExceptSelf = function(nums) {
 }
 ```
 
+### 41. [缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/description/)
+
+标签：哈希表、数组
+
+题目：
+
+![41.缺失的第一个正数](./images/leetcode/question-41.png)
+
+思路：
+
+方法二：
+
+实际上，对于一个长度为 N 的数组，**其中没有出现的最小正整数只能在 `[1,N+1]` 中**。这是因为如果 `[1,N]` 都出现了，那么答案是 N+1，否则答案是 `[1,N]` 中没有出现的最小正整数。
+
+我们对数组进行遍历，对于遍历到的数 x，如果它在 [1,N] 的范围内，那么就将数组中的第 x−1 个位置（注意：数组下标从 0 开始）打上「标记」。在遍历结束之后，如果所有的位置都被打上了标记，那么答案是 N+1，否则答案是最小的没有打上标记的位置加 1。
+
+由于我们只在意 [1,N] 中的数，因此我们可以先对数组进行遍历，把不在 [1,N] 范围内的数修改成任意一个大于 N 的数（例如 N+1）。这样一来，数组中的所有数就都是正数了，因此我们就可以将「标记」表示为「负号」。算法的流程如下：
+
+- 将数组中所有小于等于 0 的数修改为 N+1；
+
+- 遍历数组中的每一个数 x，它可能已经被打了标记，因此原本对应的数为 ∣x∣，其中 ∣∣ 为绝对值符号。如果 ∣x∣∈[1,N]，那么我们给数组中的第 ∣x∣−1 个位置的数添加一个负号。注意如果它已经有负号，不需要重复添加；
+
+- 在遍历完成之后，如果数组中的每一个数都是负数，那么答案是 N+1，否则答案是第一个正数的位置加 1。
+
+方法三：置换
+
+把 1 这个数放到下标为 0 的位置， 2 这个数放到下标为 1 的位置，按照这种思路整理一遍数组。然后我们再遍历一次数组，第 1 个遇到的它的值不等于下标的那个数，就是我们要找的缺失的第一个正数。
+
+
+代码：
+
+```js
+// 方法一：哈希表，空间复杂度O(n)不满足要求
+var firstMissingPositive = function(nums) {
+  var map = new Map();
+  for (var n of nums) {
+    map.set(n, n);
+  }
+  var k = 1;
+  while (true) {
+    if (!map.has(k)) {
+      return k;
+    }
+    k += 1;
+  }
+}
+
+// 方法二：数组，空间复杂度O(1)
+var firstMissingPositive = function(nums) {
+  var len = nums.length;
+  // 将数组中所有小于等于 0 的数修改为 N+1
+  for (var i = 0;i < len;i++) {
+    if (nums[i] <= 0) {
+      nums[i] = len + 1;
+    }
+  }
+  for (var j = 0;j < len;j++) {
+    // 将 |num| - 1 位置的元素添加负号
+    var num = Math.abs(nums[j]);
+    if (num <= len) {
+      nums[num - 1] = -Math.abs(nums[num - 1]);
+    }
+  }
+  for (var k = 0;k < len;k++) {
+    if (nums[k] > 0) {
+      return k + 1;
+    }
+  }
+  return k + 1;
+}
+
+// 方法三：置换，空间复杂度O(1)
+var firstMissingPositive = function(nums) {
+  var len = nums.length;
+  for (var i = 0;i < len;i++) {
+    // 只需要处理正整数，把x放到下标为x-1的位置
+    while(nums[i] > 0 && nums[i] <= len && nums[nums[i] - 1] !== nums[i]) {
+      var temp = nums[i];
+      nums[i] = nums[nums[i] - 1];
+      nums[temp - 1] = temp;
+    }
+  }
+  for (var j = 0;j < len;j++) {
+    if (nums[j] !== j + 1) {
+      return j + 1;
+    }
+  }
+  return len + 1;
+}
+```
+
+
 ## 矩阵
 
 ## 链表
