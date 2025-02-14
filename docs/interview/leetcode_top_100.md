@@ -843,6 +843,7 @@ var firstMissingPositive = function(nums) {
   var len = nums.length;
   for (var i = 0;i < len;i++) {
     // 只需要处理正整数，把x放到下标为x-1的位置
+    // 注意这里不能用变量接收nums[i]，因为nums[i]的值会改变
     while(nums[i] > 0 && nums[i] <= len && nums[nums[i] - 1] !== nums[i]) {
       var temp = nums[i];
       nums[i] = nums[nums[i] - 1];

@@ -19,6 +19,8 @@ example.cn/static 127.0.0.1:3002
 
 和预想的流程不一样，这样子配置后，首先是原来 https://example.cn/MINIAPP/test/js/chunk.0baauew1.js 的请求路径会变成 https://example.cn/js/chunk.0baauew1.js，接着 https://example.cn/js/chunk.0baauew1.js 再转发到本地服务器处理。
 
+所以无法同时代理多个不同端口的本地运行系统，`example.cn/js/` 都变成相同的了，没有模块名之类的字段可以区分不同系统。
+
 ## 启动本地服务方式
 
 ### http-server(good)
