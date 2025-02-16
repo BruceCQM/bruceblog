@@ -456,3 +456,133 @@ Accelerating to 10
 cost: 1.187ms     
 tapPromise to Async hook demo
 ```
+
+## Tapable 如何与 webpack 关联起来的
+
+阅读 `node_modules\webpack\lib\webpack.js` 的如下代码。
+
+可以得到两个结论：
+
+- webpack 插件需要有一个 apply 方法，接受 compiler 参数。
+
+- 插件会对 compiler 的 Hooks 进行监听，当 Hooks 触发时，插件就会执行相应的操作。
+
+```js
+let compiler;
+if (Array.isArray(options)) {
+	compiler = new MultiCompiler(
+		Array.from(options).map(options => webpack(options))
+	);
+} else if (typeof options === "object") {
+	options = new WebpackOptionsDefaulter().process(options);
+
+	compiler = new Compiler(options.context);
+	compiler.options = options;
+	new NodeEnvironmentPlugin({
+		infrastructureLogging: options.infrastructureLogging
+	}).apply(compiler);
+	if (options.plugins && Array.isArray(options.plugins)) {
+		for (const plugin of options.plugins) {
+			if (typeof plugin === "function") {
+				plugin.call(compiler, compiler);
+			} else {
+				plugin.apply(compiler);
+			}
+		}
+	}
+	compiler.hooks.environment.call();
+	compiler.hooks.afterEnvironment.call();
+	// 注入webpack内部的插件
+	compiler.options = new WebpackOptionsApply().process(options, compiler);
+}
+```
+
+下面是模拟代码。
+
+模拟 Compiler。
+
+```js
+// Compiler.js
+const {
+  SyncHook,
+  AsyncSeriesHook,
+} = require('tapable');
+
+module.exports = class Compiler {
+  constructor() {
+    this.hooks = {
+      accelerate: new SyncHook(['newspeed']),
+      brake: new SyncHook(),
+      calculateRoutes: new AsyncSeriesHook(['source', 'target', 'routesList']),
+    };
+  }
+
+  run() {
+    this.accelerate(10);
+    this.break();
+    this.calculateRoutes('Async', 'hook', 'demo');
+  }
+
+  accelerate(speed) {
+    this.hooks.accelerate.call(speed);
+  }
+
+  break() {
+    this.hooks.brake.call();
+  }
+
+  calculateRoutes() {
+    this.hooks.calculateRoutes.promise(...arguments).then(() => {
+    }, (err) => {
+      console.error(err);
+    });
+  }
+};
+```
+
+插件 my-plugin.js。真实的 Compiler 会有一百多个 Hook，插件其实一般只需要监听一两个。
+
+```js
+// my-plugin.js
+const Compiler = require('./Compiler');
+
+class MyPlugin {
+  constructor() {}
+
+  apply(compiler) {
+    compiler.hooks.brake.tap('WarningLampPlugin', () => console.log('WarningLampPlugin'));
+    compiler.hooks.accelerate.tap('LoggerPlugin', newSpeed => console.log(`Accelerating to ${newSpeed}`));
+    compiler.hooks.calculateRoutes.tapPromise('calculateRoutes tapAsync', (source, target, routesList) => new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log(`tapPromise to ${source} ${target} ${routesList}`);
+        resolve();
+      }, 1000);
+    }));
+  }
+}
+```
+
+模拟插件执行。
+
+```js
+const myPlugin = new MyPlugin();
+ 
+const options = {
+	plugins: [myPlugin]
+}
+
+// 创建compiler对象
+const compiler = new Compiler();
+
+// 调用插件的apply方法，使其监听compiler的Hooks
+for (const plugin of options.plugins) {
+	if (typeof plugin === "function") {
+		plugin.call(compiler, compiler);
+	} else {
+		plugin.apply(compiler);
+	}
+}
+
+// 执行compiler的run方法，其中在关键时刻会触发对应的Hooks
+compiler.run();
+```
