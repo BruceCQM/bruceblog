@@ -859,8 +859,107 @@ var firstMissingPositive = function(nums) {
 }
 ```
 
-
 ## 矩阵
+
+### 73. [矩阵置零](https://leetcode.cn/problems/set-matrix-zeroes/description/)
+
+标签：标记数组
+
+题目：
+
+![73.矩阵置零](./images/leetcode/question-73.png)
+
+思路：
+
+方法一：使用标记数组，空间复杂度为 O(m+n)
+
+用两个标记数组分别记录每一行和每一列是否有0出现。
+
+首先遍历输入数组一次，如果某个元素为 0，那么就将该元素所在的行和列所对应标记数组的位置置为 true。最后我们再次遍历该数组，用标记数组更新原数组即可。
+
+方法二：使用两个标记变量，空间复杂度为 O(1)
+
+可以用矩阵的第一行和第一列代替方法一中的两个标记数组，以达到 O(1) 的额外空间。但这样会导致原数组的第一行和第一列被修改，无法记录它们是否原本包含 0。因此我们需要额外使用两个标记变量分别记录第一行和第一列是否原本包含 0。
+
+在实际代码中，首先预处理出两个标记变量，接着使用其他行与列去处理第一行与第一列，然后反过来使用第一行与第一列去更新其他行与列，最后使用两个标记变量更新第一行与第一列即可。
+
+代码：
+
+```js
+// 方法一：使用标记数组
+var setZeroes = function(matrix) {
+  // m 为行数，n 为列数
+  var m = matrix.length, n = matrix[0].length;
+  var row = new Array(m).fill(false);
+  var col = new Array(n).fill(false);
+
+  // 遍历矩阵，记录下0所在的行和列
+  for (var i = 0;i < m;i++) {
+    for (var j = 0;j < n;j++) {
+      if (matrix[i][j] === 0) {
+        row[i] = col[j] = true;
+      }
+    }
+  }
+
+  // 遍历矩阵，更新原矩阵，将0所在行和列的元素置为0
+  for (var i = 0;i < m;i++) {
+    for (var j = 0;j < n;j++) {
+      if (row[i] || col[j]) {
+        matrix[i][j] = 0;
+      }
+    }
+  }
+}
+
+// 方法二：使用两个标记变量
+var setZeroes = function(matrix) {
+  var m = matrix.length, n = matrix[0].length;
+  var rowFlag = false, colFlag = false;
+
+  // 记录第一行和第一列是否原本包含 0
+  for (var j = 0;j < n;j++) {
+    if (matrix[0][j] === 0) {
+      rowFlag = true;
+    }
+  }
+  for (var i = 0;i < m;i++) {
+    if (matrix[i][0] === 0) {
+      colFlag = true;
+    }
+  }
+
+  // 从第二行第二列开始遍历，将0所在的行和列记录到第一行和第一列
+  for (var i = 1;i < m;i++) {
+    for (var j = 1;j < n;j++) {
+      if (matrix[i][j] === 0) {
+        matrix[0][j] = matrix[i][0] = 0;
+      }
+    }
+  }
+
+  // 再从第二行第二列开始遍历，根据第一行第一列更新矩阵元素是否为0
+  for (var i = 1;i < m;i++) {
+    for (var j = 1;j < n;j++) {
+      if (matrix[0][j] === 0 || matrix[i][0] === 0) {
+        matrix[i][j] = 0;
+      }
+    }
+  }
+
+  // 根据标记变量更新第一行和第一列
+  if (rowFlag) {
+    for (var j = 0;j < n;j++) {
+      matrix[0][j] = 0;
+    }
+  }
+  if (colFlag) {
+    for (var i = 0;i < m;i++) {
+      matrix[i][0] = 0;
+    }
+  }
+}
+```
 
 ## 链表
 
