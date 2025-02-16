@@ -346,3 +346,113 @@ processOptions 会创建一个 outputOptions 变量，表示输出的配置，�
 ### webpack-cli执行的结果
 
 webpack-cli 对配置文件和命令行参数进行转换最终生成配置选项参数 options，最终会根据配置参数实例化 webpack 对象，然后执行构建流程。
+
+## Tapable插件架构和Hooks设计
+
+webpack 两个核心对象 Compiler 和 Compilation 都是继承 Tapable，所以要重点分析 Tapable。
+
+### Tapable 是什么
+
+Tapable 是一个类似于 Node.js 的 EventEmitter 的库, 主要是控制钩子函数的发布与订阅，控制着 webpack 的插件系统。
+
+其实和 Taro 的 Events 事件机制有些类似，可以理解为事件的监听和触发。
+
+webpack 在构建过程中会触发不同的 Hook，插件会监听 Hook，当 Hook 被触发时，就会执行相应的回调函数，从而在不同的阶段做不同的事情。
+
+Tapable 库暴露了很多 Hook（钩子）类，为插件提供挂载的钩子。每个钩子代表一个关键事件节点，类似于生命周期。
+
+![Tapable 钩子](./images/webpack_source_code/tapable_hooks.png)
+
+![Tapable 钩子类型](./images/webpack_source_code/tapable_type.png)
+
+### Tapable 的使用
+
+Tapable 提供了绑定同步、异步钩子的方法，以及同步和异步钩子的执行事件方法。
+
+绑定钩子，相当于监听事件，event 的 on 方法；执行钩子，相当于触发事件，event 的 emit 方法。
+
+|Async*|Sync*|
+|---|---|
+|绑定：tapAsync/tapPromise/tap|绑定：tap|
+|执行：callAsync/promise|执行：call|
+
+基本用法示例：
+
+```js
+const { SyncHook } = require('tapable');
+
+const hook1 = new SyncHook(["arg1", "arg2", "arg3"]);
+// 订阅hook，为hook绑定回调函数
+// 这个名称只是一个标识，hook1.call后两个回调都会执行
+hook1.tap('hook1', (arg1, arg2, arg3) => console.log(arg1, arg2, arg3));
+hook1.tap('hook2', (arg1, arg2, arg3) => console.log(arg1, arg2, arg3));
+// 执行hook绑定的回调
+hook1.call('arg1', 'arg2', 'arg3');
+```
+
+实际例子：
+
+```js
+const {
+  SyncHook,
+  AsyncSeriesHook,
+} = require('tapable');
+
+class Car {
+  constructor() {
+    this.hooks = {
+      accelerate: new SyncHook(['newspeed']),
+      brake: new SyncHook(),
+      calculateRoutes: new AsyncSeriesHook(['source', 'target', 'routesList']),
+    };
+  }
+}
+
+const myCar = new Car();
+
+// 绑定同步钩子
+myCar.hooks.brake.tap('WarningLampPlugin', () => console.log('WarningLampPlugin'));
+
+// 绑定同步钩子 并传参
+myCar.hooks.accelerate.tap('LoggerPlugin', newSpeed => console.log(`Accelerating to ${newSpeed}`));
+
+// 绑定一个异步Promise钩子
+myCar.hooks.calculateRoutes.tapPromise('calculateRoutes tapPromise',
+  (source, target, routesList, callback) => new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log(`tapPromise to ${source} ${target} ${routesList}`);
+      resolve();
+    }, 1000);
+  }));
+
+myCar.hooks.brake.call();
+myCar.hooks.accelerate.call(10);
+
+console.time('cost');
+
+// 执行异步钩子
+myCar.hooks.calculateRoutes.promise('Async', 'hook', 'demo').then(() => {
+  console.timeEnd('cost');
+}, (err) => {
+  console.error(err);
+  console.timeEnd('cost');
+});
+```
+
+在 Node.js 16.16.0 版本，tapable 1.1.3 版本中，上述代码的运行结果是：
+
+```
+WarningLampPlugin
+Accelerating to 10
+tapPromise to Async hook demo
+cost: 1.006s
+```
+
+如果把绑定异步钩子的方法改为 `myCar.hooks.calculateRoutes.tapPromise`，则运行结果变为如下，有顺序差别。
+
+```
+WarningLampPlugin
+Accelerating to 10
+cost: 1.187ms     
+tapPromise to Async hook demo
+```
