@@ -586,3 +586,116 @@ for (const plugin of options.plugins) {
 // 执行compiler的run方法，其中在关键时刻会触发对应的Hooks
 compiler.run();
 ```
+
+## webpack流程：准备阶段
+
+下面学习 webpack 的整个流程，从 webpack 启动，到文件生成，具体做了哪些事情。
+
+webpack 的关键流程节点如下：
+
+![webpack 主要流程](./images/webpack_source_code/webpack_process.png)
+
+Compilation 主要负责模块的编译、打包和优化过程。
+
+首先学习 webpack 流程第一阶段：准备阶段。
+
+```js
+let compiler;
+if (Array.isArray(options)) {
+	compiler = new MultiCompiler(
+		Array.from(options).map(options => webpack(options))
+	);
+} else if (typeof options === "object") {
+	// 对 webpack 的 options 配置进行默认值处理，设置默认的参数。
+	options = new WebpackOptionsDefaulter().process(options);
+
+	compiler = new Compiler(options.context);
+	compiler.options = options;
+	new NodeEnvironmentPlugin({
+		infrastructureLogging: options.infrastructureLogging
+	}).apply(compiler);
+	if (options.plugins && Array.isArray(options.plugins)) {
+		for (const plugin of options.plugins) {
+			if (typeof plugin === "function") {
+				plugin.call(compiler, compiler);
+			} else {
+				plugin.apply(compiler);
+			}
+		}
+	}
+	compiler.hooks.environment.call();
+	compiler.hooks.afterEnvironment.call();
+	compiler.options = new WebpackOptionsApply().process(options, compiler);
+}
+```
+
+接着是 `new NodeEnvironmentPlugin({ infrastructureLogging: options.infrastructureLogging }).apply(compiler);`，调用 NodeEnvironmentPlugin 插件。
+
+NodeEnvironmentPlugin 插件监听 beforeRun 钩子，这个钩子节点在 entry-option 和 run 之间，主要负责做一些清空缓存的工作。
+
+```js
+class NodeEnvironmentPlugin {
+	constructor(options) {
+		this.options = options || {};
+	}
+
+	apply(compiler) {
+		...
+		compiler.hooks.beforeRun.tap("NodeEnvironmentPlugin", compiler => {
+			if (compiler.inputFileSystem === inputFileSystem) inputFileSystem.purge();
+		});
+	}
+}
+module.exports = NodeEnvironmentPlugin;
+```
+
+初始化 option 的钩子 entryOption 其实是在 `node_modules\webpack\lib\WebpackOptionsApply.js` 文件里触发的。
+
+WebpackOptionsApply 的作用是将所有的配置 options 参数转换成 webpack 内部插件，同时也会使用默认的插件列表。
+
+- output.library -> LibraryTemplatePlugin
+
+- externals -> ExternalsPlugin
+
+- devtool -> EvalDevToolModulePlugin, SourceMapDevToolPlugin
+
+- AMDPlugin, CommonJSPlugin, RemoveEmptyChunksPlugin
+
+`node_modules\webpack\lib\EntryOptionPlugin.js` 的 EntryOptionPlugin 插件，会监听 entryOption 的钩子，负责将 entry 配置项进行转换。
+
+接下来阅读 Compiler 的 run 方法。
+
+```js
+run(callback) {
+	...
+	const onCompiled = (err, compilation) => {
+		if (err) return finalCallback(err);
+
+		// 触发 shouldEmit 钩子
+		if (this.hooks.shouldEmit.call(compilation) === false) {
+			...
+		}
+
+		// 执行 emitAssets 函数，传入 compilation，进行构建环节了
+		this.emitAssets(compilation, err => {
+			...
+		});
+	};
+
+	// 触发 run 钩子前先触发 beforeRun 钩子
+	this.hooks.beforeRun.callAsync(this, err => {
+		if (err) return finalCallback(err);
+
+		// 触发 run 钩子，执行 onCompiled 方法
+		this.hooks.run.callAsync(this, err => {
+			if (err) return finalCallback(err);
+
+			this.readRecords(err => {
+				if (err) return finalCallback(err);
+
+				this.compile(onCompiled);
+			});
+		});
+	});
+}
+```
