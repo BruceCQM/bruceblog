@@ -168,3 +168,54 @@ ERR_TOO_MANY_REDIRECTS` 的错误消息，这表明浏览器在尝试加载网�
 这个案例强调了仔细检查服务器配置的重要性，尤其是在涉及到安全性（HTTPS）或复杂的网站结构时。
 
 ![err_too_many_redirects](./images/problems/err_too_many_redirects.png)
+
+## iOS系统APP禁用手势返回
+
+只针对 iOS 系统，安卓暂不支持。
+
+```js
+function gestureBack(options) {
+  if (process.env.TARO_ENV === 'h5') {
+    if (isApp() && isIOS()) {
+      return new Promise((resolve, reject) => {
+        try {
+          window?.app?.Plugin.gesture(
+            `app://frame/allowGesture?allow=${options.allow}`,
+            (res) => {
+              resolve(res);
+            },
+            (error) => {
+              reject(error);
+            }
+          );
+        } catch (error) {
+          reject(ErrMsg.INVOKE_FAIL);
+        }
+      });
+    } else {
+      return Promise.reject(`当前环境不支持该API调用:APP手势返回`);
+    }
+  } else {
+    return Promise.reject(`当前环境不支持该API调用:APP手势返回`);
+  }
+}
+```
+
+## APP禁止截屏录屏
+
+```js
+if (isApp() && isIOS()) {
+  var callback = function (operation) {
+    Taro.showToast({ title: `发现${operation}操作，请注意个人信息安全`, icon: 'none' });
+  };
+  window.app.NotificationPlugin.registerNoticeEvent('screenshot', () => callback('截屏'));
+  window.app.NotificationPlugin.registerNoticeEvent('screenrecord', () => callback('录屏'));
+}
+
+if (isApp()) {
+  const version = await getVersion();
+  if (isAndroid() && versionCompare(version, '1.2.0') >= 0) {
+    window.app.Plugin.secure('app://frame/setWindowSecure?secureFlag=1');
+  }
+}
+```
