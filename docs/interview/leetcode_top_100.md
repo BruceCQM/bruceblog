@@ -961,6 +961,57 @@ var setZeroes = function(matrix) {
 }
 ```
 
+### 54. [螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/description/)
+
+标签：矩阵，四指针
+
+题目：
+
+给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。
+
+![54.螺旋矩阵](./images/leetcode/question-54.png)
+
+思路：
+
+- 从左到右，顶部一层遍历完往下移一位，top++；
+- 从上到下，遍历完右侧往左移一位，right--；
+- 从右到左，判断top <= bottom，即是否上下都走完了。遍历完底部上移，bottom--；
+- 从下到上，判断left <= right，遍历完左侧右移，left++；
+
+代码：
+
+```js
+var spiralOrder = function(matrix) {
+  if (!matrix.length || !matrix[0].length) return [];
+  var rows = matrix.length, cols = matrix[0].length;
+  var left = 0, right = cols - 1, top = 0, bottom = rows - 1;
+  var res = [];
+  while (left <= right && top <= bottom) {
+    for (var i = left;i <= right;i++) {
+      res.push(matrix[top][i]);
+    }
+    top += 1;
+    for (var i = top;i <= bottom;i++) {
+      res.push(matrix[i][right]);
+    }
+    right -= 1;
+    if (top <= bottom) {
+      for (var i = right;i >= left;i--) {
+        res.push(matrix[bottom][i]);
+      }
+    }
+    bottom -= 1;
+    if (left <= right) {
+      for (var i = bottom;i >= top;i--) {
+        res.push(matrix[i][left]);
+      }
+    }
+    left += 1;
+  }
+  return res;
+}
+```
+
 ## 链表
 
 ### 160. [相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists/description/)
