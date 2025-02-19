@@ -1012,6 +1012,70 @@ var spiralOrder = function(matrix) {
 }
 ```
 
+### 48. [旋转图像](https://leetcode.cn/problems/rotate-image/description/)
+
+标签：矩阵、四指针
+
+题目：
+
+给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+
+你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
+
+![48.旋转图像](./images/leetcode/question-48.png)
+
+思路：
+
+**方法一：辅助矩阵，时间复杂度为 O(n^2)，空间复杂度为 O(n^2)。**
+
+矩阵顺时针旋转 90º 后，可找到以下规律：
+
+- 「第i行」元素旋转到「第n−1−i列」元素；
+- 「第j列」元素旋转到「第j行」元素；
+
+对于矩阵任意第i行、第j列元素matrix[i][j]，矩阵旋转 90º 后「元素位置旋转公式」为：
+
+`matrix[i][j] -> matrix[n-1-j][i]`，原索引位置和旋转后的索引位置。
+
+因此，可以创建一个辅助矩阵，将旋转后的元素赋给辅助矩阵，最后将辅助矩阵赋给原矩阵。
+
+**方法二：原地修改，时间复杂度为 O(n^2)，空间复杂度为 O(1)。**
+
+方法一不满足题目要求的原地修改要求。
+
+类似 54-螺旋矩阵，利用四个指针螺旋遍历，交换元素。先交换最外层一圈，接着逐步交换内圈，依次类推。
+
+![思路](./images/leetcode/solution-48.png)
+
+代码：
+
+```js
+// 方法二：原地修改
+var rotate = function(matrix) {
+  var n = matrix.length;
+  var left = 0, right = n - 1, top = 0, bottom = n - 1;
+  while (left <= right && top <= bottom) {
+    // 每次处理一圈 ， i代表从角开始第几个元素，从0开始
+    for (var i = 0;i < right - left;i++) {
+      // 暂存左上角元素
+      var temp = matrix[top][left + i];
+      // 左下角元素赋给左上角
+      matrix[top][left + i] = matrix[bottom - i][left];
+      // 右上角元素赋给左下角
+      matrix[bottom - i][left] = matrix[bottom][right - i];
+      // 右上角元素赋给右上角
+      matrix[bottom][right - i] = matrix[top + i][right];
+      // 最后将暂存的左上角元素赋给右上角
+      matrix[top + i][right] = temp;
+    }
+    left += 1;
+    right -= 1;
+    top += 1;
+    bottom -= 1;
+  }
+}
+```
+
 ## 链表
 
 ### 160. [相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists/description/)
