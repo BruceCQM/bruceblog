@@ -80,6 +80,101 @@ SPA (Single Page Application) 是指在页面初始化的时候加载相应的 H
 
 ![前端首屏性能优化](./images/optimization/performance_optimization.png)
 
+## 项目做过的性能优化手段
+
+- 移除sourcemap打包：升级基础库，修复sourcemap被以base64格式打包到结果包中的问题。
+
+```js
+// config/prod.js
+module.exports = {
+  env: {
+    NODE_ENV: '"production"'
+  },
+  defineConstants: {
+  },
+  weapp: {},
+  h5: {
+    publicPath: './',
+    // 主要是这一行配置导致的 sourceMap 被打包到 bundle 中
+    enableSourceMap: true,
+    sourceMapType: 'hidden-source-map',
+    router: {
+      customRoutes: {
+        '/pages/index/index': '/index'
+      }
+    },
+  },
+};
+```
+
+- 添加预加载标签：针对 api.example.com 等域名添加 preconnect 预连接标签，提升页面性能。
+
+- 启用工程内png图片压缩：目前默认构建配置中，png压缩开关是关闭的，本次将开关开启，缩小图片体积。
+
+- 提前调用接口：原有todo接口在组件组件内部请求、info接口在隐私弹窗加载时请求；上述接口请求比较滞后，在页面已经开始渲染后才开始调用，影响页面的渲染速度, 提前到接口请求的第二梯队里请求。
+
+- 并发请求接口：原有data接口调用方法，会依赖优惠券接口返回的数据来展示运营弹窗的相关内容，导致接口请求过晚，影响页面加载；可以改为并发请求，将接口调用提前，依赖部分统一到接口调用完成时处理，加快页面加载速度。
+
+- 优化接口重复请求：user接口调用的方法增加类似节流的处理，首次发起该请求，如接口尚未返回数据时，拦截后续相同的请求发送，达到去除重复接口请求的目的。
+
+```js
+let pendingPromise = null;
+
+const getUserApi = async (data) => {
+  try {
+    const res = await getUserSDK({
+      ...data
+    });
+    return res;
+  } catch (err) {
+    return {};
+  }
+};
+
+const getUserApiOnce = async (isForce = false, data) => {
+  // 存在pendingPromise表示有正在进行的请求，返回当前promise即getUserApi()
+  if (pendingPromise && !isForce) {
+    return pendingPromise;
+  }
+  try {
+    pendingPromise = getUserApi(data);
+    const result = await pendingPromise;
+    store.setUserInfo(result);
+    return result;
+  } catch (error) {
+    // 接口报错时，清空promise
+    pendingPromise = null;
+  }
+}
+```
+
+```js
+// 方法二：使用事件监听
+export const getUserApiOnce = (params) => {
+  return new Promise(async (resolve) => {
+    const { userInfo } = store || {};
+    // 若userInfo为空对象，说明接口调用已发起，则等待接口返回
+    if (userInfo && Object.keys(userInfo).length === 0) {
+      Taro.eventCenter.on('queryUserInfo', (res) => {
+        resolve(res);
+      });
+    } else if (!userInfo) {
+      store.setUserInfo({});
+      const res = await getUserApi(params);
+      store.setUserInfo(res);
+      // 接口结果返回后，触发queryService事件
+      Taro.eventCenter.trigger('queryUserInfo', res);
+      resolve(res);
+    } else {
+      // 若 userInfo 有值，直接返回
+      resolve(userInfo);
+    }
+  });
+};
+```
+
+项目上线后，p90 降了 200ms 左右。主要提速点还是 sourcemap 移除掉。
+
 ## 接口优化
 
 ### 接口数量收敛
