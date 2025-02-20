@@ -1050,6 +1050,25 @@ var spiralOrder = function(matrix) {
 代码：
 
 ```js
+// 方法一：辅助矩阵
+var rotate = function(matrix) {
+  var n = matrix.length;
+  // 注意不能写成 clone = new Array(n).fill(new Array(n))
+  // 这样写实际上clone每一行都是同一个数组的引用！
+  var clone = new Array(n);
+  for (var i = 0;i < n;i++) {
+    clone[i] = new Array(n);
+    for (var j = 0;j < n;j++) {
+      clone[i][j] = matrix[i][j];
+    }
+  }
+  for (var i = 0;i < n;i++) {
+    for (var j = 0;j < n;j++) {
+      matrix[j][n - 1 - i] = clone[i][j];
+    }
+  }
+}
+
 // 方法二：原地修改
 var rotate = function(matrix) {
   var n = matrix.length;
