@@ -1035,7 +1035,7 @@ var spiralOrder = function(matrix) {
 
 对于矩阵任意第i行、第j列元素matrix[i][j]，矩阵旋转 90º 后「元素位置旋转公式」为：
 
-`matrix[i][j] -> matrix[n-1-j][i]`，原索引位置和旋转后的索引位置。
+`matrix[i][j] -> matrix[j][n - 1 - i]`，原索引位置和旋转后的索引位置。
 
 因此，可以创建一个辅助矩阵，将旋转后的元素赋给辅助矩阵，最后将辅助矩阵赋给原矩阵。
 
