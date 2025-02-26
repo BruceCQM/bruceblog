@@ -1,4 +1,4 @@
-# LeetCode Top 100
+# LC T 100
 
 ## 哈希
 
@@ -1092,6 +1092,77 @@ var rotate = function(matrix) {
     top += 1;
     bottom -= 1;
   }
+}
+```
+
+### 240. [搜索旋转排序数组 II](https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/description/)
+
+标签：二分查找、矩阵
+
+题目：
+
+编写一个高效的算法来搜索 `m x n` 矩阵 `matrix` 中的一个目标值 `target` 。该矩阵具有以下特性：
+
+- 每行的元素从左到右升序排列。
+- 每列的元素从上到下升序排列。
+
+![240.搜索旋转排序数组II](./images/leetcode/question-240.png)
+
+思路：
+
+方法一：暴力枚举，时间复杂度为 O(m * n)，会超时。
+
+方法二：二分查找，时间复杂度为 O(mlogn)。也会超时。
+
+方法三：贪心查找。时间复杂度为 O(m + n)。
+
+从矩阵右上角开始查找，如果元素等于目标值，则返回 true；如果元素大于目标值，则向左移动一列；如果元素小于目标值，则向下移动一行。充分利用矩阵的有序性。
+
+代码：
+
+```js
+// 方法二：二分查找
+var searchMatrix = function(matrix, target) {
+  for (var row of matrix) {
+    var searchRes = search(row, target);
+    if (searchRes >= 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+var search = function(nums, target) {
+  var left = 0, right = nums.length - 1;
+  while (left <= right) {
+    var mid = Math.floor((left + right) / 2);
+    if (nums[mid] === target) {
+      return mid;
+    }
+    if (nums[mid] < target) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+  return -1;
+}
+
+// 方法三：贪心查找
+var searchMatrix = function(matrix, target) {
+  var m = matrix.length, n = matrix[0].length;
+  var x = 0, y = n - 1;
+  while (x < m && y >= 0) {
+    if (matrix[x][y] === target) {
+      return true;
+    }
+    if (matrix[x][y] < target) {
+      x += 1;
+    } else {
+      y -= 1;
+    }
+  }
+  return false;
 }
 ```
 

@@ -44,7 +44,7 @@ export default [
     link: '/interview/cs_network'
   },
   {
-    text: 'LeetCode Top 100',
+    text: 'LC 100',
     link: '/interview/leetcode_top_100'
   },
   {
