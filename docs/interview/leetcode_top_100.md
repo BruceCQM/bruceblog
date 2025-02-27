@@ -1762,6 +1762,65 @@ var inorder = function (root, res) {
 }
 ```
 
+### 104.[二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/description/)
+
+标签：深度优先搜索、递归、广度优先搜索、队列
+
+题目：
+
+给定一个二叉树 root，返回其最大深度。
+
+二叉树的 最大深度 是指从根节点到最远叶子节点的最长路径上的节点数。
+
+![104.二叉树的最大深度](./images/leetcode/question-104.png)
+
+思路：
+
+方法一：深度优先搜索（递归）
+
+二叉数的最大深度，等于其左子树的最大深度和右子树的最大深度中的较大值，加 1。
+
+时间复杂度 O(n)，空间复杂度 O(n)，最差情况下（当树退化为链表时），递归深度可达到 n。
+
+方法二：广度优先搜索（队列）
+
+树的层序遍历 / 广度优先搜索往往利用 队列 实现。
+
+关键点： 每遍历一层，则计数器 +1 ，直到遍历完成，则可得到树的深度。
+
+用一个临时数组 temp 存储下一层的节点，遍历完当层之后，把 temp 赋值给 queue。
+
+时间复杂度 O(n)，空间复杂度 O(n)， 最差情况下（当树平衡时），队列 queue 同时存储 N/2 个节点。
+
+代码：
+
+```js
+// 方法一：深度优先搜索
+var maxDepth = function (root) {
+  if (!root) return 0;
+  return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+}
+
+// 方法二：广度优先搜索
+var maxDepth = function (root) {
+  if (!root) return 0;
+  var res = 0;
+  var queue = [root];
+  while (queue.length) {
+    var temp = [];
+    // 遍历当前层的节点
+    for (var node of queue) {
+      // 将当前节点的左右子节点加入临时数组
+      if (node.left) temp.push(node.left);
+      if (node.right) temp.push(node.right);
+    }
+    res += 1;
+    queue = temp;
+  }
+  return res;
+}
+```
+
 ## 图论
 
 ## 回溯
