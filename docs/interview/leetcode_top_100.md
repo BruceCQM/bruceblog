@@ -1821,6 +1821,54 @@ var maxDepth = function (root) {
 }
 ```
 
+### 226.[翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/description/)
+
+标签：递归、深度优先搜索、广度优先搜索、队列
+
+题目：
+
+给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。
+
+![226.翻转二叉树](./images/leetcode/question-226.png)
+
+思路：
+
+方法一：深度优先搜索（递归）
+
+翻转二叉数，相当于先翻转左右子树，再交换左右子节点。时间复杂度 O(n)，空间复杂度 O(n)，最差情况下（当二叉树退化为链表），递归时系统需使用 O(N) 大小的栈空间。
+
+方法二：广度优先搜索（队列）
+
+利用队列，遍历所有节点，并交换每个节点的左右子节点。
+
+代码：
+
+```js
+// 方法一：深度优先搜索（递归）
+var invertTree = function (root) {
+  if (!root) return null;
+  var left = invertTree(root.left);
+  var right = invertTree(root.right);
+  root.left = right;
+  root.right = left;
+  return root;
+}
+
+// 方法二：广度优先搜索（队列）
+var invertTree = function (root) {
+  if (!root) return null;
+  var deque = [root];
+  while (deque.length) {
+    var node = deque.pop();
+    if (node.left) deque.push(node.left);
+    if (node.right) deque.push(node.right);
+    // 交换左右子节点
+    [node.left, node.right] = [node.right, node.left];
+  }
+  return root;
+}
+```
+
 ## 图论
 
 ## 回溯
