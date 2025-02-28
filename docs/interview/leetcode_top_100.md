@@ -1869,6 +1869,68 @@ var invertTree = function (root) {
 }
 ```
 
+### 101.[对称二叉树](https://leetcode.cn/problems/symmetric-tree/description/)
+
+标签：递归、深度优先搜索、广度优先搜索、队列
+
+题目：
+
+给你一个二叉树的根节点 root ， 检查它是否轴对称。
+
+![101.对称二叉树](./images/leetcode/question-101.png)
+
+思路：
+
+方法一：深度优先搜索（递归）
+
+如果一个树的左子树与右子树镜像对称，那么这个树是对称的。因此问题转化为：如何判断左子树和右子树是对称的？应该满足以下条件：
+
+- 它们的两个根结点具有相同的值。
+
+- 每个树的右子树都与另一个树的左子树镜像对称。
+
+方法二：广度优先搜索（队列）
+
+初始化时我们把根节点入队两次。
+
+每次提取两个结点并比较它们的值（队列中每两个连续的结点应该是相等的，而且它们的子树互为镜像），然后将两个结点的左右子结点按相反的顺序插入队列中。
+
+当队列为空时，或者我们检测到树不对称（即从队列中取出两个不相等的连续结点）时，该算法结束。
+
+代码：
+
+```js
+// 方法一：递归
+var isSymmetric = function(root) {
+  return !root || check(root.left, root.right);
+}
+
+var check = function(p, q) {
+  // 左右子节点都是空的，是对称
+  if (!p && !q) return true;
+  // 只有一边空的，或者值不相同，不是对称
+  if (!p || !q || p.val !== q.val) return false;
+  return check(p.left, q.right) && check(p.right, q.left);
+}
+
+// 方法二：队列
+var isSymmetric = function(root) {
+  return check(root, root);
+}
+var check = function(p, q) {
+  var queue = [p, q];
+  while (queue.length) {
+    var n1 = queue.shift();
+    var n2 = queue.shift();
+    if (!n1 && !n2) continue;
+    if (!n1 || !n2 || n1.val !== n2.val) return false;
+    queue.push(n1.left, n2.right);
+    queue.push(n1.right, n2.left);
+  }
+  return true;
+}
+```
+
 ## 图论
 
 ## 回溯
