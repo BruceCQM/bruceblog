@@ -1746,6 +1746,7 @@ var mergeKLists = function (lists) {
 代码：
 
 ```js
+// 方法一：递归
 var inorderTraversal = function (root) {
   var res = []
   inorder(root, res)
@@ -1759,6 +1760,22 @@ var inorder = function (root, res) {
   inorder(root.left, res)
   res.push(root.val)
   inorder(root.right, res)
+}
+
+// 方法二：迭代
+var inorderTraversal = function (root) {
+  var res = [];
+  var stack = [];
+  while(root || stack.length) {
+    while(root) {
+      stack.push(root);
+      root = root.left;
+    }
+    root = stack.pop();
+    res.push(root.val);
+    root = root.right;
+  }
+  return res;
 }
 ```
 
@@ -1799,6 +1816,13 @@ var inorder = function (root, res) {
 var maxDepth = function (root) {
   if (!root) return 0;
   return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+}
+
+var maxDepth = function (root) {
+  if (!root) return 0;
+  var left = maxDepth(root.left);
+  var right = maxDepth(root.right);
+  return Math.max(left, right) + 1;
 }
 
 // 方法二：广度优先搜索
@@ -1928,6 +1952,47 @@ var check = function(p, q) {
     queue.push(n1.right, n2.left);
   }
   return true;
+}
+```
+
+### 543.[二叉树的直径](https://leetcode.cn/problems/diameter-of-binary-tree/description/)
+
+标签：递归
+
+题目：
+
+给你一棵二叉树的根节点，返回该树的 直径 。
+
+二叉树的 直径 是指树中任意两个节点之间最长路径的 长度 。这条路径可能经过也可能不经过根节点 root 。
+
+两节点之间路径的 长度 由它们之间边数表示。
+
+树中节点数目在范围 [1, 10的四次方] 内
+
+![543.二叉树的直径](./images/leetcode/question-543.png)
+
+思路：
+
+路径的长度，等于经过的节点数减一。因此，求直径，就是求所有路径经过的最大节点数减一。
+
+任意一条路径均可以被看作由某个节点为起点，从其左儿子和右儿子向下遍历的路径拼接得到。也就是左子树和右子树的深度加一。
+
+代码：
+
+```js
+var diameterOfBinaryTree = function (root) {
+  var count = 1;
+  // 求当前节点为根节点的树，的最大深度
+  var depth = function(node) {
+    if (!node) return 0;
+    var left = depth(node.left);
+    var right = depth(node.right);
+    // 左子树和右子树的深度加一
+    count = Math.max(count, left + right + 1);
+    return Math.max(left, right) + 1;
+  }
+  depth(root);
+  return count - 1;
 }
 ```
 
