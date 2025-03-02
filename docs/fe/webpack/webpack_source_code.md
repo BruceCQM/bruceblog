@@ -699,3 +699,59 @@ run(callback) {
 	});
 }
 ```
+
+## webpack 流程：模块构建和chunk生成阶段
+
+Compiler Hooks：
+
+流程相关：(before-)run、(before-/after-)compile、make、(after-)emit、done。
+
+监听相关：watch-run、watch-close。
+
+Compiler 调用 Compilation 生命周期方法：
+
+- addEntry -> addModuleChain
+
+- finish（上报错误模块）
+
+- seal
+
+Compiler 会创建两个工厂对象，这两个都继承于 ModuleFactory。
+
+平时写的 `module.exports = function () {}`，就是 NormalModuleFactory，普通模块，可以直接 `import 模块名` 导入的。
+
+![ModuleFactory](./images/webpack_source_code/module_factory.png)
+
+webpack 支持解析的模块类型：
+
+![Module](./images/webpack_source_code/module_in_webpack.png)
+
+Compilation 相关 Hooks：
+
+模块相关：build-module、failed-module、succeed-module。
+
+资源生成相关：module-asset、chunk-asset。
+
+优化相关：(after-)seal、optimize、optimize-modules(-basic/advanced)、after-optimize-modules、optimize-chunk-modules。
+
+chunk 生成算法：
+
+- webpack 将 entry 中对应的 module 都生成一个新的 chunk。
+
+- 遍历 module 的依赖列表，将依赖的 module 也加入到 chunk 中。
+
+- 如果一个依赖 module 是动态引入的模块（比如 require、动态import），那么就会根据这个 module 创建一个新的 chunk，继续遍历依赖。
+
+- 重复上面过程，直到得到所有的 chunks。
+
+## webpack 流程：文件生成
+
+seal 阶段主要进行一系列优化工作，创建hash，以及将生成的资源挂载到 Compilation 的 assets 对象上，用于 emit 阶段输出到磁盘。
+
+![seal 阶段](./images/webpack_source_code/seal.png)
+
+![createAssets](./images/webpack_source_code/create_assets.png)
+
+emit 输出阶段就是读取 Compilation 的 assets 对象，将资源输出到磁盘。
+
+![emit hook](./images/webpack_source_code/emit_hook.png)
