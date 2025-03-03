@@ -755,3 +755,56 @@ seal 阶段主要进行一系列优化工作，创建hash，以及将生成的�
 emit 输出阶段就是读取 Compilation 的 assets 对象，将资源输出到磁盘。
 
 ![emit hook](./images/webpack_source_code/emit_hook.png)
+
+## 编写一个简易的webpack
+
+### 前置知识
+
+模块化：增强代码可读性和可维护性。
+
+- 传统的网页开发转变成 Web Apps 开发，代码复杂度在逐步增高。
+
+- 分离的 JS文件/模块，便于后续代码的维护性。
+
+- 部署时希望把代码优化成几个 HTTP 请求。
+
+常见的模块化方式：ES module、CJS、AMD。
+
+```js
+import * as largeNumber from 'large-number';
+
+const largeNumbers = require('large-number');
+
+require(['large-number'], function (large-number) {
+	// ...
+	largeNumber.add('999', '1');
+})
+```
+
+AST 基础知识：抽象语法树（abstract syntax tree 或者缩写为 AST），或者语法树（syntax tree），是源代码的抽象语法结构的树状表现形式，这里特指编程语言的源代码。树上的每个节点都表示源代码中的一种结构。
+
+AST 应用场景：
+
+- 模板引擎：常见模板引擎实现方式有，正则匹配；将模板引擎转换为字符串的流，字符串的流转换为 AST 进行分析，分析完成后，再转换为字符串。
+
+- ES6转为ES5，TS转为JS。
+
+![ast](./images/webpack_source_code/ast.png)
+
+AST 在线转换网站：https://esprima.org/demo/parse.html。
+
+### 实现简易webpack
+
+目标：
+
+1、可以将ES6语法转换成ES5语法。
+
+- 通过 babylon 生成 AST。
+
+- 通过 babel-core 将 AST 重新生成源码。
+
+2、可以分析模块之间的依赖关系。
+
+- 通过 babel-traverse 的 ImportDeclaration 方法获取依赖属性。
+
+3、生成的js文件可以在浏览器中运行。
