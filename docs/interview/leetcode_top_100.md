@@ -1996,6 +1996,42 @@ var diameterOfBinaryTree = function (root) {
 }
 ```
 
+## 102.[二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/description/)
+
+标签：广度优先搜索、队列
+
+题目：
+
+给你二叉树的根节点 root，返回其节点值的层序遍历。（即逐层地，从左到右访问所有节点）。
+
+![102.二叉树的层序遍历](./images/leetcode/question-102.png)
+
+注意：这题要求的返回值类型是 `number[][]`，即每一层的节点值要用一个数组存起来。
+
+代码：
+
+```js
+var levelOrder = function (root) {
+  if (!root) return [];
+  var res = [];
+  var queue = [root];
+  while (queue.length) {
+    // 存储下一层节点
+    var nextLevel = [];
+    // 存储这一层节点
+    var curLevel = [];
+    for (var node of queue) {
+      curLevel.push(node.val);
+      if (node.left) nextLevel.push(node.left);
+      if (node.right) nextLevel.push(node.right);
+    }
+    res.push(curLevel);
+    queue = nextLevel;
+  }
+  return res;
+}
+```
+
 ## 图论
 
 ## 回溯
