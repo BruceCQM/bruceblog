@@ -808,3 +808,262 @@ AST 在线转换网站：https://esprima.org/demo/parse.html。
 - 通过 babel-traverse 的 ImportDeclaration 方法获取依赖属性。
 
 3、生成的js文件可以在浏览器中运行。
+
+
+目录结构：
+
+```shell
+.
+├── dist
+│   ├── index.html # 测试HTML
+│   └── main.js # 打包生成的文件
+├── lib
+│   ├── compiler.js # Compiler对象
+│   ├── index.js # simplepack运行入口
+│   └── parser.js # 定义解析函数
+├── src
+│   ├── greeting.js
+│   └── index.js # 打包入口
+├── .babelrc # babel配置文件
+├── simplepack.config.js # simplepack 配置
+└── package.json
+```
+
+`simplepack.config.js` 配置文件内容：
+
+```js
+const path = require('path');
+
+module.exports = {
+  entry: path.join(__dirname, 'src/index.js'),
+  output: {
+    filename: 'main.js',
+    path: path.join(__dirname, 'dist'),
+  },
+};
+```
+
+`src/index.js` 文件内容：
+
+```js
+import { greeting } from './greeting.js';
+ 
+document.write(greeting('bruce'));
+```
+
+`src/greeting.js` 文件内容：
+
+```js
+// eslint-disable-next-line import/prefer-default-export
+export function greeting(name) {
+  return `hello ${name}`;
+}
+```
+
+`lib/parser.js` 文件导出几个函数，负责如下几个事情：将源码转换为AST，分析依赖，将AST转为源码。
+
+将源码转换为 AST 需要使用 babylon。
+
+分析模块依赖需要使用 babel-traverse。
+
+将 AST 转为源码的时候，还需要将 ES6 转为 ES5，需要借助 babel-core，还需要安装 babel-preset-env。
+
+同时，要转换 ES6 的代码，还需要创建一个 `.babelrc` 文件，安装 @babel/preset-env。
+
+相关依赖如下：
+
+```json
+"dependencies": {
+	"@babel/preset-env": "^7.26.9",
+	"babel-core": "^6.26.3",
+	"babel-preset-env": "^1.7.0",
+	"babel-traverse": "^6.26.0",
+	"babylon": "^6.18.0"
+}
+```
+
+```json
+// .babelrc
+{
+  "presets": [
+    "@babel/preset-env"
+  ]
+}
+```
+
+```js
+/**
+ * parser.js 主要功能
+ * 将es6转为es5，将代码转为ast
+ * 分析依赖
+ */
+
+const fs = require('fs');
+const babylon = require('babylon');
+const traverse = require('babel-traverse').default;
+const { transformFromAst } = require('babel-core');
+
+module.exports = {
+  // 接收一个路径，将内容转换为AST
+  getAST: (path) => {
+    const source = fs.readFileSync(path, 'utf-8');
+    
+    return babylon.parse(source, {
+      sourceType: 'module',
+    })
+  },
+
+  getDependencies: (ast) => {
+    const dependencies = [];
+
+    traverse(ast, {
+      // 怎么处理Import语句
+      ImportDeclaration: ({ node }) => {
+        // 获取节点的依赖
+        dependencies.push(node.source.value);
+      }
+    })
+
+    return dependencies;
+  },
+
+  // 将AST转为源码
+  transform: (ast) => {
+    const { code } = transformFromAst(ast, null, {
+      // ES6的代码都能解析
+      presets: ['env'],
+    });
+
+    return code;
+  }
+}
+```
+
+`getAST`、`getDependencies`、`transform` 三个函数的执行结果示例：
+
+![将源码转为AST](./images/webpack_source_code/ast_res_example.png)
+
+![getDependencies](./images/webpack_source_code/dependencies_res.png)
+
+![transform](./images/webpack_source_code/transform_ast_code.png)
+
+
+`lib/index.js` 文件是 simplepack 的执行入口，主要内容是调用 Compiler 的 run 方法。
+
+```js
+const Compiler = require('./compiler');
+const options = require('../simplepack.config');
+
+new Compiler(options).run();
+```
+
+`lib/compiler.js` 文件是 Compiler 的执行入口，主要功能是调用 parser 的相关方法，从入口文件开始，将源码转换为 AST，分析依赖，将 AST 转为源码，最后生成打包后的内容。
+
+```js
+/**
+ * Compiler 主要负责模块构建和文件输出
+ */
+
+const { getAST, getDependencies, transform } = require('./parser');
+const path = require('path');
+const fs = require('fs');
+
+module.exports = class Compiler {
+  constructor(options) {
+    const { entry, output } = options;
+    this.entry = entry;
+    this.output = output;
+    this.modules = [];
+  }
+
+  run() {
+    const entryModule = this.buildModule(this.entry, true);
+    this.modules.push(entryModule);
+    // 遍历所有依赖，递归构建所有依赖的依赖，就能得到所有模块
+    this.modules.forEach((_module) => {
+      _module.dependencies.forEach((dependency) => {
+        this.modules.push(this.buildModule(dependency));
+      });
+    })
+    // console.log(this.modules);
+
+    this.emitFiles();
+  }
+
+  buildModule(filename, isEntry) {
+    let ast;
+    if (isEntry) {
+      // 如果是入口文件，直接转换为AST
+      // 入口模块要求是绝对路径，所以直接传入即可
+      ast = getAST(filename);
+    } else {
+      // 如果不是入口文件，就是模块依赖
+      // 先将相对路径转换为绝对路径，process.cwd()表示当前项目根目录
+      const absolutePath = path.join(process.cwd(), './src', filename);
+      ast = getAST(absolutePath);
+    }
+    return {
+      filename,
+      dependencies: getDependencies(ast),
+      source: transform(ast),
+    };
+  }
+
+  emitFiles() {
+    const outputPath = path.join(this.output.path, this.output.filename);
+
+    let modules = '';
+    this.modules.forEach((_module) => {
+			// 注意，这里是 +=，把内容连接成对象字符串，不是覆盖，最后要加一个逗号，隔开键值对
+      modules += `'${_module.filename}': function (require, module, exports) { ${_module.source} },`;
+    })
+
+	// webpack 打包出来的内容是一个IIFE
+	// 首先执行入口文件内容，遇到import的依赖，执行依赖文件内容，直到所有依赖都执行完，再执行入口文件内容
+    const bundle = `(function(modules) {
+      function require(filename) {
+        var fn = modules[filename];
+        var module = { exports: {}};
+        fn(require, module, module.exports);
+        return module.exports;
+      }
+        require('${this.entry}');
+    })({${modules}})`;
+
+    fs.writeFileSync(outputPath, bundle, 'utf-8');
+  }
+};
+```
+
+最终打包出来的内容如下所示，可以比较清晰地看出运行链路。
+
+```js
+(function(modules) {
+  function require(filename) {
+    var fn = modules[filename];
+    var module = { exports: {} };
+    fn(require, module, module.exports);
+    return module.exports;
+  }
+  require('W:\webpack-code\simplepack\src\index.js');
+})({
+  'W:\webpack-code\simplepack\src\index.js': function(require, module, exports) {
+    "use strict";
+
+    var _greeting = require("./greeting.js");
+
+    document.write((0, _greeting.greeting)('bruce'));
+  }, './greeting.js': function(require, module, exports) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.greeting = greeting;
+    // eslint-disable-next-line import/prefer-default-export
+    function greeting(name) {
+      return "hello " + name;
+    }
+  },
+})
+```
