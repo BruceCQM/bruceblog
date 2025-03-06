@@ -1067,3 +1067,26 @@ module.exports = class Compiler {
   },
 })
 ```
+
+:::warning 评论留言
+1. babel7 环境下，需要用 @babel/parser 替换 babylon，用 transformFromAstSync 替换 transformFromAst
+
+2. 这里的实现只是最简单的情况，如果 `greeting.js` 文件再依赖其他文件，需要进行递归处理。
+
+3. 我装的是 `@babel/core "@babel/preset-env": "^7.10.2"`,
+
+transform 里面是
+
+```js
+transform(ast) {
+  const { code } = transformFromAst(ast, null, {
+		presets: ['@babel/env']
+	});
+	return code;
+}
+```
+
+老师之所以装了 babel-preset-env 是 babel-core 因为版本不兼容了。
+
+我全用的 7.0 也就不需要装 babel-preset-env 了 
+:::
