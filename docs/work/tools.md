@@ -1,5 +1,31 @@
 # 日常开发工具
 
+## 科学上网
+
+ikuuu 本身无需科学上网即可进入，里面有 clash 的下载链接。
+
+[ikuuu](https://ikuuu.one/user){link=static}
+
+下载 clash 后，点击 ikuuu 的【一键导入托管配置到Clash】，导入配置。
+
+![ikuuu Clash 教程](./images/tools/ikuuu_clash_rules.png)
+
+Clash 不需要【设置为系统代理】。Clash 默认的端口号是 7890，Chrome 的 SwitchyOmega 插件配置转发规则。
+
+![clash 端口号](./images/tools/clash_port.png)
+
+![switchyomega 上网规则](./images/tools/switchyomega_rules.png)
+
+这样子配置完成后，打开 switchyomega 选择对应的科学上网情景模式配置即可科学上网。
+
+如果网络不通，可以查看是不是代理节点不可用，切换成延时比较低的即可。
+
+![clash 切换代理节点](./images/tools/clash_speed.png)
+
+高级用法，可以使用 SwitchyOmega 的 auto switch 模式，配置需要科学上网的域名，自动使用科学上网配置，其它的域名使用系统代理。
+
+![auto switch配置](./images/tools/auto_switch.png)
+
 ## 启动本地服务方式
 
 ### http-server(good)
