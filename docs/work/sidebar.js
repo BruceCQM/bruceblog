@@ -7,6 +7,7 @@ export default [
       { text: 'Error 虐我千百遍', link: '/work/errors' },
       { text: '富文本编辑器', link: '/work/editor' },
       { text: 'Mobx 那些事儿', link: '/work/mobx' },
+      { text: 'whistle', link: '/work/whistle' },
       { text: '日常开发工具', link: '/work/tools' },
       { text: '碎碎记', link: '/work/problems' },
     ]
