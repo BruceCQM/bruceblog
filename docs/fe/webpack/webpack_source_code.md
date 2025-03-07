@@ -868,26 +868,14 @@ export function greeting(name) {
 
 将 AST 转为源码的时候，还需要将 ES6 转为 ES5，需要借助 babel-core，还需要安装 babel-preset-env。
 
-同时，要转换 ES6 的代码，还需要创建一个 `.babelrc` 文件，安装 @babel/preset-env。
-
 相关依赖如下：
 
 ```json
 "dependencies": {
-	"@babel/preset-env": "^7.26.9",
 	"babel-core": "^6.26.3",
 	"babel-preset-env": "^1.7.0",
 	"babel-traverse": "^6.26.0",
 	"babylon": "^6.18.0"
-}
-```
-
-```json
-// .babelrc
-{
-  "presets": [
-    "@babel/preset-env"
-  ]
 }
 ```
 

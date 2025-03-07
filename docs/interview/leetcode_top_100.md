@@ -1996,7 +1996,7 @@ var diameterOfBinaryTree = function (root) {
 }
 ```
 
-## 102.[二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/description/)
+### 102.[二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/description/)
 
 标签：广度优先搜索、队列
 
