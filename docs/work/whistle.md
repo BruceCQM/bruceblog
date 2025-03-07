@@ -4,6 +4,8 @@
 
 [Whistle 开发调试最佳实践](https://juejin.cn/post/7077385311642189832){link=static}
 
+[鹅厂都在用的whistle](https://github.com/kaiye/kaiye.github.com/issues/27){link=static}
+
 ## whistle代理到本地服务
 
 SwitchOmega 配置，将浏览器的请求都转发到 whistle 代理服务器上。
