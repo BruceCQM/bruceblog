@@ -70,6 +70,7 @@ export default [
       { text: 'webpack 实战', link: '/fe/webpack/webpack_actual_use'},
       { text: 'webpack 优化策略', link: '/fe/webpack/webpack_fast'},
       { text: 'webpack 源码阅读', link: '/fe/webpack/webpack_source_code'},
+      { text: 'loader 和插件', link: '/fe/webpack/webpack_loader_plugin'},
     ]
   },
   {
