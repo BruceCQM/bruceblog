@@ -75,9 +75,26 @@ var groupAnagrams = function (strs) {
 
 ![128.最长连续序列](./images/leetcode/question-128.png)
 
+思路：
+
+方法一：排序遍历。排序时间复杂度是O(nlogn)，不符合题目要求。
+
+方法二：哈希表
+
+核心思路：对于 nums 中的元素 x，以 x 为起点，不断查找下一个数 `x+1,x+2,⋯` 是否在 nums 中，并统计序列的长度。
+
+为了做到 O(n) 的时间复杂度，需要两个关键优化：
+
+把 nums 中的数都放入一个哈希集合（Set去重）中，这样可以 O(1) 判断数字是否在 nums 中。
+
+如果 x−1 在哈希集合中，则不以 x 为起点。为什么？因为以 x−1 为起点计算出的序列长度，一定比以 x 为起点计算出的序列长度要长！这样可以避免大量重复计算。比如 `nums=[3,2,4,5]`，从 3 开始，我们可以找到 3,4,5 这个连续序列；而从 2 开始，我们可以找到 2,3,4,5 这个连续序列，一定比从 3 开始的序列更长。
+
+⚠注意：遍历元素的时候，要遍历哈希集合，而不是 nums！Set 是去重后的数字。如果 `nums=[1,1,1,…,1,2,3,4,5,…]`（前一半都是 1），遍历 nums 的做法会导致每个 1 都跑一个 O(n) 的循环，总的循环次数是 O(n²)，会超时。
+
 代码：
 
 ```js
+// 方法一：排序遍历
 var longestConsecutive = function (nums) {
   if (nums.length === 0) {
     return 0
@@ -105,6 +122,26 @@ var longestConsecutive = function (nums) {
   }
   return max
 }
+
+// 方法二：哈希表
+var longestConsecutive = function(nums) {
+  var res = 0;
+  var set = new Set(nums); // 把 nums 转成哈希集合
+  for (var x of set) { // 遍历哈希集合
+    if (set.has(x - 1)) {
+      continue;
+    }
+    // x 是序列的起点
+    var y = x + 1;
+    while (set.has(y)) { // 不断查找下一个数是否在哈希集合中
+      y++;
+    }
+    // 循环结束后，y-1 是最后一个在哈希集合中的数
+    // 从 x 到 y-1 一共 y-x 个数
+    res = Math.max(res, y - x); 
+  }
+  return res;
+};
 ```
 
 ## 双指针
