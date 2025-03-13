@@ -92,3 +92,188 @@ runLoaders({
 运行查看结果：`node run-loader.js`。
 
 ![loader-runner运行结果](./images/webpack_loader_plugin/loader-runner.png)
+
+## 更复杂的 loader 开发场景
+
+### loader 获取参数
+
+通过 loader-utils 的 getOptions 方法获取 loader 的参数。
+
+安装 loader-utils 依赖。
+
+```bash
+npm install loader-utils@1.2.3
+```
+
+配置里面给 loader 传递参数。
+
+```js
+const { runLoaders } = require('loader-runner');
+const fs = require('fs');
+const path = require('path');
+
+runLoaders({
+  resource: path.join(__dirname, './src/demo.txt'),
+  loaders: [
+    {
+      loader: path.join(__dirname, './src/raw-loader.js'),
+      // loader 的参数
+      options: {
+        name: 'testName',
+      },
+    },
+  ],
+  context: {
+    minimize: true,
+  },
+  readResource: fs.readFile.bind(fs),
+}, (err, result) => {
+  err ? console.log(err) : console.log(result);
+});
+```
+
+编写 loader 的时候调用 getOptions 方法获取参数。
+
+```js
+const loaderUtils = require('loader-utils');
+
+module.exports = function(source) {
+  const options = loaderUtils.getOptions(this);
+  console.log(options.name);
+}
+```
+
+### loader 异常处理
+
+方式一：loader 内部直接抛出一个错误。
+
+方式二：调用 `this.callback()` 方法传递错误，方法第一个参数传递错误，第二个参数传递返回结果。
+
+```bash
+this.callback(err: Error | null, content: string | Buffer, sourceMap?: SourceMap, meta?: any)
+```
+
+```js
+module.exports = function(source) {
+  const json = JSON.stringify(source)
+    .replace(/\u2028/g, '\\u2028') // 为了安全起见，ES6模板字符串的问题
+    .replace(/\u2029/g, '\\u2029');
+
+  // 方式一：直接抛出Error
+  // throw new Error('test error');
+
+  // 方式二：调用this.callback传递错误
+  this.callback(new Error('test error'), json);
+}
+```
+
+### loader 返回结果
+
+loader 返回结果有两种方式：同步处理、异步处理。
+
+同步处理，调用 `this.callback()` 方法。异步处理，调用 `this.async()` 方法返回的 callback 函数。
+
+先看同步处理，之前在 raw-loader 中，是直接返回 json 字符串。
+
+```js
+module.exports = function(source) {
+  const json = JSON.stringify(source)
+    .replace(/\u2028/g, '\\u2028') // 为了安全起见，ES6模板字符串的问题
+    .replace(/\u2029/g, '\\u2029');
+  
+  return `export default ${json}`;
+}
+```
+
+这其实也是一种同步处理的方式，不过不太标准，标准的是使用 `this.callback()` 方法。没有错误处理，第一个参数传递 null，第二个参数把返回结果传递进去。
+
+而且，使用 `this.callback()` 方法，可以返回多个结果。
+
+```js
+module.exports = function(source) {
+  const json = JSON.stringify(source)
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+  
+  this.callback(null, `export default ${json}`);
+  // this.callback返回多个结果
+  this.callback(null, `export default ${json}`, 1, 2, 'many results');
+}
+```
+
+![同步处理返回多个结果](./images/webpack_loader_plugin/this_callback_multi_res.png)
+
+接下来看异步处理，异步处理，需要调用 `this.async()` 方法，返回一个 callback 函数。传参和 `this.callback()` 一样。
+
+```js
+const loaderUtils = require('loader-utils');
+const path = require('path');
+const fs = require('fs');
+
+module.exports = function (source) {
+  // this.async返回异步处理函数
+  const callback = this.async();
+  fs.readFile(path.join(__dirname, './async.txt'), 'utf-8', (err, data) => {
+    if (err) {
+      callback(err, '');
+      return;
+    }
+    // 异步处理结果
+    callback(null, data, 'async usage');
+  });
+};
+```
+
+### loader 同步异步处理混用
+
+情况一：在同步情况中，调用异步处理函数，是没有问题的。
+
+```js
+// 在同步情况中，调用异步处理函数
+module.exports = function(source) {
+  const json = JSON.stringify(source)
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+  
+  const callback = this.async();
+  callback(null, `export default ${json}`, 1, 2, 'many results');
+}
+```
+
+情况二：在异步情况中，调用同步处理函数，会报错 `Error: callback(): The callback was already called.`。
+
+猜测是同步处理的 `this.callback()` 方法，在 loader 的末尾其实也是会隐式调用的，所以等读取文件操作完成后，再调用就会报错重复调用。
+
+如果只调用异步处理的 `this.async()` 方法，就会阻断这个隐式调用。
+
+```js
+// 在异步情况中，调用同步处理函数
+const loaderUtils = require('loader-utils');
+const path = require('path');
+const fs = require('fs');
+
+module.exports = function (source) {
+  fs.readFile(path.join(__dirname, './async.txt'), 'utf-8', (err, data) => {
+    this.callback(null, data, 'async usage666');
+  });
+};
+```
+
+![callback already called](./images/webpack_loader_plugin/callback_already_called.png)
+
+情况三：同时调用同步和异步处理函数，也会报错 `Error: callback(): The callback was already called.`。
+
+这两个不能同时调用。
+
+```js
+const loaderUtils = require('loader-utils');
+const path = require('path');
+const fs = require('fs');
+
+module.exports = function (source) {
+  fs.readFile(path.join(__dirname, './async.txt'), 'utf-8', (err, data) => {
+    this.callback(null, data, 'async usage666');
+  });
+  this.callback(null, 'sync usage');
+};
+```
