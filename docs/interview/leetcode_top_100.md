@@ -2069,6 +2069,47 @@ var levelOrder = function (root) {
 }
 ```
 
+### 108.[将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/description/)
+
+标签：二叉搜索树、数组、递归
+
+题目：
+
+给你一个整数数组 nums，其中元素已经按 升序 排列，请你将其转换为一棵 平衡 二叉搜索树。
+
+平衡二叉树，是指该树所有节点的左右子树的高度相差不超过 1。
+
+![108.将有序数组转换为二叉搜索树](./images/leetcode/question-108.png)
+
+思路：
+
+BST 的中序遍历是升序的，因此本题等同于根据中序遍历的序列恢复二叉搜索树。
+
+因此我们可以以升序序列中的任一个元素作为根节点，以该元素左边的升序序列构建左子树，以该元素右边的升序序列构建右子树，这样得到的树就是一棵二叉搜索树。
+
+又因为本题要求高度平衡，因此我们需要选择**升序序列的中间元素**作为根节点。如果序列长度为奇数，刚好有中间元素，如果序列长度为偶数，方便起见就选择左边元素为中间元素。
+
+代码：
+
+```js
+var sortedArrayToBST = function (nums) {
+  return helper(nums, 0, nums.length - 1);
+}
+var helper = function (nums, left, right) {
+  if (left > right) {
+    return null;
+  }
+  var mid = Math.floor((left + right) / 2);
+  // 创建根节点
+  var root = new TreeNode(nums[mid]);
+  // 以根元素左边的升序序列构建左子树
+  root.left = helper(nums, left, mid - 1);
+  // 以根元素右边的升序序列构建右子树
+  root.right = helper(nums, mid + 1, right);
+  return root;
+}
+```
+
 ## 图论
 
 ## 回溯
