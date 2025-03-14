@@ -1,6 +1,6 @@
 # Mobx 那些事儿
 
-[Mobx](https://mobx.js.org/README.html){link=card}
+[Mobx](https://mobx.js.org/README.html){link=static}
 
 [Mobx 中文文档](https://cn.mobx.js.org/){link=card}
 
@@ -279,3 +279,78 @@ class Test extends Component {
 ```
 
 具体是什么原因导致的还未知，先当作一个固定用法经验之谈吧。
+
+## Mobx 的 when 函数
+
+when 使用方法：[https://cn.mobx.js.org/refguide/when.html](https://cn.mobx.js.org/refguide/when.html)
+
+### when 用法
+
+when 函数是 Mobx 提供的工具，用于在某个条件变为 true 时执行后续的逻辑。第一个参数是一个函数，表示需要观察监视的条件；第二个参数也是一个函数，代表条件变为 true 时要执行的逻辑。
+
+注意 when 函数监视的条件一般也是 Mobx 的状态，`@observable` 或者 `@computed`
+
+```js
+class MyResource {
+  constructor() {
+    when(
+      // 一旦...
+      () => !this.isVisible,
+      // ... 然后
+      () => this.dispose()
+    );
+  }
+
+  @computed get isVisible() {
+    // 标识此项是否可见
+  }
+
+  dispose() {
+    // 清理
+  }
+}
+```
+
+如果 when 函数没有传递第二个参数指定后续动作，就会返回一个 Promise。这样子其实就相当于把第二个参数的逻辑放到后续代码之中。
+
+```js
+async function() {
+  await when(() => that.isVisible)
+  // 后续代码
+}
+```
+
+### when 应用
+
+Mobx 的 store 更新其实是异步的，可能会有一定延时，会有小概率导致问题出现，比如说某个 store 状态还没更新完成，后续代码就用这个状态，但实际上并没有拿到新的状态值。
+
+此时，就需要使用 when 函数来确保状态更新完成，再执行后续逻辑。
+
+示例背景：Todo 待办接口需要使用用户号，要确保用户号更新完成后，再执行 Todo 接口请求。
+
+```js
+import { when } from 'mobx';
+
+queryTodoList() => async () => {
+  // 确保用户号更新后再执行后续逻辑
+  await when(() => store.isUserIdReady);
+  const res = await api.queryTodoList(store.userId);
+  return res;
+}
+```
+
+```js
+import { action, observable } from 'mobx';
+
+export default class Store {
+  @observable userId = '';
+
+  @observable isUserIdReady = false;
+
+  @action.bound
+  setUserId = (userId) => {
+    this.userId = userId;
+    this.isUserIdReady = true;
+  }
+}
+```
