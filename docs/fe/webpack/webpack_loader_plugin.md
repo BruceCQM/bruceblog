@@ -277,3 +277,22 @@ module.exports = function (source) {
   this.callback(null, 'sync usage');
 };
 ```
+
+### loader 输出文件
+
+loader 通过调用 `this.emitFile()` 方法，将内容输出为文件。通常回和 `loaderUtils.interpolateName()` 方法结合使用。
+
+`loaderUtils.interpolateName()` 方法功能是，根据文件内容、和其它参数生成一个唯一的文件名。
+
+`this.emitFile` 文件输出的路径就是 webpack 配置 `output.path` 指定的目录。
+
+```js
+const loaderUntils = require('loader-utils');
+
+module.exports = function(source) {
+  // index.a3fs.js
+  const fileName = loaderUntils.interpolateName(this, '[name].[hash:4].[ext]', source)
+  this.emitFile(fileName, source);
+  return source;
+}
+```
