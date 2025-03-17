@@ -296,3 +296,126 @@ module.exports = function(source) {
   return source;
 }
 ```
+
+:::warning 评论留言
+1. loader-utils 3.0.0 版本已经移除getOptions方法，详见：https://github.com/webpack/loader-utils/blob/master/CHANGELOG.md
+:::
+
+## 开发自动合成雪碧图的loader
+
+支持的语法：
+
+```css
+.img1 {
+  background: url(./images/logo.jpg?__sprite);
+}
+.img2 {
+  background: url(./images/logo.png?__sprite);
+}
+/* 变成 */
+.img1 {
+  background: url(./images/sprite.png);
+}
+```
+
+如何将两张图片合为一张？使用 [spritesmith](https://www.npmjs.com/package/spritesmith)。
+
+使用示例：
+
+```js
+const Spritesmith = require('spritesmith');
+const fs = require('fs');
+const path = require('path');
+
+const sprites = ['./loaders/images/logo.jpg', './loaders/images/logo.png'];
+
+Spritesmith.run({ src: sprites }, (err, result) => {
+  // 合成后图片的buffer数据
+  console.log(result.image);
+  // 每张图片的左上角坐标信息
+  console.log(result.coordinates);
+  // 合成后图片的大小
+  console.log(result.properties);
+  fs.writeFileSync(path.join(__dirname, './loaders/images/sprite.png'), result.image);
+});
+```
+
+![spritesmith](./images/webpack_loader_plugin/spritesmith_result.png)
+
+开始编写 sprite-loader.js。
+
+```js
+const Spritesmith = require('spritesmith');
+const fs = require('fs');
+const path = require('path');
+
+module.exports = function (source) {
+  const callback = this.async();
+  // 匹配出所有带有 __sprite 后缀的css语句
+  const imgs = source.match(/url\((\S*)\?__sprite/g);
+  const matchedImgs = [];
+  
+  for (let i = 0;i < imgs.length;i++) {
+    const img = imgs[i].match(/url\((\S*)\?__sprite/)[1];
+    // 截取每张图片的路径，并且拼成绝对路径
+    matchedImgs.push(path.join(__dirname, img));
+  }
+
+  Spritesmith.run({
+    src: matchedImgs
+  }, (err, result) => {
+    fs.writeFileSync(path.join(process.cwd(), 'dist/sprite.jpg'), result.image);
+    // 将css图片的路径替换为合成后的图片路径
+    source = source.replace(/url\((\S*)\?__sprite/g, (match) => {
+      return `url("dist/sprite.jpg"`;
+    });
+    // 修改css文件内容
+    fs.writeFileSync(path.join(process.cwd(), 'dist/index.css'), source);
+    callback(null, source);
+  });
+}
+```
+
+```js
+// run-loader.js
+const { runLoaders } = require('loader-runner');
+const fs = require('fs');
+const path = require('path');
+
+runLoaders({
+  resource: path.join(__dirname, './loaders/index.css'),
+  loaders: [
+    path.join(__dirname, './loaders/sprite-loader.js'),
+  ],
+  context: {
+    minimize: true,
+  },
+  readResource: fs.readFile.bind(fs),
+}, (err, result) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(result);
+  }
+});
+```
+
+```css
+.img1 {
+  background: url(./images/logo.jpg?__sprite);
+}
+.img2 {
+  background: url(./images/logo.png?__sprite);
+}
+```
+
+运行完成后，index.css 文件内容变为如下，并且生成了合并后的图片。
+
+```css
+.img1 {
+  background: url("dist/sprite.jpg");
+}
+.img2 {
+  background: url("dist/sprite.jpg");
+}
+```
