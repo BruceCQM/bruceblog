@@ -438,3 +438,53 @@ browsers: ['last 3 versions', 'Android >= 5', 'ios >= 9.3']
 异步setData触发绘制的首屏内容展示不一定会计入启动耗时统计，但会延迟用户看到页面内容的时间，影响用户体验。与支付宝启动性能指标不同，微信首屏内容展示不计入启动性能。
 
 微信以Page.onReady事件触发标志小程序启动过程完成。
+
+## bfCache 
+
+背景：iOS 设备，二级页面返回首页，页面不会刷新；安卓设备，二级页面返回首页，页面会刷新。
+
+bfCache（Back/Forward Cache），当用户离开当前页面时，浏览器会将页面的 DOM、JavaScript 状态、滚动位置等信息保存到内存中。当用户通过前进或后退返回该页面时，浏览器直接从缓存中恢复页面状态，无需重新请求资源或执行初始化脚本。
+
+### 测试bfCache
+
+Chrome 打开开发者工具，Application -> Background Services -> Back/Forward Cache。
+
+![bfCache1](./images/optimization/bfCache_1.png)
+
+点击按钮，测试bfCache。Chrome 会自动将您转到 chrome://terms/，然后返回原来的网页。
+
+如果网页的 bfCache 功能没有问题，会显示成功。
+
+![bfCache2](./images/optimization/bfCache_2.png)
+
+如果有问题，会显示问题列表。
+
+![bfCache3](./images/optimization/bfCache_3.png)
+
+### 测试结果
+
+经测试，WebKit 内核的浏览器（如Safari）可以正常使用 bfCache，Chromium 内核的浏览器（如Chrome）无法正常使用 bfCache。
+
+通常而言，安卓手机浏览器的内核是 Chromium 内核，而苹果手机浏览器的内核是 WebKit 内核。
+
+但安卓手机的夸克浏览器（Chromium 内核）却可以正常使用 bfCache，或许是其做了额外处理。
+
+WebKit 内核的浏览器和 Chromium 内核的浏览器对 bfCache 的支持不相同，可能与不同浏览器引擎对缓存策略、API 兼容性及页面行为的处理方式有关。
+
+如果能解决 Chromium 内核的浏览器不支持 bfCache 的问题，那对用户体验是一个较大的优化，从二级页面返回上一级页面，页面无需刷新。如果需要更新数据，监听 `onpageshow` 事件，判断 `event.persisted` 为 true，则手动更新数据，说明是从缓存恢复的页面。
+
+```js
+window.onpageshow = (event) => {
+  // event.persisted 表示页面从缓存中恢复
+  // window.performance.navigation.type === 2 表示页面通过 前进后退 触发的
+  if (event.persisted || window.performance.navigation.type === 2) {
+    // 手动请求接口，更新数据...
+  }
+}
+```
+
+相关资料：
+
+[被忽略的缓存 -bfcache](https://blog.csdn.net/LuckyWinty/article/details/134131374){link=static}
+
+[测试往返缓存](https://developer.chrome.com/docs/devtools/application/back-forward-cache?hl=zh-cn){link=static}
