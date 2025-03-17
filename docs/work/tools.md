@@ -26,6 +26,26 @@ Clash 不需要【设置为系统代理】。Clash 默认的端口号是 7890，
 
 ![auto switch配置](./images/tools/auto_switch.png)
 
+## 使用Chrome调试手机网页
+
+[chrome调试手机网页](https://silent.blog.csdn.net/article/details/139336996){link=static}
+
+[如何使用edge浏览器或chrome谷歌浏览器调试手机端网页（微信网页、浏览器皆可](https://blog.csdn.net/ForidaAxu/article/details/135748032){link=static}
+
+Edge 同理，区别在于 Chrome 需要科学上网，Edge 不需要。
+
+1. 手机打开开发者模式（一般在手机全部参数的页面，连续点击系统版本号），并且打开 USB 调试开关（在设置直接搜索usb调试）。
+
+2. Chrome 开启科学上网，打开 `chrome://inspect/#devices`。
+
+3. 用 USB 线连接电脑和手机，注意要**使用正装 USB 数据线**，盗版便宜的 USB 数据线可能没有调试功能。正装的线插上去会弹出调试的提示。
+
+![chrome inspect](./images/tools/chrome_inspect.png)
+
+4. 手机打开浏览器，打开一个页面，Chrome 就可以看到手机的页面。点击 `Inspect`，就可以调试手机的页面。
+
+![chrome inspect 调试页面](./images/tools//chrome_inspect_page.png)
+
 ## 启动本地服务方式
 
 ### http-server(good)
