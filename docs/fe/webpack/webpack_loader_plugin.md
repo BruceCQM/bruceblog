@@ -419,3 +419,29 @@ runLoaders({
   background: url("dist/sprite.jpg");
 }
 ```
+
+## 插件基本结构介绍
+
+插件没有像 loader 那样的独立运行环境，只能在 webpack 里面运行。
+
+插件的基本结构如下，插件是一个导出为类的模块，并且类里面一定要有一个 apply 方法。
+
+```js
+module.exports = class MyPlugin {
+  apply(compiler) {
+    compiler.hooks.done.tap('MyPlugin', (stats) => {
+      console.log('MyPlugin');
+    })
+  }
+}
+```
+
+插件的运行环境：在 webpack 配置的 plugins 参数中加入插件。
+
+```js
+const MyPlugin = require('./plugins/my-plugin');
+
+module.exports = {
+  plugins: [new MyPlugin()],
+}
+```
