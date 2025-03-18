@@ -445,3 +445,68 @@ module.exports = {
   plugins: [new MyPlugin()],
 }
 ```
+
+## 更复杂的插件开发场景
+
+### 插件中如何获取参数
+
+通过插件的构造函数获取。
+
+```js
+module.exports = class MyPlugin {
+  constructor(options) {
+    this.options = options;
+  }
+  apply(compiler) {
+    console.log('MyPlugin', this.options);
+  }
+}
+```
+
+```js
+module.exports = {
+  plugins: [new MyPlugin({ name: 'zhangsan' })],
+}
+```
+
+### 插件的错误处理
+
+1. 在参数校验阶段，可以直接 throw 一个 error 出来，`throw new Error('Error Message')`。比如校验到参数的数据类型不对，或者参数名称不对等。
+
+2. 可以通过 compilation 对象的 warnings 和 errors 接收。
+
+```js
+compilation.warnings.push('warning message');
+compilation.errors.push('error message');
+```
+
+### 通过Compilation进行文件写入
+
+webpack 的 emit 文件输出阶段，会把 compilation 对象上的 assets 属性的内容进行输出，因此把要输出的内容挂载到 compilation.assets 上即可。
+
+文件写入需要使用 [webpack-sources](https://www.npmjs.com/package/webpack-sources)。
+
+```js
+const { RwaSource } = require('webpack-sources');
+
+module.exports = class DemoPlugin {
+  constructor(options) {
+    this.options = options;
+  }
+  apply(compiler) {
+    const { name } = this.options;
+    compiler.hooks.emit.tapPromise('DemoPlugin', (compilation, callback) => {
+      // 比如如果要输出代码，就可以使用RawSource
+      compilation.assets[name] = new RawSource(name);
+    })
+  }
+}
+```
+
+### 插件扩展-编写插件的插件
+
+插件自身也可以通过暴露 hooks 的方式进行自身扩展，以 html-webpack-plugin 为例。
+
+- html-webpack-plugin-alter-chunks(Sync)
+
+- html-webpack-plugin-alter-asset-tags(Sync)
