@@ -112,6 +112,98 @@ serve -p 3000
 
 但这种方式只能访问 HTML 文件，不能访问 JS 文件。
 
+## yalc神器-前端link调试
+
+[yalc: 可能是最好的前端link调试方案](https://juejin.cn/post/7033400734746066957){link=card}
+
+使用背景：你在开发一个 **组件库/sdk/插件** 或 **其他npm库**，想知道它们在前端项目上使用的真实效果。
+
+举个栗子：你在开发一个组件 hello-ui，想要知道它在另一个前端项目 world-fe 中的效果如何，应该怎么做？
+
+没有了解 yalc 之前，我的做法主要有两种：
+
+- 组件出包后再调试：组件 hello-ui 进行构建发布（出包），将构建产物发布到公司的 npm 上，得到一个新的组件版本号，接着在 world-fe 项目中更新组件的版本号，运行 `npm install` 命令更新组件。这种方法比较麻烦。
+
+- 直接在 world-fe 项目的 node_modules 中直接修改 hello-ui 组件的代码，查看效果，确认效果无误后，再到 hello-ui 的仓库中同步代码。这种方法，同步代码到组件库中，很容易出错，很容易遗漏代码。
+
+现在了解了 yalc，一切就变得简单了。
+
+### yalc是什么
+
+[Yalc github](https://github.com/wclr/yalc){link=static}
+
+> Better workflow than npm | yarn link for package authors.
+>
+> 对包开发者来说，比 npm | yarn link 更好的开发流程。
+
+`When developing and authoring multiple packages (private or public), you often find yourself in need of using the latest/WIP versions in other projects that you are working on in your local environment without publishing those packages to the remote registry. `
+
+yalc 的主要功能是：在不需要把包发布到远程仓库的情况下，在本地项目中使用最新的包。真正做到「立竿见影」的效果。
+
+### yalc的基本使用
+
+安装 yalc：`npm i -g yalc`。
+
+使用 yalc：
+
+1. yalc publish 发布依赖
+
+在 hello-ui 中执行 `yalc publish`。它会把需要发布的内容保存到全局缓存之中。
+
+```bash
+yalc publish
+```
+
+运行成功后，会看到控制台打印如下内容。
+
+```bash
+hello-ui@1.0.0 published in store
+```
+
+2. yalc add 添加依赖
+
+在 world-fe 项目中，执行 `yalc add hello-ui`。这样一来，world-fe 项目 node_modules 目录中的 hello-ui 就更新为最新内容了。
+
+```bash
+yalc add hello-ui
+```
+
+运行成功后，会看到控制台打印以下内容。
+
+```bash
+Package hello-ui@1.0.0 added ==> /Users/zhangsan/projects/world-fe/node_modules/hello-ui
+```
+
+同时，world-fe 项目的 package.json 文件中，hello-ui 的版本号会变为 `file:.yalc/hello-ui`，代表使用 yalc 缓存的组件内容。
+
+3. yalc push 推送和更新
+
+如果你在 hello-ui 修改了代码，只需要执行 push 命令，最新的包的内容就会直接更新到 world-fe！直接触发了 HRM。
+
+```bash
+yalc publish --push
+# 简写
+yalc push
+```
+
+4. yalc remove 移除依赖
+
+在 world-fe 执行：
+
+```bash
+yalc remove hello-ui
+```
+
+就能移除 yalc 的 hello-ui 依赖，但是原本的 hello-ui 依赖不会恢复，需要手动 npm i 重新安装一下。
+
+5. yalc update 更新依赖
+
+其实 yalc push 后会自动更新包，也用不着这个命令了。
+
+```bash
+yalc update hello-ui
+```
+
 ## classnames
 
 一个实用的工具库，方便我们根据条件动态组合类名。
