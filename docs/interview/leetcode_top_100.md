@@ -2110,6 +2110,91 @@ var helper = function (nums, left, right) {
 }
 ```
 
+### 98.[验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/description/)
+
+标签：二叉搜索树
+
+题目：
+
+给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。有效二叉搜索树定义如下：
+
+- 节点的左子树只包含 小于 当前节点的数。
+
+- 节点的右子树只包含 大于 当前节点的数。
+
+- 所有左子树和右子树自身必须也是二叉搜索树。
+
+![98.验证二叉搜索树](./images/leetcode/question-98.png)
+
+思路：
+
+#### 方法一
+
+二叉搜索树的中序遍历结果（左-根-右）是升序的序列，因此可以先保存中序遍历的结果，然后遍历数组，判断数组是否为严格升序。
+
+#### 方法二：遍历
+
+使用栈模拟中序遍历的过程，如果当前遍历的节点值小于上一次的节点值，则说明不是二叉搜索树。
+
+#### 方法三：递归
+
+设计一个递归函数 `helper(root, lower, upper)` 来递归判断，函数表示考虑以 root 为根的子树，判断子树中所有节点的值是否都在 `(l,r)` 的范围内（注意是开区间）。如果 root 节点的值 val 不在 `(l,r)` 的范围内说明不满足条件直接返回，否则我们要继续递归调用检查它的左右子树是否满足，如果都满足才说明这是一棵二叉搜索树。
+
+根据二叉搜索树的性质，在递归调用左子树时，我们需要把上界 upper 改为 `root.val`，即调用 `helper(root.left, lower, root.val)`，因为左子树里所有节点的值均小于它的根节点的值。同理递归调用右子树时，我们需要把下界 lower 改为 `root.val`，即调用 `helper(root.right, root.val, upper)`。
+
+函数递归调用的入口为 `helper(root, -inf, +inf)`， inf 表示一个无穷大的值。
+
+代码：
+
+```js
+// 方法一：中序遍历，判断是否升序
+var isValidBST = function (root) {
+  var arr = [];
+  inorder(root, arr);
+  for (var i = 1; i < arr.length; i++) {
+    if (arr[i] <= arr[i - 1]) {
+      return false;
+    }
+  }
+  return true;
+}
+var inorder = function (root, arr) {
+  if (!root) return;
+  inorder(root.left, arr);
+  arr.push(root.val);
+  inorder(root.right, arr);
+}
+
+// 方法二：遍历
+var isValidBST = function (root) {
+  var stack = [];
+  var mini = -Infinity;
+  while (stack.length || root) {
+    while (root) {
+      stack.push(root);
+      root = root.left;
+    }
+    root = stack.pop();
+    if (root.val <= mini) {
+      return false
+    }
+    mini = root.val;
+    root = root.right;
+  }
+  return true
+}
+
+// 方法三：递归
+var isValidBST = function(root) {
+  return helper(root, -Infinity, Infinity);
+};
+var helper = function(root, lower, upper) {
+  if (!root) return true;
+  if (root.val <= lower || root.val >= upper) return false;
+  return helper(root.left, lower, root.val) && helper(root.right, root.val, upper);
+}
+```
+
 ## 图论
 
 ## 回溯
