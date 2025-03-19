@@ -2195,6 +2195,36 @@ var helper = function(root, lower, upper) {
 }
 ```
 
+### 230.[二叉搜索树中第K小的元素](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/description/)
+
+标签：二叉搜索树
+
+题目：
+
+给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 小的元素（从 1 开始计数）。
+
+思路：
+
+二叉搜索树的中序遍历结果是升序数组。中序遍历后，第 k 小的元素就是数组中的第 k - 1 个元素。
+
+树中的节点数为 n ，1 <= k <= n。
+
+代码：
+
+```js
+var kthSmallest = function(root, k) {
+  var arr = [];
+  inorder(root, arr);
+  return arr[k - 1];
+};
+var inorder = function(root, arr) {
+  if (!root) return;
+  inorder(root.left, arr);
+  arr.push(root.val);
+  inorder(root.right, arr);
+}
+```
+
 ## 图论
 
 ## 回溯
