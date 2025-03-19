@@ -510,3 +510,66 @@ module.exports = class DemoPlugin {
 - html-webpack-plugin-alter-chunks(Sync)
 
 - html-webpack-plugin-alter-asset-tags(Sync)
+
+## 开发压缩构建资源为zip包的插件
+
+要求：
+
+- 生成的 zip 包，文件名称可以通过插件参数传入。
+
+- 需要使用 Compiler 对象上特定的 hooks 进行资源生成，而不是使用 fs 等文件读写库。
+
+准备知识：如何将文件压缩为 zip 包？使用 [jszip](https://www.npmjs.com/package/jszip)。
+
+使用示例：
+
+```js
+const zip = new JSZip();
+
+zip.file("Hello.txt", "Hello World\n");
+
+const img = zip.folder("images");
+img.file("smile.gif", imgData, {base64: true});
+
+zip.generateAsync({type:"blob"}).then(function(content) {
+  // see FileSaver.js
+  saveAs(content, "example.zip");
+});
+```
+
+Compiler 上负责文件生成的 hooks 是 emit，是一个异步的 hook。emit 文件生成阶段，读取的事 compilation.assets 对象的值。因此可以把 zip 资源包设置到 compilation.assets 对象上。
+
+```js
+// zip-plugin.js
+const JSZip = require('jszip');
+const path = require('path');
+const RawSource = require('webpack-sources').RawSource;
+
+const zip = new JSZip();
+
+module.exports = class ZipPlugin {
+  constructor(options) {
+    this.options = options;
+  }
+
+  apply(compiler) {
+    compiler.hooks.emit.tapAsync('ZipPlugin', (compilation, callback) => {
+      // 创建一个 zip 文件夹
+      const folder = zip.folder(this.options.filename);
+      for (const filename in compilation.assets) {
+         const source = compilation.assets[filename].source();
+        //  将文件内容写入到 zip 文件夹中
+         folder.file(filename, source);
+      }
+      zip.generateAsync({
+        // 指定生成的内容类型
+        type: 'nodebuffer',
+      }).then((content) => {
+        compilation.assets[this.options.filename + '.zip'] = new RawSource(content);
+        // callback一定要调用，否则不会生成文件。通知webpack异步任务已完成。
+        callback();
+      })
+    });
+  }
+};
+```
