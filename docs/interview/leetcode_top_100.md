@@ -2279,6 +2279,45 @@ var rightSideView = function(root) {
 };
 ```
 
+### 114.[二叉树展开为链表](https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/description/)
+
+标签：二叉树、前序遍历、递归
+
+题目：
+
+给你二叉树的根结点root ，请你将它展开为一个单链表：
+
+- 展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+- 展开后的单链表应该与二叉树 先序遍历 顺序相同。
+
+进阶：你可以使用原地算法（O(1) 额外空间）展开这棵树吗？
+
+思路：
+
+#### 方法一（记这个，思路简单）
+
+先执行前序遍历，将结果保存到数组中，接着遍历数组，将数组中的元素按要求依次连接起来。时间复杂度和空间复杂度都是O(n)。
+
+代码：
+
+```js
+// 方法一：先前序遍历，再连接节点
+var flatten = function(root) {
+  var arr = [];
+  preorder(root, arr);
+  for (var i = 0;i < arr.length;i++) {
+    arr[i].right = arr[i + 1] || null;
+    arr[i].left = null;
+  }
+};
+var preorder = function(root, arr) {
+  if (!root) return;
+  arr.push(root);
+  preorder(root.left, arr);
+  preorder(root.right, arr);
+}
+```
+
 ## 图论
 
 ## 回溯
