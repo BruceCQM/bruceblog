@@ -2225,6 +2225,60 @@ var inorder = function(root, arr) {
 }
 ```
 
+### 199.[二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/description/)
+
+标签：二叉树、队列、递归
+
+题目：
+
+给定一个二叉树的根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+
+![199.二叉树的右视图](./images/leetcode/question-199.png)
+
+思路：
+
+方法一：层序遍历，取出每一层最后一个节点，就是右侧看到的节点。（记这个，复用层序遍历已有代码）
+
+方法二：递归，优先扫描右叶子递归，add结果集的时候判断下该层级是不是有元素。
+
+代码：
+
+```js
+// 方法一：层序遍历
+var rightSideView = function (root) {
+  if (!root) return [];
+  var queue = [root];
+  var res = [];
+  while (queue.length) {
+    var cur = [];
+    var next = [];
+    for (var node of queue) {
+      cur.push(node.val);
+      if (node.left) next.push(node.left);
+      if (node.right) next.push(node.right);
+    }
+    res.push(cur[cur.length - 1]);
+    queue = next;
+  }
+  return res;
+}
+
+// 方法二：递归
+var rightSideView = function(root) {
+  var res = [];
+  var scan = function(node, level) {
+    if (!node) return;
+    if (res.length <= level) {
+      res.push(node.val);
+    }
+    scan(node.right, level + 1);
+    scan(node.left, level + 1);
+  }
+  scan(root, 0);
+  return res;
+};
+```
+
 ## 图论
 
 ## 回溯
