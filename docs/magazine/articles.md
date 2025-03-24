@@ -570,3 +570,9 @@ rimraf node_modules
 性能优化系列实战文章，值得一看。
 
 [前端性能优化实战 从 30s 到 2s](https://juejin.cn/post/7008072984858460196){link=static}
+
+https://web.developers.google.cn/articles/preconnect-and-dns-prefetch?hl=zh-cn#resolve_domain_name_early_with_reldns-prefetch
+
+https://segmentfault.com/a/1190000011577248
+
+https://segmentfault.com/a/1190000003944417
