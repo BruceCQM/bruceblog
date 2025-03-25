@@ -90,14 +90,14 @@ module.exports = {
   env: {
     NODE_ENV: '"production"'
   },
-  defineConstants: {
-  },
+  defineConstants: {},
   weapp: {},
   h5: {
     publicPath: './',
     // 主要是这一行配置导致的 sourceMap 被打包到 bundle 中
-    enableSourceMap: true,
-    sourceMapType: 'hidden-source-map',
+    // 优化之后把enableSourceMap和sourceMapType都删掉
+    // enableSourceMap: true,
+    // sourceMapType: 'hidden-source-map',
     router: {
       customRoutes: {
         '/pages/index/index': '/index'
