@@ -571,8 +571,10 @@ rimraf node_modules
 
 [前端性能优化实战 从 30s 到 2s](https://juejin.cn/post/7008072984858460196){link=static}
 
-https://web.developers.google.cn/articles/preconnect-and-dns-prefetch?hl=zh-cn#resolve_domain_name_early_with_reldns-prefetch
+[关于首屏优化，我做了哪些](https://juejin.cn/post/7117515006714839047){link=static}
 
-https://segmentfault.com/a/1190000011577248
+[尽早建立网络连接，以提升系统感知的网页速度](https://web.developers.google.cn/articles/preconnect-and-dns-prefetch?hl=zh-cn#resolve_domain_name_early_with_reldns-prefetch){link=static}
 
-https://segmentfault.com/a/1190000003944417
+[带你玩转prefetch, preload, dns-prefetch，defer和async](https://segmentfault.com/a/1190000011577248){link=static}
+
+[预加载系列一：DNS Prefetching 的正确使用姿势](https://segmentfault.com/a/1190000003944417){link=static}
