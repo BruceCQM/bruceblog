@@ -2318,6 +2318,60 @@ var preorder = function(root, arr) {
 }
 ```
 
+### 105.[从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/)
+
+标签：哈希表、递归
+
+题目：
+
+给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
+
+![105.从前序与中序遍历序列构造二叉树](./images/leetcode/question-105.png)
+
+思路：
+
+- 前序遍历的首元素 为 树的根节点 node 的值。
+- 在中序遍历中搜索根节点 node 的索引 ，可将 中序遍历 划分为 `[ 左子树 | 根节点 | 右子树 ]` 。
+- 根据中序遍历中的左（右）子树的节点数量，可将 前序遍历 划分为 `[ 根节点 | 左子树 | 右子树 ]` 。
+
+![solution-105](./images/leetcode/solution-105.png)
+
+通过以上三步，可确定三个节点：1.树的根节点、2.左子树根节点、3.右子树根节点。
+
+根据分治思想，对于树的左、右子树，仍可复用以上方法划分子树的左右子树。
+
+代码：
+
+```js
+var buildTree = function(preorder, inorder) {
+  var map = new Map();
+  // 存储中序遍历节点及对应的索引
+  for (var i = 0;i < inorder.length;i++) {
+    map.set(inorder[i], i);
+  }
+  
+  var build = function(preLeft, preRight, midLeft, midRight) {
+    if (preLeft > preRight) {
+      return null;
+    }
+    // 前序遍历左边界是根节点
+    var root = new TreeNode(preorder[preLeft]);
+    // 获取根节点在中序遍历数组中的索引
+    var midIndex = map.get(preorder[preLeft]);
+    // 中序遍历数组，左子树的长度
+    var leftLength = midIndex - midLeft;
+    // 递归构建左右子树
+    // 前序遍历数组中，根节点下一个值就是左子树的左边界，即左子树根节点。左子树右边界的下一个值就是右子树的左边界
+    // 中序遍历数组中，根节点左右分别就是左右子树
+    root.left = build(preLeft + 1, preLeft + leftLength, midLeft, midIndex - 1);
+    root.right = build(preLeft + leftLength + 1, preRight, midIndex + 1, midRight);
+    return root;
+  }
+
+  return build(0, preorder.length - 1, 0, inorder.length - 1);
+};
+```
+
 ## 图论
 
 ## 回溯
