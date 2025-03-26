@@ -2372,6 +2372,50 @@ var buildTree = function(preorder, inorder) {
 };
 ```
 
+### 437.[路径总和 III](https://leetcode.cn/problems/path-sum-iii/description/)
+
+标签：递归、前缀和
+
+题目：
+
+给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
+
+路径不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+
+![437.路径总和 III](./images/leetcode/question-437.png)
+
+思路：
+
+#### 方法一：深度优先搜索
+
+穷举所有的可能，访问每一个节点 node，检测以 node 为起始节点且向下延深的路径有多少种。我们递归遍历每一个节点的所有可能的路径，然后将这些路径数目加起来即为返回结果。
+
+定义 rootSum(p,val) 表示以节点 p 为起点向下且满足路径总和为 val 的路径数目。我们对二叉树上每个节点 p 求出 rootSum(p,targetSum)，然后对这些路径数目求和即为返回结果。
+
+代码：
+
+```js
+var pathSum = function(root, targetSum) {
+  if (!root) return 0;
+  var res = rootSum(root, targetSum);
+  res += rootSum(root.left, targetSum);
+  res += rootSum(root.right, targetSum);
+  return res;
+}
+
+var rootSum = function(root, targetSum) {
+  if (!root) return 0;
+  var res = 0;
+  var val = root.val;
+  if (val === targetSum) {
+    res += 1;
+  }
+  res += rootSum(root.left, targetSum - val);
+  res += rootSum(root.right, targetSum - val);
+  return res;
+}
+```
+
 ## 图论
 
 ## 回溯
