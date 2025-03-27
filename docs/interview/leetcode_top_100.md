@@ -2398,8 +2398,8 @@ var buildTree = function(preorder, inorder) {
 var pathSum = function(root, targetSum) {
   if (!root) return 0;
   var res = rootSum(root, targetSum);
-  res += rootSum(root.left, targetSum);
-  res += rootSum(root.right, targetSum);
+  res += pathSum(root.left, targetSum);
+  res += pathSum(root.right, targetSum);
   return res;
 }
 
