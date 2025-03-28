@@ -2417,7 +2417,7 @@ var rootSum = function(root, targetSum) {
 ```
 
 ### 236.[二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/)
-### 236.[二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/)
+
 标签：递归
 
 题目：
