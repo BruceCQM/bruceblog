@@ -2417,7 +2417,7 @@ var rootSum = function(root, targetSum) {
 ```
 
 ### 236.[二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/)
-
+### 236.[二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/)
 标签：递归
 
 题目：
@@ -2480,6 +2480,37 @@ var lowestCommonAncestor = function(root, p, q) {
   // 左右子树都找到p和q了，那就说明p和q分别在左右两个子树上，所以此时的最近公共祖先就是root
   return root;
 }
+```
+
+### 124. [二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/description/)
+
+标签：递归
+
+题目：
+
+给你一个二叉树的根节点 root ，返回其 最大路径和 。
+
+![124.二叉树中的最大路径和](./images/leetcode/question-124.png)
+
+思路：
+
+可以看作是，543题二叉树的直径的提高版。
+
+代码：
+
+```js
+var maxPathSum = function(root) {
+  var res = -Infinity;
+  var depth = function(node) {
+    if (!node) return 0;
+    var left = depth(node.left);
+    var right = depth(node.right);
+    res = Math.max(res, left + right + node.val);
+    return Math.max(Math.max(left, right) + node.val, 0);
+  }
+  depth(root);
+  return res;
+};
 ```
 
 ## 图论
