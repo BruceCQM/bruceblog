@@ -2520,6 +2520,89 @@ var maxPathSum = function(root) {
 
 ## 图论
 
+### 200. [岛屿数量](https://leetcode.cn/problems/number-of-islands/description/)
+
+标签：深度优先搜索、网格类DFS问题
+
+题目：
+
+给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+
+岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+
+此外，你可以假设该网格的四条边均被水包围。
+
+![200.岛屿数量](./images/leetcode/question-200.png)
+
+[思路-岛屿类问题的通用解法、DFS 遍历框架](https://leetcode.cn/problems/number-of-islands/solutions/211211/dao-yu-lei-wen-ti-de-tong-yong-jie-fa-dfs-bian-li-/?envType=study-plan-v2&envId=top-100-liked)：
+
+岛屿类问题 DFS 框架代码。
+
+```java
+void dfs(int[][] grid, int r, int c) {
+  // 判断网格点是否在网格矩阵内
+  if (!inArea(grid, r, c)) {
+      return;
+  }
+  // 如果这个格子不是岛屿，直接返回
+  if (grid[r][c] != 1) {
+      return;
+  }
+  grid[r][c] = 2; // 将格子标记为「已遍历过」
+  
+  // 访问上、下、左、右四个相邻结点
+  dfs(grid, r - 1, c);
+  dfs(grid, r + 1, c);
+  dfs(grid, r, c - 1);
+  dfs(g~rid, r, c + 1);
+}
+
+// 判断坐标 (r, c) 是否在网格中
+boolean inArea(int[][] grid, int r, int c) {
+  return 0 <= r && r < grid.length && 0 <= c && c < grid[0].length;
+}
+```
+
+代码：
+
+```js
+var numIslands = function(grid) {
+  var res = 0;
+  for (var i = 0;i < grid.length;i++) {
+    for (var j = 0;j < grid[0].length;j++) {
+      // 注意题目给的是字符串 '1'
+      if (grid[i][j] === '1') {
+        // 遍历陆地
+        area(grid, i, j);
+        // 遍历完陆地及其相邻的所有陆地，得到岛屿数+1
+        res += 1;
+      }
+    }
+  }
+  return res;
+};
+
+var area = function(grid, i, j) {
+  if (!inArea(grid, i, j)) {
+    return;
+  }
+  if (grid[i][j] !== '1') {
+    return;
+  }
+  // 标记为已遍历
+  grid[i][j] = '2';
+  // 访问上、下、左、右四个相邻网格点
+  area(grid, i - 1, j);
+  area(grid, i + 1, j);
+  area(grid, i, j - 1);
+  area(grid, i, j + 1);
+}
+
+var inArea = function(grid, i, j) {
+  return i >= 0 && i < grid.length && j >= 0 && j < grid[0].length;
+}
+```
+
 ## 回溯
 
 ## 二分查找
