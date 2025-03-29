@@ -2500,13 +2500,18 @@ var lowestCommonAncestor = function(root, p, q) {
 
 ```js
 var maxPathSum = function(root) {
+  // 最大路径和，初始化为负无穷大，因为节点可以为负数
   var res = -Infinity;
   var depth = function(node) {
     if (!node) return 0;
+    // 左、右子树提供的最大路径和
     var left = depth(node.left);
     var right = depth(node.right);
+    // 当前子树内部最大路径和，即左右子树最大路径和加上当前节点值
     res = Math.max(res, left + right + node.val);
-    return Math.max(Math.max(left, right) + node.val, 0);
+    // 当前子树对外提供的最大和
+    const outputMaxSum = Math.max(left, right) + node.val;
+    return Math.max(outputMaxSum, 0);
   }
   depth(root);
   return res;
