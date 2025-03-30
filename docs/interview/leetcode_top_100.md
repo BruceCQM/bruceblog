@@ -2667,6 +2667,88 @@ var orangesRotting = function(grid) {
 };
 ```
 
+### 207. [课程表](https://leetcode.cn/problems/course-schedule/description/)
+
+标签：广度优先搜索BFS
+
+题目：
+
+你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。
+
+在选修某些课程之前需要一些先修课程。 先修课程按数组 prerequisites 给出，其中 `prerequisites[i] = [ai, bi]` ，表示如果要学习课程 ai 则 必须 先学习课程  bi 。
+
+例如，先修课程对 `[0, 1]` 表示：想要学习课程 0 ，你需要先完成课程 1 。
+
+请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。
+
+![207.课程表](./images/leetcode/question-207.png)
+
+思路：
+
+每门课程的入度为 n，说明其先修课程数量为 n。
+
+BFS 前的准备工作：
+
+- 每门课的入度需要被记录，我们关心入度值的变化。
+- 课程之间的依赖关系也要被记录，我们关心选当前课会减小哪些课的入度。
+- 因此我们需要选择合适的数据结构，去存这些数据：
+- 入度数组：课号 0 到 n - 1 作为索引，通过遍历先决条件表求出对应的初始入度。
+- 邻接表：用哈希表记录依赖关系（也可以用二维矩阵，但有点大）。key：课号，value：依赖这门课的后续课（数组）
+
+怎么判断能否修完所有课？
+
+BFS 结束时，如果仍有课的入度不为 0，无法被选，完成不了所有课。否则，能找到一种顺序把所有课上完。
+
+或者：用一个变量 count 记录入列的顶点个数，最后判断 count 是否等于总课程数。
+
+代码：
+
+```js
+var canFinish = function(numCourses, prerequisites) {
+  var inDegree = new Array(numCourses).fill(0);
+  var map = new Map();
+  for (var i = 0;i < prerequisites.length;i++) {
+    var after = prerequisites[i][0];
+    var pre = prerequisites[i][1];
+    inDegree[after] += 1;
+    if (map.has(pre)) {
+      map.get(pre).push(after);
+    } else {
+      map.set(pre, [after]);
+    }
+  }
+
+  var queue = [];
+  for (var i = 0;i < inDegree.length;i++) {
+    if (inDegree[i] === 0) queue.push(i);
+  }
+
+  var count = 0;
+  while(queue.length) {
+    var cur = queue.shift();
+    count += 1;
+    var afterCourses = map.get(cur);
+    if (afterCourses && afterCourses.length) {
+      for (var course of afterCourses) {
+        inDegree[course] -= 1;
+        if (inDegree[course] === 0) {
+          queue.push(course);
+        }
+      }
+    }
+  }
+  return count === numCourses;
+};
+```
+
+:::danger 代码坑点
+`map.get(pre).push(after);` 和 `map.set(pre, map.get(pre).push(after));` 是不一样的！
+
+前者是直接修改 pre 键对应的数组，将 after 添加到数组末尾。
+
+后者覆盖了 pre 键对应的数组，导致数据丢失。因为 `Array.push` 方法返回的是修改后数组的长度！而不是新数组！这段代码等价于 `map.set(pre, newLength)`，将 pre 对应的值从数组变成了数字，导致原数组被覆盖。
+:::
+
 ## 回溯
 
 ## 二分查找
