@@ -2603,6 +2603,70 @@ var inArea = function(grid, i, j) {
 }
 ```
 
+### 994. [腐烂的橘子](https://leetcode.cn/problems/rotting-oranges/description/)
+
+标签：广度优先搜索
+
+题目：
+
+在给定的 m x n 网格 grid 中，每个单元格可以有以下三个值之一：
+
+- 值 0 代表空单元格；
+- 值 1 代表新鲜橘子；
+- 值 2 代表腐烂的橘子。
+
+每分钟，腐烂的橘子 周围 4 个方向上相邻 的新鲜橘子都会腐烂。
+
+返回 直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能，返回 -1 。
+
+![994.腐烂的橘子](./images/leetcode/question-994.png)
+
+代码：
+
+```js
+var orangesRotting = function(grid) {
+  // 新鲜橘子个数
+  var fresh = 0;
+  // 腐烂橘子的位置
+  var badPosition = [];
+  for (var i = 0;i < grid.length;i++) {
+    for (var j =0;j < grid[0].length;j++) {
+      if (grid[i][j] === 1) {
+        fresh += 1;
+      } else if (grid[i][j] === 2) {
+        badPosition.push([i, j]);
+      }
+    }
+  }
+
+  var mins = 0;
+  // 当还有新鲜橘子，且还有未遍历的腐烂橘子
+  while (fresh && badPosition.length) {
+    mins += 1;
+    var curBad = badPosition;
+    badPosition = [];
+    // 遍历已经腐烂橘子位置
+    for (var [x, y] of curBad) {
+      var nearPosition = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
+      // 相邻四个方向的节点
+      for (var [i, j] of nearPosition) {
+        // 如果在网格内，且有新鲜橘子
+        if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] === 1) {
+          // 将新鲜橘子腐烂掉
+          grid[i][j] = 2;
+          // 新鲜橘子数量减一
+          fresh -= 1;
+          // 记录下腐烂橘子的位置
+          badPosition.push([i, j]);
+        }
+      }
+    }
+  }
+  // 如果跳出循环后还有新鲜橘子，说明这个橘子不会被腐烂掉
+  return fresh ? -1 : mins;
+};
+```
+
 ## 回溯
 
 ## 二分查找
