@@ -2821,6 +2821,45 @@ Trie.prototype.startsWith = function(prefix) {
 
 ## 回溯
 
+### 46. [全排列](https://leetcode.cn/problems/permutations/description/)
+
+标签：递归、回溯
+
+题目：
+
+给定一个不含重复数字的数组 nums ，返回其所有可能的全排列。你可以按任意顺序返回答案。
+
+![46.全排列](./images/leetcode/question-46.png)
+
+代码：
+
+```js
+var permute = function(nums) {
+  var res = [];
+  // 记录已经使用过的数字
+  var used = {};
+  var dfs = function(path) {
+    // 个数足够了
+    if (path.length === nums.length) {
+      // 拷贝一份path，加入结果数组
+      res.push(path.slice());
+      return;
+    }
+    for (var num of nums) {
+      if (used[num]) continue; // 使用过，则跳过
+      path.push(num);
+      used[num] = true;
+      dfs(path); // 基于当前选了的数，进行递归
+      path.pop(); // 上一句递归结束，回溯，将最后选的数pop出来
+      used[num] = false; // 恢复记录
+    }
+  }
+  // 递归入口，传空数组
+  dfs([]);
+  return res;
+};
+```
+
 ## 二分查找
 
 ### 35.[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
