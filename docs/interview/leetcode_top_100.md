@@ -2683,7 +2683,7 @@ var orangesRotting = function(grid) {
 
 ![207.课程表](./images/leetcode/question-207.png)
 
-思路：
+[思路](https://leetcode.cn/problems/course-schedule/solutions/250377/bao-mu-shi-ti-jie-shou-ba-shou-da-tong-tuo-bu-pai-/)：
 
 每门课程的入度为 n，说明其先修课程数量为 n。
 
@@ -2705,12 +2705,15 @@ BFS 结束时，如果仍有课的入度不为 0，无法被选，完成不了�
 
 ```js
 var canFinish = function(numCourses, prerequisites) {
+  // 入度数组
   var inDegree = new Array(numCourses).fill(0);
   var map = new Map();
   for (var i = 0;i < prerequisites.length;i++) {
     var after = prerequisites[i][0];
     var pre = prerequisites[i][1];
+    // 求每门课的初始入度
     inDegree[after] += 1;
+    // 记录每门课以及依赖于它的后修课
     if (map.has(pre)) {
       map.get(pre).push(after);
     } else {
@@ -2719,24 +2722,31 @@ var canFinish = function(numCourses, prerequisites) {
   }
 
   var queue = [];
+  // 入度为0的课程入列，说明可以选修了
   for (var i = 0;i < inDegree.length;i++) {
     if (inDegree[i] === 0) queue.push(i);
   }
 
   var count = 0;
   while(queue.length) {
+    // 选修一门课
     var cur = queue.shift();
+    // 已修课数目+1
     count += 1;
     var afterCourses = map.get(cur);
+    // 如果这门课有后修课
     if (afterCourses && afterCourses.length) {
       for (var course of afterCourses) {
+        // 后修课的入度减一
         inDegree[course] -= 1;
+        // 如果入度减为零，则入列
         if (inDegree[course] === 0) {
           queue.push(course);
         }
       }
     }
   }
+  // 选了的课等于总课数，返回true，否则false
   return count === numCourses;
 };
 ```
@@ -2748,6 +2758,66 @@ var canFinish = function(numCourses, prerequisites) {
 
 后者覆盖了 pre 键对应的数组，导致数据丢失。因为 `Array.push` 方法返回的是修改后数组的长度！而不是新数组！这段代码等价于 `map.set(pre, newLength)`，将 pre 对应的值从数组变成了数字，导致原数组被覆盖。
 :::
+
+### 208. [实现 Trie (前缀树)](https://leetcode.cn/problems/implement-trie-prefix-tree/description/)
+
+标签：字符串、哈希表、数组
+
+题目：
+
+Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补全和拼写检查。
+
+请你实现 Trie 类：
+
+- Trie() 初始化前缀树对象。
+- void insert(String word) 向前缀树中插入字符串 word 。
+- boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
+- boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。
+
+![208.实现Trie前缀树](./images/leetcode/question-208.png)
+
+代码：
+
+```js
+
+var Trie = function() {
+  this.arr = [];
+  this.map = new Map();
+};
+
+/** 
+ * @param {string} word
+ * @return {void}
+ */
+Trie.prototype.insert = function(word) {
+  this.arr.push(word);
+  this.map.set(word, word);
+};
+
+/** 
+ * @param {string} word
+ * @return {boolean}
+ */
+Trie.prototype.search = function(word) {
+  return this.map.get(word) || false;
+};
+
+/** 
+ * @param {string} prefix
+ * @return {boolean}
+ */
+Trie.prototype.startsWith = function(prefix) {
+  return this.arr.find(item => item.startsWith(prefix)) || false;
+};
+
+/** 
+ * Your Trie object will be instantiated and called as such:
+ * var obj = new Trie()
+ * obj.insert(word)
+ * var param_2 = obj.search(word)
+ * var param_3 = obj.startsWith(prefix)
+ */
+```
 
 ## 回溯
 
