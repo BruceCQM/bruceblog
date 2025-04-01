@@ -28,6 +28,13 @@ git config --global --list
 git config --local --list
 ```
 
+5. 删除配置
+
+```bash
+git config --local --unset user.name
+git config --local --unset user.email
+```
+
 ## 本地基本操作
 
 ### 初始化本地库

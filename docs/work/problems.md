@@ -82,7 +82,10 @@
 
 宿主环境：某银行APP，机型：iPhone。
 
+### 法一：监听pageshow事件
+
 解决代码：
+
 ```js
 // 解决ios部分机型二级页返回不刷新的问题
 window.onpageshow = async (event) => {
@@ -100,6 +103,28 @@ window.onpageshow = async (event) => {
 - `event.persisted` 属性表明页面是否在缓存中加载的。
 
 - `window.performance.navigation.type` 属性返回页面导航的类型，其中 2 表示页面通过浏览器的「前进」或「后退」按钮加载的。
+
+### 法二：监听visibilitychange事件
+
+解决代码：
+
+```js
+if (isIOS()) {
+  document.addEventListener('visibilitychange', async () => {
+    if (!document.hidden) {
+      this.doThings();
+    }
+  });
+}
+```
+
+`visibilitychange` 事件是用于检测页面可见性状态变化的事件。当页面从可见变为不可见（例如用户切换到其他标签页或最小化窗口），或从不可见变为可见时，会触发这个事件。
+
+这个事件在处理需要根据页面可见性来执行某些操作的场景中非常有用，比如节省资源、暂停动画或重新加载数据。
+
+`document.hidden` 表示页面是否隐藏的。
+
+因此上述代码结合起来就是，判断页面从不可见变为可见的时候，执行相应操作。
 
 ## iOS机型二级页面返回,上一级页面状态没重置
 
