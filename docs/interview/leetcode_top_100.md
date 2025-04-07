@@ -2860,6 +2860,53 @@ var permute = function(nums) {
 };
 ```
 
+### 78. [子集](https://leetcode.cn/problems/subsets/description/)
+
+标签：位运算、回溯、数组
+
+题目：
+
+给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
+
+解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+
+> 输入：nums = [1,2,3]
+> 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+
+思路：
+
+每个子集可以用一个二进制序列表示，索引是从右到左，例如 110 表示子集 [2,3]，每个二进制序列代表一个十进制数字，因此所有的二进制序列 0 到 2的n次方-1。
+
+代码：
+
+```js
+var subsets = function(nums) {
+  var res = [];
+  var n = nums.length;
+  // 遍历所有二进制序列，1 << n 表示 2的n次方
+  for (var mask = 0; mask < (1 << n); mask++) {
+    var arr = [];
+    // 检查mask的每一位
+    for (var i = 0;i < n;i++) {
+      // 如果第i位是1，则选中nums[i]
+      if (mask & (1 << i)) {
+        arr.push(nums[i]);
+      }
+    }
+    res.push(arr);
+  }
+  return res;
+}
+```
+
+:::tip 位运算
+`1 << n` 是一个位运算表达式，表示将数字 1 的二进制表示向左移动 n 位。
+
+<< 是左移运算符，作用是将一个数的二进制位整体向左移动指定的位数，并在右侧补 0。`1 << n` 的结果是： 1 * 2 的 n 次方。
+
+`1 << 5` 是 1 左移 5 位，右侧补零，左移 5 位 → 100000（即 32），也就是 2的5次方。
+:::
+
 ## 二分查找
 
 ### 35.[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
