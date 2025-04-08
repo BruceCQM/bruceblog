@@ -2884,11 +2884,13 @@ var subsets = function(nums) {
   var res = [];
   var n = nums.length;
   // 遍历所有二进制序列，1 << n 表示 2的n次方
+  // 2的n次方还可以写为 2 ** n，Math.pow(2, n)
   for (var mask = 0; mask < (1 << n); mask++) {
     var arr = [];
     // 检查mask的每一位
     for (var i = 0;i < n;i++) {
       // 如果第i位是1，则选中nums[i]
+      // 2 ** i，Math.pow(2, i)
       if (mask & (1 << i)) {
         arr.push(nums[i]);
       }
