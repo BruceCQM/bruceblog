@@ -2909,6 +2909,52 @@ var subsets = function(nums) {
 `1 << 5` 是 1 左移 5 位，右侧补零，左移 5 位 → 100000（即 32），也就是 2的5次方。
 :::
 
+### 17. [电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/description/)
+
+标签：回溯、哈希表、字符串
+
+题目：
+
+![17.电话号码的字母组合](./images/leetcode/question-17.png)
+
+代码：
+
+```js
+var letterCombinations = function(digits) {
+  var res = [];
+  var n = digits.length;
+  if (n === 0) return res;
+
+  var map = new Map();
+  map.set('2', ['a', 'b', 'c']);
+  map.set('3', ['d', 'e', 'f']);
+  map.set('4', ['g', 'h', 'i']);
+  map.set('5', ['j', 'k', 'l']);
+  map.set('6', ['m', 'n', 'o']);
+  map.set('7', ['p', 'q', 'r', 's']);
+  map.set('8', ['t', 'u', 'v']);
+  map.set('9', ['w', 'x', 'y', 'z']);
+  res = map.get(digits[0]);
+  if (n === 1) return res;
+
+  // 遍历剩下的数字，逐步生成所有可能的组合
+  for (var i = 1; i < n; i++) {
+    var temp = [];
+    // 遍历当前结果数组中的每一个组合
+    for (var s1 of res) {
+      // 获取当前数字对应的字母列表
+      var next = map.get(digits[i]);
+      // 将当前组合与新数字对应的每个字母拼接，生成新的组合
+      for (var s2 of next) {
+        temp.push(s1 + s2);
+      }
+    }
+    res = temp;
+  }
+  return res;
+}
+```
+
 ## 二分查找
 
 ### 35.[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
