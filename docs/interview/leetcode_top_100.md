@@ -2955,6 +2955,56 @@ var letterCombinations = function(digits) {
 }
 ```
 
+### 39. [组合总和](https://leetcode.cn/problems/combination-sum/description/)
+
+标签：回溯、数组
+
+题目：
+
+给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+
+candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。 
+
+对于给定的输入，保证和为 target 的不同组合数少于 150 个。
+
+![39.组合总和](./images/leetcode/question-39.png)
+
+代码：
+
+```js
+var combinationSum = function(candidates, target) {
+  var state = [];
+  candidates.sort((a, b) => a - b);
+  var res = [];
+  var start = 0;
+  backtrack(state, target, candidates, start, res);
+  return res;
+};
+var backtrack = function(state, target, choices, start, res) {
+  // 子集和等于 target 时，记录解
+  if (target === 0) {
+    // 注意要拷贝state！否则后面state变化会影响到res的值，传的是引用
+    res.push([...state]);
+    return;
+  }
+  // 遍历所有选择
+  // 剪枝二：从 start 开始遍历，避免生成重复子集
+  for (var i = start;i < choices.length; i++) {
+    // 剪枝一：若子集和超过 target ，则直接结束循环
+    // 这是因为数组已排序，后边元素更大，子集和一定超过 target
+    if (target - choices[i] < 0) {
+      break;
+    }
+    // 做出选择，更新target、start
+    state.push(choices[i]);
+    // 进行下一轮选择
+    backtrack(state, target - choices[i], choices, i, res);
+    // 回退：撤销选择，恢复到之前的状态
+    state.pop();
+  }
+}
+```
+
 ## 二分查找
 
 ### 35.[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
