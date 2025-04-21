@@ -244,3 +244,50 @@ if (isApp()) {
   }
 }
 ```
+
+## 页面字体大小异常问题
+
+问题描述：在 iOS 机型上，某个模块的部分页面会出现字体大小异常的问题，可能变大或者变小，而且是偶发的，不是必现的，但就是有。
+
+思路：页面整体的字体大小变大或者变小，可能是和根元素 html 的 font-size 有关系，设置有异常。
+
+因此，去代码中搜索和设置根元素 font-size（fontSize）相关的代码，发现 index.html 文件中确有一段代码是根据页面宽度设置根元素 font-size。
+
+```js
+!(function (x) {
+  function w() {
+    var v, u, t, tes, s = x.document, r = s.documentElement, a = r.getBoundingClientRect().width;
+    if (!v && !u) {
+      var n = !!x.navigator.appVersion.match(/AppleWebKit.*Mobile.*/);
+      v = x.devicePixelRatio;
+      tes = x.devicePixelRatio;
+      v = n ? v : 1, u = 1 / v;
+    }
+    if (a >= 640) {
+      r.style.fontSize = "40px";
+    } else {
+      if (a <= 320) {
+        r.style.fontSize = "20px";
+      } else {
+        r.style.fontSize = a / 320 * 20 + "px";
+      }
+    }
+  }
+  x.addEventListener("resize", function () {
+    w();
+  });
+  w();
+}(window));
+```
+
+代码根据根元素 html 的宽度动态设置根元素 font-size。经过打印日志排查，现在出现异常的时候就是根元素 font-size 变成了 40px 或者 20px，导致页面字体大小异常。
+
+尝试了很多手段，例如使用 window.innerWidth、定时器延迟一段时间再执行 w 函数，但均无效。
+
+后面试着在 app.jsx 文件的 componentDidMount 中执行这段逻辑，理论上 index.html 文件这段代码的执行肯定会比 componentDidMount 中的代码先执行，但结果发现 compionentDidMount 中设置的 font-size 被 index.html 的覆盖了。
+
+由此怀疑是不是和 resize 的监听再执行有关，又在 resize 中加了日志，发现确实是 resize 被触发导致 font-size 重新被设置了，而且取的根元素宽度还是 980px 或者 0，导致 font-size 设置异常。
+
+解决方案：把 resize 的监听删除，问题解决。
+
+但究竟是因为什么原因 resize 被触发导致 font-size 重新被设置，还不得而知。
