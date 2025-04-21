@@ -3005,6 +3005,53 @@ var backtrack = function(state, target, choices, start, res) {
 }
 ```
 
+### 22. [括号生成](https://leetcode.cn/problems/generate-parentheses/description/)
+
+标签：递归、回溯
+
+题目：
+
+数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+
+> 输入：n = 3
+>
+> 输出：["((()))","(()())","(())()","()(())","()()()"]
+
+代码：
+
+```js
+var generateParenthesis = function(n) {
+  if (n === 0) {
+    return [];
+  }
+  var res = [];
+  dfs('', n, n, res);
+  return res;
+};
+/**
+ * cur 当前递归结果
+ * left 左括号可以使用的个数
+ * right 右括号可以使用的个数
+ */
+var dfs = function(cur, left, right, res) {
+  // 递归终止的时候，直接把它添加到结果集
+  if (left === 0 && right === 0) {
+    res.push(cur);
+    return;
+  }
+  //  剪枝（左括号可以使用的个数严格大于右括号可以使用的个数，才剪枝)
+  if (left > right) {
+    return;
+  }
+  if (left > 0) {
+    dfs(cur + '(', left - 1, right, res);
+  }
+  if (right > 0) {
+    dfs(cur + ')', left, right - 1, res);
+  }
+}
+```
+
 ## 二分查找
 
 ### 35.[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
