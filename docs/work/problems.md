@@ -284,6 +284,10 @@ if (isApp()) {
 
 尝试了很多手段，例如使用 window.innerWidth、定时器延迟一段时间再执行 w 函数，但均无效。
 
+:::tip
+`window.document.documentElement.getBoundingClientRect().width` 返回的是 HTML 根元素的宽度。
+:::
+
 后面试着在 app.jsx 文件的 componentDidMount 中执行这段逻辑，理论上 index.html 文件这段代码的执行肯定会比 componentDidMount 中的代码先执行，但结果发现 compionentDidMount 中设置的 font-size 被 index.html 的覆盖了。
 
 由此怀疑是不是和 resize 的监听再执行有关，又在 resize 中加了日志，发现确实是 resize 被触发导致 font-size 重新被设置了，而且取的根元素宽度还是 980px 或者 0，导致 font-size 设置异常。
@@ -291,3 +295,61 @@ if (isApp()) {
 解决方案：把 resize 的监听删除，问题解决。
 
 但究竟是因为什么原因 resize 被触发导致 font-size 重新被设置，还不得而知。
+
+![移动端布局(二)关于视口](https://blog.csdn.net/androidioskl/article/details/122226577){link=static}
+
+## webview(iframe)多页面加载导致的问题
+
+![WebView-Taro](https://docs.taro.zone/docs/components/open/web-view){link=static}
+
+webview 是一个用来承载网页的容器，本质上是使用了 iframe 来打开了一个新的网页。
+
+### 外层window对象调用属性出错
+
+问题机型：Android。iOS 没有这个问题，挺奇怪的。
+
+问题描述：
+
+如下图所示，A模块页面使用了 WebView 容器，容器里打开了B模块页面，这种通常是打开协议之类的页面。
+
+![webview_click_error](./images/problems/webview_click_error.png)
+
+假设有一个公共方法可以设置按钮的点击函数。
+
+现在每个模块加载的时候，都会调用公共方法设置按钮的点击函数，函数的内容大概如下，接收一个函数，将其挂载到 window 对象上，接着通过 window 对象调用改方法。
+
+```js
+function setBtnClick(callback) {
+  const funcKey = `key_${new Date().getTime()}`
+  window[funcKey] = callback;
+  eval(`window.${funcKey}`);
+}
+```
+
+现在出现的问题是：点击按钮报错了，`window.xxx is not a function`。
+
+问题排查：
+
+这个问题是在某个 APP 上发现的，在手机的 vConsole 调试组件里其实值打印了 `script error` 的错误，但是没有具体的报错信息。因此需要使用 USB 线连接到电脑上，使用 Chrome 调试手机网页。
+
+连接电脑调试后，就清楚地看到，点击按钮时控制台打印了 `window.xxx is not a function` 的错误。
+
+问题分析：
+
+一开始加载A模块的页面，会调用公共方法，给 window 对象挂载一个 a 函数，按钮设置点击方法通过 `window.a()` 调用。
+
+后面 WebView 加载B模块页面，又执行了同样的操作，给**iframe 的 window 对象**挂载一个 b 函数，按钮设置了点击方法为 `window.b()`。
+
+这样导致最后按钮点击的时候，调用的是 `window.b()`，而外层的 window 对象实际上并没有 b 这个属性方法，所以就报错了。
+
+解决方法：
+
+WebView 加载完页面后，再次手动调用公共方法，重新给外层 window 挂载一个 c 方法，设置一遍按钮的点击函数调用它。
+
+```jsx
+onLoad = () => {
+  setBtnClick(() => alert('click'));
+}
+
+<WebView src={src} onLoad={this.onLoad} />
+```
