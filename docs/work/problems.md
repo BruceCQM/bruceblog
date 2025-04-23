@@ -300,7 +300,7 @@ if (isApp()) {
 
 ## webview(iframe)多页面加载导致的问题
 
-![WebView-Taro](https://docs.taro.zone/docs/components/open/web-view){link=static}
+[WebView-Taro](https://docs.taro.zone/docs/components/open/web-view){link=static}
 
 webview 是一个用来承载网页的容器，本质上是使用了 iframe 来打开了一个新的网页。
 
