@@ -3052,6 +3052,51 @@ var dfs = function(cur, left, right, res) {
 }
 ```
 
+### 79. [单词搜索](https://leetcode.cn/problems/word-search/description/)
+
+标签：深度优先搜索、回溯
+
+题目：
+
+给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+![79.单词搜索](./images/leetcode/question-79.png)
+
+思路：
+
+遍历二维字符网格，对每一个网格进行 DFS。按照上、右、下、左的方向进行递归，使用 或 连接，只要找到一条路径即可。
+
+递归终止条件：行或列索引越界、当前字符与目标字符不相同，返回 false；已遍历的字符长度与目标字符串长度相等，返回 true。
+
+访问当前字符后，需要将字符置为空，表示已访问；递归后需要还原为初始值，避免影响后续的递归。
+
+代码：
+
+```js
+var exist = function(board, word) {
+  for (var i = 0; i < board.length; i++) {
+    for (var j = 0; j < board[0].length; j++) {
+      if (dfs(board, word, i, j, 0)) return true;
+    }
+  }
+  return false;
+}
+var dfs = function(board, word, i, j, k) {
+  // 行或列索引越界、当前字符与目标字符不相同
+  if (i < 0 || i >= board.length || j < 0 || j >= board[0].length || board[i][j] !== word[k]) return false;
+  // 已遍历的字符长度与目标字符串长度相等
+  if (k === word.length - 1) return true;
+  // 访问当前字符后，需要将字符置为空，表示已访问
+  board[i][j] = '';
+  var res = dfs(board, word, i - 1, j, k + 1) || dfs(board, word, i + 1, j, k + 1) || dfs(board, word, i, j - 1, k + 1) || dfs(board, word, i, j + 1, k + 1);
+  // 还原为初始值，避免影响后续的递归
+  board[i][j] = word[k];
+  return res;
+}
+```
+
 ## 二分查找
 
 ### 35.[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
