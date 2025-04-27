@@ -3097,6 +3097,61 @@ var dfs = function(board, word, i, j, k) {
 }
 ```
 
+### 131. [分割回文串](https://leetcode.cn/problems/palindrome-partitioning/description/)
+
+标签：回溯、深度优先搜索
+
+题目：
+
+给你一个字符串 s，请你将 s 分割成一些 子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
+
+> 输入：s = "aab"
+>
+> 输出：[["a","a","b"],["aa","b"]]
+>
+> 输入：s = "a"
+>
+> 输出：[["a"]]
+
+代码：
+
+```js
+var partition = function(s) {
+  var n = s.length;
+  var res = [];
+  var temp = [];
+  var dfs = function(i) {
+    // 分割完毕
+    if (i === n) {
+      // 记住要拷贝一份
+      res.push(temp.slice());
+      return;
+    }
+    // 枚举子串的结束位置
+    for (var j = i;j < n;j++) {
+      if (helper(s, i, j)) {
+        // 分割
+        temp.push(s.substring(i, j + 1));
+        dfs(j + 1);
+        // 恢复现场
+        temp.pop();
+      }
+    }
+  }
+  dfs(0);
+  return res;
+};
+// 判断是否为回文字符串
+var helper = function(s, left, right) {
+  while (left < right) {
+    if (s[left] !== s[right]) return false;
+    left += 1;
+    right -= 1;
+  }
+  return true;
+}
+```
+
 ## 二分查找
 
 ### 35.[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
