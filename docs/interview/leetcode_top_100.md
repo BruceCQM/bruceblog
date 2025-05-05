@@ -3237,25 +3237,22 @@ var solveNQueens = function(n) {
 
 ```js
 var searchInsert = function (nums, target) {
-  var len = nums.length
+  var len = nums.length;
   if (nums[len - 1] < target) {
-    return len
+    return len;
   }
-  var left = 0,
-    right = len - 1
-  while (left < right) {
-    // 除以 2 向下取整
-    var mid = (left + right) >> 1
+  var left = 0, right = len - 1;
+  while (left <= right) {
+    var mid = Math.floor((left + right) / 2);
     if (nums[mid] === target) {
-      return mid
+      return mid;
     } else if (nums[mid] < target) {
-      // 注意 left 要加 1，不然向下取整可能会导致死循环
-      left = mid + 1
+      left = mid + 1;
     } else {
-      right = mid
+      right = mid - 1;
     }
   }
-  return left
+  return left;
 }
 ```
 
