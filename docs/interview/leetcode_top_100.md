@@ -3152,6 +3152,77 @@ var helper = function(s, left, right) {
 }
 ```
 
+### 51. [N 皇后](https://leetcode.cn/problems/n-queens/description/)
+
+标签：回溯、数组
+
+题目：
+
+按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。
+
+n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+
+给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。
+
+每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 `'Q'` 和 `'.'` 分别代表了皇后和空位。
+
+![51.N皇后](./images/leetcode/question-51.png)
+
+[思路](https://leetcode.cn/problems/n-queens/solutions/398929/nhuang-hou-by-leetcode-solution/?envType=study-plan-v2&envId=top-100-liked)
+
+代码：
+
+```js
+var solveNQueens = function(n) {
+  var res = [];
+  // 记录每个皇后的位置，数组索引是行，元素值是列
+  var queens = new Array(n).fill(-1);
+  // 判断所在列是否已经有皇后
+  var columns = new Set();
+  // 判断所在对角线是否已经有皇后，1是左上到右下的斜线，2是右上到左下的斜线
+  var diagonal1 = new Set();
+  var diagonal2 = new Set();
+  var row = new Array(n).fill(".");
+
+  // 生成棋盘排列结果
+  function generateBoard() {
+    var board = [];
+    for (var i = 0;i < n;i++) {
+      row[queens[i]] = "Q";
+      board.push(row.join(''));
+      row[queens[i]] = ".";
+    }
+    return board;
+  }
+
+  function backtrack(row) {
+    if (row === n) {
+      var board = generateBoard();
+      res.push(board);
+    } else {
+      for (var i = 0;i < n;i++) {
+        // 如果列或者对角线已经有皇后，则跳过
+        if (columns.has(i) || diagonal1.has(row - i) || diagonal2.has(row + i)) {
+          continue;
+        }
+        queens[row] = i;
+        columns.add(i);
+        diagonal1.add(row - i);
+        diagonal2.add(row + i);
+        backtrack(row + 1);
+        // 恢复现场
+        columns.delete(i);
+        diagonal1.delete(row - i);
+        diagonal2.delete(row + i);
+      }
+    }
+  }
+
+  backtrack(0);
+  return res;
+};
+```
+
 ## 二分查找
 
 ### 35.[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
