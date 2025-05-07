@@ -1414,8 +1414,7 @@ var detectCycle = function (head) {
 // 方法二：快慢双指针。
 // 首先快慢指针找到第一次重合的节点，接着快指针从头开始，两个指针相遇的节点即为环的入口
 var detectCycle = function (head) {
-  var slow = head,
-    fast = head
+  var slow = head, fast = head;
   while (true) {
     // 没有环，返回null
     if (!fast || !fast.next) {
@@ -1435,8 +1434,29 @@ var detectCycle = function (head) {
     slow = slow.next
     fast = fast.next
   }
-  return slow
+  return slow;
 }
+
+var detectCycle = function(head) {
+  var slow = head, fast = head;
+  var hasCycle = false;
+  while (fast && fast.next) {
+    fast = fast.next.next;
+    slow = slow.next;
+    if (slow === fast) {
+      hasCycle = true;
+      break;
+    };
+  }
+  if (!hasCycle) return null;
+
+  fast = head;
+  while (slow !== fast) {
+    slow = slow.next;
+    fast = fast.next;
+  }
+  return fast;
+};
 ```
 
 ### 21. [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/description/)
