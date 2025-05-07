@@ -1363,18 +1363,27 @@ var printList = function (head) {
 
 ```js
 // 双指针：快慢指针
-var hasCycle = function (head) {
-  var slow = head,
-    fast = head
+var hasCycle = function(head) {
+  var slow = head, fast = head;
   while (fast && fast.next) {
-    slow = slow.next
-    fast = fast.next.next
-    if (slow === fast) {
-      return true
-    }
+    fast = fast.next.next;
+    slow = slow.next;
+    if (slow === fast) return true;
   }
-  return false
-}
+  return false;
+};
+
+// 哈希表
+var hasCycle = function(head) {
+  var map = new Map();
+  var p = head;
+  while (p) {
+    if (map.has(p)) return true;
+    map.set(p);
+    p = p.next;
+  }
+  return false;
+};
 ```
 
 ### 142. [环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/description/)
