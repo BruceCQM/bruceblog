@@ -3371,32 +3371,41 @@ var searchMatrix = function(matrix, target) {
 >
 > 输出：[-1,-1]
 
+思路：
+
+找第一个元素，就是找第一个元素的位置。
+
+找最后一个元素，就是找第一个比目标值大的元素的位置，然后减一。
+
 代码：
 
 ```js
-const binarySearch = (nums, target, lower) => {
-  let left = 0, right = nums.length - 1, ans = nums.length;
+var searchRange = function(nums, target) {
+  var res = [-1, -1];
+  var leftIndex = binarySearch(nums, target, false);
+  var rightIndex = binarySearch(nums, target, true) - 1;
+  // 检查索引是否符合要求，避免数组没有元素的情况
+  if (leftIndex <= rightIndex && rightIndex < nums.length && nums[leftIndex] === target && nums[rightIndex] === target) {
+    res = [leftIndex, rightIndex];
+  }
+  return res;
+};
+var binarySearch = function(nums, target, bound) {
+  var left = 0, right = nums.length - 1;
+  var res = nums.length;
   while (left <= right) {
-    const mid = Math.floor((left + right) / 2);
-    if (nums[mid] > target || (lower && nums[mid] >= target)) {
+    var mid = Math.floor((left + right) / 2);
+    // 找第一个元素，值等于target的都需要移动right指针
+    // 找最后一个元素，值等于target的都需要移动left指针
+    if ((!bound && nums[mid] >= target) || (bound && nums[mid] > target)) {
       right = mid - 1;
-      ans = mid;
+      res = mid;
     } else {
       left = mid + 1;
     }
   }
-  return ans;
+  return res;
 }
-
-var searchRange = function(nums, target) {
-  let ans = [-1, -1];
-  const leftIdx = binarySearch(nums, target, true);
-  const rightIdx = binarySearch(nums, target, false) - 1;
-  if (leftIdx <= rightIdx && rightIdx < nums.length && nums[leftIdx] === target && nums[rightIdx] === target) {
-    ans = [leftIdx, rightIdx];
-  } 
-  return ans;
-};
 ```
 
 ## 栈
