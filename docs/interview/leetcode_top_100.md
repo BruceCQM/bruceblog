@@ -3408,6 +3408,73 @@ var binarySearch = function(nums, target, bound) {
 }
 ```
 
+### 33.[搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/description/)
+
+标签：二分查找
+
+题目：
+
+整数数组 nums 按升序排列，数组中的值 互不相同 。
+
+在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。
+
+给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。
+
+你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
+
+> 输入：nums = [4,5,6,7,0,1,2], target = 0
+>
+> 输出：4
+>
+> 输入：nums = [4,5,6,7,0,1,2], target = 3
+>
+> 输出：-1
+>
+> 输入：nums = [1], target = 0
+>
+> 输出：-1
+
+思路：
+
+将数组从中间分开成左右两部分的时候，一定有一部分的数组是有序的。拿示例来看，我们从 6 这个位置分开以后数组变成了 [4, 5, 6] 和 [7, 0, 1, 2] 两个部分，其中左边 [4, 5, 6] 这个部分的数组是有序的，其他也是如此。
+
+如果 [l, mid - 1] 是有序数组，且 target 的大小满足 `[nums[l],nums[mid])`，则我们应该将搜索范围缩小至 [l, mid - 1]，否则在 [mid + 1, r] 中寻找。
+
+如果 [mid, r] 是有序数组，且 target 的大小满足 `(nums[mid+1],nums[r]]`，则我们应该将搜索范围缩小至 [mid + 1, r]，否则在 [l, mid - 1] 中寻找。
+
+代码：
+
+```js
+var search = function(nums, target) {
+  var len = nums.length;
+  if (len === 0) return -1;
+  if (len === 1) return nums[0] === target ? 0 : -1;
+
+  var left = 0, right = len - 1;
+  while (left <= right) { 
+    var mid = Math.floor((left + right) / 2);
+    if (nums[mid] === target) return mid;
+    // 左边是有序数组
+    if (nums[0] <= nums[mid]) {
+      // target 在左边，注意 <= 小于等于
+      if (nums[0] <= target && target < nums[mid]) {
+        right = mid -1;
+      } else {
+        left = mid + 1;
+      }
+    } else {
+      // 右边是有序数组，且 target 在右边
+      if (nums[mid] < target && target <= nums[len - 1]) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+  }
+  return -1;
+};
+```
+
 ## 栈
 
 ## 堆
