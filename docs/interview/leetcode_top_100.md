@@ -3475,6 +3475,52 @@ var search = function(nums, target) {
 };
 ```
 
+### 153.[寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/description/)
+
+标签：二分查找
+
+题目：
+
+已知一个长度为 n 的数组，预先按照升序排列，经由 1 到 n 次 旋转 后，得到输入数组。例如，原数组 nums = [0,1,2,4,5,6,7] 在变化后可能得到：
+
+- 若旋转 4 次，则可以得到 [4,5,6,7,0,1,2]
+- 若旋转 7 次，则可以得到 [0,1,2,4,5,6,7]
+
+注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
+
+给你一个元素值 互不相同 的数组 nums ，它原来是一个升序排列的数组，并按上述情形进行了多次旋转。请你找出并返回数组中的 最小元素 。
+
+你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
+
+思路：
+
+思路和第 33 题类似，将数组从中间分开成左右两部分的时候，一定有一边的数组是升序的。
+
+以数组第一个元素作为比较基准，如果 mid 左边的数组是升序的，那么最小元素就在 mid 的右边，执行 left = mid + 1；否则 mid 右边的数组是升序的，那么最小元素只可能在 mid 的左边，执行 right = mid - 1。
+
+每次计算 mid 完，都与第一个元素进行比较，更新最小值。
+
+代码：
+
+```js
+var findMin = function(nums) {
+  var left = 0, right = nums.length - 1;
+  var res = nums[0];
+  while (left <= right) {
+    var mid = Math.floor((left + right) / 2);
+    // 更新最小值
+    res = Math.min(res, nums[mid]);
+    // 左边数组是升序的，更小的值只可能在 mid 的右边
+    if (nums[0] <= nums[mid]) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+  return res;
+};
+```
+
 ## 栈
 
 ## 堆
