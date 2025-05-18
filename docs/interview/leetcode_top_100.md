@@ -3529,6 +3529,55 @@ var findMin = function(nums) {
 
 ## 栈
 
+### 20.[有效的括号](https://leetcode.cn/problems/valid-parentheses/description/)
+
+标签：栈
+
+题目：
+
+给定一个只包括 `'('，')'，'{'，'}'，'['，']'` 的字符串 s ，判断字符串是否有效。
+
+有效字符串需满足：
+
+- 左括号必须用相同类型的右括号闭合。
+- 左括号必须以正确的顺序闭合。
+- 每个右括号都有一个对应的相同类型的左括号。
+
+> 输入：s = "()"
+> 
+> 输出：true
+>
+> 输入：s = "()[]{}"
+> 
+> 输出：true
+>
+> 输入：s = "(]"
+> 
+> 输出：false
+
+思路：
+
+遍历字符串，如果遇到左括号，则将左括号入栈；如果遇到右括号，则判断栈顶的左括号是否匹配，如果匹配则出栈，否则返回 false。
+
+最后判断栈是否为空，如果为空则返回 true，否则返回 false，避免存在多余的左括号。
+
+代码：
+
+```js
+var isValid = function(s) {
+  var map = new Map([['(',')'], ['[',']'], ['{', '}']]);
+  var stack = [];
+  for (var str of s) {
+    if (map.has(str)) {
+      stack.push(str);
+    } else if (map.get(stack.pop()) !== str) {
+      return false;
+    }
+  }
+  return stack.length === 0;
+};
+```
+
 ## 堆
 
 ## 贪心算法
