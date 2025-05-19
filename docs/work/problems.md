@@ -296,7 +296,7 @@ if (isApp()) {
 
 但究竟是因为什么原因 resize 被触发导致 font-size 重新被设置，还不得而知。
 
-![移动端布局(二)关于视口](https://blog.csdn.net/androidioskl/article/details/122226577){link=static}
+[移动端布局(二)关于视口](https://blog.csdn.net/androidioskl/article/details/122226577){link=static}
 
 ## webview(iframe)多页面加载导致的问题
 
