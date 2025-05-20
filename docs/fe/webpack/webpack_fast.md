@@ -1,5 +1,7 @@
 # webpack 构建速度和体积优化
 
+[玩转 webpack，使你的打包速度提升 90%](https://juejin.cn/post/6844904071736852487){link=card}
+
 ## 使用webpack内置的stats分析体积
 
 webpack 的内置对象 stats 存储着构建的统计信息，包括构建花费的总时间、每个模块的大小等。
