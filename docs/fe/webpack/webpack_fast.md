@@ -1,6 +1,12 @@
 # webpack 构建速度和体积优化
 
+webpack好文推荐：
+
 [玩转 webpack，使你的打包速度提升 90%](https://juejin.cn/post/6844904071736852487){link=card}
+
+[五种可视化方案分析 webpack 打包性能瓶颈](https://juejin.cn/post/6844904056985485320){link=card}
+
+[webpack 最佳配置指北](https://juejin.cn/post/6844904036936712200){link=card}
 
 ## 使用webpack内置的stats分析体积
 
