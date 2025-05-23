@@ -354,3 +354,41 @@ export default class Store {
   }
 }
 ```
+
+## 跨store引用问题
+
+store 之间可能需要引用，官方推荐使用一个 根store 来实现，解决交叉引用问题。
+
+```js
+class RootStore {
+  constructor() {
+    this.userStore = new UserStore(this)
+    this.todoStore = new TodoStore(this)
+  }
+}
+
+class UserStore {
+  constructor(rootStore) {
+    this.rootStore = rootStore
+  }
+
+  getTodos(user) {
+    // Access todoStore through the root store.
+    return this.rootStore.todoStore.todos.filter(todo => todo.author === user)
+  }
+}
+
+class TodoStore {
+  todos = []
+  rootStore
+
+  constructor(rootStore) {
+    makeAutoObservable(this)
+    this.rootStore = rootStore
+  }
+}
+```
+
+[Combining multiple stores](https://mobx.js.org/defining-data-stores.html){link=static}
+
+[组合多个 stores](https://cn.mobx.js.org/best/store.html){link=static}
