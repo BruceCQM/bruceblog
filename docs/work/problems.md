@@ -372,3 +372,116 @@ const svg1 = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class=
 
 <Image src={svgToBase64(svg1, '#fff')} />
 ```
+
+## CSS 自定义属性实现主题切换
+
+CSS 自定义属性（CSS Variables）允许我们定义变量，然后使用这些变量来设置 CSS 属性。
+
+CSS 自定义属性教程详见：
+
+[CSS专题之自定义属性](https://blog.csdn.net/m0_56326830/article/details/147871201){link=static}
+
+这里只需要使用三个知识点：定义CSS自定义属性、使用CSS自定义属性、修改CSS自定义属性。
+
+### 定义CSS自定义属性
+
+```css
+:root {
+  --theme-color: red;
+}
+```
+
+CSS 自定义属性必须要定义在某个选择器里面，这里的 `:root` 选择器就是根元素 html。
+
+CSS 自定义属性有使用范围，只能在定义的选择器及其子元素里面使用。
+
+CSS 自定义属性命名必须以 `--` 开头，便于浏览器区分普通属性和自定义属性。
+
+### 使用CSS自定义属性
+
+```css
+.button {
+  background-color: var(--theme-color, blue);
+}
+```
+
+通过 `var()` 函数使用自定义属性，第一个参数就是变量名，第二个参数是默认值，即如果取不到变量值的时候，使用默认值。
+
+### 使用js修改CSS自定义属性
+
+```js
+document.documentElement.style.setProperty('--theme-color', green);
+```
+
+其实就是把自定义属性设置在对应选择器的内联样式之中，只不过 html 标签不认识这个自定义属性。
+
+这样子设置完之后，所有使用到这个变量的样式都会同步修改。
+
+![css_custom_property](./images/problems/css_custom_properties.png)
+
+### 实战：动态切换主题
+
+原始 HTML 文件：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  :root {
+    --primary-color: #334477;
+    --bg-color: #f5f5f5;
+  }
+  body {
+    background: var(--bg-color);
+    transition: all 0.3s;
+  }
+  button {
+    background: var(--primary-color);
+    color: white;
+  }
+</style>
+</head>
+<body>
+  <button onclick="changeTheme('#ff5722', '#333')">切换橙色主题</button>
+  
+  <script>
+    function changeTheme(color, bg) {
+      document.documentElement.style.setProperty('--primary-color', color);
+      document.documentElement.style.setProperty('--bg-color', bg);
+    }
+  </script>
+</body>
+</html>
+```
+
+React 项目：
+
+可以在 app.scss 中定义变量。
+
+```scss
+// app.scss
+:root {
+  --theme-color: red;
+}
+```
+
+在某个 jsx 文件里动态设置主题。
+
+```jsx
+class Test extends Component {
+  render() {
+    const { themeColor } = this.props;
+    document.documentElement.style.setProperty('--theme-color', themeColor);
+    return (...)
+  }
+}
+```
+
+其它所有需要根据主题设置样式的组件里面，使用这个自定义属性。
+
+```scss
+.button {
+  background-color: var(--theme-color, blue);
+}
+```

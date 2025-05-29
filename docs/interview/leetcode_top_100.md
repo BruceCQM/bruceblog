@@ -2918,7 +2918,7 @@ var subsets = function(nums) {
     var arr = [];
     // 检查mask的每一位
     for (var i = 0;i < n;i++) {
-      // 如果第i位是1，则选中nums[i]
+      // 判断mask第i位是否为1，如果第i位是1，则选中nums[i]
       // 2 ** i，Math.pow(2, i)
       if (mask & (1 << i)) {
         arr.push(nums[i]);
