@@ -650,7 +650,7 @@ module.exports = {
 
 ## 浏览器兼容性
 
-webpack 支持所有复核 ES5 标准的浏览器（不支持 IE8 及以下版本）。
+webpack 支持所有符合 ES5 标准的浏览器（不支持 IE8 及以下版本）。
 
 webpack 的 import() 和 require.ensure() 需要 Promise。如果想要支持旧版本浏览器，在使用这些表达式之前，需要提前[加载 polyfill](https://www.webpackjs.com/guides/shimming/#loading-polyfills)。
 

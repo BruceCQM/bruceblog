@@ -16,7 +16,7 @@
 
 ## webapck 工作原理
 
-通过 `fs.readFileSync` 读取入口文件，然后通过 `@bable/parser` 获取 ast 抽象语法树，借助 `@babel/core` 和 `@babel/preset-env`，把 ast 语法树转换成合适的代码，最后输出一个文件对象。
+通过 `fs.readFileSync` 读取入口文件，然后通过 `@babel/parser` 获取 ast 抽象语法树，借助 `@babel/core` 和 `@babel/preset-env`，把 ast 语法树转换成合适的代码，最后输出一个文件对象。
 
 它会以一个或多个文件作为打包的入口，在 webpack 处理不同模块依赖时，会将代码分割成多个 chunk，每个 chunk 包含一个或多个模块，最后将整个项目所有文件编译组合成一个或多个 bundle 输出出去。
 
@@ -102,7 +102,7 @@ console.log('🥬 333 ');
 
 - 两个入口分别分配到名称为 index2 和 index3 的 chunk 中。
 
-- `runtimeChunk: 'multiple'` 的升明，会抽离 webpack 运行时代码到单独的 chunk 中。有两个入口，因此有两份运行时 chunk。
+- `runtimeChunk: 'multiple'` 的声明，会抽离 webpack 运行时代码到单独的 chunk 中。有两个入口，因此有两份运行时 chunk。
 
 - jquery 符合 cacheGroups.vendor 规则，抽离到名为 vendor 的 chunk 中。
 
