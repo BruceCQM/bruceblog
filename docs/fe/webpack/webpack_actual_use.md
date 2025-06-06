@@ -130,6 +130,16 @@ module.exports = {
 }
 ```
 
+:::warning 小节问答
+1、`.less` 文件经过 `less-loader` 处理成 `.css` 文件之后，是否还会经过 `css-loader` 的处理呢?
+
+需要的，每个 loader 一般只做一件事情。
+
+拿解析 less 为例，需要先将 less 转换成 css，这个是 `less-loader` 处理，处理成 css 之后，但是由于 webpack 并不能识别 css 文件，依然需要 `css-loader` 将 css 转换成 commonjs 对象放到 js 里面，最后页面渲染的时候要想把样式显示出来，需要借助 `style-loader` 或者 `MiniCssExtractPlugin.loader` 把 css 插入到 html 里面的 style 或者以 link 外部 css 的方式。
+
+每个 loader 就是一个函数，可以把这个过程理解成流水线的方式。
+:::
+
 ## 解析图片和字体
 
 ### 方式一：file-loader
@@ -290,7 +300,7 @@ JS 源代码经过 webpack compiler 编译器的处理，生成的 bundle 传递
 
 热更新也可以使用 webpack-dev-middleware 来实现热更新，使用起来更复杂，也更加灵活。
 
-:::tip 小节问答
+:::warning 小节问答
 1、热更新插件 HotModuleReplacementPlugin 的作用？
 
 热更新中最核心的是 HMR Server 和 HMR Runtime。
@@ -304,6 +314,20 @@ HotModuleReplacementPlugin 的作用：webpack 构建出来的 bundle.js 本身�
 简单来说就是让 bundle.js 具备热更新的能力。
 
 在 webpack 配置文件中可以不必手动引入 HotModuleReplacementPlugin，只要配置了 `hot: true` 就会自动引入。
+
+2、webpack-dev-server 和 hot-module-replacement-plugin 之间的区别
+
+webpack-dev-server(WDS)的功能提供 bundle server的能力，就是生成的 bundle.js 文件可以通过 localhost://xxx 的方式去访问，另外 WDS 也提供 livereload(浏览器的自动刷新)。
+
+hot-module-replacement-plugin 的作用是提供 HMR 的 runtime，并且将 runtime 注入到 bundle.js 代码里面去。一旦磁盘里面的文件修改，那么 HMR server 会将有修改的 js module 信息发送给 HMR runtime，然后 HMR runtime 去局部更新页面的代码。因此这种方式可以不用刷新浏览器。
+
+单独写两个包也是出于功能的解耦来考虑的。简单来说就是：hot-module-replacement-plugin 包给 webpack-dev-server 提供了热更新的能力。
+
+3、为什么浏览器有刷新？
+
+webpack-dev-server 默认是会在内容编译完成后自动刷新(liveload)浏览器的，此处增加了 HotModuleReplacementPlugin 插件之后可以做到 HMR的。
+
+如果HMR失败的化会降级使用 liveload 自动刷新浏览器模式。
 :::
 
 ## 文件指纹
@@ -362,7 +386,6 @@ module.exports = {
 }
 ```
 
-
 ### 图片设置文件指纹
 
 图片的文件指纹通过设置 file-loader 的 `name` 参数来设置。
@@ -398,6 +421,13 @@ module.exports = {
 }
 ```
 
+::: warning 小节问答
+1、js 文件为什么不是用 contenthash？
+
+因为 js 没有 contenthash，只能从 chunkhash 和 hash 中选择。
+
+hash 对于 js 的含义是整个构建的文件指纹，每次构建有任何文件变了这个值都会变。所以 js 只能用 chunkhash。
+:::
 
 ## 代码压缩
 
@@ -712,10 +742,17 @@ module.exports = {
 
 而 style-loader 生成的 html 文件本身是没有引入样式的，是在运行 html 文件的时候动态引入，因此查看网页源代码可以看到样式引入。
 
-:::warning
+:::warning 小节问答
+1、在做CSS内联实战的时候发现，第一种方式style-loader内联的话，在webpack打包后生成的html中源码是看不到内联进去的css样式的，只有在浏览器中才能看到，但是第二种方式采用html-inline-css-webpack-plugin插件内联的话，在webpack打包后生成的html中源码是能看到内联进去的css样式的，当然浏览器中也能看到。请问这是为什么？
+
 style-loader 插入样式是一个动态的过程，你可以直接查看打包后的 html 源码，并不会看到 html 有 style 样式的。
 
 css-loader 的作用是将 css 转换成 commonjs 对象，也就是样式代码会被放到 js 里面去了。style-loader 是代码运行时动态的创建 style 标签，然后将 css style 插入到 style 标签里面去，对应的源码：https://github.com/webpack-contrib/style-loader/blob/master/src/runtime/injectStylesIntoStyleTag.js#L260
+
+CSS 内联的思路是：先将 css 提取打包成一个独立的 css 文件（使用MiniCssExtractPlugin.loader），然后读取提取出的 css 内容注入到页面的 style 里面去。这个过程在构建阶段完成。
+
+CSS 内联的演示已经以文章的形式更新到博客里面（https://github.com/cpselvis/blog/issues/5）
+CSS 内联的例子（https://github.com/cpselvis/geektime-webpack-course/tree/master/code/chapter03/inline-resource）
 
 html-inline-css-webpack-plugin CSS 内联的思路是：先将 css 提取打包成一个独立的 css 文件（使用MiniCssExtractPlugin.loader），然后读取提取出的 css 内容注入到页面的 style 里面去。这个过程在构建阶段完成。
 :::

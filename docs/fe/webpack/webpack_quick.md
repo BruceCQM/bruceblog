@@ -377,25 +377,7 @@ module.exports = {
 
 ## webpack 问答
 
-1、.less 文件经过 less-loader 处理成 .css 文件之后，是否还会经过 css-loader 的处理呢?
-
-需要的，每个 loader 一般只做一件事情。拿解析 less 为例，需要先将 less 转换成 css，这个是 less-loader 处理，处理成 css 之后，但是由于 webpack 并不能识别 css 文件，依然需要 css-loader 将 css 转换成 commonjs 对象放到 js 里面，最后页面渲染的时候要想把样式显示出来，需要借助 style-loader 或者 MiniCssExtractPlugin.loader 把 css 插入到 html 里面的 style 或者以 link 外部 css 的方式。
-
-每个 loader 就是一个函数，可以把这个过程理解成流水线的方式。
-
-2、loader 之间应该也存在叠加处理，类似流水线一般的吗?比如 url-loader 和 file-loader 之间。
-
-这个就看写loader 的作者了，可以把 loader 的职责分的更细，比如把 url-loader 的功能拆成 file-loader 和一个用于base64的 loader，也可以一个 loader 做几件事情。我更倾向把 loader 责任划分的更细和清楚。
-
-3、process.env.NODE_ENV 到底是什么呢，是 node 提供的运行环境参数还是啥？
-
-process.env 这个会返回用户的环境变量，而NODE_ENV是环境变量里面用的较多的一个，用来设置当前构建脚本是开发阶段和生产阶段。如果将mode设置成development，则process.env.NODE_ENV的值就是development，production也同理。
-
-4、Babel 有两块比较重要的内容，plugins 和 presets。
-
-plugins 可以理解为一个功能，presets 可以理解为一系列 plugins 的集合。
-
-5、使用 px2rem-loader 和 lib-flexible 将 CSS px 自动转换成 rem，如果某些地方不需要转换怎么做？
+1、使用 px2rem-loader 和 lib-flexible 将 CSS px 自动转换成 rem，如果某些地方不需要转换怎么做？
 
 可以使用 /*no*/ 的注释语法。有这种注释语法的不会进行 rem 转换。
 
@@ -412,48 +394,3 @@ plugins 可以理解为一个功能，presets 可以理解为一系列 plugins �
 px2rem-loader 和 flexible.js 必须一起使用。px2rem-loader 只是以构建的手段将 px 单位转换成了 rem。但是 rem 和 px 的单位计算并不清楚。
 
 flexible.js 的作用就是动态的去计算不同设备下的 rem 相对 px 的单位，也就是计算跟元素 html 节点的 font-size 大小。
-
-6、在做CSS内联实战的时候发现，第一种方式style-loader内联的话，在webpack打包后生成的html中源码是看不到内联进去的css样式的，只有在浏览器中才能看到，但是第二种方式采用html-inline-css-webpack-plugin插件内联的话，在webpack打包后生成的html中源码是能看到内联进去的css样式的，当然浏览器中也能看到。请问这是为什么？
-
-style-loader 插入样式是一个动态的过程，你可以直接查看打包后的 html 源码并不会看到 html 有 style 样式的。
-
-css-loader 的作用是将 css 转换成 commonjs 对象，也就是样式代码会被放到 js 里面去了。style-loader 是代码运行时动态的创建 style 标签，然后将 css style 插入到 style 标签里面去，对应的源码：https://github.com/webpack-contrib/style-loader/blob/master/src/runtime/injectStylesIntoStyleTag.js#L260。
-
-CSS 内联的思路是：先将 css 提取打包成一个独立的 css 文件（使用MiniCssExtractPlugin.loader），然后读取提取出的 css 内容注入到页面的 style 里面去。这个过程在构建阶段完成。
-
-CSS 内联的演示已经以文章的形式更新到博客里面（https://github.com/cpselvis/blog/issues/5）
-CSS 内联的例子（https://github.com/cpselvis/geektime-webpack-course/tree/master/code/chapter03/inline-resource）
-
-7、热更新插件 HotModuleReplacementPlugin 的作用？
-
-热更新中最核心的是 HMR Server 和 HMR Runtime。
-
-HMR Server 是服务端，用来将变化的 js 模块通过 websocket 的消息通知给浏览器端。
-
-HMR Runtime是浏览器端，用于接受 HMR Server 传递的模块数据，浏览器端可以看到 .hot-update.json 的文件过来。
-
-HotModuleReplacementPlugin 的作用：webpack 构建出来的 bundle.js 本身是不具备热更新的能力的，HotModuleReplacementPlugin 的作用就是将 HMR runtime 注入到 bundle.js，使得 bundle.js 可以和HMR server建立 websocket 的通信连接。
-
-简单来说就是让 bundle.js 具备热更新的能力。
-
-在 webpack 配置文件中可以不必手动引入 HotModuleReplacementPlugin，只要配置了 `hot: true` 就会自动引入。
-
-8、webpack-dev-server 和 hot-module-replacement-plugin 之间的区别
-
-webpack-dev-server(WDS)的功能提供 bundle server的能力，就是生成的 bundle.js 文件可以通过 localhost://xxx 的方式去访问，另外 WDS 也提供 livereload(浏览器的自动刷新)。
-
-hot-module-replacement-plugin 的作用是提供 HMR 的 runtime，并且将 runtime 注入到 bundle.js 代码里面去。一旦磁盘里面的文件修改，那么 HMR server 会将有修改的 js module 信息发送给 HMR runtime，然后 HMR runtime 去局部更新页面的代码。因此这种方式可以不用刷新浏览器。
-
-单独写两个包也是出于功能的解耦来考虑的。简单来说就是：hot-module-replacement-plugin 包给 webpack-dev-server 提供了热更新的能力。
-
-9、为什么浏览器有刷新？
-
-webpack-dev-server 默认是会在内容编译完成后自动刷新(liveload)浏览器的，此处增加了 HotModuleReplacementPlugin 插件之后可以做到 HMR的。
-
-如果HMR失败的化会降级使用 liveload 自动刷新浏览器模式。
-
-10、js 文件为什么不是用 contenthash？
-
-因为 js 没有 contenthash，只能从 chunkhash 和 hash 中选择。
-
-hash 对于 js 的含义是整个构建的文件指纹，每次构建有任何文件变了这个值都会变。所以 js 只能用 chunkhash。
