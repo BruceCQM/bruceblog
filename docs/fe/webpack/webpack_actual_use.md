@@ -49,6 +49,21 @@ module.exports = {
     ]
   }
 }
+
+// 如果不单独创建一个 .babelrc 文件，也可以把ES6的Babel配置卸载loader里
+module.exports = {
+  module: {
+    rules: [
+      test: /.js$/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ["@babel/preset-env"],
+        }
+      }
+    ]
+  }
+}
 ```
 
 ## 解析 React JSX
