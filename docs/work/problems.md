@@ -455,6 +455,43 @@ document.documentElement.style.setProperty('--theme-color', green);
 </html>
 ```
 
+更优雅的方式应该是定义好主题，每个主题下的变量值不同，这样就不需要逐个修改变量。给根元素设置 data-theme 属性，设置主题。
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  :root {
+    --primary-color: #334477;
+    --bg-color: #f5f5f5;
+  }
+  [data-theme="orange"] {
+    --primary-color: #ff5722;
+    --bg-color: #333333;
+  }
+  body {
+    background: var(--bg-color);
+    transition: all 0.3s;
+  }
+  button {
+    background: var(--primary-color);
+    color: white;
+  }
+</style>
+</head>
+<body>
+  <button onclick="changeTheme('#ff5722', '#333')">切换橙色主题</button>
+  
+  <script>
+    function changeTheme(color, bg) {
+      document.documentElement.setAttribute('data-theme', 'orange');
+    }
+  </script>
+</body>
+</html>
+```
+
 React 项目：
 
 可以在 app.scss 中定义变量。
