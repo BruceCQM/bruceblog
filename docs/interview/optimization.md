@@ -4,82 +4,6 @@
 
 [前端性能优化实战 从 30s 到 2s](https://juejin.cn/post/7008072984858460196){link=static}
 
-## SPA 单页面应用的理解
-
-### SPA 概述
-
-SPA (Single Page Application) 是指在页面初始化的时候加载相应的 HTML、css、JS 文件，加载完后不会因为用户的操作而进行页面重载或跳转，内容变化利用路由机制实现。
-
-优点：
-
-- 良好的交互体验。
-
-用户在访问应用页面是不会频繁的去切换浏览页面，从而避免了页面的重新加载。
-
-- 前后端分离。
-
-单页Web应用可以和 RESTful 规约一起使用，通过 REST API 提供接口数据，并使用 Ajax 异步获取，这样有助于分离客户端和服务器端工作。
-
-更进一步，在客户端也可以分解为静态页面和页面交互两个部分。
-
-- 减轻服务器压力。
-
-服务器只用出数据就可以，不用管展示逻辑和页面合成，吞吐能力会提高几倍。
-
-- 共用一套后端代码。
-
-不用修改后端程序代码就可以同时用于 Web 界面、手机、平板等多种客户端。
-
-缺点：
-
-- 首屏加载速度慢。
-
-- 不利于SEO优化。
-
-- 不能使用浏览器前进后退功能。
-
-### SPA 优化
-
-1、首屏加载慢
-
-原因：网络延迟、资源文件过大、重复加载、加载脚本时的阻塞渲染。
-
-优化：
-
-- 使用路由懒加载，减少入口文件大小，按需加载。
-
-- UI 框架按需加载。例如 element-ui 只引入用到的组件，不要全部引入。
-
-- 设置骨架屏，提升用户视觉体验。
-
-- 静态资源本地缓存。
-
-- 防止组件重复下载。在 webpack 中配置 CommonsChunkPlugin，为 minChunks 设置具体的值，表示把使用 n 次及以上的包抽离出来，放入公共依赖文件，避免重复加载组件。
-
-- 图片资源压缩：雪碧图、使用在线字体图标等。
-
-- 开启 Gzip 压缩，compression-webpack-plugin 对资源文件进行压缩。
-
-- 使用 SSR，即在服务端渲染，再发送给浏览器。
-
-- 复用页面组件，在加载初始页面的时候会完全加载，然后逐渐替换更新新的页面片段。
-
-2、前进后退优化
-
-保存历史路由信息。在页面切换的时候，也可以使用骨架屏，防止空屏出现。
-
-3、SEO 优化
-
-页面的 `#` 替换成 `#!`，解决难被搜索引擎抓取到的问题。
-
-[浅谈前端SPA（单页面应用](https://blog.csdn.net/cmzhuang/article/details/94334619){link=static}
-
-[面试官：SPA（单页应用）首屏加载速度慢怎么解决？](https://blog.csdn.net/weixin_44475093/article/details/110675962){link=static}
-
-### 前端首屏性能优化
-
-![前端首屏性能优化](./images/optimization/performance_optimization.png)
-
 ## 项目做过的性能优化手段
 
 - 移除sourcemap打包：升级基础库，修复sourcemap被以base64格式打包到结果包中的问题。
@@ -174,6 +98,154 @@ export const getUserApiOnce = (params) => {
 ```
 
 项目上线后，p90 降了 200ms 左右。主要提速点还是 sourcemap 移除掉。
+
+### webpack层面做的性能优化
+
+lighthouse 对首屏分析结果显示，需要减少 JS 执行时间。
+
+> Reduce JavaScript execution time. 
+>
+> Consider reducing the time spent parsing, compiling, and executing JS. You may find delivering smaller JS payloads helps with this.
+
+优化点：某个 JS 包 chunk-a 体积比较大，导致执行时间较长，需要进行优化。
+
+优化方法：
+
+- 将一些二方包移到别的 chunk 
+
+- 对一些业务包进行代码分割，按需加载，从而降低 chunk-a 体积大小
+
+- 某些业务包，不要暴露整个 JS，而是按需暴露，使用方按需引入，从而降低 chunk-a 体积大小
+
+优化之后，chunk-mu 从 473.67KB，降低到 200.63KB。
+
+```js
+module.exports = {
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commonComponents: {
+          // 把一些组件移动到 chunk-common-components
+          test: /[\/]node_modules[\\/](swiper)/,
+          name: 'chunk-common-components',
+          chunks: 'all',
+          priority: 100,
+          reuseExistingChunk: true,
+        }
+      }
+    }
+  }
+}
+```
+
+```js
+// 代码分割与懒加载
+import Loadable from 'react-loadable';
+
+const loading = () => null;
+const MyComponentLazy = isH5 ? Loadable({ loader: () => import(/* webpackChunkName: "lazy_comp" */), loading}) : null;
+```
+
+`react-loader` 是一个用于 实现 React 组件懒加载（Lazy Loading） 的库，它通过动态 `import()` 语法实现组件的异步加载。主要作用如下：
+
+- 按需加载：页面初始化时不加载该组件，只在需要时才加载对应 JS 文件。
+
+- 代码分割：Webpack 会将懒加载组件打包成独立的 chunk，提升首屏加载速度。
+
+上述代码中，通过 webpack 的魔法注释 `/* webpackChunkName: "lazy_comp" */` 指定webpack打包时的chunk名称。
+
+React 官方从 v16.6 开始引入了 React.lazy 和 Suspense，推荐优先使用原生方案。
+
+```js
+import React, { Suspense } from 'react';
+
+const LazyComponent = React.lazy(() => import(/* webpackChunkName: "lazy-component" */ '../components/LazyComponent'));
+
+function App() {
+  return (
+    <Suspense fallback="Loading...">
+      <LazyComponent />
+    </Suspense>
+  );
+}
+```
+
+
+## SPA 单页面应用的理解
+
+### SPA 概述
+
+SPA (Single Page Application) 是指在页面初始化的时候加载相应的 HTML、css、JS 文件，加载完后不会因为用户的操作而进行页面重载或跳转，内容变化利用路由机制实现。
+
+优点：
+
+- 良好的交互体验。
+
+用户在访问应用页面是不会频繁的去切换浏览页面，从而避免了页面的重新加载。
+
+- 前后端分离。
+
+单页Web应用可以和 RESTful 规约一起使用，通过 REST API 提供接口数据，并使用 Ajax 异步获取，这样有助于分离客户端和服务器端工作。
+
+更进一步，在客户端也可以分解为静态页面和页面交互两个部分。
+
+- 减轻服务器压力。
+
+服务器只用出数据就可以，不用管展示逻辑和页面合成，吞吐能力会提高几倍。
+
+- 共用一套后端代码。
+
+不用修改后端程序代码就可以同时用于 Web 界面、手机、平板等多种客户端。
+
+缺点：
+
+- 首屏加载速度慢。
+
+- 不利于SEO优化。
+
+- 不能使用浏览器前进后退功能。
+
+### SPA 优化
+
+1、首屏加载慢
+
+原因：网络延迟、资源文件过大、重复加载、加载脚本时的阻塞渲染。
+
+优化：
+
+- 使用路由懒加载，减少入口文件大小，按需加载。
+
+- UI 框架按需加载。例如 element-ui 只引入用到的组件，不要全部引入。
+
+- 设置骨架屏，提升用户视觉体验。
+
+- 静态资源本地缓存。
+
+- 防止组件重复下载。在 webpack 中配置 CommonsChunkPlugin，为 minChunks 设置具体的值，表示把使用 n 次及以上的包抽离出来，放入公共依赖文件，避免重复加载组件。
+
+- 图片资源压缩：雪碧图、使用在线字体图标等。
+
+- 开启 Gzip 压缩，compression-webpack-plugin 对资源文件进行压缩。
+
+- 使用 SSR，即在服务端渲染，再发送给浏览器。
+
+- 复用页面组件，在加载初始页面的时候会完全加载，然后逐渐替换更新新的页面片段。
+
+2、前进后退优化
+
+保存历史路由信息。在页面切换的时候，也可以使用骨架屏，防止空屏出现。
+
+3、SEO 优化
+
+页面的 `#` 替换成 `#!`，解决难被搜索引擎抓取到的问题。
+
+[浅谈前端SPA（单页面应用](https://blog.csdn.net/cmzhuang/article/details/94334619){link=static}
+
+[面试官：SPA（单页应用）首屏加载速度慢怎么解决？](https://blog.csdn.net/weixin_44475093/article/details/110675962){link=static}
+
+### 前端首屏性能优化
+
+![前端首屏性能优化](./images/optimization/performance_optimization.png)
 
 ## 接口优化
 

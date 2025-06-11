@@ -22,16 +22,15 @@ Web 性能优化系列文章，包括 webpack 分包、图片优化、css 优化
 
 [Web 性能优化：理解及使用 JavaScript 缓存](https://segmentfault.com/a/1190000018589996){link=card}
 
+[webpack 系列五：优化首屏加载时间及流畅度](https://github.com/sisterAn/blog/issues/66){link=static}
+
 ### 4、性能优化实战文章
 
 性能优化系列实战文章，值得一看。
 
 [前端性能优化实战 从 30s 到 2s](https://juejin.cn/post/7008072984858460196){link=static}
 
+[前端性能优化的几个大招（理论+实践，看完就是Leader水平）](https://juejin.cn/post/7468655596641976320){link=static}
+
 [关于首屏优化，我做了哪些](https://juejin.cn/post/7117515006714839047){link=static}
 
-[尽早建立网络连接，以提升系统感知的网页速度](https://web.developers.google.cn/articles/preconnect-and-dns-prefetch?hl=zh-cn#resolve_domain_name_early_with_reldns-prefetch){link=static}
-
-[带你玩转prefetch, preload, dns-prefetch，defer和async](https://segmentfault.com/a/1190000011577248){link=static}
-
-[预加载系列一：DNS Prefetching 的正确使用姿势](https://segmentfault.com/a/1190000003944417){link=static}
