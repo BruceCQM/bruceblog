@@ -336,7 +336,7 @@ git reset --hard 版本号
 
 1、`git reset --hard 版本号`：硬性回退，该版本之后的提交记录全都删除了。
 
-2、`git revert -n 版本号`：新增一个版本，将指定版本的操作全部撤销。
+2、`git revert -n 版本号`：将指定的这个提交版本的变更撤销，生成一条撤销记录，需要手动提交撤销commit。
 
 [Git恢复之前版本的两种方法reset、revert](https://blog.csdn.net/yxlshk/article/details/79944535){link=card}
 

@@ -488,6 +488,12 @@ export default [
     title: '常用工具',
     items: [
       {
+        icon: 'https://tools.pdf24.org/static/img/pdf24.png',
+        title: 'PDF24 Tools',
+        desc: 'PDF编辑 - 简便，在线，免费 - PDF24',
+        link: 'https://tools.pdf24.org/zh/edit-pdf'
+      },
+      {
         icon: 'https://caniuse.com/img/favicon-128.png',
         title: 'Can I Use',
         desc: '前端 API 浏览器兼容性查询',
