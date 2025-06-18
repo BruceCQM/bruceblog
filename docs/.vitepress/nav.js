@@ -20,6 +20,7 @@ export default [
           { text: 'Nodejs', link: '/fe/nodejs/node_basis' },
           { text: 'Git', link: '/fe/git/git' },
           { text: 'Webpack', link: '/fe/webpack/webpack_quick' },
+          { text: '性能优化', link: '/fe/performance/performance_optimize' },
           { text: 'Vscode', link: '/fe/ide/vscode' },
         ]
       },

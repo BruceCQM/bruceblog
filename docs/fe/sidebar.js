@@ -74,6 +74,14 @@ export default [
     ]
   },
   {
+    text: '性能优化',
+    collapsed: true,
+    items: [
+      { text: '性能优化专项学习', link: '/fe/performance/performance_optimize' },
+      { text: '性能优化零星总结', link: '/fe/performance/optimization_summary' },
+    ]
+  },
+  {
     text: 'Other',
     collapsed: true,
     items: [
