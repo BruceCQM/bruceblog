@@ -245,7 +245,7 @@ SPA (Single Page Application) 是指在页面初始化的时候加载相应的 H
 
 ### 前端首屏性能优化
 
-![前端首屏性能优化](./images/optimization/performance_optimization.png)
+![前端首屏性能优化](./images/performance_optimization.png)
 
 ## 接口优化
 
@@ -521,17 +521,17 @@ bfCache（Back/Forward Cache），当用户离开当前页面时，浏览器会�
 
 Chrome 打开开发者工具，Application -> Background Services -> Back/Forward Cache。
 
-![bfCache1](./images/optimization/bfCache_1.png)
+![bfCache1](./images/bfCache_1.png)
 
 点击按钮，测试bfCache。Chrome 会自动将您转到 chrome://terms/，然后返回原来的网页。
 
 如果网页的 bfCache 功能没有问题，会显示成功。
 
-![bfCache2](./images/optimization/bfCache_2.png)
+![bfCache2](./images/bfCache_2.png)
 
 如果有问题，会显示问题列表。
 
-![bfCache3](./images/optimization/bfCache_3.png)
+![bfCache3](./images/bfCache_3.png)
 
 ### 测试结果
 
