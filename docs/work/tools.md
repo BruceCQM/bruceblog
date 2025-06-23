@@ -567,3 +567,95 @@ java -version
 
 常见的代码目录结构图。
 ![树状图](./images/tools/PlantUML_tree.png)
+
+## Mermaid在线编辑器
+
+[Mermaid在线编辑器](https://www.processon.com/mermaid){link=static}
+
+Mermaid是一种基于JavaScript的图表工具，能够通过Markdown风格的文本定义动态创建和修改图表‌，广泛应用于流程图、时序图、甘特图等多种可视化需求。‌‌
+
+```ts
+classDiagram
+  direction LR
+
+  subgraph Loan Application Aggregate
+      class LoanApplication {
+          <<Aggregate Root>>
+          +id: string
+          +status: ApplicationStatus
+          +contractId: string
+          ---
+          +applicant: Applicant
+          +bankCard: BankCard
+          +personalInfo: PersonalInfo
+          +approvedLimit: CreditLimit
+          ---
+          +submit()
+          +approve(limit)
+          +reject(reason)
+          +linkContract(contractId)
+      }
+
+      class Applicant {
+          <<Value Object>>
+          +name: string
+          +idNumber: string
+      }
+
+      class BankCard {
+          <<Value Object>>
+          +cardNumber: string
+          +mobile: string
+      }
+
+      class PersonalInfo {
+          <<Value Object>>
+          +employmentType: string
+          +educationLevel: string
+          +monthlyIncome: string
+          +contacts: Contact[]
+      }
+
+      class Contact {
+          <<Value Object>>
+          +relationship: string
+          +name: string
+          +phone: string
+      }
+
+      class CreditLimit {
+          <<Value Object>>
+          +amount: number
+          +currency: string
+      }
+  end
+
+  subgraph Contract Aggregate
+      class Contract {
+          <<Aggregate Root>>
+          +id: string
+          +loanApplicationId: string
+          +status: ContractStatus
+          ---
+          +terms: string
+          +principal: number
+          +interestRate: number
+          ---
+          +sign()
+          +activate()
+      }
+  end
+
+  %% --- Relationships ---
+  LoanApplication "1" *-- "1" Applicant : contains
+  LoanApplication "1" *-- "1" BankCard : contains
+  LoanApplication "1" *-- "1" PersonalInfo : contains
+  LoanApplication "1" *-- "0..1" CreditLimit : contains (on approval)
+  PersonalInfo "1" *-- "1..*" Contact : contains
+
+  %% --- Inter-Aggregate Relationship ---
+  LoanApplication ..> Contract : references by ID
+  Contract ..> LoanApplication : references by ID
+```
+
+![Mermaid图表](./images/tools/mermaid_graph.png)

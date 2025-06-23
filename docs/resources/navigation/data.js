@@ -782,6 +782,17 @@ export default [
     ]
   },
   {
+    title: '绘制图表',
+    items: [
+      {
+        icon: 'https://www.processon.com/public_login/logo.9570b1fa.svg',
+        title: 'Mermaid在线编译器',
+        desc: 'Mermaid在线编译器',
+        link: 'https://www.processon.com/mermaid'
+      },
+    ]
+  },
+  {
     title: '周刊的网站',
     items: [
       {
@@ -798,6 +809,11 @@ export default [
         title: '加水印',
         desc: '图片加水印的网页工具，纯前端应用，不需要服务器',
         link: 'https://github.com/pdmaker/watermark-master',
+      },
+      {
+        title: '中国城市地铁可视化',
+        desc: '中国城市地铁可视化',
+        link: 'https://subway.cuvii.dev/',
       },
     ]
   }
