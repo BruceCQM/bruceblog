@@ -125,3 +125,71 @@ ARMS监控工具：ARMS前端监控专注于对Web场景、Weex场景和小程�
 - 资源越小：减小内容。
 
 - 越早展示：提前渲染。
+
+## 优化1：加快请求
+
+### 使用HTTP2.0协议
+
+HTTP2.0 协议的优化：
+
+- 二进制分帧：采用二进制格式传输数据，解析更高效。
+
+- 多路复用：同一个域名下只需要建立一个 HTTP 连接，单个连接可以承载任意数量的双向数据流。
+
+- 头部压缩：对 HTTP 头采用 HPACK 进行压缩传输，节省流量；对于相同头信息，不重复发送。
+
+使用HTTP1.1的效果--串行、阶梯式请求，同时发起请求少，一个接一个，慢。
+
+![HTTP1.0 网站](./images/feng_http1.png)
+
+使用HTTP2.0的效--并发请求，同时发起的请求多，快。
+
+![HTTP2.0 网站](./images/feng_http2.png)
+
+从 HTTP1.1 升级到 HTTP2.0 之后，首屏时间降低了 20% 左右，效果显著。
+
+升级 HTTP2.0 需要 CDN 开启 HTTP2.0，NG 安装 HTTP2.0 插件。同时需要注意兼容性问题。
+
+### 使用预加载preload和预提取prefetch
+
+preload 是为了尽早加载首屏需要的关键资源（强制尽快），从而提升页面渲染性能(css,js,image,viedo,audio,fonts等等)，这个加载跟页面解析是并行的（与HTTP2.0使用），不会阻塞页面本身的加载。
+
+prefetch 是在浏览器空闲的时候下载将来可能访问的资源，需要业务逻辑中进行判断做按需加载。目前前端业务基本用得少，有部分用了react-lodable 或者 component-lodable 的可以设置。
+
+使用 Webpack 的 PreloadWebpackPlugin 插件，对关键资源进行预加载，提高页面加载速度，同时也可以对非关键资源进行预提取。
+
+![preload-webpack-plugin](./images/preload_webpack_plugin.png)
+
+```js
+module.exports = {
+  plugins: [
+    new PreloadWebpackPlugin({
+      // 指定预加载
+      rel: 'preload',
+      // 对所有代码块尽心预加载
+      include: 'allChunks',
+      // 黑名单，不处理
+      fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
+      // 白名单，优先级最高，若指定了白名单，只处理白名单的内容
+      // 白名单指定关键的公共资源，如：chunk-vendors.js
+      fileWhitelist: [/chunk-/]
+    }),
+  ]
+}
+```
+
+:::warning 思考：对公共的bundle，preload是否对性能一定有提升？
+一般情况下有提升。preload 资源是提前加载，公共的 bundle 是业务页面必须加载的，使用 preload 能充分利用 html 解析、index.js 加载解析的时间提前加载，提升首屏显示。
+
+但是，如果 index.js 中有前置请求接口，那 preload 资源可能会把前置请求接口挤掉，让你前置请求失效。因为在某些浏览器内核，preload 资源是最高优先级。
+
+比如，A 页面的性能瓶颈其实是某个接口，因为 preload 资源导致前置接口请求没有提前。大部分时候，页面的 js、css 都能击中缓存，preload 资源节约的时间比不上提前请求接口的时间。
+
+因此，此时不要对公共 bundle 进行 preload，从而让接口能够提前发起，更能优化性能。
+
+但需要注意，部分浏览器内核可能对请求数量有限制，所以这么设置后，可能前置请求和 bundle 也不是并发的。甚至在某些低端机型中，就算 bundle 不设置 preload，它也会在接口请求之前加载。
+
+所以说，同一个优化措施，对不同模块效果不一样，甚至不同浏览器内核效果都不一样，优化措施要对比论证、客观分析。
+
+没有一招打遍天下的措施。
+:::
