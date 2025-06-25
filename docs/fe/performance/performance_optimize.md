@@ -233,3 +233,85 @@ CDN作为静态资源文件的分发，做好静态资源的缓存工作，就�
 - html文件（一般是工程的首页代码）由于无法添加hash，为避免发版之后长时间才更新文件，只能设置短时间（比如10分钟）短缓存，在一定程度上利用缓存。
 
 - 有些文件名不会更新的JS文件、css文件，比如 `no-change-script.js`，就算发版了，文件名也不会变化。针对此类文件可以约定文件名 `.cc` 结尾，nginx 中设定 `.cc` 结尾的文件名设置为十分钟短缓存，避免无法更新文件。
+
+### 构建配置充分利用缓存
+
+充分利用缓存，减少重复资源的请求。要求项目与项目间公共的资源尽量能复用，每次打包的 bundle 尽量不变。主要是从构建配置上面进行处理。
+
+#### 1. 提取引导模板(extracting boilerplate)
+
+在 Webpack 中，"提取引导模板" (extracting boilerplate) 是指将 Webpack 的运行时代码(runtime) 和模块管理逻辑从主应用程序代码中分离出来。目的是提升长期缓存效率和应用加载性能。
+
+runtime 指的是 webpack 的运行环境(具体作用就是模块解析、加载) 和 模块信息清单, 模块信息清单在每次有模块变更(hash 变更)时都会变更，比如页面新引一个组件，runtime chunk就会改变。
+
+如果runtime chunk不单独拿出来，就会放到 `index.hash.js` bundle中，每次改变业务代码，会改变 `index.hash.js` 文件(首页必须)，缓存就失效了，导致每次发版都要重新请求 `index.hash.js` 文件，无法利用缓存。
+
+设置runtimeChunk之后，webpack就会生成一个个 `runtime~xxx.js` 的文件。将 runtime 文件独立抽出来后，依赖的加载一般不影响 app.js bundle了（除非修改了 app.jsx）。
+
+一般来说，**runtime bundle 都非常小，单独发送请求并不划算**。因为重新发版后 index.html 必须更新（里面bundle和版本号改变，且设置了 5min 缓存时间），所以把 runtime 集成到 index.html 入口文件是个巧妙的处理方式。通过 script-ext-html-webpack-plugin 实现。
+
+```js
+module.exports = {
+  optimization: {
+    runtimeChunk: 'single',
+  },
+  plugins: [
+    new ScriptExtHtmlWebpackPlugin({
+      inline: /runtime\..*\.js$/, // 匹配 runtime 文件名
+    }),
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      fileBlacklist: [/runtime\..*\.js$/], // 要从 preload 剔除 runtime 文件
+    }),
+  ]
+}
+```
+
+#### 2. 避免module id和chunk id以默认的方式自增，锁定模块标识符
+
+这一点不太理解。
+
+module 就是没有被编译之前的代码，通过 webpack 的根据文件引用关系生成 chunk 文件，webpack 处理好 chunk 文件后，生成运行在浏览器中的代码 bundle。
+
+一个module id是一个模块的唯一标识符，module的改变会引起chunk的改变，最终引起bundle的改变，这是一个连锁反应。需要尽量避免module的大规模改变。
+
+![避免自增id](./images/avoid_chunk_id.png)
+
+问题：如果不显式设置，默认module id是一个数值，其他module id以自增的方式依次用数字命名，模块的增加和减少，代码的改动，都会批量改变module id的值，最终引起大部分bundle文件名的改变。可能就会出现，改了几行代码，整个模块所有文件缓存都会失效的情况。
+
+解决：要使用唯一的标记替换module id，让module id不再以自增的方式改变，用hash替代，与文件内容相关。只有代码改变的module被重新打包，其他无关的bundle名字不变。
+
+```js
+optimization: {
+  runtimeChunk: 'single',
+  moduleIds: 'hashed',
+  namedChunks: true,
+}
+```
+
+#### 3. 使用contenthash避免jsx、图片、css的改变带来的变化
+
+filename：对应于 entry 里面生成出来的文件名。
+
+chunkFilename：chunkFilename 就是未被列在 entry 中，但有些场景需要被打包出来的文件命名配置。比如按需加载（异步）模块的时候。
+
+原来使用 hash 命名，每次构建都容易引起整个项目页面 bundle 的改变。所以调整成使用 contenthash。不同值的含义:
+
+- hash：计算与整个项目的构建相关；
+- chunkhash：计算与同一 chunk 内容相关；
+- contenthash：计算与文件内容本身相关。
+
+```js
+output: {
+  filename: '[name].[hash:8].js',
+  chunkFilename: '[name].[contenthash:8].js'
+},
+imageUrlLoaderOption: {
+  limit: 1, // 所有image都不转换为base64
+  name: 'static/images/[name].[contenthash:8].[ext]'
+},
+miniCssExtractPluginOption: {
+  filename: 'css/[name].[contenthash:8].css',
+  chunkFilename: 'css/[name].[contenthash:8].css'
+},
+```
