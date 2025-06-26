@@ -315,3 +315,94 @@ miniCssExtractPluginOption: {
   chunkFilename: 'css/[name].[contenthash:8].css'
 },
 ```
+
+#### 4. 修改optimization.splitChunks 配置，优化分包策略
+
+充分利用缓存，减少重复资源的请求。这就要求项目与项目间公共的资源尽量能复用，以及每次发版打包的 bundle 尽量不变。主要是从构建上面进行处理，策略原则：
+
+- 不变的依赖尽量一起打包，利用缓存，减少HTTP请求次数。比如 mobx-h5、swiper 等几乎不变的三方包。
+
+- 相关的依赖尽量一起打包，降低依赖批量变化带来的影响。比如和人脸识别相关的依赖一起打包。
+
+- 合并体积小的 chunk 文件，像几KB甚至几B的文件。小文件的请求开销比下载时间更久，因为网络下载速度是逐步爬升的，需要充分利用提升后稳定的网速，50KB的文件和100KB的时间差距可能只有0.2倍。
+
+- 不要让某个文件成为瓶颈，避免单个文件体积过大，拖慢页面加载速度，尽量让多个大小均匀的包并发请求，较多的请求数更能抢占网速。一个包最多在100KB。当然前提是，使用二零HTTP2.0，并发请求没有限制的情况下，否则在HTTP 1.1的情况下，不拆包更合理，因为拆包多请求可能会更慢。
+
+```js
+splitChunks: {
+  cacheGroups: {
+    // 调试组件单独打包
+    vconsole: {
+      test: /[\\/]node_modules[\\/]vconsole[\\/]dist.*/,
+      name: 'vconsole',
+      chunks: 'all',
+      minChunks: 1,
+      priority: 1000,
+    },
+    fixed: {
+      // 很少变化的依赖
+      test: /[\\/]node_modules[\\/](mobx-h5|mobx-common|async-await)|swiper)[\\/]/,
+      name: 'bundle-fixed',
+      chunks: 'all',
+      priority: 900,
+      reuseExistingChunk: true
+    },
+    ui: {
+      // UI组件库
+      test: /[\\/]node_modules[\\/](UI)/,
+      name: 'bundle-ui',
+      chunks: 'all',
+      minChunks: 2,
+      priority: 850,
+      reuseExistingChunk: true
+    },
+    face: {
+      // 人脸识别相关包
+      test: /[\\/]node_modules[\\/](face)/,
+      name: 'bundle-face',
+      chunks: 'all',
+      priority: 800,
+      reuseExistingChunk: true
+    },
+    common: {
+      // 其它第三方包
+      test: /[\\/]node_modules[\\/]/,
+      name: 'bundle-common',
+      chunks: 'all',
+      minChunks: 2,
+      priority: 500,
+      reuseExistingChunk: true
+    },
+    commontemp: {
+      // temp打入bundle-temp中，避免index.xx.js过大以及减少请求
+      test: /[\\.]temp/,
+      name: 'bundle-temp',
+      chunks: 'all',
+      minChunks: 2,
+      priority: 400,
+      reuseExistingChunk: true
+    },
+    mergeChunkCss: {
+      // 合并零碎的css小文件
+      test: /[\\/]node_modules[\\/].*\.(sc|c|sa|le)ss$/,
+      name: 'bundle-common',
+      chunks: 'all',
+      minChunks: 2,
+      priority: 1000,
+      reuseExistingChunk: true,
+      minSize: 0
+    },
+  }
+}
+```
+
+#### 5. 抽取业务框架的代码成独立脚本
+
+把各个业务模块，都需要使用的重复代码抽离成独立的js脚本，不同项目通过脚本引入的方式进行引用。
+
+不同业务项目跳转时，由于页面缓存的存在，重复的依赖不需要再次下载，节约网络开销，加快了页面打开的速度。
+
+```html
+<!-- index.html -->
+<link rel="preload" as="script" href="./common.js">
+```
