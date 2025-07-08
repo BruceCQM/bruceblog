@@ -116,6 +116,28 @@ if (isIOS()) {
     }
   });
 }
+
+if (isIOS()) {
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState === 'visible') {
+      this.doThings();
+    }
+  });
+}
+```
+
+## 关闭webview返回刷新页面
+
+页面A通过新开 webview 的方式跳转到页面B，从页面B关闭 webview 返回页面A，页面A不会刷新。现在要刷新，存在一些业务情况从B返回A要刷新页面获取最新数据。
+
+只修改页面A的方案思路：让A页面主动检测自身是否被重新激活（从隐藏变为可见），并触发刷新逻辑。
+
+```js
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible') {
+    this.doThings();
+  }
+});
 ```
 
 `visibilitychange` 事件是用于检测页面可见性状态变化的事件。当页面从可见变为不可见（例如用户切换到其他标签页或最小化窗口），或从不可见变为可见时，会触发这个事件。
