@@ -406,3 +406,16 @@ splitChunks: {
 <!-- index.html -->
 <link rel="preload" as="script" href="./common.js">
 ```
+
+### 核心接口前置请求
+
+核心接口前置到 app.xxx.js 中请求，让接口请求和 chunk-xx.hash.js 等资源请求并发，尽快加快请求速度。数据存储在全局变量中，进一步减低请求次数。
+
+也就是让核心的接口在执行 app.xxx.js 的时候就发起请求，尽可能提前。
+
+```js
+// app.jsx
+// 核心接口前置请求
+requestOne();
+class App extends Component {}
+```
