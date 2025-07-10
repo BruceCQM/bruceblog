@@ -51,6 +51,7 @@ export default [
       { text: '富文本编辑器', link: '/work/editor' },
       { text: 'Mobx 那些事儿', link: '/work/mobx' },
       { text: '开发工具', link: '/work/tools' },
+      { text: 'DDD工程', link: '/work/DDD' },
       { text: '问题碎碎记', link: '/work/problems' },
       {
         text: '微信小程序',
