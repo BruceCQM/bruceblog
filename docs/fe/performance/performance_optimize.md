@@ -616,3 +616,103 @@ font-spider 是一个用于压缩网页字体文件的工具，它会搜索当�
 Moment.js 是一个大而全的 JS 时间库，虽然很大地方便了我们处理日期和时间。但时间久远，设计陈旧，导致 Moment.js 体积太大了(200k+)，可能一般项目也只使用到了几个常用的API，而 tree shaking 对 Moment 无效。
 
 可以使用 dayjs 替代moment，dayjs 实现了 moment 的大多数功能，Api 基本一致，压缩后体积却不到 2k，是优秀的替代方案，且多数情况下，dayjs 可以完美的替代。实际上，moment 官方也推荐使用其他工具替换。
+
+### 使用编译原理技术达到按需引入
+
+原来 UI 组件库的 CSS 文件会被全部打包进来，但实际上，我们并非使用全部组件，所以有部分组件的样式是不需要的。
+
+可以通过编译原理去分析代码，分析代码总共调用了哪些组件（按照一定的规则去匹配），然后把这部分组件的样式按需引入进来。
+
+```js
+import { parse } from '@babel/parser';
+import traverse from '@babel/traverse';
+
+function getComponents(pathList: Array<string>, UIName: string) {
+  pathList.forEach((fPath) => {
+    const data = fs.readFileSync(fPath, 'utf-8');
+    let ast: any = '';
+    try {
+      ast = parse(data, {
+        sourceType: 'module',
+        plugins: ['decorators-legacy', 'jsx', 'typescript', 'classProperties']
+      });
+    } catch (parseError) {
+      console.log(`${fPath}语法分析出错`);
+    }
+    if (!ast) return;
+    traverse(ast, {
+      ImportDeclaration: (obj) => {
+        const { node } = obj;
+        const { value } = obj.node.source;
+        if (value.indexOf(`/${UIName}`) > -1) {
+          node.specifiers.forEach((spec) => {
+            const { name } = (spec as any).imported;
+            // addUseToFile(`${fPath}中使用了${name}组件`);
+            if (!componentSet.has(name)) {
+              componentSet.add(name);
+              const cssFileName = transformComponentName2CssName(name, UIName);
+              const cssTruePath = getComponentCssTruePath(cssFileName, UIName);
+              const cssExists = fs.existsSync(cssTruePath);
+              if (cssExists) {
+                const cssPath = getComponentCssPath(cssFileName, UIName);
+                addCSSToFile(UIName, name, cssPath);
+              } else {
+                console.log(`${UIName}:${name}组件没有CSS文件,请检查改组件是否无CSS文件或者CSS文件命名是否规范`);
+              }
+            }
+          });
+        }
+      }
+    });
+  });
+}
+```
+
+工作流程示例：
+
+假设有一个文件包含以下代码：
+
+```js
+import { Button, Modal, Input } from 'eui';
+```
+
+1. parse 将代码解析成AST树形结构
+2. traverse 遍历AST，找到 ImportDeclaration 节点
+3. 检测到导入来源包含 /eui
+4. 提取组件名：['Button', 'Modal', 'Input']
+5. 为每个组件生成对应的CSS路径：
+- Button → button.scss
+- Modal → modal.scss
+- Input → input.scss
+6. 将CSS导入语句添加到 app.scss 文件中
+
+最终在 app.scss 文件中，自动添加样式：
+
+```scss
+@import '~eui/dist/style/components/button.scss';
+@import '~eui/dist/style/components/modal.scss';
+@import '~eui/dist/style/components/input.scss';
+```
+
+### 图片懒加载技术
+
+页面启动只加载首屏的图片，这样能明显减少了服务器的压力和流量，也能够减小浏览器的负担。
+
+如果页面上所有的图片都需要加载，由于图片数目较大，等待时间很长这就严重影响用户体验。
+
+一般通过 IntersectionObserver 监听视口的方式，先用占位图显示图片，如果监听到视口到达了目标区，则使用JS下载图片并显示。
+
+### 设置postcss配置，不生成低版本css兼容代码
+
+```js
+module: {
+  postcss: {
+    autoprefixer: {
+      enable: true,
+      config: {
+        browsers: ['Android >= 5', 'ios >= 12']
+      }
+    }
+  }
+}
+```
