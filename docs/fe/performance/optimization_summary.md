@@ -143,7 +143,7 @@ module.exports = {
 import Loadable from 'react-loadable';
 
 const loading = () => null;
-const MyComponentLazy = isH5 ? Loadable({ loader: () => import(/* webpackChunkName: "lazy_comp" */), loading}) : null;
+const MyComponentLazy = isH5 ? Loadable({ loader: () => import(/* webpackChunkName: "lazy_comp" */ './my-component'), loading}) : null;
 ```
 
 `react-loader` 是一个用于 实现 React 组件懒加载（Lazy Loading） 的库，它通过动态 `import()` 语法实现组件的异步加载。主要作用如下：

@@ -419,3 +419,200 @@ splitChunks: {
 requestOne();
 class App extends Component {}
 ```
+
+## 优化2：减少请求内容
+
+### 路由懒加载（动态加载）
+
+单页应用可通过前端路由动态按需加载 page 页面，这是 Taro 编译配置默认提供的能力。
+
+实现前提：ES6 的动态地加载模块，import()。
+
+调用 import() 之处，被请求的模块和它引用的所有子模块，会分离到一个单独的 chunk 中。
+
+```js
+render() {
+  return <Router
+    routes={[
+      {
+        path: '/pages/index/index',
+        componentLoader: () => import( /* webpackChunkName: "index" */ './pages/index/index'),
+        isIndex: true,
+      },
+      {
+        path: '/pages/detail/detail',
+        componentLoader: () => import( /* webpackChunkName: "detail" */ './pages/detail/detail'),
+        isIndex: false,
+      }
+      ...
+    ]}
+  />
+}
+```
+
+### JS依赖做成动态加载（require实现）
+
+对于一些 js 的 sdk 文件，不同渠道需要的 SDK 不同。微信渠道需要的是微信渠道的 SDK，支付宝生活号需要 alipay 的 sdk，可以做成动态按需加载。
+
+```js
+function getSDK() {
+  let channel = '';
+  if (isWechat()) {
+    channel = 'wechat';
+  } else if (isAlipay()) {
+    channel = 'alipay';
+  }
+  return require(`./lib/${channel}/js-sdk.js`).default;
+}
+```
+
+比如原来某个页面通过 import 使用了 pdfh5 这个依赖，差不多1M大小，如果没有做特殊的处理，会构建的时候被直接被进vendor bundle中，必定会影响首页的加载。
+
+但只有个别页面需要这个依赖包，这个页面流程不一定被触发，所以使用 require 做成动态加载对其他页面来说更加合理。
+
+```js
+let pdfh5 = null;
+if (process.env.NODE_ENV === 'h5') {
+  pdfh5 = require('pdfh5');
+  require('pdfh5/css/pdfh5.css');
+}
+```
+
+### 组件做成动态加载
+
+taro 1.x 并不支持动态 import 组件，所以无法使用类 react 的动态 import。但可以使用第三方库 `react-loadable` 和 `@loadable/component`。
+
+一般来说，非首屏的依赖组件可以动态加载。动态加载的组件通常可以设置为 prefetch，让浏览器闲时加载。
+
+```js
+import Loadable from 'react-loadable';
+
+const loading = () => null;
+const MyComponentLazy = isH5 ? Loadable({ loader: () => import(/* webpackChunkName: "lazy_comp" */ /* webpackPrefetch: true */ './my-component'), loading}) : null;
+```
+
+### 代码压缩
+
+- 配置 Csso 插件对 CSS 文件进行压缩
+- HtmlWebpackPlugin 压缩 Html 文件
+- 配置 terser-webpack-plugin 插件对 JS 文件进行压缩
+
+### 开启Tree-shaking
+
+构建时，打掉依赖中没有被引用的代码。由于项目中使用了 Babel，Babel 的预案（preset）默认会将任何模块类型都转译成 CommonJS 类型，为了 tree shaking 可以生效，需要给 babel 配置设置 `modules： false`，否则 treeshaking 不会生效。
+
+```json
+// .babelrc
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false
+      }
+    ]
+  ]
+}
+```
+
+注意：export default 通常导出的是一个对象，「无法通过静态分析判断出一个对象的哪些变量未被使用，所以 tree-shaking 只对使用 export 导出的变量生效」，所以一般建议不用 export default。
+
+默认导出通常导出一个对象/函数，Tree-shaking 难以判断其内部哪些属性未被使用；而命名导出可精确识别未使用的独立成员。
+
+```js
+// utils.js（默认导出对象，无法摇掉未使用的方法）
+export default {
+  add: (a, b) => a + b,
+  unused: () => '未使用的方法' // Tree-shaking 无法移除！
+};
+
+// 导入（只能整体导入，无法单独导入 add）
+import utils from './utils';
+utils.add(1, 2); // 虽然只用到 add，但 unused 仍会被打包
+```
+
+```js
+// utils.js（命名导出独立方法）
+export const add = (a, b) => a + b;
+export const unused = () => '未使用的方法'; // 未被导入，会被 Tree-shaking 移除
+
+// 导入（只导入需要的成员）
+import { add } from './utils'; // 仅 add 会被打包，unused 被摇掉
+add(1, 2);
+```
+
+### 文件进行Gzip压缩
+
+Gzip 是一种数据的压缩格式，或者说是一种文件格式。服务器对文件进行 gzip 压缩后，再进行传输，浏览器收到资源后再解压的过程，达到减少网络实际传输数据的大小的目的。Gzip 压缩通常能减少2/3的体积，这对性能提升非常可观。
+
+需要让资源服务器在 Content-Encoding 指定gzip，并返回 gzip 文件，运维配置。
+
+![Gzip压缩](./images/Gzip.png)
+
+### 图片资源压缩裁剪
+
+对项目自带图片，可以通过
+https://tinypng.com/ 手工压缩大小，一般来说，对图片的压缩效果都在50%以上。除了通过在线网站手动压缩，也可以通过配置 image-webpack-loader 插件进行自动化压缩。
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpe?g|gif)$/,
+        use: [
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              disable: process.env.NODE_ENV === 'development',
+              // 调试模式下跳过压缩
+              bypassOnDebug: true,
+              // 启用渐进式JPEG，图片会逐步显示
+              mozjpeg: {
+                progressive: true
+              },
+              optipng: {
+                // 禁用 optipng 压缩
+                enabled: false
+              },
+              pngquant: {
+                // 压缩质量范围：65%-90%
+                quality: [0.65, 0.9],
+                // 压缩速度等级（1-11，4是平衡点）
+                speed: 4
+              },
+              gifsicle: {
+                // 优化等级（1-3，3是最高级别）
+                optimizationLevel: 3,
+                // 颜色数量限制为32色
+                colors: 32
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+对在线图片，比如配置的图片，部分图片过大，导致页面展示效果不好，为解决该问题，对在线图片进行代理请求，先请求到 picasso.com 服务器，由该服务器对图片进行压缩处理再返回，提高图片打开速度，而且后续再请求，存在缓存。
+
+### 字体裁剪
+
+设计稿中的特殊字体，直接引入改字体的字体库 `.ttf` 文件，字体文件通常都会有几 M 大小，加载速度很慢，体验会十分不好。
+
+font-spider 是一个用于压缩网页字体文件的工具，它会搜索当前页面所有使用 @font-face 的字体，然后执行 font-spider 压缩的时候，将字体包中没用用到的文字全部排除，只留下要使用的部分文字已达到压缩的目的。
+
+```css
+@font-face {
+  font-family: 'icon-font';
+  src: url("./static/iconBold.ttf");
+}
+```
+
+### 使用功能相同但体积更小的依赖
+
+Moment.js 是一个大而全的 JS 时间库，虽然很大地方便了我们处理日期和时间。但时间久远，设计陈旧，导致 Moment.js 体积太大了(200k+)，可能一般项目也只使用到了几个常用的API，而 tree shaking 对 Moment 无效。
+
+可以使用 dayjs 替代moment，dayjs 实现了 moment 的大多数功能，Api 基本一致，压缩后体积却不到 2k，是优秀的替代方案，且多数情况下，dayjs 可以完美的替代。实际上，moment 官方也推荐使用其他工具替换。
