@@ -3648,6 +3648,38 @@ MinStack.prototype.getMin = function() {
 
 ## 动态规划
 
+### 121. [买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/description/)
+
+标签：动态规划、数组
+
+题目：
+
+给定一个数组 prices ，它的第 i 个元素 `prices[i]` 表示一支给定股票第 i 天的价格。
+
+你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+
+思路：
+
+如果第i天卖出股票，则最大利润为(该天的股价-前面天数中最小的股价)，然后与已知的最大利润比较，如果大于则更新当前最大利润的值。
+
+因此，需要两个变量，一个记录最小股价，一个记录最大利润。
+
+代码：
+
+```js
+var maxProfit = function(prices) {
+  var minprices = Infinity;
+  var res = 0;
+  for (var p of prices) {
+    minprices = Math.min(minprices, p);
+    res = Math.max(res, p - minprices);
+  }
+  return res;
+}
+```
+
 ## 多维动态规划
 
 ## 技巧
