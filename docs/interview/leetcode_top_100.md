@@ -3646,8 +3646,6 @@ MinStack.prototype.getMin = function() {
 
 ## 贪心算法
 
-## 动态规划
-
 ### 121. [买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/description/)
 
 标签：动态规划、数组
@@ -3679,6 +3677,8 @@ var maxProfit = function(prices) {
   return res;
 }
 ```
+
+## 动态规划
 
 ## 多维动态规划
 
