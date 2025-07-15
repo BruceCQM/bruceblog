@@ -168,7 +168,7 @@ module.exports = {
     new PreloadWebpackPlugin({
       // 指定预加载
       rel: 'preload',
-      // 对所有代码块尽心预加载
+      // 对所有代码块进行预加载
       include: 'allChunks',
       // 黑名单，不处理
       fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
@@ -756,3 +756,72 @@ module: {
 3. 杜绝非页面，脚本发起的请求开启 loading，也就是不让 loading 闪烁，提升客户感官。
 
 4. 使用平台组封装的标准、统一api，删除各业务自己开发的 api，比如fetch，减少业务代码。
+
+## 案例分析1-前置请求没有生效
+
+在 app.jsx 文件里，前置的用户相关接口请求没有生效。按理想情况，前置的接口请求应该要和 chunk-xxx.js/css 这些包一块并发请求的，但实际情况是，接口请求在包请求之后。
+
+```jsx
+requestOne();
+
+class App extends Component {}
+Taro.render(<App />, document.getElementById('app'));
+```
+
+去询问 AI，提供下思路：
+
+> 在一个taro1.x的spa工程中，我在 `app.[hash].js` 中发起接口请求，但从 performance 面板发现，接口请求是在其他 chunkjs 加载完成后才会发起，而不是在 `app.[hash].js` 执行到请求接口的时候发起，按道理来说请求的线程和 js 执行线程不同，不需要等待所有chunk加载完成才发起请求。
+
+AI 提供的排查思路：
+
+1. 如果 fetchData() 中包含依赖其他 Chunk 的代码(如需要某个模块的变量)，可能会因 Chunk 未加载完成而触发动态导入的等待，导致请求延迟。
+
+从 webpack-bundle-analyzer 可以分析看到，前置请求函数 requestOne，所有依赖相关的模块代码，都被打入了 app.xx.js 中。使用的 API 也来自于公共框架线上脚本，所以理论上来说，它并不需要依赖其他公共的 chunk，所以并不是因为依赖才导致接口请求被滞后。
+
+2. 浏览器并发连接限制：同一域名下同时请求数量有限。
+
+已经使用了 HTTP2.0，请求数量限制不会那么少。
+
+3. 主线程繁忙：虽然网络请求由浏览器内核处理，但回调函数需要等待主线程空闲。
+
+不会是这个原因，app.js 执行是最高线程，而且请求线程和主线程并不冲突。
+
+4. 请求优先级：浏览器会优先加载 CSS/JS 等阻塞渲染的资源。
+
+可能和这个有关系，目前看来是设置了 preload 的资源先加载了，阻塞了接口请求。
+
+继续分析第 4 个原因。询问 AI：preload 的脚本会阻塞 app.hash.js 里的接口请求吗？
+
+> 2.浏览器优先级调度(间接阻塞)
+> 
+> 原理: preload 的资源被标记为最高优先级，浏览器会优先下载它们。若接口请求与 preload 资源同时触发，请求可能被降级，导致延迟。
+> 
+> 验证方法: 使用 Chrome DevTools 的 Performance 面板观察网络瀑布图，检査 preload 资源与接口请求的时间线。
+
+看来就是 preload 资源导致的，去修改 webpack 配置。
+
+```js
+// 原来的配置：所有chunk都加上preload
+module.exports = {
+  plugins: [
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      include: 'allChunks',
+      fileBlacklist: [/runtime\./,/\.map$/, /vconsole\./],
+    })
+  ]
+}
+
+// 修改后的配置：只在初始加载的资源加上preload
+module.exports = {
+  plugins: [
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      include: 'initial', // 只包含初始加载的资源
+      fileBlacklist: [/runtime\./],
+    })
+  ]
+}
+```
+
+修改完之后，接口请求和其它 chunk 并发请求了。
