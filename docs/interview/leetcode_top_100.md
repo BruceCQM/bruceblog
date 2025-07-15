@@ -3678,6 +3678,38 @@ var maxProfit = function(prices) {
 }
 ```
 
+### 55. [跳跃游戏](https://leetcode.cn/problems/jump-game/description/)
+
+标签：贪心算法、数组、动态规划
+
+题目：
+
+给你一个非负整数数组 nums ，你最初位于数组的 第一个下标 。数组中的每个元素代表你在该位置可以跳跃的最大长度。
+
+判断你是否能够到达最后一个下标，如果可以，返回 true ；否则，返回 false 。
+
+思路：
+
+使用一个变量记录可以跳跃的最远距离。遍历数组，更新最远跳跃距离。如果当前位置在最远距离之内，说明这个位置可以到达，否则返回 false，最后一个元素肯定是不可达的。
+
+代码：
+
+```js
+var canJump = function(nums) {
+  // 最远跳跃距离
+  var maxJump = 0;
+  for (var i = 0;i < nums.length;i++) {
+    // 当前位置大于最远距离，说明不可达，直接返回false
+    if (i > maxJump) {
+      return false;
+    }
+    // 更新最远跳跃距离
+    maxJump = Math.max(maxJump, i + nums[i]);
+  }
+  return true;
+}
+```
+
 ## 动态规划
 
 ## 多维动态规划
