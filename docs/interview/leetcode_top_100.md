@@ -3710,6 +3710,85 @@ var canJump = function(nums) {
 }
 ```
 
+### 45. [跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii/description/)
+
+标签：贪心算法、数组、动态规划
+
+题目：
+
+给定一个长度为 n 的 0 索引整数数组 nums。初始位置为 nums[0]。
+
+每个元素 nums[i] 表示从索引 i 向后跳转的最大长度。换句话说，如果你在 nums[i] 处，你可以跳转到任意 nums[i + j] 处:
+
+0 <= j <= nums[i]，i + j < n
+
+返回到达 nums[n - 1] 的最小跳跃次数。生成的测试用例可以到达 nums[n - 1]。
+
+示例：
+
+> 输入: nums = [2,3,1,1,4]
+> 
+> 输出: 2
+> 
+> 解释: 跳到最后一个位置的最小跳跃数是 2。从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
+
+思路：
+
+方法一：
+
+我们的目标是到达数组的最后一个位置，因此我们可以考虑最后一步跳跃前所在的位置，该位置通过跳跃能够到达最后一个位置。
+
+如果有多个位置通过跳跃都能够到达最后一个位置，那么我们应该如何进行选择呢？直观上来看，我们可以「贪心」地选择距离最后一个位置最远的那个位置，也就是对应下标最小的那个位置。因此，我们可以从左到右遍历数组，选择第一个满足要求的位置。
+
+找到最后一步跳跃前所在的位置之后，我们继续贪心地寻找倒数第二步跳跃前所在的位置，以此类推，直到找到数组的开始位置。
+
+时间复杂度：O(n²)，其中 n 是数组长度。有两层嵌套循环，在最坏的情况下，例如数组中的所有元素都是 1，position 需要遍历数组中的每个位置，对于 position 的每个值都有一次循环。
+
+方法二：
+
+![思路45](./images/leetcode/solution-45.png)
+
+时间复杂度：O(n)，其中 n 是数组长度。
+
+代码：
+
+```js
+// 方法一
+var jump = function (nums) {
+  var steps = 0;
+  var position = nums.length - 1;
+  while (position > 0) {
+    for (var i = 0;i < position;i++) {
+      if (i + nums[i] >= position) {
+        position = i;
+        steps += 1;
+      }
+    }
+  }
+  return steps;
+}
+
+// 方法二
+var jump = function (nums) {
+  var res = 0;
+  // 能到达的最远距离
+  var maxDistance = 0;
+  // 当前这座桥的右端点
+  var curRight = 0;
+  // 遍历到 n - 2 就好，n-1已经是终点了
+  for (var i = 0; i < nums.length - 1; i++) {
+    // 更新最远距离
+    maxDistance = Math.max(maxDistance, i + nums[i]);
+    // 当前桥的右端点已经到达了，则要建新桥，即更新右端点为最远距离，同时次数加1
+    if (i >= curRight) {
+      curRight = maxDistance;
+      res += 1;
+    }
+  }
+  return res;
+}
+```
+
 ## 动态规划
 
 ## 多维动态规划
