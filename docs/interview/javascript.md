@@ -1250,12 +1250,123 @@ function isEmptyObject(obj) {
 5. 箭头函数没有自己的 `this`，它的 `this` 指向在函数定义时就已经确定了，指向的是函数外层作用域的 `this`，且不会改变。
 6. `bind()`、`call()`、`apply()` 等方法可以改变函数的 `this` 指向。
 
-## 箭头函数和普通函数的区别
+## 箭头函数和普通函数
 
 1. 箭头函数没有自己的 this，它的 this 指向在函数定义时就确定了，指向函数外层作用域的 this，并且不会改变，call、apply、bind 方法也无法改变箭头函数的 this 指向。
+
 2. 箭头函数没有 arguments，在箭头函数里访问 arguments 得到的实际上是外层函数的 arguments。如果没有外层函数，也就是箭头函数在全局作用域内，使用 arguments 会报错。可以使用剩余参数来代替 arguments 访问箭头函数的参数列表。
+
+```js
+// 例⼦⼀
+let fun = (val) => {
+  console.log(val); // 111
+  // 下⾯⼀⾏会报错
+  // Uncaught ReferenceError: arguments is not defined
+  // 因为外层全局环境没有arguments对象
+  console.log(arguments);
+};
+fun(111);
+
+// 例⼦⼆
+function outer(val1, val2) {
+  let argOut = arguments;
+  console.log(argOut); // ①
+  let fun = () => {
+    let argIn = arguments;
+    console.log(argIn); // ②
+    console.log(argOut === argIn); // ③
+  };
+  fun();
+}
+outer(111, 222);
+```
+
+![箭头函数arguments](./images/js/arrow_function_arguments.png)
+
 3. 箭头函数没有原型对象 prototype。
+
+```js
+let sayHi = () => {
+  console.log('Hello World !')
+};
+console.log(sayHi.prototype); // undefined
+```
+
 4. 箭头函数不能用作构造函数，不可以使用 new 命令。在 new 一个构造函数时，首先会创建一个对象，接着把新对象的 `__proto__` 属性设置为构造函数的原型对象 prototype，接着把构造函数的 this 指向新对象。对于箭头函数而言，第一，它没有原型对象 prototype，第二，它没有自己的 this，所以不能用作构造函数。
+
+```js
+let Fun = (name, age) => {
+ this.name = name;
+ this.age = age;
+};
+// 报错 Uncaught TypeError: Fun is not a constructor
+let p = new Fun('cao', 24);
+```
+
+## 函数 this 指向
+
+```js
+globalThis.a = 100;
+function fn() {
+  return {
+    a: 200,
+    m: function () {
+      console.log(this.a);
+    },
+    n: () => {
+      console.log(this.a);
+    },
+    k: function () {
+      return function () {
+        console.log(this.a);
+      };
+    },
+  };
+}
+
+const fn0 = fn();
+fn0.m(); // 200，普通函数的this指向它的调用者
+fn0.n(); // 100，fn0.n 是一个箭头函数，它的this指向外层函数作用域的this，即fn函数的this
+fn0.k()(); // 100，fn0.k()返回一个匿名函数，匿名函数的this指向是window对象，即globalThis
+
+const context = { a: 300 };
+const fn1 = fn.call(context);
+fn1.m(); // 200
+fn1.n(); // 300
+fn0.k().call(context); // 300
+```
+
+```js
+var name = "window";
+const person1 = {
+  name: "person1",
+  foo1: function () {
+    console.log(this.name);
+  },
+  foo2: () => {
+    console.log(this.name);
+  },
+  foo3: function () {
+    return function () {
+      console.log(this.name);
+    };
+  },
+};
+const person2 = {
+  name: "person2",
+};
+
+person1.foo1(); // persion1
+person1.foo1.call(person2); // person2
+person1.foo2(); // window
+person1.foo2.call(person2); // window
+person1.foo3()(); // window
+
+// window，person1.foo3.call(person2)返回的还是匿名函数，因此this指向是window
+person1.foo3.call(person2)();
+// person2，person1.foo3()返回匿名函数，然后再改变了匿名函数的this指向
+person1.foo3().call(person2); 
+```
 
 ## 作用域、执行上下文
 

@@ -305,9 +305,9 @@ export default [
       },
       {
         icon: 'https://www.expressjs.com.cn/images/favicon.png',
-        title: 'Express',
+        title: 'Express 中文文档',
         desc: '基于 Node.js 平台，快速、开放、极简的 Web 开发框架',
-        link: 'https://www.expressjs.com.cn/'
+        link: 'https://nodejs.cn/express/'
       },
       {
         icon: 'https://www.eggjs.org/favicon.png',
@@ -316,10 +316,10 @@ export default [
         link: 'https://www.eggjs.org/zh-CN'
       },
       {
-        icon: '',
+        icon: 'https://www.koajs.net/img/logo.svg',
         title: 'koa',
         desc: '基于 Node.js 平台的下一代 web 开发框架',
-        link: 'https://koa.bootcss.com/'
+        link: 'https://www.koajs.net/'
       },
     ]
   },
