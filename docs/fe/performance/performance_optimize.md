@@ -825,3 +825,72 @@ module.exports = {
 ```
 
 修改完之后，接口请求和其它 chunk 并发请求了。
+
+## 案例分析2-为什么app.xxx.css这么大
+
+在 performance 面板中，app.hash.css 文件有一个红色的角标，说明存在问题。点击一看，发现 app.hash.css 提示过大，阻塞 js 的执行。
+
+![css render block](./images/css_render_block.png)
+
+把 app.hash.css 文件下载，丢给 AI 大模型让其分析这个 css 文件存在什么问题，AI 回答的一个关键点：
+
+> 内嵌字体文件体积较大（Base64 编码），可能影响加载速度，建议拆分或使用外部字体链接。
+
+app.hash.css 里面的 font-face 很大，因为 UI 组件把字体、图标转成 base64 打入。
+
+打开 app.hash.css 文件排查，发现 font-face 重复引入了多次，本身已经比较大了，还被重复引入了多次。排查 UI 组件是否被重复引入，发现并没有。后面尝试在 app.scss 文件中手动增加 font-face，发现新加的也重复引入了，因此怀疑 app.scss 被重复引用。
+
+经过代码排查发现，有多个主题样式文件都引入了 app.scss 文件，而 app.js 里又动态加载这些主题文件，从而导致 app.scss 被重复引用。
+
+```scss
+// red.scss
+@import '../app.scss'
+
+// green.scss
+@import '../app.scss'
+```
+
+```js
+const setTheme = () => {
+  switch (themeColor) {
+    case 'red':
+      require('../styles/themes/red.scss');
+      break;
+    case 'green':
+      require('../styles/themes/green.scss');
+      break;
+    default:
+      require('../styles/themes/default.scss');
+      break;
+  }
+};
+```
+
+```js
+// app.jsx
+import setTheme from './setTheme';
+...
+```
+
+优化修复方法：不在主题文件中引入 app.scss 文件，直接在 app.jsx 中直接引入，避免重复引入。
+
+此外，app.scss 把一些已经内聚到组件内部的组件样式引入删除掉，进一步减小体积大小。
+
+```scss
+// app.scss
+@import '~@ui-components/styles/index.scss';
+```
+
+经过 font-face 去重、以及裁剪，app.hash.js 从 279KB 变成 168KB（未压缩）。
+
+### 问题思考:为何不把css内联到HTML里？
+
+既然 app.hash.css 是瓶颈，为什么不把 css 内联到 html 中，直接节约一次单独请求的开销，html 加载后不用发起 css 请求就开始解析 app.hash.css，那样岂不是很快。
+
+复习一个知识点：css 加载会阻塞 js 执行，而 js 会阻塞 DOM 树解析，因此如果 css 后面有 js，css 会通过阻塞 js 间接阻塞 DOM 树的解析。所以，app.hash.css 肯定越快加载并解析完成，那么整个 DOM 解析越快，最终渲染越快。
+
+但是，html 文件是只有几分钟缓存，如果把 app.hash.css 打入了 html，基本上每次客户访问都得重新下载 app.hash.css 的内容。
+
+app.hash.css 由二三方组件的 scss 文件组成，内容基本不变，而且还挺大。正常访问 app.hash.css 基本都能击中缓存，**缓存节约的时间**，实际上比「**把 app.hash.css 打入 html 减少一个请求**」节约的时间更多。
+
+所以从这个角度来说，不适合打入。除非是 app.hash.css 真的很小，加载耗时可以忽略不计的。而且如果 app.hash.css 比较大，打入 HTML 后，HTML 又会变大，成为性能瓶颈。
