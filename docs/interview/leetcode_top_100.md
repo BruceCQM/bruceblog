@@ -3805,6 +3805,65 @@ var jump = function (nums) {
 }
 ```
 
+### 763. [划分字母区间](https://leetcode.cn/problems/partition-labels/description/)
+
+标签：哈希表、双指针、字符串、贪心
+
+题目：
+
+给你一个字符串 s 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。例如，字符串 "ababcc" 能够被分为 ["abab", "cc"]，但类似 ["aba", "bcc"] 或 ["ab", "ab", "cc"] 的划分是非法的。
+
+注意，划分结果需要满足：将所有划分结果按顺序连接，得到的字符串仍然是 s 。
+
+返回一个表示每个字符串片段的长度的列表。
+
+示例：
+
+> 输入：s = "ababcbacadefegdehijhklij"
+> 
+> 输出：[9,7,8]
+> 
+> 解释：划分结果为 "ababcbaca"、"defegde"、"hijhklij" 。每个字母最多出现在一个片段中。
+> 
+> 像 "ababcbacadefegde", "hijhklij" 这样的划分是错误的，因为划分的片段数较少。
+
+思路：
+
+每个字母第一个出现的下标和最后一次出现的下标，一定在同一个片段里。
+
+- 遍历字符串，记录每个字母最后一次出现的下标。
+
+- 初始化两个变量 start、end 为 0。从左往右遍历字符串，每次更新 end，取 end 和当前字母最后一次下标的较大者。
+
+- 当访问到 end 位置时，当前片段就结束，长度为 end - start + 1。接着令 start = end + 1，继续下一次遍历。
+
+- 重复上述过程直到遍历完成字符串。
+
+代码：
+
+```js
+var partitionLabels = function(s) {
+  // 记录每个字母最后出现的位置
+  var map = new Map();
+  for (var i = 0;i < s.length;i++) {
+    map.set(s[i], i);
+  }
+  var start = 0, end = 0;
+  var res = [];
+  for (var i = 0;i < s.length;i++) {
+    var lastIndex = map.get(s[i]);
+    // 更新 end，取较大的字母最后位置
+    end = Math.max(end, lastIndex);
+    // 访问到end，当前片段结束
+    if (i >= end) {
+      res.push(end - start + 1);
+      start = end + 1;
+    }
+  }
+  return res;
+};
+```
+
 ## 动态规划
 
 ## 多维动态规划
