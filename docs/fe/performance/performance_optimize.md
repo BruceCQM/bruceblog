@@ -928,3 +928,25 @@ module.exports = {
   }
 }
 ```
+
+## 案例分析4-阻塞函数在哪里
+
+页面的主要区块出现的还是比较慢，得分析排查。
+
+实际上，火焰图对一些接口阻塞导致的瓶颈是很难看得出来的。现在使用最原始的方法，打印 js 加载和函数实际执行的时间。
+
+更直接的办法，在差性能手机上，对主要函数打印执行的时间。
+
+直接使用console.time计算时间，或者使用一个同样的起始值（这里用 performance.timing.fetchStart）
+
+```js
+console.log(Date.now() - performance.timing.fetchStart);
+await mainProcess();
+console.log(Date.now() - performance.timing.fetchStart);
+```
+
+通过一系列打印发现，从 willmount 开始到请求核心接口，花费了将近 1.5s 时间。这就是阻塞点所在。
+
+分析代码，存在很多与核心接口无关的操作导致发起请求获取时间过晚，特别是出现了接口串行的问题，核心接口等待了某个接口请求完成后才执行。
+
+因此，对代码进行优化处理，将核心接口请求与数据前置，不受其他代码影响。
