@@ -894,3 +894,37 @@ import setTheme from './setTheme';
 app.hash.css 由二三方组件的 scss 文件组成，内容基本不变，而且还挺大。正常访问 app.hash.css 基本都能击中缓存，**缓存节约的时间**，实际上比「**把 app.hash.css 打入 html 减少一个请求**」节约的时间更多。
 
 所以从这个角度来说，不适合打入。除非是 app.hash.css 真的很小，加载耗时可以忽略不计的。而且如果 app.hash.css 比较大，打入 HTML 后，HTML 又会变大，成为性能瓶颈。
+
+## 案例分析3-首包体积太大
+
+首包是指首屏页面渲染所有需要的 js、css 资源文件，包括 index.hash.js 和各种 chunk-xx.hash.js 文件。想办法缩小首包体积。
+
+对于首屏并不需要使用到的业务组件，可以使用动态加载，并且设置成 prefetch，让浏览器闲时加载。
+
+```js
+import Loadable from 'react-loadable';
+
+const loading = () => null;
+const MyComponentLazy = isH5 ? Loadable({ loader: () => import(/* webpackChunkName: "lazy_comp" */ /* webpackPrefetch: true */ './my-component'), loading}) : null;
+```
+
+对于首屏并不需要使用到的 npm 包，通过修改构建配置，将其分离出去。
+
+```js
+module.exports = {
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        money: {
+          test: /[\\/]node_modules[\\/](money)[\\/]/,
+          name: 'lazyComp',
+          chunks: 'all',
+          minChunks: 2,
+          priority: 100,
+          reuseExistingChunk: true,
+        }
+      }
+    }
+  }
+}
+```
