@@ -3866,6 +3866,63 @@ var partitionLabels = function(s) {
 
 ## 动态规划
 
+### 70. [爬楼梯](https://leetcode.cn/problems/climbing-stairs/description/)
+
+标签：动态规划
+
+题目：
+
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+示例：
+
+> 输入：n = 2
+> 
+> 输出：2
+> 
+> 解释：有两种方法可以爬到楼顶。1 阶 + 1 阶、2 阶
+
+思路：
+
+设跳上 n 级台阶有 f(n) 种跳法。在所有跳法中，最后一步只有两种情况： 跳上 1 级或 2 级台阶。
+
+1. 当为 1 级台阶： 剩 n−1 个台阶，此情况共有 f(n−1) 种跳法。
+2. 当为 2 级台阶： 剩 n−2 个台阶，此情况共有 f(n−2) 种跳法。
+
+即 f(n) 为以上两种情况之和，即状态转移方程为：f(n)=f(n−1)+f(n−2)。并且 f(0)=1 , f(1)=1 , f(2)=2 。
+
+时间复杂度：O(n)，若新建长度为 n 的 dp 列表，则空间复杂度：O(n)。
+
+由于 dp 列表第 i 项只与第 i−1 和第 i−2 项有关，因此只需要初始化三个整形变量 sum, a, b ，利用辅助变量 sum 使 a,b 两数字交替前进即可 （具体实现见代码） 。由于省去了 dp 列表空间，因此空间复杂度降至 O(1) 。
+
+代码：
+
+```js
+var climbStairs = function(n) {
+  var dp = new Array(n + 1);
+  dp[1] = 1;
+  dp[2] = 2;
+  for (var i = 3; i <= n; i++) {
+    dp[i] = dp[i - 1] + dp[i - 2];
+  }
+  return dp[n];
+}
+
+var climbStairs = function(n) {
+  var left = 1, right = 1, sum = 0;
+  for(var i = 2;i <= n;i++) {
+    sum = left + right;
+    left = right;
+    right = sum;
+  }
+  return right;
+}
+```
+
 ## 多维动态规划
 
 ## 技巧
