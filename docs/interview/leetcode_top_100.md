@@ -3923,6 +3923,51 @@ var climbStairs = function(n) {
 }
 ```
 
+### 118. [杨辉三角](https://leetcode.cn/problems/pascals-triangle/description/)
+
+标签：动态规划、数组
+
+题目：
+
+给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
+
+![杨辉三角](./images/leetcode/question-118.png)
+
+思路：
+
+把杨辉三角的每一排左对齐：
+
+```js
+[1]
+[1,1]
+[1,2,1]
+[1,3,3,1]
+[1,4,6,4,1]
+```
+ 
+设要计算的二维数组是 c，计算方法如下：
+
+每一排的第一个数和最后一个数都是 1，即 `c[i][0]=c[i][i]=1`。
+其余数字，等于左上方的数，加上正上方的数，即 `c[i][j]=c[i−1][j−1]+c[i−1][j]`。例如 4=1+3, 6=3+3 等。
+
+代码：
+
+```js
+var generate = function(numRows) {
+  var res = [];
+  for (var i = 0;i < numRows;i++) {
+    // 当前这行初始化数组
+    var row = new Array(i + 1).fill(1);
+    for (var j = 1;j < row.length - 1;j++) {
+      // 计算除去头尾，中间元素的值
+      row[j] = res[i - 1][j - 1] + res[i - 1][j];
+    }
+    res.push(row);
+  }
+  return res;
+}
+```
+
 ## 多维动态规划
 
 ## 技巧
