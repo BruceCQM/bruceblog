@@ -44,12 +44,19 @@ export default [
     link: '/interview/cs_network'
   },
   {
-    text: 'LC 100',
-    link: '/interview/leetcode_top_100'
-  },
-  {
     text: '算法相关',
     link: '/interview/algorithm'
+  },
+  {
+    text: 'LC 100',
+    collapsed: false,
+    items: [
+      { text: 'top_100_1', link: '/interview/lc/lc_100_1' },
+      { text: 'top_100_2', link: '/interview/lc/lc_100_2' },
+      { text: 'top_100_3', link: '/interview/lc/lc_100_3' },
+      { text: 'top_100_4', link: '/interview/lc/lc_100_4' },
+      { text: 'top_100_5', link: '/interview/lc/lc_100_5' },
+    ]
   },
   {
     text: '构建工具',
