@@ -92,7 +92,7 @@ module.exports = {
 
 除了公共包，如果有某些组件体积很大，可以使用懒加载的方式引入，就不用打到主包中。
 
-## 速度优化：使用高版本的webpack和Node.js
+## 速度优化-使用高版本的webpack和Node.js
 
 要提升构建速度，推荐使用高版本的 webpack 和 Node.js。
 
@@ -592,12 +592,12 @@ module.exports = {
       react: path.resolve(__dirname, './node_modules/react/umd/react.production.min.js'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom/umd/react-dom.production.min.js'),
     },
-    // 没有后缀名的文件，去寻找文件名加.js的文件
-    extensions: ['.js'],
+    // 没有后缀名的文件，去寻找文件名加.js .jsx的文件，减少后缀名尝试
+    extensions: ['.js', '.jsx'],
     // 查找package.json的main字段内容作为入口文件
     mainFields: ['main'],
     // 添加modules字段，指定模块查找的目录顺序
-    // 减小模块搜索层级
+    // 减小模块搜索层级，这两个层级找不到就不继续往上找了
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
   },
 }
