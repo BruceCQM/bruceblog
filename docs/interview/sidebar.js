@@ -24,6 +24,10 @@ export default [
     link: '/interview/coding_problem'
   },
   {
+    text: 'React',
+    link: '/interview/react'
+  },
+  {
     text: '移动端',
     link: '/interview/mobile_end'
   },
