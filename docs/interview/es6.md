@@ -162,6 +162,39 @@ g.throw（'出错了'）;
 
 ## 11.Promise
 
+```js
+const fnc = () => {
+  return new Promise((resolve) => {
+    resolve("返回值");
+  });
+};
+const cb = () => {
+  return "新的值";
+};
+
+fnc()
+  .then(() => {
+    return cb();
+  })
+  .then((res) => console.log(res)); // 新的值
+
+fnc()
+  .then(() => {
+    cb();
+  })
+  .then((res) => console.log(res)); // undefined
+
+fnc()
+  .then(cb()) // onFulfilled不是函数，忽略这行
+  .then((res) => console.log(res)); // 返回值
+```
+
+promise.then(onFulfilled, onRejected)接收两个参数，一个是状态变为resolve后的回调函数，一个是状态变为reject后的回调函数（此处只讨论onFulfilled）
+
+- 如果onFulfilled是一个函数，且有返回值，则返回值可以继续传递给后续的then
+- 如果onFulfilled是一个函数，但没有返回值（相当于return undefined），则后续then中的入参为undefined
+- 如果onFulfilled不是函数，则忽略当前then，将参数直接传递给后续的then
+
 ## 12. Set
 
 ES6 提供了新的数据结构 Set（集合），本质上是一个对象。它类似于数组，但成员的值都是唯一的，Set 实现了 iterator 接口，因此可以使用 for...of 遍历。
