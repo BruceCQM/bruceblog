@@ -941,12 +941,20 @@ Function.prototype.myBind = function (context, ...arg1) {
 
 :::tip 检查是否是可迭代数据
 通过检查数据的 `Symbol.iterator` 是不是 `function` 来判断是否为可迭代对象。
+
+```js
+const arr = [];
+arr[Symbol.iterator]; // ƒ values() { [native code] }
+
+const a = 1;
+a[Symbol.iterator]; // undefined
+```
 :::
 [[JS] 检查一个对象是否可迭代](https://blog.csdn.net/sinat_36246371/article/details/103671711){link=static}
 
 - 返回一个 promise 实例。
 
-- 当所有 promise 都成功是，返回的 promise 才会成功，并且成功的结果是所有 promise 的成功返回值组成的数组。
+- 当所有 promise 都成功，返回的 promise 才会成功，并且成功的结果是所有 promise 的成功返回值组成的数组。
 
 - 当有一个 promise 失败了，返回的 promise 就会失败，并且失败的结果是第一个失败 promise 的结果。
 

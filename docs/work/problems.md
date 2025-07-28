@@ -544,3 +544,7 @@ class Test extends Component {
   background-color: var(--theme-color, blue);
 }
 ```
+
+## APP内自动拉起并跳转微信小程序
+
+APP 内跳转到微信的官方链接，`weixin://dl/business/?appid=wx123456789&path=good/page/index&env_version=release&query=123456`，即可自动拉起微信并跳转到 appid 指定的小程序。
