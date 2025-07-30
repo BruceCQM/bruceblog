@@ -99,6 +99,12 @@ export const getUserApiOnce = (params) => {
 
 项目上线后，p90 降了 200ms 左右。主要提速点还是 sourcemap 移除掉。
 
+- 骨架屏使用 html 实现，不使用图片 img 实现，避免骨架屏对性能指标 LCP 统计的影响。
+
+- 使用 intersectionObserver 实现图片的懒加载。
+
+- service worker 实现离线缓存。
+
 ### webpack层面做的性能优化
 
 lighthouse 对首屏分析结果显示，需要减少 JS 执行时间。
@@ -169,7 +175,6 @@ function App() {
   );
 }
 ```
-
 
 ## SPA 单页面应用的理解
 
