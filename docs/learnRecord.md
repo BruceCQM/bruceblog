@@ -170,3 +170,4 @@
 
 Todo：
 熟悉Koa、Express其中一种Node.js框架，快速搭建服务应用
+path.join、path.resolve、__dirname、process.cwd()

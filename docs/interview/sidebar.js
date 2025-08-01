@@ -12,6 +12,10 @@ export default [
     link: '/interview/javascript'
   },
   {
+    text: 'Node',
+    link: '/interview/node'
+  },
+  {
     text: 'ES6 新特性',
     link: '/interview/es6.md'
   },
