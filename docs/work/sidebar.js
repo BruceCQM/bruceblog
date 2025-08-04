@@ -8,9 +8,16 @@ export default [
       { text: '富文本编辑器', link: '/work/editor' },
       { text: 'Mobx 那些事儿', link: '/work/mobx' },
       { text: 'whistle', link: '/work/whistle' },
-      { text: 'DDD 工程', link: '/work/DDD' },
       { text: '日常开发工具', link: '/work/tools' },
       { text: '碎碎记', link: '/work/problems' },
+    ]
+  },
+  { 
+    text: 'DDD 工程',
+    collapsed: false,
+    items: [
+      { text: 'DDD_v1', link: '/work/DDD' },
+      { text: 'DDD_v2', link: '/work/DDD2' },
     ]
   },
   {

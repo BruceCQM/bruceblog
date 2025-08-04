@@ -173,3 +173,12 @@
 Todo：
 熟悉Koa、Express其中一种Node.js框架，快速搭建服务应用
 path.join、path.resolve、__dirname、process.cwd()
+
+技术栈：
+React、Taro、JS、TS、HTML、CSS、SaSS（BEM规范）、Mobx、Webpack、npm、git、AI辅助编程
+Bundle分析工具（Webpack-bundle-analyzer）、性能工具（lighthouse、performance、network）
+
+project：
+性能优化（首屏时间FMP2.6s->1.8s，减少了30%；4种工具、10+种方法；）、DDD重构工程（根据设计方案快速生成领域模型以及类型定义；使用AI辅助编程生成接近10k行代码，提高开发效率30%；AI进行代码Review，优化显著的问题如判空、魔法值、提取工具方法、添加方法注释、完善错误捕获处理）
+
+本项目采用领域驱动设计（Domain-Driven Design）架构，基于 Taro + TypeScript + MobX 技术栈，旨在构建可维护、可扩展的前端应用。
