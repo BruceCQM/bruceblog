@@ -183,3 +183,15 @@ project：
 性能优化（首屏时间FMP2.6s->1.8s，减少了30%；4种工具、10+种方法；）、DDD重构工程（根据设计方案快速生成领域模型以及类型定义；使用AI辅助编程生成接近10k行代码，提高开发效率30%；AI进行代码Review，优化显著的问题如判空、魔法值、提取工具方法、添加方法注释、完善错误捕获处理）
 
 本项目采用领域驱动设计（Domain-Driven Design）架构，基于 Taro + TypeScript + MobX 技术栈，旨在构建可维护、可扩展的前端应用。
+
+公司技术栈：Taro1.x、React、Mobx、Webpack
+
+项目一：消费金融应用首页前端性能优化
+
+利用Chrome NetWork、Performance以及lighthouse等工具分析首页性能优化点，通过splitChunks拆包、组件代码分割按需加载、移除sourceMap等方法，首屏FMP从2.5s降至1.8s，速度提高了约28%。
+
+- 修改webapck配置，将sourceMap从js包中移除出来，包体积从1.1MB降低至500KB。
+- 通过splitChunks拆包，将体积较大的包的部分内容拆分到别的包中，使所有包文件体积保持基本一致，避免某个体积较大的包成为性能瓶颈。
+- 使用react-loadable将非首屏需要的组件进行代码分割、按需加载，减小首包体积，同时设置预提取prefetch进行闲时加载。
+- 将首页核心接口请求前置，尽快发起请求，避免没有强依赖关系的接口串行请求以及操作阻塞核心接口。
+- 针对关键的资源域名，设置dns-prefetch和preconnect，提前解析DNS和进行预连接，提升性能。
