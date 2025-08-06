@@ -10,6 +10,7 @@ export default [
       { text: 'whistle', link: '/work/whistle' },
       { text: '日常开发工具', link: '/work/tools' },
       { text: '碎碎记', link: '/work/problems' },
+      { text: '技术选型', link: '/work/tech_select' },
     ]
   },
   { 

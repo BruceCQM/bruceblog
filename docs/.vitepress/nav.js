@@ -53,6 +53,7 @@ export default [
       { text: '开发工具', link: '/work/tools' },
       { text: 'DDD工程', link: '/work/DDD' },
       { text: '问题碎碎记', link: '/work/problems' },
+      { text: '技术选型', link: '/work/tech_select' },
       {
         text: '微信小程序',
         items: [
