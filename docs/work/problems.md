@@ -548,3 +548,34 @@ class Test extends Component {
 ## APP内自动拉起并跳转微信小程序
 
 APP 内跳转到微信的官方链接，`weixin://dl/business/?appid=wx123456789&path=good/page/index&env_version=release&query=123456`，即可自动拉起微信并跳转到 appid 指定的小程序。
+
+## Taro 页面管理机制
+
+Taro框架的页面管理机制：
+
+Taro 为模拟小程序的“页面栈”特性(新页面压栈、旧页面保留状态)，在SPA跳转时不会销毁旧页面，仅通过 CSS (如 display:none)隐藏。因此，首页的 DOM 元素仍存在于下一页的 DOM 树中。
+
+![Taro 页面管理](./images/problems/taro_spa_dom.png)
+
+若需要在页面执行 DOM 操作，排除上一个页面的 DOM 元素影响，可以先将页面隐藏的元素移除掉，执行完 DOM 操作后，再恢复隐藏元素，避免返回上一页出现空白。
+
+```js
+// 目标元素
+const target = this.ref.vnode.dom;
+const hiddenElements = document.querySelectorAll('[style*="display: none"]');
+const removedElements = [];
+hiddenElements.forEach(el => {
+  // 排除目标元素内部的子元素
+  if (!target.contain(el)) {
+    removedElements.push({ el, parent: el.parentNode });
+    // 移除隐藏元素
+    el.parentNode.removeChild(el);
+  }
+})
+// ... 执行本页面的DOM操作
+
+// 恢复隐藏元素
+removedElements.forEach(({el, parent}) => {
+  parent.appendChild(el);
+});
+```
