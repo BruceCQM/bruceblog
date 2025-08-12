@@ -6,6 +6,10 @@ ikuuu 本身无需科学上网即可进入，里面有 clash 的下载链接。
 
 [ikuuu](https://ikuuu.one/user){link=static}
 
+[Github for clashX](https://github.com/yichengchen/clashX)
+
+[Github for clash](https://github.com/Dreamacro/clash)
+
 下载 clash 后，点击 ikuuu 的【一键导入托管配置到Clash】，导入配置。
 
 ![ikuuu Clash 教程](./images/tools/ikuuu_clash_rules.png)
