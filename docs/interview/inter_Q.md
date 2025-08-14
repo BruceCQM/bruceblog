@@ -191,3 +191,76 @@ module.exports = {
 ### 更小的运行时代码
 
 Webpack5: 生成的运行时代码体积减少约 20%。
+
+## 像Antd组件库，是如何实现组件的按需加载的
+
+像Antd Mobile、Antd这些组件库，组件的按需加载是怎么实现的？给出一个主要思路。
+
+按需加载：只引入项目中实际使用到的组件，而不是将整个组件库全部打包进去，从而减少最终打包体积。
+
+### 主要思路
+
+- 组件库需要提供 ES Module 格式的模块化代码，每个组件单独导出。
+- 使用工具（如 babel-plugin-import）在编译时转换导入语句，将库的整体导入转换为对具体组件文件的导入，并同时引入组件对应的样式文件。或者通过手动引入指定的组件及其样式文件。
+- 这样，最终打包时只会包含实际导入的组件代码和样式，达到了按需加载的目的。
+
+### 组件库架构设计
+
+```bash
+antd/
+  ├── es/
+  │   ├── button/
+  │   │   ├── index.js      # 组件入口
+  │   │    └── style/
+  │   │       ├── index.css # 组件样式
+  │   │       └── css.js    # 样式导入文件
+  ├── lib/                  # CommonJS版本
+  └── index.js              # 完整入口
+```
+
+### 组件引入1-手动引入
+
+手动引入需要使用到的组件以及其对应的样式文件即可，在 webpack 构件时组件库中其他未被引入的文件不会被打包。
+
+```js
+import Button from 'antd/es/button';
+import 'antd/es/button/style/css';
+```
+
+### 组件引入2-自动加载
+
+使用 babel-plugin-import 插件，可以自动将组件的引入转换为按需加载的写法，避免手动书写的繁琐。
+
+```js
+// 源代码
+import { Button, Input } from 'antd';
+
+// 转换后
+import Button from 'antd/es/button';
+import 'antd/es/button/style/css'; // 自动添加样式
+import Input from 'antd/es/input';
+import 'antd/es/input/style/css';
+```
+
+修改配置：
+
+```js
+// webpack.config.js
+module.exports = {
+  module: {
+    rules: [{
+      test: /\.js$/,
+      loader: 'babel-loader',
+      options: {
+        plugins: [
+          ['import', {
+            libraryName: 'antd',
+            libraryDirectory: 'es',
+            style: 'css' // 自动加载CSS
+          }]
+        ]
+      }
+    }]
+  }
+};
+```
