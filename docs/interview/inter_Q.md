@@ -6,6 +6,37 @@
 
 ### 持久化缓存
 
+[Cache](https://webpack.docschina.org/configuration/cache/){link=static}
+
+Webpack4 每次构建都需要处理全部模块，要使用缓存需要手动配置 hard-source-webpack-plugin、cache-loader 等内容。
+
+Webpack5 内部内置了 cache 缓存机制，开发模式下默认启用内存缓存，生产模式需手动配置持久化策略。 缓存分为内存缓存和磁盘持久化缓存，默认方式为内存缓存，磁盘持久化缓存需要手动配置。
+
+```js
+// Webpack 4 通过插件实现缓存机制
+const HardSourcePlugin = require('hard-source-webpack-plugin');
+module.exports = {
+  plugins: [
+    new HardSourcePlugin()  // 默认缓存路径：node_modules/.cache/hard-source
+  ]
+};
+
+// Webpack 5 默认的内存缓存
+module.exports = {
+  cache: { type: 'memory' }  
+};
+
+// Webpack 5 手动配置的持久化磁盘缓存
+module.exports = {
+  cache: {
+    type: 'filesystem',
+    // 自定义缓存路径，cache.cacheDirectory 选项仅当 cache.type 被设置成 filesystem 才可用
+    cacheDirectory: 'node_modules/.cache/webpack', // 默认路径
+    buildDependencies: { config: [__filename] }    // 配置更改时缓存失效
+  }
+};
+```
+
 ### 更好的tree-shaking
 
 ### 模块联邦
