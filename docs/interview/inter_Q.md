@@ -4,6 +4,10 @@
 
 [大厂面试--webpack新特性详解](https://blog.csdn.net/qq_34738754/article/details/136856591){link=static}
 
+[webpack5新特性](https://juejin.cn/post/6983985071699001357){link=static}
+
+[Webpack](https://juejin.cn/post/7506338106435338255){link=static}
+
 ### 持久化缓存
 
 [Cache](https://webpack.docschina.org/configuration/cache/){link=static}
@@ -38,6 +42,29 @@ module.exports = {
 ```
 
 ### 更好的tree-shaking
+
+Webpack5 支持**嵌套的 tree-shaking**，能够更深度地识别和删除未被使用的 嵌套导出属性（如对象属性、类方法等）。
+
+相比 Webpack4 仅能标记顶层未使用的导出，Webpack5 可以深入到模块内部的嵌套结构，实现更精细的 Dead Code Elimination（死代码删除）。
+
+```js
+// utils.js
+export const tools = {
+  used: () => console.log("I'm used"),
+  unused: () => console.log("I'm unused"), // 期望被删除，但 Webpack 4 无法做到
+};
+```
+
+Webpack4 中：即使只导入 tools.used，整个 tools 对象会被保留（包括 unused 方法）。因为 Webpack4 只能标记整个 tools 是否被使用，无法分析其内部属性。
+
+在 Webpack5 中：如果代码仅使用 tools.used，tools.unused 会被安全删除。
+
+最终产出的代码可能直接优化为：
+
+```js
+// 编译后（经过压缩）
+console.log("I'm used");
+```
 
 ### 模块联邦
 
