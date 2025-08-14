@@ -168,7 +168,25 @@ module: {
 
 ### modulesId/chunksId的优化
 
+Webpack4: 使用递增数字 ID，导致文件哈希随顺序变化而改变。
+
+Webpack5: 改用哈希算法生成稳定 ID，避免因模块增减影响缓存。
+
 ### 移除Nodejs的polyfill
+
+Webpack4: 自动注入 Node.js 核心模块（如 crypto）的 polyfill。
+
+Webpack5: 不再自动注入，需显式配置。
+
+```js
+module.exports = {
+  resolve: {
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+    },
+  },
+};
+```
 
 ### 更小的运行时代码
 
