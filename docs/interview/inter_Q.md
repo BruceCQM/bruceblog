@@ -68,6 +68,64 @@ console.log("I'm used");
 
 ### 模块联邦
 
+模块联邦（Module Federation）允许不同的独立应用（或微前端）在运行时直接共享代码模块，而无需重复打包或通过 npm 安装依赖。这一设计彻底改变了前端架构的模块化共享方式，尤其适合微前端、多团队协作等场景。
+
+它是为了解决独立应用之间代码共享问题，可以在项目内动态加载其他项目的代码，共享依赖。
+
+- Remote（远程模块）：暴露自身模块供其他应用使用（如 app1 暴露一个 Button 组件）。
+- Host（宿主应用）：消费其他应用暴露的模块（如 app2 使用 app1 的 Button）。
+- Bi-Directional（双向）：一个应用可同时作为 Host 和 Remote（互相共享模块）。
+
+Remote 暴露模块：
+```js
+// webpack.config.js (app1)
+const { ModuleFederationPlugin } = require('webpack').container;
+
+module.exports = {
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'app1', // 唯一标识
+      filename: 'remoteEntry.js', // 入口文件（供其他应用加载）
+      exposes: {
+        './Button': './src/Button.js', // 暴露模块路径:导出别名
+        './utils': './src/utils.js',
+      },
+      shared: ['react', 'react-dom'], // 共享的库（避免重复加载）
+    }),
+  ],
+}
+```
+
+Host 消费模块：
+```js
+// webpack.config.js (app2)
+new ModuleFederationPlugin({
+  name: 'app2',
+  remotes: {
+    app1: 'app1@http://localhost:3001/remoteEntry.js', // 格式: `name@远程入口URL`
+  },
+  shared: ['react', 'react-dom'], // 声明共享依赖
+});
+```
+
+Host 中使用 Remote 模块：
+
+```js
+// app2 的代码中动态导入 app1 的 Button
+import React from 'react';
+const RemoteButton = React.lazy(() => import('app1/Button'));
+
+function App() {
+  return (
+    <div>
+      <React.Suspense fallback="Loading Button...">
+        <RemoteButton />
+      </React.Suspense>
+    </div>
+  );
+}
+```
+
 ### 资源模块
 
 [资源模块](https://webpack.docschina.org/guides/asset-modules/){link=static}
@@ -111,3 +169,7 @@ module: {
 ### modulesId/chunksId的优化
 
 ### 移除Nodejs的polyfill
+
+### 更小的运行时代码
+
+Webpack5: 生成的运行时代码体积减少约 20%。
