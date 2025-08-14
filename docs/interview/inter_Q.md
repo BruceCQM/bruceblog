@@ -1,0 +1,55 @@
+# 麵筋一块一串
+
+## webpack5和4的区别
+
+[大厂面试--webpack新特性详解](https://blog.csdn.net/qq_34738754/article/details/136856591){link=static}
+
+### 持久化缓存
+
+### 更好的tree-shaking
+
+### 模块联邦
+
+### 资源模块
+
+[资源模块](https://webpack.docschina.org/guides/asset-modules/){link=static}
+
+Webpack4 中，加载图片、字体这些资源需要使用不同的 loader。
+
+在 Webpack5 中，内置了静态资源构建能力，从而让 Webpack 不用使用额外的 loader 就能加载这些资源。
+
+在 webpack 5 之前，通常使用：
+
+- raw-loader 将文件导入为字符串
+- url-loader 将文件作为 data URI 内联到 bundle 中
+- file-loader 将文件发送到输出目录
+
+资源模块类型(asset module type)，通过添加 4 种新的模块类型，来替换所有这些 loader：
+
+- asset/resource：发送一个单独的文件并导出 URL。之前通过使用 file-loader 实现。(即输出为一个文件，并且其路径将被注入到 bundle 中)
+- asset/inline：导出一个资源的 data URI。之前通过使用 url-loader 实现。（比如图片使用base64格式内联进包里）
+- asset/source：导出资源的源代码。之前通过使用 raw-loader 实现。（返回文件的原始内容）
+- asset：在导出一个 data URI 和发送一个单独的文件之间自动选择。之前通过使用 url-loader，并且配置资源体积限制实现。
+
+```js
+module: {
+  rules: [
+    {
+      test: /\.(png|jpg|jpeg|gif)$/,
+      type: 'asset/resource'
+    },
+    {
+      test: /\.svg/,
+      type: 'asset/inline'
+    },
+    {
+      test: /\.txt/,
+      type: 'asset/source' // 原样将txt文件中的文本内容注入到打包文件中
+    }
+  ]
+}
+```
+
+### modulesId/chunksId的优化
+
+### 移除Nodejs的polyfill

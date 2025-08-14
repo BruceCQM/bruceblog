@@ -56,6 +56,10 @@ export default [
     link: '/interview/algorithm'
   },
   {
+    text: '面筋',
+    link: '/interview/inter_Q'
+  },
+  {
     text: 'LC 100',
     collapsed: false,
     items: [
