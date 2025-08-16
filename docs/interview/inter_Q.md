@@ -394,14 +394,58 @@ Fiber 引入了优先级标记（如 Immediate、UserBlocking、Normal），它�
 
 ## 移动端适配方案
 
+[移动端适配的5种方案](https://juejin.cn/post/6953091677838344199){link=static}
+
 ### rem 布局
 
 rem 是 CSS3 新增的相对单位，以 HTML 元素的 font-size 为基准值。
+
+优点：rem 布局能很好的实现在不同尺寸的屏幕横向填满屏幕，且在不同屏幕元素大小比例一致
+
+缺点：在大屏设备（Pad）上，元素尺寸会很大，页面显示更少的内容。
+
+针对大屏改进方案：
+
+- 限制 rem 的最大值，
+- 通过媒体查询，限制内容最大宽度，如：腾讯网、荔枝FM
+
+在移动端浏览器 rem 方案是解决移动端适配的主流方案，这套方案的另一个名字叫做 flexible 方案，通过动态设置 rem 实现在不同尺寸的设备上界面展示效果一致。
 
 ### vm/vh 布局
 
 vm/vh 将页面分为 100 份，1vm = 1/100 屏幕高度，1vh = 1/100 屏幕宽度。
 
+优点：vw、vh布局能良好的实现在不同尺寸的屏幕横向填满屏幕，使用 postcss-px-to-viewport 能很好的帮我们进行单位转换
+
+缺点：
+
+- 无法修改 vw/vh 的值，在大屏设备（Pad）中元素会放大，且无法通过 js 干预
+- 兼容性- 大多数浏览器都支持、ie11不支持 少数低版本手机系统 ios8、android4.4以下不支持
+
 ### 百分比布局
 
+在 css 中，我们可以使用百分比来实现布局，但是需要特定宽度时，这个百分比的计算对开发者来说并不友好。
+
+且元素百分比参考的对象为父元素，元素嵌套较深时会有问题。
+
+注意：
+
+- 子元素的 width 和 height 百分比参考对象是父元素的 width 和 height。
+- margin、padding 的参考对象为父元素的 width。
+- border-radius、background-size、transform: translate()、transform-origin 的参考对象为自身宽高。
+
 ### 媒体查询
+
+通过媒体查询，可以针对不同的屏幕进行单独设置，但是针对所有的屏幕尺寸做适配显然是不合理的，但是可以用来处理极端情况（例如 IPad 大屏设备）或做简单的适配（隐藏元素或改变元素位置）
+
+```css
+body {
+  background-color: yellow;
+}
+/* 针对大屏产品 ipad pro */
+@media screen and (min-width: 1024px) {
+  body {
+    background-color: blue;
+  }
+}
+```
