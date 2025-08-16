@@ -264,3 +264,74 @@ module.exports = {
   }
 };
 ```
+
+## 开发一个React组件，怎么做？
+
+构建工具选择：webpack。
+
+### 组件项目结构
+
+首先需要开发 React 组件。组件的项目结构示例如下：
+
+```bash
+my-react-component/
+├── dist/                    # 构建输出目录
+├── src/                     # 源代码
+│   ├── components/          # React 组件
+│   │   └── MyComponent.jsx  # 示例组件
+│   ├── styles/              # 样式文件
+│   └── index.js             # 组件入口文件
+├── .babelrc                 # Babel 配置
+├── webpack.config.js        # Webpack 配置
+└── package.json
+```
+
+组件入口文件内容示例：
+
+```js
+import MyComponent from './components/MyComponent';
+
+// 导出组件
+export default MyComponent;
+
+// 可选：导出其他工具函数或子组件
+export { default as Button } from './components/Button';
+export { default as Input } from './components/Input';
+```
+
+### 构建打包
+
+webpack 配置文件示例：
+
+```js
+const TerserPlugin = require('terser-webpack-plugin');
+
+module.exports = {
+  entry: {
+    'my-component': './src/index.js',
+    'my-component.min': './src/index.js',
+  },
+  output: {
+    filename: '[name].js',
+    // 指定暴露出去的库的名称，也支持以全局变量的方式引用它
+    library: 'MyComponent',
+    // 支持 AMD/CJS/ESM 模块和 script 引入
+    libraryTarget: 'umd',
+    // 方便使用，如果不加使用组件的时候需要 MyComponent.default 来用
+    libraryExport: 'default',
+  },
+  mode: 'none',
+  // 只针对 .min.js 结尾的文件进行压缩
+  optimization: {
+    minimize: true,
+    minimizer: [
+      // uglifyJsPlugin不能压缩ES6语法，会报错，推荐使用TerserPlugin
+      new TerserPlugin({
+        include: /\.min\.js$/,
+      }),
+    ],
+  },
+};
+```
+
+webpack 构建打包完成，发布到 npm 上。
