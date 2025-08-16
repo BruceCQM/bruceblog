@@ -35,7 +35,7 @@ export default [
   },
   {
     text: '宝典',
-    link: '/interview/javascript'
+    link: '/interview/html'
   },
   {
     text: '知也无涯',
