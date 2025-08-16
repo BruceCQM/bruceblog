@@ -578,3 +578,8 @@ rimraf node_modules
 [带你玩转prefetch, preload, dns-prefetch，defer和async](https://segmentfault.com/a/1190000011577248){link=static}
 
 [预加载系列一：DNS Prefetching 的正确使用姿势](https://segmentfault.com/a/1190000003944417){link=static}
+
+### 2、Chrome 此扩展程序已停用，因为它已不再受支持
+
+[解决：谷歌浏览器提示“此扩展程序已停用，因为它已不再受支持”](https://blog.csdn.net/scoful/article/details/149361038){link=static}
+
