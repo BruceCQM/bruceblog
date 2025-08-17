@@ -478,8 +478,75 @@ body {
 - 当用户滚动接近页面底部时，触发加载新的数据。
 - 获取到新数据后，生成新的内容块元素，重复步骤2-4，将这些新块添加到布局中最低的列。
 
-## 实现方式
+### 实现方式
 
 - 纯CSS实现：CSS Multi-column Layout (多列布局)、CSS Grid Layout (网格布局)
 - JS 库：Masonry (最经典、最流行)、Isotope (Masonry 的超集)
 - 前端框架组件方案：React有react-window/react-virtualized+react-masonry-css等；Vue有vue-masonry/vue-waterfall等
+
+## 地图渲染很多点，如何优化卡顿？
+
+标记点过多导致卡顿，主要原因是浏览器需要处理大量的DOM元素，导致重绘和重排的开销过大。优化思路主要是减少实际渲染的DOM数量，以及提高每个标记点的渲染效率。
+
+### 优化方案
+
+1. 标记点聚合（Marker Clustering）
+
+将相邻的标记点合并为集群（Cluster），点击或者放大地图时再展开，从而减少渲染的标记点。
+
+常见工具：[leaflet-markercluster](https://github.com/Leaflet/Leaflet.markercluster)
+
+2. 视图裁剪（Viewport Clipping）
+
+只渲染当前视图范围内的标记点，视图外的标记点不渲染或移除。
+
+```js
+map.on('moveend', () => {
+  const bounds = map.getBounds();
+  markers.forEach(marker => {
+    if (bounds.contains(marker.getLatLng())) {
+      marker.addTo(map);
+    } else {
+      marker.remove();
+    }
+  });
+});
+```
+
+3. 使用Canvas/WebGL渲染
+
+使用 Canvas 或 WebGL 代替 DOM 元素来绘制标记点，因为它们在处理大量图形时性能更好。
+
+4. 简化标记点设计
+
+简化标记点的样式，避免使用复杂的阴影、渐变等样式。
+
+使用简单的图标或小图片。
+
+5. 分级加载标记点
+
+根据地图的缩放级别，渲染不同密度的标记点。例如，地图缩小时，只渲染重要的标记点。（和标记点聚合有些异曲同工之妙）
+
+```js
+map.on('zoomend', () => {
+  if (map.getZoom() > 10) {
+    loadHighDetailMarkers(); // 加载详细点
+  } else {
+    loadLowDetailMarkers();  // 加载简化点（如区域中心点）
+  }
+});
+```
+
+6. 使用 Web Worker
+
+将标记点的数据处理（如坐标计算、聚合计算）放到 Web Worker 中，避免阻塞主线程。
+
+7. 防抖节流
+
+通过防抖节流，避免拖动或缩放地图时，频繁触发重新渲染标记点。
+
+### 推荐工具库
+
+- Leaflet：轻量级，配合leaflet.markercluster+L.Canvas。
+- Mapbox GL JS：原生WebGL支持，适合超大数据量。
+- Deck.gl：专为大容量地理数据设计（支持百万级点）。
