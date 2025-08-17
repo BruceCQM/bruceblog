@@ -550,3 +550,114 @@ map.on('zoomend', () => {
 - Leaflet：轻量级，配合leaflet.markercluster+L.Canvas。
 - Mapbox GL JS：原生WebGL支持，适合超大数据量。
 - Deck.gl：专为大容量地理数据设计（支持百万级点）。
+
+## ESModule 和 CommonJS 的区别
+
+### 语法差异
+
+CommonJS 的导入导出语法：
+
+```js
+const fs = require('fs');
+const { readFileSync } = require('fs');
+
+module.exports = { a: 1 }; // 类似默认导出
+exports.b = 2; // 类似命名导出
+```
+
+ESModule 的导入导出语法：
+
+```js
+import fs from 'fs';
+import { readFileSync } from 'fs';
+import * as utils from './utils.js';
+
+export const a = 1;
+export default { b: 2 };
+```
+
+### 加载时机
+
+|特性|CommonJS|ESModule|
+|-|-|-|
+|加载方式|运行时同步加载|编译时异步加载|
+|解析顺序|按代码顺序执行|静态分析，提前解析依赖|
+|位置要求|可在条件语句中动态加载|必须位于顶层作用域|
+
+### 值特性
+
+CommonJS 导出的是值的拷贝，对于基本类型是复制，对于对象是引用。
+
+```js
+// count.js
+let count = 0;
+module.exports = {
+  count,
+  increment: () => count++
+}
+
+// index.js
+const { count, increment } = require('./count');
+increment();
+console.log(count); // 0（不受影响，导出的count是值拷贝）
+```
+
+ESModule 导出的是值的引用（动态绑定）。
+
+```js
+// counter.js
+export let count = 0;
+export const increment = () => count++;
+
+// main.js
+import { count, increment } from './counter.mjs';
+increment();
+console.log(count); // 1（值变了）
+```
+
+### 循环依赖处理
+
+CommonJS 不会报错，会继续执行。
+
+```js
+// a.js
+console.log('a 开始');
+const b = require('./b');
+console.log('在 a 中，b.done = %j', b.done);
+module.exports = { done: true };
+
+// b.js
+console.log('b 开始');
+const a = require('./a');
+console.log('在 b 中，a.done = %j', a.done);
+module.exports = { done: true };
+
+// 执行顺序：
+// a 开始 → b 开始 → 在 b 中，a.done = false → 在 a 中，b.done = true
+```
+
+ESModule 会报错。
+
+```js
+// a.mjs
+import { bar } from './b.mjs';
+console.log('a: bar =', bar);
+export const foo = 'foo';
+
+// b.mjs
+import { foo } from './a.mjs';
+console.log('b: foo =', foo);
+export const bar = 'bar';
+
+// 执行报错：ReferenceError: Cannot access 'foo' before initialization
+```
+
+### 动态导入
+
+CommonJS 动态导入也是使用 require() 语句。
+
+ESModule 使用 import() 函数进行动态导入。
+
+```js
+const module = await import('./module.mjs');
+```
