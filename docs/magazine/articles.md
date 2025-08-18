@@ -583,3 +583,13 @@ rimraf node_modules
 
 [解决：谷歌浏览器提示“此扩展程序已停用，因为它已不再受支持”](https://blog.csdn.net/scoful/article/details/149361038){link=static}
 
+## AI 相关
+
+Cursor 生成开发计划提示词。
+
+[Cursor 实践：Plan & Act 模式](https://zhuanlan.zhihu.com/p/1904181803104863505){link=static}
+
+
+Cursor 的 claude4 模型无法使用解决。
+
+[Cursor区域限制解决方法， Cursor 提示：“Model not available“的原因](https://zhuanlan.zhihu.com/p/1931320539454080939){link=static}
