@@ -339,6 +339,10 @@ nvm uninstall <version>   // 卸载指定版本的 node
 
 [nvm 详细安装步骤以及使用（window10 系统）](https://blog.csdn.net/Anony_me/article/details/124153201){link=card}
 
+nvm 镜像源使用这个：
+
+[nvm-下载、安装、使用（2024/09/03更新）](https://blog.csdn.net/m0_54345753/article/details/131653960){link=static}
+
 ### nvm 使用问题
 
 1、nvm 下载 node 很慢，或者卡住、下载失败
