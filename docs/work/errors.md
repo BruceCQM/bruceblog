@@ -191,6 +191,12 @@ ssh -T git@github.com
 
 [ssh: connect to host github.com port 22: Connection refused](https://zhuanlan.zhihu.com/p/521340971){link=card}
 
+### ssh 登录 Github 报错
+
+ssh 登录 GitHub 报错：kex_exchange_identification: read: Connection reset by peer Connection reset by 20.205.243.166 port 22
+
+[ssh 登录 GitHub 报错](https://www.cnblogs.com/liuhanxu/p/16025861.html){link=static}
+
 ## NPM
 
 ### npm ERR! code ELIFECYCLE
