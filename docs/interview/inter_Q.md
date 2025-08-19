@@ -666,3 +666,60 @@ ESModule 使用 import() 函数进行动态导入。
 ```js
 const module = await import('./module.mjs');
 ```
+
+## FMP指标是如何计算的？
+
+[【性能指标】FMP 是怎么算出来的](https://juejin.cn/post/6844903929717915661){link=static}
+
+## react-loadable类似的工具
+
+### 除了react-loadable，有没有其它类似功能的工具
+
+React.lazy()、loadable-component、动态导入 import()。
+
+### 为什么项目使用react-loadable，不使用React.lazy()？
+
+[一篇文章理解 Taro1/3原理](https://blog.csdn.net/qq_45643079/article/details/134872570){link=static}
+
+项目使用的是 Taro1.x 版本。Taro 1.x 版本并非直接使用官方 React 库，而是基于类 React 语法的 Nerv 框架（由京东团队开发）实现。
+
+在 Taro1.x 官方文档中，描述如下：
+
+> Taro 遵循 React 语法规范，它采用与 React 一致的组件化思想，组件生命周期与 React 保持一致，同时支持使用 JSX 语法，让代码具有更丰富的表现力，使用 Taro 进行开发可以获得和 React 一致的开发体验。
+
+说的是【遵循 React 语法规范】，但实际上并不是直接使用 React 库，使用的是 Nerv 框架。
+
+Nerv 的 API 设计主要参考 React15~16 版本，所以 Taro1.x 其实对应的是 React16 版本。而 React.lazy 是在 16.6 版本推出的，因此 Taro1.x 版本无法使用 React.lazy 进行代码分割。
+
+从 Taro 3.0 开始，官方全面转向支持原生 React（需手动安装 react 和 react-dom），并逐步兼容至 React 18（Taro 3.5+）
+
+[从 Taro v3.5 开始，Taro 将默认使用 React 18 版本](https://docs.taro.zone/docs/react-18){link=static}
+
+## AI 编程的理解
+
+对于 AI 编程，不能仅停留在提示词生成代码比较浅层次的层面。
+
+AI 编程，本质上是一个【工程化】问题，而非技术问题。技术沉淀在框架之中，AI 是去调用框架能力。
+
+### 如何让AI生成确定高的代码？
+
+如果 AI 生成的代码确定性不高，需要人工二次检查，进行纠错，其实并不能对开发效率提高很多。
+
+如果是把所有 TS 类型定义梳理好丢给 AI 生成，那其实和人工干完也没有太大区别。
+
+以 cursor 为例。
+
+可以在 cursor.rules 中存放项目工程的架构、目录结构、代码规范这些规范性的内容，甚至可以放一些标准的示例代码，从而约束 cursor 的代码生成，让它生成符合规范的代码。
+
+另外，工程化的颗粒度要足够细。以领域模型为例，领域模型要拆得足够细致，字段属性描述清楚，cursor 根据这份拆解好的领域模型以及 cursor.rules 的工程规范，就可以生成确定性、准确性都很高的 TS 类型定义。
+
+说到底是一个工程颗粒度问题，只能拆得足够细致，AI 是可以生成确定性高的代码的。
+
+其实就是告诉 AI 足够多的细节，把人类了解的东西，以清晰的语言描述给 AI。
+
+另外，还可以通过 eslint 来提高代码生成的准确性。
+
+人家搭建的 AI 体系可以做到：
+
+- 丢一张设计稿，几分钟就能生成准确的、可交互的页面，并且可以直接上线，根本无需人工干预。这其中涉及到 MCP 阅读设计稿。
+- 给 AI 提供了一套抓取后端接口 API 类型定义的工具流程，AI 可以自动获取后端接口的返回字段和结构，这其中应该也涉及到 MCP 工具。
