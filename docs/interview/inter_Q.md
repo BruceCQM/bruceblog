@@ -632,8 +632,13 @@ const a = require('./a');
 console.log('在 b 中，a.done = %j', a.done);
 module.exports = { done: true };
 
-// 执行顺序：
-// a 开始 → b 开始 → 在 b 中，a.done = false → 在 a 中，b.done = true
+// 执行 b.js，打印结果如下：
+// b 开始
+// a 开始
+// 在 a 中，b.done = undefined
+// 在 b 中，a.done = true
+// (node:46590) Warning: Accessing non-existent property 'done' of module exports inside circular dependency
+// (Use `node --trace-warnings ...` to show where the warning was created)
 ```
 
 ESModule 会报错。
@@ -649,7 +654,7 @@ import { foo } from './a.mjs';
 console.log('b: foo =', foo);
 export const bar = 'bar';
 
-// 执行报错：ReferenceError: Cannot access 'foo' before initialization
+// 执行报错：ReferenceError: Cannot access 'bar' before initialization
 ```
 
 ### 动态导入
