@@ -11,6 +11,7 @@ export default [
       { text: '日常开发工具', link: '/work/tools' },
       { text: '碎碎记', link: '/work/problems' },
       { text: '技术选型', link: '/work/tech_select' },
+      { text: 'ai 相关', link: '/work/ai'}
     ]
   },
   { 
