@@ -579,3 +579,19 @@ removedElements.forEach(({el, parent}) => {
   parent.appendChild(el);
 });
 ```
+
+## webview第一个页面返回无法触发路由拦截
+
+webview 的第一个页面，点击箭头返回，无法触发 beforeRouteLeave 路由拦截。
+
+可以插入一条相同的路由记录。
+
+```js
+componentDidMount() {
+  if (window && process.env.TARO_ENV === 'h5') {
+    window.history.pushState({
+      key: window.history.state.key, // 必须要加小于等于当前路由的key
+    }, '', window.location.href);
+  }
+}
+```
