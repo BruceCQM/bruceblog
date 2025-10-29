@@ -583,6 +583,10 @@ rimraf node_modules
 
 [解决：谷歌浏览器提示“此扩展程序已停用，因为它已不再受支持”](https://blog.csdn.net/scoful/article/details/149361038){link=static}
 
+### 3. Edge/Chrome 配置跨域
+
+[edge浏览器配置跨域完整流程-前端](https://blog.csdn.net/weixin_43564810/article/details/130053646){link=card}
+
 ## AI 相关
 
 Cursor 生成开发计划提示词。
