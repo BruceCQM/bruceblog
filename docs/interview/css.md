@@ -1600,3 +1600,59 @@ div 宽高设置为 0，接着设置对应的边框颜色和边框宽度，即�
 ![css三角形](./images/css/CSS_triangle.png)
 
 [纯 CSS 实现绘制各种三角形（各种角度）](https://www.cnblogs.com/chengxs/p/11406278.html){link=static}
+
+## 22、CSS 实现半圆合并效果
+
+![CSS半圆合并效果](./images/css/half_circle.png)
+
+使用伪元素进行实现。
+
+```css
+<style>
+  .upDiv {
+    width: 300px;
+    height: 60px;
+    background-color: red;
+    position: relative;
+  }
+  .upDiv::after {
+    content: "";
+    position: absolute;
+    /** 上面的半圆往下移动 */
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 10px;
+    background-color: red;
+    border-radius: 0 0 10px 10px;
+    /* 避免上面的半圆前半部分被挡住 */
+    z-index: 9; 
+  }
+  .downDiv {
+    width: 300px;
+    height: 60px;
+    background-color: red;
+    position: relative;
+    margin-top: 6px;
+  }
+  .downDiv::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 10px;
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+  }
+</style>
+```
+
+```html
+<body>
+  <div class="upDiv"></div>
+  <div class="downDiv"></div>
+</body>
+```
