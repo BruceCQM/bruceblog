@@ -266,9 +266,15 @@ module.exports = {
 
 WDS 可以解决这个问题。和 watch 参数相比，它的好处在于构建的内容存在内存当中，而不是存在磁盘中，因此速度更快。另外，搭配 HotModuleReplacementPlugin 插件使用，可以实现浏览器自动刷新。
 
-需要使用到的插件：webpack-dev-server（安装webpack时默认会安装、无需单独手动安装）、HotModuleReplacementPlugin（webpack的内置插件）。
+需要使用到的插件：webpack-dev-server、HotModuleReplacementPlugin（webpack的内置插件）。
 
-修改运行命令：
+安装 webpack-dev-server，webpack4.x 需要使用 3.x 版本的，这里使用 3.11.3，是 3.x 最后一个稳定版本。
+
+```bash
+npm install webpack-dev-server@3.11.3 -D
+```
+
+修改运行命令，`--config webpack.dev.js` 是指定使用的 webpack 配置文件，可以没有。没有默认使用 webpack.config.js。
 
 ```json
 {
