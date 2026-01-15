@@ -501,6 +501,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
+      // 指明使用的html模板，需要创建好
       template: path.join(__dirname, "src/search/index.html"),
       filename: "search.html",
       // 指定生成的html要使用哪些chunk
@@ -520,6 +521,11 @@ module.exports = {
   ]
 }
 ```
+
+注意事项：
+
+- 通常而言，一个入口文件对应一个 html 文件，所以 HtmlWebpackPlugin 插件配置也会有多个。
+- `template` 字段指明的 html 模板需要提前创建好，否则会报错。
 
 ## 自动清理构建目录产物
 
