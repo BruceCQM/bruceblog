@@ -736,6 +736,8 @@ npm i html-inline-css-webpack-plugin@1.2.1 mini-css-extract-plugin@0.6.0 -D
 修改配置：
 
 ```js
+const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default;
+
 module.exports = {
   module: {
     rules: [
