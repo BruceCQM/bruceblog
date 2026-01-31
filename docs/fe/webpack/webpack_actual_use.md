@@ -811,6 +811,8 @@ npm i glob@7.1.4 -D
 修改 webpack 配置，动态匹配 src 目录下每个页面的 index 文件路径，然后设置 entry 和 html-webpack-plugin 配置。
 
 ```js
+const glob = require('glob');
+
 const setMPA = () => {
   const entry = {};
   const htmlWebpackPlugins = [];
