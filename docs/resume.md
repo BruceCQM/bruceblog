@@ -35,3 +35,29 @@
 在代码重构的项目中，采用了领域驱动设计的架构，来对原有的代码进行重新设计划分，并且利用 Cursor 来生成代码和进行代码评审，缩短了大概30%的开发周期。
 
 在地图开发的项目中，主要是使用Taro和react-amap组件完成小程序和B端的地图功能开发，实现了标记点绘制、路线绘制、拖拽更新这些地图功能。
+
+src和href的区别
+defer和async的区别
+iframe的优点和缺点
+浏览器乱码的原因是什么？如何解决？
+渐进增强和优雅降级的区别
+为什么有时候用translate改变位置而不是定位？
+li与li之间又看不见的空白间隔是什么原因引起的？如何解决？
+null和undefined的区别
+如果安全获取undefined
+双向数据绑定原理
+使用Object.defineProperty()来进行数据劫持有什么缺点？
+Computed和Watch的区别
+$nextTick的原理及作用
+对React-Fiber的理解，它解决了什么问题？
+React.Component和React.PureComponent的区别
+对有状态组件和无状态组件的理解及使用场景
+webpack的构建流程
+http1.1和http2.0的区别
+http状态码304是多好还是少好
+什么是XSS攻击？
+死锁产生的原因？如何解决死锁的问题？
+如何实现浏览器内多个标签页之间的通信？
+如何进行网站性能优化
+写个快排
+手写Promise
