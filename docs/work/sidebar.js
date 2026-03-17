@@ -30,4 +30,11 @@ export default [
       { text: '微信小程序地图开发教程', link: '/work/wx/wx_map' },
     ]
   },
+  {
+    text: '支付宝小程序',
+    collapsed: true,
+    items: [
+      { text: '支付宝小程序', link: '/work/zfb/zfb_points'}
+    ]
+  }
 ]
