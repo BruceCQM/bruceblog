@@ -157,3 +157,31 @@ import BaseComponent from '../../../../../components/base';
 class UserEducation extends BaseComponent {}
 ```
 
+## 真机预览，分包加签失败
+
+支付宝开发者工具，点击真机预览，出现如下报错：
+
+```
+{"traceId":"xxxx","errorCode":"CREATE_DEBUG_VERSION_ERROR","msg":"真机预览失败 分包加签失败","type":"netBiz","stat":"failed","error":"真机预览失败 分包加签失败"}
+```
+
+这个问题是由于某个文件编译之后路径过长导致的。
+
+高版本的开发者工具看不到具体是哪个文件路径过长，需要安装低版本开发者工具（例如[2.9.1版本](https://opendocs.alipay.com/mini/ide/stable_log?pathHash=e4b6a05a)）查看。
+
+具体报错如下：
+
+```
+{"code": "AB0311010110215", "msg": "Request URL: https://openhome.alipay.com/platform/generateMiniDebugForMulti.jso
+
+n\n生成调试版失败，原因真机预览失败 file name &#39:xxxxxxxxxx/xxxx/xxxx.png&#39; is too long ( &gt; 100 bytes)"}
+
+直机预览失败 file name
+
+生成调试版失败，原因真机预览失败 file name &#39;xxxxxxxxxx/xxxx/xxxx.png&#39; is too long ( &gt; 100 bytes)
+```
+
+解决方案：
+
+1. 将图片转换为在线链接。
+2. 把图片放到外层目录，从而缩短路径的长度。
