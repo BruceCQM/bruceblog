@@ -1,7 +1,7 @@
 export default [
   {
     text: '高效搬砖',
-    collapsed: true,
+    collapsed: false,
     items: [
       { text: '那些年, Antd 坑我的地方', link: '/work/antd' },
       { text: 'Error 虐我千百遍', link: '/work/errors' },
@@ -23,18 +23,12 @@ export default [
     ]
   },
   {
-    text: '微信小程序',
-    collapsed: true,
+    text: '小程序',
+    collapsed: false,
     items: [
-      { text: '小程序开发之坑', link: '/work/wx/wx_points' },
-      { text: '微信小程序地图开发教程', link: '/work/wx/wx_map' },
+      { text: '小程序开发之坑', link: '/work/mini/wx_points' },
+      { text: '微信小程序地图开发教程', link: '/work/mini/wx_map' },
+      { text: '支付宝小程序编译报错', link: '/work/mini/zfb_points'}
     ]
   },
-  {
-    text: '支付宝小程序',
-    collapsed: true,
-    items: [
-      { text: '支付宝小程序', link: '/work/zfb/zfb_points'}
-    ]
-  }
 ]

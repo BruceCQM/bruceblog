@@ -55,10 +55,11 @@ export default [
       { text: '问题碎碎记', link: '/work/problems' },
       { text: '技术选型', link: '/work/tech_select' },
       {
-        text: '微信小程序',
+        text: '小程序',
         items: [
-          { text: '小程序开发之坑', link: '/work/wx/wx_points' },
-          { text: '微信小程序地图开发', link: '/work/wx/wx_map' },
+          { text: '小程序开发之坑', link: '/work/mini/wx_points' },
+          { text: '微信小程序地图开发', link: '/work/mini/wx_map' },
+          { text: '支付宝小程序编译报错', link: '/work/mini/zfb_points' },
         ]
       },
     ]
