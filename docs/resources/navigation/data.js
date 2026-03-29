@@ -127,10 +127,22 @@ export default [
         desc: '完整的前端学习教程，包括HTML、css、JavaScript、Webpack、canvas等',
         link: 'https://learn.fuming.site/front-end/Webpack/origin/loader.html'
       },
+      {
+        icon: 'https://bigfedcamp.com/icon?69058743d07fb89f',
+        title: '大前端同学营',
+        desc: '大前端 - 沙包那么大，也可以装下一个人',
+        link: 'https://bigfedcamp.com/'
+      },
+      {
+        icon: 'https://www.codefather.cn/favicon.ico',
+        title: '编程导航',
+        desc: '编程教程 - 编程导航 - 优质教程分享，程序员编程学习交流社区',
+        link: 'https://www.codefather.cn/course'
+      },
     ]
   },
   {
-    title: '打包工具',
+    title: '前端工程化',
     items: [
       {
         icon: 'https://webpack.js.org/favicon.a3dd58d3142f7566.ico',
@@ -161,6 +173,12 @@ export default [
         title: 'Rspack',
         desc: 'Rust应用，用于取代webpack，速度飞快，非常兼容webpack，几乎可以不修改webpack的配置',
         link: 'https://rspack.dev/zh/'
+      },
+      {
+        icon: 'https://docs.github.com/assets/cb-345/images/site/favicon.png',
+        title: 'GitHub Actions 文档',
+        desc: '使用 GitHub Actions 直接在你的代码库中自动化、自定义和执行软件开发工作流程。 您可以发现、创建和共享操作以执行您喜欢的任何作业（包括 CI/CD），并将操作合并到完全自定义的工作流程中。',
+        link: 'https://docs.github.com/zh/actions'
       },
     ]
   },
@@ -226,6 +244,12 @@ export default [
         title: 'Mobx 中文文档',
         desc: '简单、可扩展的状态管理',
         link: 'https://cn.mobx.js.org/'
+      },
+      {
+        icon: 'https://ahooks.js.org/logo.svg',
+        title: 'ahooks',
+        desc: '一套高质量可靠的 React Hooks 库',
+        link: 'https://ahooks.js.org/zh-CN'
       },
     ]
   },
