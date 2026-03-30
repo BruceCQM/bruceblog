@@ -90,6 +90,7 @@ export default [
       { text: 'Vscode', link: '/fe/ide/vscode' },
       { text: 'Vuepress', link: '/fe/vuepress/vuepress' },
       { text: 'Vitepress', link: '/fe/vuepress/vitepress' },
+      { text: 'CICD', link: '/fe/cicd/github_pages_cicd' },
     ]
   },
 ]
