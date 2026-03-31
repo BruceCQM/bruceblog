@@ -435,6 +435,8 @@ git push 别名 本地分支:远程分支
 git push origin master
 
 git push --set-upstream origin master
+# 简写形式
+git push -u origin master
 ```
 
 ![git push upstream](./images/git_push_upstream.png)

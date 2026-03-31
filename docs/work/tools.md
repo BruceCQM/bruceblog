@@ -407,6 +407,19 @@ npm install express --save-dev
 npm install express -D
 ```
 
+3、CI/CD 安装依赖
+
+```bash
+npm ci
+```
+
+`npm ci` 是 npm 提供的一个专门用于 CI/CD 环境的依赖安装命令，全称是 "clean install" 。
+
+特点：
+
+- 严格按照 lock 文件安装。只会使用 `package-lock.json` 或 `npm-shrinkwrap.json` 中的版本，忽略 `package.json` 中声明的版本范围，确保每次安装的依赖版本完全一致。如果 `package-lock.json` 和 `package.json` 版本不一致，`npm ci` 会直接报错，而不是自动更新 lock 文件。
+- 更干净的安装。会自动删除 `node_modules` 目录，然后重新安装依赖，避免缓存导致不一致问题。
+
 ### npm 使用问题
 
 1、Windows 系统，vscode 终端运行 npm 命令，报错「找不到命令」

@@ -178,7 +178,7 @@ jobs:
       # 执行命令
       - run: npm --version
       - run: npm ci  # 安装依赖（使用 package-lock.json 锁定版本）
-      - run: npm run lint --if-present
+      - run: npm run lint --if-present # 有定义 lint 命令才会执行
       - run: npm run test:ci  # 运行测试
       - run: npm run build    # 构建项目
 ```
@@ -199,7 +199,7 @@ git remote add origin xxxx
 git push -u origin master
 ```
 
-- `-U` 参数是 `--set-upstream` 的简写形式，用于设置上游分支。第一次推送本地分支到远程仓库时，会建立分支联系，后续执行 `git push` 就会自动匹配分支。
+- `-u` 参数是 `--set-upstream` 的简写形式，用于设置上游分支。第一次推送本地分支到远程仓库时，会建立分支联系，后续执行 `git push` 就会自动匹配分支。
 
 提交代码后，CI 就会自动执行。
 
