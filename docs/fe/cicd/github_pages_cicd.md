@@ -204,3 +204,314 @@ git push -u origin master
 提交代码后，CI 就会自动执行。
 
 ![GitHub actions CI](./images/github_actions_ci.jpg)
+
+## 4. 服务器准备 webhook 部署器
+
+CD 的关键点：
+
+- GitHub 只负责把“发生了 push”这件事通知到你的服务器（Webhook）
+- 服务器负责真正执行：拉取代码 → 安装依赖 → 跑测试 → 构建 → 重启/更新服务
+- 必须校验 Webhook 签名，防止被伪造请求触发部署
+
+服务器的前置条件：
+
+- Node.js 20（或你项目要求的版本）
+- git、npm
+- 一个用于部署的目录，例如 `/srv/vite-app`
+- 一个用于跑 Webhook 服务的端口（建议只在内网监听，由 Nginx 反代到公网）
+- 一个用于对外提供静态文件的目录，例如 `/var/www/vite-app`
+
+服务器部署目录初始化：
+
+```bash
+sudo mkdir -p /srv/vite-app
+sudo chown -R $USER:$USER /srv/vite-app
+cd /srv/vite-app
+git clone <仓库地址> .
+```
+
+先在服务器验证一下是否能正常运行：
+
+```bash
+npm install
+npm run test:ci
+npm run build
+```
+
+## 5. 配置 GitHub Webhook（触发服务器执行CD）
+
+在 GitHub 仓库：Settings → Webhooks → Add webhook。
+
+- Payload URL：`http://你的域名（或服务器公网IP）/webhook/github`。
+- Content type：application/json
+- Secret：设置一个强随机字符串（例如 32+ 位），可以使用 base64 生成
+- Which events：选 Just the push event
+- Active：勾选
+
+记下这个 Secret，后面用于服务器校验签名。
+
+![GitHub webhook](./images/webhook_settings.png)
+
+webhook创建成功，如有报错是正常的，这是因为我们服务器端的接口还没有通。
+
+## 6. 实现 Webhook Receiver
+
+推荐 Node 内置 http，无额外依赖。
+
+在服务器的 `/srv/vite-app/scripts/webhook-server.cjs` 路径创建一个 Webhook 服务 webhook-server.cjs。
+
+示例代码用 Node 内置模块，重点是“原始 body 的 HMAC 校验”与“只处理 master 的 push”。
+
+注意：
+
+- 如果主分支名称不是 master 的话，请自行修改，比如修改为 main。
+- 如果包管理工具不是 npm，请自行修改对应命令。
+
+```js
+const http = require('http')
+const crypto = require('crypto')
+const { spawn } = require('child_process')
+
+const PORT = Number(process.env.PORT || 9000)
+const HOST = process.env.HOST || '127.0.0.1'
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || ''
+const DEPLOY_DIR = process.env.DEPLOY_DIR || '/srv/vite-app'
+const DIST_DIR = process.env.DIST_DIR || '/var/www/vite-app'
+
+function hmacSha256(secret, bodyBuffer) {
+  const hmac = crypto.createHmac('sha256', secret)
+  hmac.update(bodyBuffer)
+  return `sha256=${hmac.digest('hex')}`
+}
+
+function safeEqual(a, b) {
+  const aBuf = Buffer.from(a)
+  const bBuf = Buffer.from(b)
+  if (aBuf.length !== bBuf.length) return false
+  return crypto.timingSafeEqual(aBuf, bBuf)
+}
+
+function runDeploy() {
+  const cmd = [
+    'set -euo pipefail',
+    `cd "${DEPLOY_DIR}"`,
+    'git fetch --all --prune',
+    'git reset --hard origin/master',
+    'npm install --frozen-lockfile',
+    'npm run test:ci',
+    'npm run build',
+    `mkdir -p "${DIST_DIR}"`,
+    `rsync -a --delete "${DEPLOY_DIR}/dist/" "${DIST_DIR}/"`,
+    'systemctl reload nginx || true',
+  ].join('\n')
+
+  const child = spawn('bash', ['-lc', cmd], {
+    stdio: 'inherit',
+    env: process.env,
+  })
+
+  child.on('exit', (code) => {
+    process.exitCode = code === 0 ? 0 : 1
+  })
+}
+
+const server = http.createServer((req, res) => {
+  if (req.method !== 'POST' || req.url !== '/webhook/github') {
+    res.statusCode = 404
+    res.end('Not Found')
+    return
+  }
+
+  const signature = req.headers['x-hub-signature-256']
+  const event = req.headers['x-github-event']
+
+  const chunks = []
+  req.on('data', (d) => chunks.push(d))
+  req.on('end', () => {
+    const body = Buffer.concat(chunks)
+
+    if (!WEBHOOK_SECRET) {
+      res.statusCode = 500
+      res.end('Server not configured')
+      return
+    }
+
+    if (typeof signature !== 'string') {
+      res.statusCode = 400
+      res.end('Missing signature')
+      return
+    }
+
+    const expected = hmacSha256(WEBHOOK_SECRET, body)
+    if (!safeEqual(signature, expected)) {
+      res.statusCode = 401
+      res.end('Invalid signature')
+      return
+    }
+
+    if (event !== 'push') {
+      res.statusCode = 200
+      res.end('Ignored')
+      return
+    }
+
+    let payload
+    try {
+      payload = JSON.parse(body.toString('utf8'))
+    } catch {
+      res.statusCode = 400
+      res.end('Invalid JSON')
+      return
+    }
+
+    if (payload.ref !== 'refs/heads/master') {
+      res.statusCode = 200
+      res.end('Ignored branch')
+      return
+    }
+
+    res.statusCode = 200
+    res.end('OK')
+
+    runDeploy()
+  })
+})
+
+server.listen(PORT, HOST, () => {
+  process.stdout.write(`listening on http://${HOST}:${PORT}\n`)
+})
+```
+
+要点：
+
+- 一定要用“原始 body”计算签名，不能先 JSON parse 再 stringify
+- 只响应 push，并限制 ref === refs/heads/master
+- Webhook 服务建议只监听 127.0.0.1，由 Nginx 反代对外
+
+## 7. 用 pm2 托管 Webhook 服务
+
+### 7.1 安装 pm2
+
+在服务器上全局安装 pm2。
+
+```bash
+npm i -g pm2
+```
+
+### 7.2 用 pm2 启动 Webhook 服务
+
+创建 pm2 配置文件: `/srv/vite-app/ecosystem.config.cjs`。
+
+```js
+module.exports = {
+  apps: [
+    {
+      name: 'github-webhook',
+      script: '/srv/vite-app/scripts/webhook-server.cjs',
+      exec_mode: 'fork',
+      instances: 1,
+      env: {
+        PORT: '9000',
+        HOST: '0.0.0.0',
+        WEBHOOK_SECRET: '替换为你的Secret',
+        DEPLOY_DIR: '/srv/vite-app',
+        DIST_DIR: '/var/www/vite-app',
+      },
+    },
+  ],
+}
+```
+
+启动 pm2，查看状态。
+
+```bash
+cd /srv/vite-app
+pm2 start ecosystem.config.cjs
+pm2 status
+pm2 logs github-webhook
+```
+
+### 7.3 设置开机自启
+
+```bash
+pm2 save
+pm2 startup
+```
+
+## 8. 用 Docker Compose 启动 Nginx（静态站点 + Webhook 反代）
+
+这里用 Docker Compose 跑一个 Nginx 容器来做两件事：
+
+- 静态站点：把构建产物目录（例如 /var/www/vite-app）挂载进容器对外提供访问
+- Webhook 反代：把 /webhook/github 转发到宿主机上的 Webhook 服务（pm2 跑的 127.0.0.1:9000）
+
+创建目录：
+
+```bash
+sudo mkdir -p /srv/vite-app/docker/nginx
+sudo chown -R $USER:$USER /srv/vite-app/docker
+```
+
+创建文件：`/srv/vite-app/docker/docker-compose.yml`
+
+```yml
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: vite-app-nginx
+    ports:
+      - "${NGINX_PORT:-8080}:80"
+    extra_hosts:
+      - "webhook-host:host-gateway"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - /var/www/vite-app:/usr/share/nginx/html:ro
+    restart: unless-stopped
+```
+
+创建文件：`/srv/vite-app/docker/nginx/default.conf`
+
+```bash
+server {
+    listen 80;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location = /index.html {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+        try_files $uri =404;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /webhook/github {
+        proxy_request_buffering off;
+        proxy_buffering off;
+
+        proxy_pass http://webhook-host:9000/webhook/github;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+启动 Nginx 服务。
+
+```bash
+cd /srv/vite-app/docker
+docker compose up -d
+docker compose ps
+docker compose logs -f nginx
+```
+
+验证：
+- 访问站点：`http://你的服务器公网IP/（或域名）`
+- Webhook 保持配置不变：`https://你的域名:端口号/webhook/github`（如果没上 HTTPS，可以先用 http:// 验证）
