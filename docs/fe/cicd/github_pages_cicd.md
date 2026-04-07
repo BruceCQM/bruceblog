@@ -382,6 +382,17 @@ server.listen(PORT, HOST, () => {
 })
 ```
 
+构建产物同步：
+
+构建产物在 `/srv/vite-app/dist` 目录下，但通过了 rsync 命令同步到 `/var/www/vite-app` 目录下。
+
+同步阶段，执行 `rsync -a --delete "${DEPLOY_DIR}/dist/" "${DIST_DIR}/"`。
+
+- `DEPLOY_DIR`：部署目录
+- `DIST_DIR`：静态文件服务目录
+- `rsync -a`：以归档模式同步，保留权限、时间戳等元数据
+- `--delete`：删除目标目录中存在，但源目录中不存在的文件，避免多余的历史文件。
+
 要点：
 
 - 一定要用“原始 body”计算签名，不能先 JSON parse 再 stringify
@@ -515,3 +526,33 @@ docker compose logs -f nginx
 验证：
 - 访问站点：`http://你的服务器公网IP/（或域名）`
 - Webhook 保持配置不变：`https://你的域名:端口号/webhook/github`（如果没上 HTTPS，可以先用 http:// 验证）
+
+## 9. 总结梳理
+
+### 9.1 目录结构
+
+1. 核心部署目录
+
+```bash
+/srv/vite-app/                  # 项目部署根目录
+├── .git/                       # Git 仓库
+├── package.json                # 项目配置文件
+├── node_modules/              # Node.js 依赖
+├── dist/                      # 构建产物（由 npm run build 生成）
+├── scripts/
+│   └── webhook-server.cjs     # Webhook 服务脚本
+├── ecosystem.config.cjs       # PM2 配置文件
+└── docker/
+    ├── docker-compose.yml     # Docker Compose 配置
+    └── nginx/
+        └── default.conf       # Nginx 配置文件
+```
+
+2. 静态文件服务目录
+
+```bash
+/var/www/vite-app/             # 静态文件根目录
+├── index.html                 # 主页面
+├── assets/                    # 静态资源（JS、CSS、图片等）
+└── ...                       # 其他构建产物
+```
