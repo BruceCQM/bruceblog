@@ -556,3 +556,72 @@ docker compose logs -f nginx
 ├── assets/                    # 静态资源（JS、CSS、图片等）
 └── ...                       # 其他构建产物
 ```
+
+### 9.2 Linux 命令梳理
+
+#### 目录管理命令
+
+```bash
+sudo mkdir -p /srv/vite-app          # 创建部署目录
+sudo chown -R $USER:$USER /srv/vite-app  # 设置目录权限
+sudo mkdir -p /var/www/vite-app      # 创建静态文件目录
+sudo mkdir -p /srv/vite-app/docker/nginx  # 创建 Docker 配置目录
+```
+
+#### Git 命令
+
+```bash
+git init                            # 初始化 Git 仓库
+git add .                           # 添加所有文件到暂存区
+git commit -m 'feat: init'          # 提交代码
+git remote add origin <仓库地址>     # 添加远程仓库
+git push -u origin master           # 推送到远程仓库
+git clone <仓库地址> .              # 克隆仓库到当前目录
+git fetch --all --prune             # 拉取最新代码并清理本地不存在的分支
+git reset --hard origin/master      # 强制重置到远程 master 分支
+```
+
+#### Node.js/npm 命令
+
+```bash
+npm create vite@latest . -- --template react-ts  # 创建 Vite 项目
+npm i -D vitest jsdom @testing-library/react @testing-library/jest-dom  # 安装开发依赖
+npm run build                       # 构建项目
+npm run test:ci                     # 运行测试
+npm ci                              # 安装依赖（CI 环境）
+npm install                         # 安装依赖（本地）
+npm install --frozen-lockfile       # 安装依赖（锁定版本）
+npm run lint --if-present           # 运行代码检查
+npm i -g pm2                        # 全局安装 PM2
+```
+
+#### PM2 进程管理命令
+
+```bash
+pm2 start ecosystem.config.cjs      # 启动应用
+pm2 status                          # 查看状态
+pm2 logs github-webhook             # 查看日志
+pm2 save                            # 保存进程配置
+pm2 startup                         # 设置开机自启
+```
+
+#### Docker/Docker Compose 命令
+
+```bash
+docker compose up -d                # 后台启动服务
+docker compose ps                   # 查看容器状态
+docker compose logs -f nginx        # 查看 Nginx 日志
+```
+
+#### 文件同步命令
+
+```bash
+rsync -a --delete "/srv/vite-app/dist/" "/var/www/vite-app/"  # 同步构建产物
+```
+
+#### 系统命令
+
+```bash
+systemctl reload nginx || true      # 重新加载 Nginx 配置
+```
+
