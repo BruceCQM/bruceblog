@@ -627,6 +627,73 @@ systemctl reload nginx || true      # 重新加载 Nginx 配置
 
 ## 10. 遇到的问题
 
+### docker compose 启动失败
+
+问题：
+
+运行 `docker compose up -d` 启动失败，提示如下错误。
+
+```bash
+[+] up 1/1
+
+✘ Image nginx:alpine Error Get "https://registry-1.docker.io/v2/": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)                          15.2s
+ 
+Error response from daemon: Get "https://registry-1.docker.io/v2/": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+```
+
+原因：
+
+服务器连不上 Docker 官方镜像仓库，请求失败。
+
+解决方法：
+
+配置 docker 的国内镜像源。具体镜像源地址见该文章，豆包给的镜像源地址都不能用的。
+
+[Docker拉取镜像失败/超慢？2026最新国内镜像源配置指南，解决DockerHub无法访问、加速下载](https://cloud.tencent.com/developer/article/2649344){link=static}
+
+```bash
+# 1. 创建docker配置目录（若已存在会自动跳过）
+sudo mkdir -p /etc/docker
+# 2. 写入2026年实测有效的镜像源配置（轩辕+毫秒+DaoCloud，容灾切换）
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": [
+    "https://docker.xuanyuan.me",
+    "https://docker.1ms.run",
+    "https://docker.m.daocloud.io"
+  ]
+}
+EOF
+# 3. 重载配置并重启Docker，使镜像源生效
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+# 4. 验证配置是否成功（输出包含上面的镜像源地址即生效）
+docker info | grep -A 5 "Registry Mirrors"
+```
+
+配置成功后，重新执行 docker 启动命令。
+
+```bash
+cd /srv/vite-app/docker
+docker compose up -d
+```
+
+### 站点网址访问失败
+
+问题1：访问 `http://xxxx/`，出现了 403 报错。
+
+问题2：访问 `http://xxxx:8080/`，页面显示【无法访问此页面，响应时间太长】。
+
+原因1：端口访问错了，http 默认访问的是 80 端口，但我的 docker nginx 运行在 8080 端口。
+
+原因2：服务器的防火墙没有放开 8080 端口，导致访问失败。
+
+问题1解决方法：访问 `http://xxxx:8080/`。
+
+问题2解决方法：服务器的防火墙放开 8080 端口。
+
+![](./images/server_8080_port.jpg)
+
 ### GitHub webhook 请求失败
 
 问题：服务器站点 `http://xxx:8080/` 访问正常，但 GitHub 触发 webhook 请求失败。

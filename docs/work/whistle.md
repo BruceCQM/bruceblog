@@ -21,7 +21,7 @@ Chrome 升级到 140 版本后，SwitchOmega 插件不能使用了，不满足 V
 
 如果使用 Proxy SwitchyOmega 3 (ZeroOmega) 后发现接口都挂了，可以打开 Chrome 的设置页，重置设置即可。 chrome://settings/reset
 
-![Proxy SwitchyOmega 3](./images/whistle/Proxy_SwitchyOmega_3%20.png)
+![Proxy SwitchyOmega 3](./images/whistle/Proxy_SwitchyOmega.png)
 :::
 
 本地运行系统 127.0.0.1:3002，运行 `w2 start -p 8888` 启动 whistle，并配置规则。
