@@ -1,0 +1,42 @@
+# 工作流名称
+name: BruceBlog CI
+
+# 触发条件
+on:
+  pull_request:  # 当有 PR 时触发
+  push:          # 当有推送时触发
+    branches: [master, main]  # 仅在 master 和 main 分支触发
+
+# 权限设置
+permissions:
+  contents: read  # 只读权限
+
+# 并发控制
+concurrency:
+  group: ci-${{ github.ref }}  # 并发组名
+  cancel-in-progress: true     # 取消正在进行的相同任务
+
+# 任务定义
+jobs:
+  vite_react:  # 任务名称
+    # 指定 CI 工作流运行的操作系统环境，使用最新版本的 Ubuntu Linux 操作系统
+    # 为整个 CI 工作流提供运行环境，确保所有命令和操作都在一致的系统环境中执行
+    # Ubuntu 是 GitHub Actions 最常用的环境，因为它稳定且支持大多数开发工具
+    runs-on: ubuntu-latest
+    # env:
+    #   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # 强制使用 Node.js 24
+    
+    steps:  # 执行步骤
+      # 将仓库中的代码文件复制到 CI 运行环境中
+      - uses: actions/checkout@v5  # 检出代码（支持 Node.js 24）
+      
+      - uses: actions/setup-node@v5  # 设置 Node.js（支持 Node.js 24）
+        with:  # 配置参数
+          node-version: 24
+          cache: npm
+      
+      # 执行命令
+      - run: npm --version
+      - run: npm ci  # 安装依赖（使用 package-lock.json 锁定版本）
+      - run: npm run lint --if-present # 有定义 lint 命令才会执行
+      - run: npm run build    # 构建项目
