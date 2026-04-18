@@ -36,8 +36,7 @@ jobs:
       - name: 上传构建产物
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist  # 构建输出目录：Vite/Vue/React 都是 dist
-
+          path: ./docs/.vitepress/dist  # 构建输出目录
   deploy:
     needs: build
     runs-on: ubuntu-latest
