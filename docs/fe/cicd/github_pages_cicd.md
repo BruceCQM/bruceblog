@@ -769,4 +769,67 @@ git remote set-url origin git@github.com:xxx.git
 
 把 `vite.config.ts` 中的 `base: '/githubcicd/'` 删掉。
 
+## 11. 部署GitHub Pages
 
+如果没钱买服务器，也可以使用 GitHub Pages 来部署网站。
+
+和第 3 步一样，也需要创建一个 ci 文件，但配置内容有所不同。
+
+`.github/workflows/deploy.yml`
+```bash
+name: BruceBlog Deploy
+
+on:
+  push:
+    branches: [master, main]  # 你的主分支名
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm install
+
+      - name: 构建项目
+        run: npm run build  # 大部分框架都是这个命令
+
+      - name: 上传构建产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs/.vitepress/dist  # 构建输出目录
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+有两个注意点：
+
+- 构建产物的输出目录需要写对，`path: ./docs/.vitepress/dist`，不是普通的 `path: ./dist`。
+- 项目的打包配置文件中的 base 需要修改为 github 仓库的名称，如 `/bruceblog/`，否则 js、css 文件的请求路径有问题，导致404。
