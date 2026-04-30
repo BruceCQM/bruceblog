@@ -98,14 +98,14 @@ export default {
     outlineTitle: 'Have a brief look',
     // 设置社交链接
     socialLinks: [
-      {
-        icon: 'github',
-        link: 'https://github.com/BruceCQM'
-      },
-      {
-        icon: { svg: giteeFavicon, },
-        link: 'https://gitee.com/brucecai55520'
-      },
+      // {
+      //   icon: 'github',
+      //   link: ''
+      // },
+      // {
+      //   icon: { svg: giteeFavicon, },
+      //   link: ''
+      // },
       { icon: { svg: juejinFavicon }, link: 'https://juejin.cn/user/4152185650162680' },
       { icon: { svg: WXFavicon }, link: 'https://mp.weixin.qq.com/s?__biz=MzAxOTU3NzE1Ng==&mid=2247483708&idx=1&sn=5495e66b7465a22eb4625e1c8500fb7b' },
       { icon: { svg: sfFavicon }, link: 'https://segmentfault.com/u/ning_643b67be37ac3/articles' },
