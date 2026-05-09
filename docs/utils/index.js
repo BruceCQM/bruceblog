@@ -1,5 +1,5 @@
-const defaultLogo = '/bruceblogpages/logo.png';
-const essayLogo = '/bruceblogpages/essay_logo.jpg';
+const defaultLogo = '/bruceblog/logo.png';
+const essayLogo = '/bruceblog/essay_logo.jpg';
 
 /**
  * @description 从所给的URL中提取标题、摘要、图片等信息

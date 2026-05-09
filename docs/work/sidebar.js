@@ -11,7 +11,6 @@ export default [
       { text: '日常开发工具', link: '/work/tools' },
       { text: '碎碎记', link: '/work/problems' },
       { text: '技术选型', link: '/work/tech_select' },
-      { text: 'ai 相关', link: '/work/ai'}
     ]
   },
   { 
@@ -29,6 +28,14 @@ export default [
       { text: '小程序开发之坑', link: '/work/mini/wx_points' },
       { text: '微信小程序地图开发教程', link: '/work/mini/wx_map' },
       { text: '支付宝小程序编译报错', link: '/work/mini/zfb_points'}
+    ]
+  },
+  {
+    text: 'AI',
+    collapsed: false,
+    items: [
+      { text: 'Harness Engineering', link: '/work/ai/harness_engineering' },
+      { text: 'ai', link: '/work/ai/ai' }
     ]
   },
 ]

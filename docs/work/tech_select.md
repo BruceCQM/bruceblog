@@ -23,3 +23,5 @@ React 管理端高德地图组件：[react-amap](https://elemefe.github.io/react
 微信小程序图表绘制：[AntV-F2](https://f2-v3.antv.vision/zh/docs/tutorial/getting-started)
 
 React 管理端图表绘制：[echarts-for-react](https://www.npmjs.com/package/echarts-for-react)
+
+视频下载：yt-dlp
