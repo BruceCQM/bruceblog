@@ -1,5 +1,7 @@
 # 基于 DDD 的前端工程 V2
 
+[【第1680期】领域驱动设计在前端中的应用](https://mp.weixin.qq.com/s/pROCXZNZ7RKeYDlDUJng_Q){link=static}
+
 ## 分层架构
 
 ![image](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/a/Rq8z1PLnvha4wKAN/62fbf3d5468f4cada417e14ebfc7e98d1257.png)
