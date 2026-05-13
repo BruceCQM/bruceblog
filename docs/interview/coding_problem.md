@@ -1,5 +1,52 @@
 # 前端编程题
 
+## 实现任意树的DFS和BFS遍历
+
+实现任意树（不一定是二叉数）的DFS和BFS遍历。
+
+关键点：任意树。由于任意树的子节点数量不确定，因此需要使用一个数组来保存子节点。
+
+很简单的题目。
+
+```js
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.children = [];
+  }
+}
+
+const dfs = function(root, res) {
+  if (!root) {
+    return;
+  }
+
+  res.push(root.value);
+  for (const child of root.children) {
+    dfs(child, res);
+  }
+
+  return res;
+}
+
+const bfs = function(root, res) {
+  if (!root) {
+    return;
+  }
+
+  const queue = [root];
+  const res = [];
+  while (queue.length) {
+    const node = queue.shift();
+    res.push(node.value);
+    for (const child of node.children) {
+      queue.push(child);
+    }
+  }
+  return res;
+}
+```
+
 ## debounce 防抖
 
 防抖原理：连续触发事件，只有最后一次事件被触发 n 秒之后才会执行回调，是解决事件回调频繁调用的手段之一。
