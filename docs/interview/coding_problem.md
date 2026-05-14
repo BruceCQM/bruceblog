@@ -14,6 +14,10 @@ class Node {
     this.value = value;
     this.children = [];
   }
+
+  addChild(node) {
+    this.children.push(node);
+  }
 }
 
 const dfs = function(root, res) {
