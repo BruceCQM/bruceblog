@@ -14,11 +14,15 @@ class Node {
     this.value = value;
     this.children = [];
   }
+
+  addChild(node) {
+    this.children.push(node);
+  }
 }
 
 const dfs = function(root, res) {
   if (!root) {
-    return;
+    return res;
   }
 
   res.push(root.value);
@@ -29,9 +33,9 @@ const dfs = function(root, res) {
   return res;
 }
 
-const bfs = function(root, res) {
+const bfs = function(root) {
   if (!root) {
-    return;
+    return [];
   }
 
   const queue = [root];
@@ -45,6 +49,36 @@ const bfs = function(root, res) {
   }
   return res;
 }
+```
+
+```js
+// 创建示例树
+function createExampleTree() {
+    const root = new TreeNode('A');
+    
+    const b = new TreeNode('B');
+    const c = new TreeNode('C');
+    const d = new TreeNode('D');
+    const e = new TreeNode('E');
+    const f = new TreeNode('F');
+    const g = new TreeNode('G');
+    
+    root.addChild(b);
+    root.addChild(c);
+    root.addChild(d);
+    
+    b.addChild(e);
+    b.addChild(f);
+    
+    d.addChild(g);
+    
+    return root;
+}
+
+// 使用示例
+const tree = createExampleTree();
+console.log(dfs(tree, []));
+console.log(bfs(tree));
 ```
 
 ## debounce 防抖
