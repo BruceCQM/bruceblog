@@ -723,3 +723,58 @@ AI 编程，本质上是一个【工程化】问题，而非技术问题。技�
 
 - 丢一张设计稿，几分钟就能生成准确的、可交互的页面，并且可以直接上线，根本无需人工干预。这其中涉及到 MCP 阅读设计稿。
 - 给 AI 提供了一套抓取后端接口 API 类型定义的工具流程，AI 可以自动获取后端接口的返回字段和结构，这其中应该也涉及到 MCP 工具。
+
+## LCP 指标是什么？怎么统计计算的？
+
+[如何计算LCP](https://wukongdoc.tingyun.com/browser/metric/LCP.html){link=static}
+
+[页面加载性能之LCP](https://zhuanlan.zhihu.com/p/174837488){link=static}
+
+LCP（Largest Contentful Paint，最大内容绘制）是衡量网页核心内容加载速度的关键性能指标，它统计的是视口（viewport）内最大可见元素完成渲染的时间点。
+
+简单来说，它回答了“用户什么时候能看到页面的主要内容？”这个问题。
+
+### LCP 统计的是什么元素
+
+浏览器会持续监控视口内尺寸最大的以下4类元素，并取其中渲染完成最晚的一个作为 LCP 值。
+
+- `<img>`元素：最常见的 LCP 来源。
+- `<image>`内 SVG 元素：矢量图标或图形。
+- `<video>`元素：视频海报图（poster image）。
+- 块级元素（Block-level element）：包含文本节点的元素（如 div、h1、p），其计算尺寸是文本节点的大小，而非整个容器的背景。即包含文本节点或其他内联文本元素子级的块级元素。
+
+### LCP 计算过程
+
+- 监听阶段：从页面开始加载起，浏览器监听所有符合条件元素的渲染时间（renderTime）。
+- 尺寸判定：计算每个元素在视口内的可见面积（width * height），找出最大的那个。
+- 最终取值：在页面生命周期内（通常到首次用户输入前），每当有更大元素出现或当前最大元素更新，LCP 时间戳就会更新。最终上报的是最大那个元素的渲染时间。
+
+计算结束的时间点：
+
+- 用户产生了交互行为，如点击、滚动、按键。用户产生了这些行为，说明页面当前可以进行交互了，就没必要继续监测 LCP。用户开始操作意味着页面初始内容已可交互，后续动态加载的内容（如点击按钮弹出的弹窗）不应计入初始加载性能
+- 页面离开了，如用户关闭页面、刷新或跳转到其他 URL。页面生命周期结束，直接取当前已记录的最大值。
+
+### 获取 LCP 数值
+
+- Chrome DevTools。Performance 面板的 "Timings" 栏可直接查看 LCP 标记点。
+- Web Vitals JS 库。使用 web-vitals库的 getLCP()函数，可获取真实用户的 LCP 数据。
+
+### 性能平台如何收集LCP
+
+基调听云这类 RUM（真实用户监控）平台的数据，完全依赖浏览器端的 JavaScript 主动上报。
+
+平台后端只是负责接收、存储和展示数据的“仓库”，它本身无法直接“看到”或计算你浏览器里的 LCP。
+
+通过在页面中嵌入的监控 SDK（一小段 JS 代码），利用 PerformanceObserverAPI 监听 largest-contentful-paint类型的性能条目。
+
+核心逻辑：
+
+```js
+// 类似基调听云SDK内部的简化逻辑
+new PerformanceObserver((entryList) => {
+  const entries = entryList.getEntries();
+  const lcpEntry = entries[entries.length - 1]; // 取最后一个候选
+  // 上报到平台
+  tingyun.report('LCP', lcpEntry.startTime);
+}).observe({type: 'largest-contentful-paint', buffered: true});
+```
