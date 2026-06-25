@@ -1,5 +1,34 @@
 export default [
   {
+    title: 'AI相关',
+    items: [
+      {
+        icon: 'https://cursor.com/favicon.ico',
+        title: 'cursor 中文文档',
+        desc: 'Cursor 是一款用于构建大型软件的编码智能体。使用它来理解您的代码库、规划和构建功能、修复缺陷、审查更改，并与您已经在使用的工具协同工作。',
+        link: 'https://cursor.com/cn/docs'
+      },
+      {
+        icon: 'https://open.bigmodel.cn/img/icons/apple-touch-icon-152x152.png',
+        title: '智谱AI开放平台',
+        desc: '不止模型，构建可信智能',
+        link: 'https://open.bigmodel.cn/'
+      },
+      {
+        icon: 'https://fe-static.deepseek.com/platform/favicon.svg',
+        title: 'DeepSeek开放平台',
+        desc: 'DeepSeek开放平台',
+        link: 'https://platform.deepseek.com/usage'
+      },
+      {
+        icon: 'https://cdn.sanity.io/images/4zrzovbb/claude-com/369b14e80ac643cc09dccd581ccb91f82b559190-32x32.png',
+        title: 'Claude 官网',
+        desc: 'Brainstorm in chat, build in Cowork',
+        link: 'https://claude.com/'
+      },
+    ]
+  },
+  {
     title: '技术博客',
     items: [
       {
