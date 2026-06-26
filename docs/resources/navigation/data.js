@@ -26,6 +26,18 @@ export default [
         desc: 'Brainstorm in chat, build in Cowork',
         link: 'https://claude.com/'
       },
+      {
+        icon: 'https://cdn.sanity.io/images/4zrzovbb/claude-com/369b14e80ac643cc09dccd581ccb91f82b559190-32x32.png',
+        title: 'Claude vscode 插件',
+        desc: 'Enabling Claude Code to work more autonomously',
+        link: 'https://www.anthropic.com/news/enabling-claude-code-to-work-more-autonomously'
+      },
+      {
+        icon: 'https://p1-hera.feishucdn.com/tos-cn-i-jbbdkfciu3/683b9c6cd73a42239ac53b619eb573ac.png~tplv-jbbdkfciu3-png:0:0.png',
+        title: '飞书 CLI',
+        desc: '仅需一行指令，在任意 Agent 操作飞书',
+        link: 'https://www.feishu.cn/feishu-cli'
+      },
     ]
   },
   {
