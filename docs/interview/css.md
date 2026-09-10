@@ -1220,7 +1220,7 @@ CSS 单位包括绝对单位和相对单位。
   font-size: 1.5em; 
 }
 .grandson {
-  /* grandson 的字体大小是 32px */
+  /* grandson 的字体大小是 48px */
   font-size: 2em;
 }
 ```

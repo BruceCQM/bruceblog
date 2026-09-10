@@ -81,6 +81,26 @@ console.log(dfs(tree, []));
 console.log(bfs(tree));
 ```
 
+## 重写数组的push方法
+
+核心思路：
+
+- 数组最后一个位置添加新元素
+- push方法返回数组的最新长度
+- push方法可以接收任意个参数元素
+  
+```js
+Array.prototype.myPush = function(...rest) {
+  for (let i = 0;i < rest.length;i++) {
+    this[this.length] = rest[i];
+  }
+  return this.length;
+}
+
+const arr = [1,2,3];
+arr.myPush(4,5,6);
+```
+
 ## debounce 防抖
 
 防抖原理：连续触发事件，只有最后一次事件被触发 n 秒之后才会执行回调，是解决事件回调频繁调用的手段之一。
